@@ -6,6 +6,9 @@ This document lists all JAR files required by the Digital Regulatory Reporting p
 Generated on: 2025-08-28
 Project Version: 0.0.0.master-SNAPSHOT
 
+IMPORTANT NOTE: All dependencies are resolved from Maven Central or other remote repositories.
+No local JAR files are used - all dependencies are managed through Maven's dependency management.
+
 ================================================================================
 CORE PROJECT JARS
 ================================================================================
@@ -57,6 +60,8 @@ CDM (COMMON DOMAIN MODEL) JARS
 
 11. org.finos.cdm:cdm-java:jar:5.26.2
     - FINOS Common Domain Model Java implementation
+    - NOTE: This is NOT a local CDM version - it's the official FINOS CDM from Maven Central
+    - The CDM dependency comes from the Rosetta framework, not from a local build
 
 ================================================================================
 ECLIPSE XTEXT/EMF JARS (DSL FRAMEWORK)
