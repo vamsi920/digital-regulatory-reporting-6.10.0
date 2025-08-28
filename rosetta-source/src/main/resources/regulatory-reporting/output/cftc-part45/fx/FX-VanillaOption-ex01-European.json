@@ -1,0 +1,93 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "RR3QWICWWIPCS8A4S074",
+  "callAmount" : 19500000,
+  "callCurrency" : "USD",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "RR3QWICWWIPCS8A4S074",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2015-02-03",
+  "eventIdentifier" : "AL1025104031by85df9m3ux9hhja",
+  "eventTimestamp" : "2015-02-03T13:26:29Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.822,
+  "exchangeRateBasis" : "USD/CHF",
+  "executionTimestamp" : "2015-02-03T13:26:29Z",
+  "expirationDate" : "2019-02-01",
+  "finalContractualSettlementDate" : "2019-02-05",
+  "firstExerciseDate" : "2019-02-01",
+  "leg1" : {
+    "notionalAmount" : 16029000,
+    "notionalCurrency" : "CHF",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "CHF"
+  },
+  "leg2" : {
+    "notionalAmount" : 19500000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CHF",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 20022222.5,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2019-02-05",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 16029000,
+  "putCurrency" : "CHF",
+  "reportSubmittingEntityID" : "RR3QWICWWIPCS8A4S074",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "GGDZP1UYGU9STUHRDP48",
+  "strikePrice" : {
+    "monetary" : 0.822
+  },
+  "strikePriceCurrency" : "USD/CHF",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

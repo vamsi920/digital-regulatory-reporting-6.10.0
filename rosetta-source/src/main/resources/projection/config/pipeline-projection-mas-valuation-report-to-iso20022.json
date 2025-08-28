@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-mas-valuation-report-to-iso20022",
+  "name" : "Mas Valuation Report To Iso20022",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.iso20022.mas.rewrite.valuation.functions.Project_MASValuationReportToIso20022",
+    "inputType" : "drr.regulation.mas.rewrite.valuation.MASValuationReport",
+    "outputType" : "iso20022.auth030.mas.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-mas-valuation",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/auth030-mas-rosetta-xml-config.json"
+  }
+}

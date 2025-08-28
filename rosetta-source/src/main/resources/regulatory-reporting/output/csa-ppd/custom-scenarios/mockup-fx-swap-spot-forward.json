@@ -1,0 +1,60 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "I",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "BANKX00012024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "549300O5MFEP1XJ40B46",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2011-02-12",
+  "eventTimestamp" : "2011-02-04T16:42:18Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.9175,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2011-02-04T16:21:47Z",
+  "expirationDate" : "2011-12-21",
+  "leg1" : {
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "notionalAmount" : 9175000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "FX_Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : false,
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPFXSWAPSPOTFO01"
+}

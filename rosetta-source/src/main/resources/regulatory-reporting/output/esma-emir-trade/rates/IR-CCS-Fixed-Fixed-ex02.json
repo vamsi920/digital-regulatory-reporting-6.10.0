@@ -1,0 +1,59 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioCode" : "123",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CDTI" ],
+  "corporateSectorOfTheCounterparty2" : [ "AIFD" ],
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2022-02-24",
+  "entityResponsibleForReporting" : "549300V2LQD6SX1WIG70",
+  "eventDate" : "2022-02-22",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-22T13:40:50Z",
+  "expirationDate" : "2026-02-24",
+  "finalContractualSettlementDate" : "2026-02-24",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 2,
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A005",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "fixedRate" : 0.3,
+    "notionalAmount" : 0,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SRDXCC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "venueOfExecution" : "XXXX"
+}

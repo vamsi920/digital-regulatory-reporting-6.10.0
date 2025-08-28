@@ -1,0 +1,23 @@
+{
+  "actionType" : "VALU",
+  "counterparty1" : "5493001RKR55V4X61F71",
+  "counterparty2" : "5U0XI89JRFVHWIBS4F54",
+  "counterparty2IdentifierSource" : "LEID",
+  "delta" : 8200,
+  "messageType" : "Valuation",
+  "nextFloatingReferenceResetDateLeg1" : "2011-02-12",
+  "nextFloatingReferenceResetDateLeg2" : "2021-02-12",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "submittedForParty" : "5493001RKR55V4X61F71",
+  "submitterIdentifier" : "5493001RKR55V4X61F71",
+  "submittingPartyIDType" : "LEI",
+  "tradeParty1ExecutionAgentID" : "TESTEXAGENTLEI000011",
+  "tradeParty1ExecutionAgentIDType" : "LEI",
+  "tradeParty1IDType" : "LEI",
+  "uniqueTransactionIdentifier" : "DTD380513903T7YHJ898VALUATIONEX001UNIQUETRANSACTION1",
+  "valuationAmount" : 250000,
+  "valuationCurrency" : "USD",
+  "valuationMethod" : "MTMA",
+  "valuationTimestamp" : "2021-03-13T06:32:49Z",
+  "version" : "CORE1.0"
+}

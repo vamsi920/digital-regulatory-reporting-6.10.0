@@ -1,0 +1,116 @@
+namespace drr.standards.iosco.cde.version1.datetime
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.event.common.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective Date">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "1"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction come into effect, as included in the confirmation"]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+        provision "The rule does not report adjusted dates since CFTC explicity indicates that dates should be reported unadjusted"]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230120"
+        provision "For options the obligations under the OTC Derivative Transaction come into effect on the Trade Date.  A fall back should be added to CDE Effective Date which handles effective date in this way when no specific effective date is specified."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230426"
+        provision "Effective date should never be taken from the underlier of an option, neither from its product definition. For this kind of products, the effective date should be the trade date."]
+    extract
+        if EconomicTermsForProduct(ProductForEvent) -> effectiveDate -> adjustableDate exists
+                and IsProductOTC(ProductForEvent) // for ETDs, effective date is not in the product
+        then AdjustableDateResolution(
+                    ProductForEvent -> contractualProduct -> economicTerms -> effectiveDate -> adjustableDate
+                )
+        // interestRatePayout
+        else if ProductForEvent -> contractualProduct -> economicTerms -> payout -> interestRatePayout -> calculationPeriodDates -> effectiveDate -> adjustableDate exists
+        then (ProductForEvent -> contractualProduct -> economicTerms -> payout -> interestRatePayout -> calculationPeriodDates -> effectiveDate -> adjustableDate
+            extract AdjustableDateResolution
+            then min)
+        else if TradeForEvent exists
+        then TradeForEvent -> tradeDate
+        else if PositionForEvent exists
+        then PositionForEvent -> openDateTime -> date
+
+reporting rule ExpirationDate from Product: <"Expiration Date">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "2"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction stop being effective, as included in the confirmation. Early termination does not affect this data element."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+        provision "The rule does not report adjusted dates since CFTC explicity indicates that dates should be reported unadjusted"]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    extract product [
+        EconomicTermsForProduct(product)
+            then if terminationDate -> adjustableDate exists
+                then AdjustableDateResolution(terminationDate -> adjustableDate)
+                // interestRatePayout
+                else if payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate exists
+                then (payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate
+                    extract AdjustableDateResolution
+                    then max)
+                // option - european exercise
+                else if payout -> optionPayout -> exerciseTerms -> optionStyle -> europeanExercise -> expirationDate -> adjustableDate exists
+                then (payout -> optionPayout -> exerciseTerms -> optionStyle -> europeanExercise -> expirationDate -> adjustableDate
+                    extract AdjustableDateResolution
+                    then max)
+                // option - bermuda exercise
+                else if payout -> optionPayout -> exerciseTerms -> optionStyle -> bermudaExercise -> bermudaExerciseDates -> adjustableDates exists
+                then (payout -> optionPayout -> exerciseTerms -> optionStyle -> bermudaExercise -> bermudaExerciseDates -> adjustableDates
+                    extract AdjustableDatesResolution
+                    then flatten
+                    then max)
+                // option - american exercise
+                else if payout -> optionPayout -> exerciseTerms -> optionStyle -> americanExercise -> expirationDate -> adjustableDate exists
+                then (payout -> optionPayout -> exerciseTerms -> optionStyle -> americanExercise -> expirationDate -> adjustableDate
+                    extract AdjustableDateResolution
+                    then max)
+                else if payout -> forwardPayout -> settlementTerms -> settlementDate -> valueDate exists
+                then payout -> forwardPayout -> settlementTerms -> settlementDate -> valueDate max
+                else if payout -> optionPayout -> settlementTerms -> settlementDate -> valueDate exists
+                then payout -> optionPayout -> settlementTerms -> settlementDate -> valueDate max
+                else if payout -> performancePayout -> observationTerms -> observationDates -> periodicSchedule -> endDate -> adjustableDate exists
+                then (payout -> performancePayout -> observationTerms -> observationDates -> periodicSchedule -> endDate -> adjustableDate
+                    extract AdjustableDateResolution
+                    then max)
+                else if IsCommoditySwap(product) or IsCommodityFloatingPriceForward(product)
+                then payout -> commodityPayout -> schedule -> schedulePeriod -> fixingPeriod -> endDate max
+                else if IsCommodityFixedPriceForward(product)
+                then payout -> fixedPricePayout -> schedule -> schedulePeriod -> fixingPeriod -> endDate max
+                else if IsCommodityOption(product) or IsCommoditySwaption(product)
+                then payout -> optionPayout only-element -> schedule -> schedulePeriod -> fixingPeriod -> endDate max
+    ]
+
+reporting rule EarlyTerminationDate from TransactionReportInstruction: <"Early termination date">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "3"
+        provision "Effective date of the early termination (expiry) of the reported transaction.
+        This data element is applicable if the termination of the transaction occurs prior to its maturity due to an ex-interim decision of a counterparty (or counterparties). Examples of early terminations (expiry) are: negotiated early termination; early termination under an optional early termination provision (mutual put); novation; offsetting (netting) transaction; option exercise; compression; early termination clause specified in the original contract which is a callable swap (bought embedded option); mutual credit break."]
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "3" // FIA FIAReportingBestPractice date "20240308"
+        provision "The approach chosen for flat counterpartyPosition (quantity = 0) before expiry, is to not report an early termination, so that the same position UTI can be used throughout the life of the contract."]
+    extract
+        if QuantityDecreasedToZero(
+                    originatingWorkflowStep -> businessEvent -> instruction -> before,
+                    originatingWorkflowStep -> businessEvent -> after
+                )
+        then originatingWorkflowStep -> businessEvent -> effectiveDate
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "4"
+        provision "Date and time of the submission of the report to the trade repository."]
+    Now
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution Timestamp">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "5"
+        provision "Date and time a transaction was originally executed, resulting in the generation of a new UTI. This data element remains unchanged throughout the life of the UTI."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230903"
+        provision "For post trade events the original execution timestamp needs to be used.  For new trades the execution timestamp can be taken directly from the WorkflowStep."]
+    extract GetExecutionTimestamp
+
+reporting rule ValuationTimestamp from TransactionReportInstruction: <"Valuation Timestamp">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "27"
+        provision "Date and time of the last valuation marked to market, provided by the central counterparty (CCP) or calculated using the current or last available market price of the inputs. If for example a currency exchange rate is the basis for a transactions valuation, then the valuation timestamp reflects the moment in time that exchange rate was current."]
+    extract GetValuation(item) -> timestamp

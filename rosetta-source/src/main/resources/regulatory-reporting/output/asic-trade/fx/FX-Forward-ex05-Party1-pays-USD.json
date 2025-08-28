@@ -1,0 +1,56 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "beneficiary1" : "W22LROWP2IHZNBB6K528",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "FORW",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierType" : true,
+  "effectiveDate" : "2020-11-09",
+  "entityResponsibleForReporting" : "W22LROWP2IHZNBB6K528",
+  "eventIdentifier" : "envuatuatExt10f8072af860547f9b07204d954b089b2",
+  "eventTimestamp" : "2020-11-09T04:28:05Z",
+  "eventType" : "ALOC",
+  "exchangeRate" : 1.25,
+  "exchangeRateBasis" : "USD/EUR",
+  "executionAgentCounterparty1" : "NOAP",
+  "executionAgentCounterparty2" : "FOR8UP27PHTHYVLBNG30",
+  "executionTimestamp" : "2020-11-09T16:28:05Z",
+  "expirationDate" : "2020-12-23",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 125,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 100,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "FXFORWARDEXPARTYPA01"
+}

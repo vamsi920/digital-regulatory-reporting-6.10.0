@@ -1,0 +1,56 @@
+namespace drr.standards.iosco.cde.version2.datetime
+version "${project.version}"
+
+import cdm.base.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iosco.cde.version2.* as cdeV2
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective Date">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "1"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction come into effect, as included in the confirmation"]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+        provision "The rule does not report adjusted dates since CFTC explicity indicates that dates should be reported unadjusted"]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230120"
+        provision "For options the obligations under the OTC Derivative Transaction come into effect on the Trade Date.  A fall back should be added to CDE Effective Date which handles effective date in this way when no specific effective date is specified."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230426"]
+    cdeV1.datetime.EffectiveDate
+
+reporting rule ExpirationDate from Product: <"Expiration Date">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "2"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction stop being effective, as included in the confirmation. Early termination does not affect this data element."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+        provision "The rule does not report adjusted dates since CFTC explicity indicates that dates should be reported unadjusted"]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    cdeV1.datetime.ExpirationDate
+
+reporting rule EarlyTerminationDate from TransactionReportInstruction: <"Early termination date">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "3"
+        provision "Effective date of the early termination (expiry) of the reported transaction.
+        This data element is applicable if the termination of the transaction occurs prior to its maturity due to an ex-interim decision of a counterparty (or counterparties). Examples of early terminations (expiry) are: negotiated early termination; early termination under an optional early termination provision (mutual put); novation; offsetting (netting) transaction; option exercise; compression; early termination clause specified in the original contract which is a callable swap (bought embedded option); mutual credit break."]
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "3" // FIA FIAReportingBestPractice date "20240308"
+        provision "The approach chosen for flat counterpartyPosition (quantity = 0) before expiry, is to not report an early termination, so that the same position UTI can be used throughout the life of the contract."]
+    cdeV1.datetime.EarlyTerminationDate
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "4"
+        provision "Date and time of the submission of the report to the trade repository."]
+    cdeV2.datetime.ReportingTimestamp
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution Timestamp">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "5"
+        provision "Date and time a transaction was originally executed, resulting in the generation of a new UTI. This data element remains unchanged throughout the life of the UTI."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230903"
+        provision "For post trade events the original execution timestamp needs to be used.  For new trades the execution timestamp can be taken directly from the WorkflowStep."]
+    cdeV1.datetime.ExecutionTimestamp
+
+reporting rule ValuationTimestamp from TransactionReportInstruction: <"Valuation Timestamp">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "27"
+        provision "Date and time of the last valuation marked to market, provided by the central counterparty (CCP) or calculated using the current or last available market price of the inputs. If for example a currency exchange rate is the basis for a transactions valuation, then the valuation timestamp reflects the moment in time that exchange rate was current."]
+    cdeV1.datetime.ValuationTimestamp

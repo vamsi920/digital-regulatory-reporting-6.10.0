@@ -1,0 +1,71 @@
+{
+  "actionType" : "NEWT",
+  "callAmount" : 50000,
+  "callCurrency" : "USD",
+  "cleared" : "I",
+  "counterparty1" : "F226TOH6YD6XJB17KS62",
+  "counterparty2" : "W22LROWP2IHZNBB6K528",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "envuatuatExt1cad505d414f446408df6533a2e0c32402024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "F226TOH6YD6XJB17KS62",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2020-11-02",
+  "eventTimestamp" : "2020-11-02T20:17:35Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.5,
+  "exchangeRateBasis" : "USD/EUR",
+  "executionTimestamp" : "2020-11-02T11:04:20Z",
+  "expirationDate" : "2020-11-05",
+  "firstExerciseDate" : "2020-11-05",
+  "leg1" : {
+    "notionalAmount" : 25000,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "notionalAmount" : 50000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 17941.68,
+  "optionPremiumCurrency" : "EUR",
+  "packageIndicator" : false,
+  "putAmount" : 25000,
+  "putCurrency" : "EUR",
+  "reportSubmittingEntityID" : "F226TOH6YD6XJB17KS62",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 0.5
+  },
+  "strikePriceCurrency" : "USD/EUR",
+  "strikePriceNotation" : "Monetary"
+}

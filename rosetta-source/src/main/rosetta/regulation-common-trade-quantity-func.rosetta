@@ -1,0 +1,412 @@
+namespace drr.regulation.common.trade.quantity
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.* as cde
+import drr.standards.iso.*
+
+func NotionalAmountLeg2_01_Validation: <"Notional Amount Leg - 2">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        direction2Leg2 Direction2Enum (0..1)
+        notionalAmountLeg2 ShortFraction5DecimalNumber (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> CURR, CommonAssetClass -> EQUI] any = assetClass
+        then if direction2Leg2 exists
+            then notionalAmountLeg2 exists and notionalAmountLeg2 >= 0
+                    or notionalAmountLeg2 = 9999999999999999999999999
+
+func NotionalAmountLeg2_02_Validation: <"Notional Amount Leg - 2">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        direction2Leg2 Direction2Enum (0..1)
+        notionalAmountLeg2 ShortFraction5DecimalNumber (0..1)
+        contractType CommonContractType (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> COMM
+                    and [CommonContractType -> CFDS, CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> OPTN, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType)
+        then (if direction2Leg2 exists then notionalAmountLeg2 exists)
+                or notionalAmountLeg2 = 9999999999999999999999999
+
+func NotionalCurrrencyLeg1_01_Validation: <"Notional Currency Leg - 1">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalAmountLeg1 ShortFraction5DecimalNumber (0..1)
+        notionalCurrencyLeg1 ISOCurrencyCodeEnum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if notionalAmountLeg1 exists
+            then notionalCurrencyLeg1 exists
+                    and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] all <> notionalCurrencyLeg1 // XEU, XFU does not exists
+
+func NotionalCurrrencyLeg1_02_Validation: <"Notional Currency Leg - 1">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalAmountLeg1 ShortFraction5DecimalNumber (0..1)
+        notionalCurrencyLeg1 ISOCurrencyCodeEnum (0..1)
+        contractType CommonContractType (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> CFDS, CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> SWPT] any = contractType
+                and assetClass = CommonAssetClass -> CURR
+        then if notionalAmountLeg1 exists
+            then notionalCurrencyLeg1 exists
+                    and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] all <> notionalCurrencyLeg1
+
+func NotionalCurrencyLeg2_Validation: <"Notional Currency - Leg 2 "> //currently asic only. TODO: Add to MAS DTCC_MAS_BR_0077_01,
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalAmountLeg2 ShortFraction5DecimalNumber (0..1)
+        notionalCurrencyLeg2 ISOCurrencyCodeEnum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if notionalAmountLeg2 exists
+            then (notionalCurrencyLeg2 exists and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] all <> notionalCurrencyLeg2)
+
+func QuantityUnitOfMeasureLeg_Validation: <"Quantity unit of measure - Leg 1">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        totalNotionalQuantityLeg ShortFraction5DecimalNumber (0..1)
+        quantityUnitOfMeasureLeg Max4Text (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if totalNotionalQuantityLeg exists
+            then quantityUnitOfMeasureLeg exists
+
+func NotionalQuantityLeg1_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalQuantityLeg1 ShortFraction5DecimalNumber (1..1)
+        totalNotionalQuantityLeg1 ShortFraction5DecimalNumber (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and CommonAssetClass -> COMM = assetClass
+        then notionalQuantityLeg1 exists and notionalQuantityLeg1 <= totalNotionalQuantityLeg1 and notionalQuantityLeg1 > 0
+
+func NotionalQuantityLeg2_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalQuantityLeg2 ShortFraction5DecimalNumber (1..1)
+        totalNotionalQuantityLeg2 ShortFraction5DecimalNumber (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and CommonAssetClass -> COMM = assetClass
+        then if notionalQuantityLeg2 exists
+                    and totalNotionalQuantityLeg2 <> 9999999999999999999999999
+            then notionalQuantityLeg2 <= totalNotionalQuantityLeg2
+            else if notionalQuantityLeg2 < 0
+            then False
+
+func TotalNotionalQuantityLeg1_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalQuantityLeg1 ShortFraction5DecimalNumber (1..1)
+        totalNotionalQuantity ShortFraction5DecimalNumber (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if totalNotionalQuantity > notionalQuantityLeg1 or totalNotionalQuantity = 9999999999999999999999999
+            then True
+            else if totalNotionalQuantity < 0
+            then False
+
+func TotalNotionalQuantityLeg2_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        notionalQuantityLeg2 ShortFraction5DecimalNumber (1..1)
+        totalNotionalQuantityLeg2 ShortFraction5DecimalNumber (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if notionalQuantityLeg2 < totalNotionalQuantityLeg2
+            then if notionalQuantityLeg2 <> totalNotionalQuantityLeg2
+                then True
+                else if totalNotionalQuantityLeg2 < 0
+                then False
+
+func NotionalQuantityScheduleEffectiveDate_Validation:
+    inputs:
+        notionalQuantitySchedule cde.quantity.NotionalPeriod (0..*)
+    output:
+        result boolean (1..1)
+    set result:
+        if notionalQuantitySchedule -> value exists
+        then notionalQuantitySchedule -> effectiveDate exists
+        else notionalQuantitySchedule -> effectiveDate is absent
+
+func NotionalQuantityScheduleEndDate_Validation:
+    inputs:
+        notionalQuantitySchedule cde.quantity.NotionalPeriod (0..*)
+    output:
+        result boolean (1..1)
+    set result:
+        if notionalQuantitySchedule -> value exists
+        then notionalQuantitySchedule -> endDate exists
+        else notionalQuantitySchedule -> endDate is absent
+
+func NotionalAmountScheduleEffectiveDate_Validation:
+    inputs:
+        notionalAmountSchedule cde.quantity.NotionalPeriod (0..*)
+    output:
+        result boolean (1..1)
+    set result:
+        if notionalAmountSchedule -> value exists
+        then notionalAmountSchedule -> effectiveDate exists
+                and (notionalAmountSchedule -> value count = notionalAmountSchedule -> effectiveDate count)
+        else notionalAmountSchedule -> effectiveDate is absent
+
+func NotionalScheduleEffectiveDateDTCC_Validation:
+    inputs:
+        value ShortFraction5DecimalNumber (1..*)
+        effectiveDate date (1..*)
+    output:
+        result boolean (1..1)
+    set result:
+        (if value exists
+        then (effectiveDate exists
+                and (if effectiveDate count > 1
+                    then effectiveDate count = value count))
+        else effectiveDate is absent)
+
+func NotionalScheduleEndDate_Validation:
+    inputs:
+        value ShortFraction5DecimalNumber (0..*)
+        endDate date (0..*)
+    output:
+        result boolean (1..1)
+    set result:
+        if value exists
+        then endDate exists and (value count = endDate count)
+        else endDate is absent
+
+func NotionalScheduleEndDateCountDTCC_Validation:
+    inputs:
+        value ShortFraction5DecimalNumber (0..*)
+        endDate date (0..*)
+    output:
+        result boolean (1..1)
+    set result: if endDate count >= 1 then endDate count = value count
+
+func NotionalAmountScheduleCount_Validation:
+    inputs:
+        notionalAmountSchedule cde.quantity.NotionalPeriod (0..*)
+    output:
+        result boolean (1..1)
+    set result:
+        notionalAmountSchedule -> value count
+                = notionalAmountSchedule -> effectiveDate count
+            and notionalAmountSchedule -> value count
+                = notionalAmountSchedule -> endDate count
+
+func QuantityFrequencyLeg1:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        quantityFrequency QuantityFrequency (0..1)
+
+    alias quantity:
+        TradeForEvent(reportableEvent)
+            then extract
+                (if Qualify_Commodity_Swap_Basis(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then CommodityObservablePriceQuantity(
+                            tradableProduct -> tradeLot only-element,
+                            CommodityLeg1(ProductForTrade)
+                        )
+                else if Qualify_Commodity_Swap_FixedFloat(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then CommodityFixedPriceQuantity(tradableProduct -> tradeLot only-element)
+                else if Qualify_Commodity_Swaption(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                        and Qualify_Commodity_Swap_Basis(
+                                UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                            )
+                then CommodityObservablePriceQuantity(
+                            tradableProduct -> tradeLot only-element,
+                            CommodityLeg1(UnderlierForProduct(ProductForTrade))
+                        )
+                else if Qualify_Commodity_Swaption(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                        and Qualify_Commodity_Swap_FixedFloat(
+                                UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                            )
+                then CommodityFixedPriceQuantity(tradableProduct -> tradeLot only-element)
+                else if Qualify_Commodity_Option(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then tradableProduct -> tradeLot -> priceQuantity only-element
+                else if IsCommodityFixedPriceForward(ProductForTrade)
+                then (tradableProduct -> tradeLot -> priceQuantity
+                    filter pq [ pq -> price exists ]
+                    then only-element)
+                else if IsCommodityFloatingPriceForward(ProductForTrade)
+                then CommodityObservablePriceQuantity(
+                            tradableProduct -> tradeLot only-element,
+                            CommodityLeg1(ProductForTrade)
+                        ))
+
+    alias frequency:
+        TradeForEvent(reportableEvent)
+            then extract
+                (if Qualify_Commodity_Swap_Basis(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then QuantityFrequencyOrCalculationPeriod(
+                            CommodityLeg1(ProductForTrade) -> calculationPeriodDates,
+                            CommodityObservablePriceQuantity(
+                                    tradableProduct -> tradeLot only-element,
+                                    CommodityLeg1(ProductForTrade)
+                                )
+                        )
+                else if Qualify_Commodity_Swap_FixedFloat(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then QuantityFrequencyOrCalculationPeriod(
+                            CommodityLeg2(ProductForTrade) -> calculationPeriodDates,
+                            CommodityFixedPriceQuantity(
+                                    tradableProduct -> tradeLot only-element
+                                )
+                        )
+                else if Qualify_Commodity_Swaption(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                        and Qualify_Commodity_Swap_Basis(
+                                UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                            )
+                then QuantityFrequencyOrCalculationPeriod(
+                            CommodityLeg1(UnderlierForProduct(ProductForTrade)) -> calculationPeriodDates,
+                            CommodityObservablePriceQuantity(
+                                    tradableProduct -> tradeLot only-element,
+                                    CommodityLeg1(UnderlierForProduct(ProductForTrade))
+                                )
+                        )
+                else if Qualify_Commodity_Swaption(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                        and Qualify_Commodity_Swap_FixedFloat(
+                                UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                            )
+                then QuantityFrequencyOrCalculationPeriod(
+                            CommodityLeg2(UnderlierForProduct(ProductForTrade)) -> calculationPeriodDates,
+                            CommodityFixedPriceQuantity(
+                                    tradableProduct -> tradeLot only-element
+                                )
+                        )
+                else if Qualify_Commodity_Option(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then QuantityFrequencyOrCalculationPeriod(
+                            ProductForTrade -> contractualProduct -> economicTerms -> payout -> optionPayout -> observationTerms -> calculationPeriodDates only-element,
+                            tradableProduct -> tradeLot -> priceQuantity only-element
+                        )
+                else if IsCommodityFixedPriceForward(ProductForTrade)
+                then (tradableProduct -> tradeLot -> priceQuantity
+                    filter pq [ pq -> price exists ] -> quantity
+                    filter q [ q -> frequency exists ] -> frequency only-element)
+                else if IsCommodityFloatingPriceForward(ProductForTrade)
+                then QuantityFrequencyOrCalculationPeriod(
+                            ProductForTrade -> contractualProduct -> economicTerms -> payout -> commodityPayout -> calculationPeriodDates only-element,
+                            CommodityObservablePriceQuantity(
+                                    tradableProduct -> tradeLot only-element,
+                                    CommodityLeg1(ProductForTrade)
+                                )
+                        ))
+
+    set quantityFrequency:
+        QuantityFrequency {
+            period: FrequencyPeriod(quantity, frequency),
+            periodMultiplier: frequency -> periodMultiplier,
+        }
+
+func QuantityFrequencyLeg2:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        quantityFrequency QuantityFrequency (0..1)
+
+    alias quantity:
+        TradeForEvent(reportableEvent)
+            then extract
+                (if IsCommoditySwap(ProductForTrade)
+                then CommodityObservablePriceQuantity(
+                            tradableProduct -> tradeLot only-element,
+                            CommodityLeg2(ProductForTrade)
+                        )
+                else if IsCommodityFixedPriceForward(ProductForTrade)
+                then (tradableProduct -> tradeLot -> priceQuantity
+                    filter pq [ pq -> price is absent ]
+                    then only-element)
+                else if IsCommodityFloatingPriceForward(ProductForTrade)
+                then CommodityForwardObservablePriceQuantity(
+                            tradableProduct -> tradeLot only-element,
+                            ProductForTrade -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element
+                        ))
+
+    alias frequency:
+        TradeForEvent(reportableEvent)
+            then extract
+                (if IsCommoditySwap(ProductForTrade)
+                then QuantityFrequencyOrCalculationPeriod(
+                            CommodityLeg2(ProductForTrade) -> calculationPeriodDates,
+                            CommodityObservablePriceQuantity(
+                                    tradableProduct -> tradeLot only-element,
+                                    CommodityLeg2(ProductForTrade)
+                                )
+                        )
+                else if IsCommodityFixedPriceForward(ProductForTrade)
+                then (tradableProduct -> tradeLot -> priceQuantity
+                    filter pq [ pq -> price is absent ] -> quantity
+                    filter q [ q -> frequency exists ] -> frequency only-element)
+                else if IsCommodityFloatingPriceForward(ProductForTrade)
+                then QuantityFrequencyOrCalculationPeriod(
+                            ProductForTrade -> contractualProduct -> economicTerms -> payout -> commodityPayout -> calculationPeriodDates only-element,
+                            CommodityForwardObservablePriceQuantity(
+                                    tradableProduct -> tradeLot only-element,
+                                    ProductForTrade -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element
+                                )
+                        ))
+
+    set quantityFrequency:
+        QuantityFrequency {
+            period: FrequencyPeriod(quantity, frequency),
+            periodMultiplier: frequency -> periodMultiplier,
+        }

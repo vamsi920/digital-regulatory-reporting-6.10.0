@@ -1,0 +1,95 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "Commodity",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300KFSLY4U7N3LL12",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "549300AJRHKBLY9GM262",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2006-07-01",
+  "eventIdentifier" : "00122941455512345BR777123456789",
+  "eventTimestamp" : "2023-07-19T14:44:58Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-07-19T14:44:58Z",
+  "expirationDate" : "2006-07-31",
+  "finalContractualSettlementDate" : "2006-07-31",
+  "leg1" : {
+    "notionalAmount" : 487862.5,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2500,
+    "payerIdentifier" : "549300KFSLY4U7N3LL12",
+    "payerIdentifierFormat" : "Lei",
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "MBTU",
+    "receiverIdentifier" : "549300AJRHKBLY9GM262",
+    "receiverIdentifierFormat" : "Lei",
+    "totalNotionalQuantity" : 77500
+  },
+  "leg2" : {
+    "notionalAmount" : 487862.5,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2500,
+    "payerIdentifier" : "549300AJRHKBLY9GM262",
+    "payerIdentifierFormat" : "Lei",
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "MBTU",
+    "receiverIdentifier" : "549300KFSLY4U7N3LL12",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 77500
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "NATURAL GAS-HENRY HUB-NYMEX",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "postPricedSwapIndicator" : false,
+  "price" : {
+    "monetary" : 6.295
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "MBTU",
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300KFSLY4U7N3LL12",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPCOMMODITYDEL01"
+}

@@ -1,0 +1,39 @@
+{
+  "actionType" : "EROR",
+  "cleared" : "N",
+  "counterparty1" : "549300K7EEOSKRJDRI19",
+  "counterparty2" : "549300O5MFEP1XJ40B46",
+  "counterparty2IdentifierSource" : "LEID",
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "X0012024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "submittedForParty" : "549300K7EEOSKRJDRI19",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "versionTransaction" : "CORE1.0"
+  },
+  "eventIdentifier" : "X001",
+  "eventTimestamp" : "2011-02-04T16:42:16Z",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "level" : "TCTN",
+  "nonReportable" : {
+    "instrumentType" : "Other",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH"
+        },
+        "Header" : {
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "549300K7EEOSKRJDRI19",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "WITHDRAWALERROREXX01"
+}

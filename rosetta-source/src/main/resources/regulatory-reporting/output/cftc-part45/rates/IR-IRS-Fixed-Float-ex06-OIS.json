@@ -1,0 +1,97 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "DUMMYLEI012345678906",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "DUMMYLEI012345678905",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2021-03-15",
+  "eventIdentifier" : "DTDApproved2380442703EMIRRiskNewNewInterest",
+  "eventTimestamp" : "2021-03-12T09:45:08Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-12T09:43:47Z",
+  "expirationDate" : "2021-12-10",
+  "finalContractualSettlementDate" : "2021-12-10",
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 33000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "DUMMYLEI012345678905",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    },
+    "receiverIdentifier" : "DUMMYLEI012345678906",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 33000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "DUMMYLEI012345678906",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "YEAR",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "receiverIdentifier" : "DUMMYLEI012345678905",
+    "receiverIdentifierFormat" : "Lei",
+    "spread" : {
+      "basis" : 1
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "NotionalSchedule" : "Constant",
+          "ReferenceRateTermUnit" : "DAYS",
+          "ReferenceRateTermValue" : 1,
+          "UnderlierID" : "USD-Federal Funds-H.15-OIS-COMPOUND",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Fixed_Float_OIS"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI012345678906",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "IRIRSFIXEDFLOATEXO03"
+}

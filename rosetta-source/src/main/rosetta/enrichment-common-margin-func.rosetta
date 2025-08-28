@@ -1,0 +1,56 @@
+namespace drr.enrichment.common.margin
+version "${project.version}"
+
+import drr.regulation.common.*
+
+func Create_RegimeReportableCollateral: <"Creates RegimeReportableEvent from a ReportableEvent and list of RegimeReportingSide.">
+    inputs:
+        reportableCollateral ReportableCollateral (1..1)
+        regimeReportingSide RegimeReportingSide (0..*)
+    output:
+        regimeReportableCollateral RegimeReportableCollateral (1..1)
+
+    set regimeReportableCollateral:
+        RegimeReportableCollateral {
+            collateralDetails: reportableCollateral -> collateralDetails,
+            reportableInformation: reportableCollateral -> reportableInformation,
+            regimeReportingSide: regimeReportingSide
+        }
+
+func Create_CollateralReportInstruction: <"Creates CollateralReportInstruction from a ReportableCollateral and ReportingSide.">
+    inputs:
+        reportableCollateral ReportableCollateral (1..1)
+        reportingSide ReportingSide (1..1)
+    output:
+        collateralReportInstruction CollateralReportInstruction (1..1)
+
+    set collateralReportInstruction:
+        CollateralReportInstruction {
+            collateralDetails: reportableCollateral -> collateralDetails,
+            reportableInformation: reportableCollateral -> reportableInformation,
+            reportingSide: reportingSide
+        }
+
+func Create_CollateralReportInstructionForRegime: <"Creates CollateralReportInstruction from a RegimeReportableCollateral for the specified regime and supervisory body.">
+    inputs:
+        regimeReportableCollateral RegimeReportableCollateral (1..1)
+        regimeName RegimeNameEnum (1..1)
+        supervisoryBody SupervisoryBodyEnum (1..1)
+        delegatedReporting boolean (1..1)
+    output:
+        collateralReportInstruction CollateralReportInstruction (0..1)
+
+    alias reportingSide:
+        regimeReportableCollateral -> regimeReportingSide
+            filter
+                item -> regimeName = regimeName
+                    and item -> supervisoryBody = supervisoryBody
+            then extract
+                if delegatedReporting
+                then delegatedReportingSide
+                else reportingSide
+            then only-element
+
+    set collateralReportInstruction:
+        if reportingSide exists
+        then Create_CollateralReportInstruction(regimeReportableCollateral, reportingSide)

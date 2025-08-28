@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-csa-valuation-report-to-dtcc-rds-harmonized",
+  "name" : "Csa Valuation Report To Dtcc Rds Harmonized",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.dtcc.rds.harmonized.csa.rewrite.valuation.functions.Project_CSAValuationReportToDtccRdsHarmonized",
+    "inputType" : "drr.regulation.csa.rewrite.valuation.CSAValuationReport",
+    "outputType" : "iso20022.dtcc.rds.harmonized.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-csa-valuation",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/dtcc-rds-rosetta-xml-config.json"
+  }
+}

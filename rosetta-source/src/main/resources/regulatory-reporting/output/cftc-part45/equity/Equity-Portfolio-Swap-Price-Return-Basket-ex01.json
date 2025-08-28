@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "Equity",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "TESTHOUSELEI00000001",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "TESTCLIENTLEI0000009",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2021-04-16",
+  "eventIdentifier" : "envuatuatExt148a5f4c0a8484da5a2dc38fed2e31c7a",
+  "eventTimestamp" : "2021-04-14T10:27:32.886Z",
+  "eventType" : "TRAD",
+  "executionAgentCounterparty1" : "NOAP",
+  "executionAgentCounterparty2" : "TESTCLIENTLEI0000009",
+  "executionTimestamp" : "2021-04-14T10:01:05Z",
+  "expirationDate" : "2022-04-18",
+  "finalContractualSettlementDate" : "2022-04-18",
+  "leg1" : {
+    "notionalAmount" : 0.66,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 0.66,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO"
+    },
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "USD-LIBOR-BBA"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "TESTHOUSELEI00000001",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "EQUITYPORTFOLIOSWA01"
+}

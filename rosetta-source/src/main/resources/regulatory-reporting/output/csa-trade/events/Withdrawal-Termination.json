@@ -1,0 +1,41 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierSource" : "LEID",
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "077749839555123459991234569BR7771234567892024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "submittedForParty" : "213800IV9PCAC364HN60",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC" ],
+    "tradeParty1TransactionID" : "WITHDRAWALTERMINAT01",
+    "versionTransaction" : "CORE1.0"
+  },
+  "eventIdentifier" : "077749839555123459991234569BR777123456789",
+  "eventTimestamp" : "2021-12-06T17:09:13Z",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "level" : "TCTN",
+  "nonReportable" : {
+    "instrumentType" : "Other",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH"
+        },
+        "Header" : {
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "WITHDRAWALTERMINAT02"
+}

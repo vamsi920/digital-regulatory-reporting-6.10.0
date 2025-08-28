@@ -1,0 +1,77 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true
+  },
+  "cleared" : "N",
+  "counterparty1" : "5493001RKR55V4X61F71",
+  "counterparty2" : "549300O5MFEP1XJ40B46",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2011-02-08",
+  "eventTimestamp" : "2011-02-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2016-02-08",
+  "leg1" : {
+    "fixedRate" : 0.0253,
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A011",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "NotionalSchedule" : "Constant",
+          "ReferenceRateTermUnit" : "MNTH",
+          "ReferenceRateTermValue" : 6,
+          "UnderlierID" : "USD-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Fixed_Float"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "5493001RKR55V4X61F71",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "IRIRSFIXEDFLOATEXX01"
+}

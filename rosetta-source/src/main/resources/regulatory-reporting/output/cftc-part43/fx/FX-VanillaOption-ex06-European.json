@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "callAmount" : 1000000,
+  "callCurrency" : "USD",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300ZK53CNGEEI6A29",
+  "counterparty2" : "R0MUWSFPU8MPRO8K5P83",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-12-03",
+  "eventTimestamp" : "2020-12-03T15:24:36Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 104.3,
+  "exchangeRateBasis" : "USD/JPY",
+  "executionTimestamp" : "2020-12-03T15:22:41Z",
+  "expirationDate" : "2021-06-03",
+  "firstExerciseDate" : "2021-06-03",
+  "leg1" : {
+    "notionalAmount" : 104300000,
+    "notionalCurrency" : "JPY",
+    "settlementCurrency" : "JPY"
+  },
+  "leg2" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 104300000,
+  "putCurrency" : "JPY",
+  "reportSubmittingEntityID" : "549300ZK53CNGEEI6A29",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 104.3
+  },
+  "strikePriceCurrency" : "USD/JPY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

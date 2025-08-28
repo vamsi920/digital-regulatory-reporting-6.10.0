@@ -1,0 +1,18 @@
+namespace drr.standards.iosco.cde.base.price
+version "${project.version}"
+
+import drr.standards.iso.*
+
+type PriceFormat:
+    monetary BaseOne18Rate (0..1)
+    decimal BaseOneRate (0..1)
+    percentage BaseOneRate (0..1)
+    basis BasisFormat (0..1)
+
+    condition:
+        one-of
+
+type PricePeriod:
+    price PriceFormat (1..1)
+    effectiveDate date (1..1)
+    endDate date (0..1)

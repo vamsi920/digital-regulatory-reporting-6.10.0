@@ -1,0 +1,223 @@
+namespace drr.regulation.hkma.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.*
+import drr.regulation.common.*
+import drr.regulation.hkma.*
+import drr.standards.*
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iso.*
+
+corpus Dissemination Valuation
+
+corpus Dissemination DTCC_Harmonized
+
+report HKMA Valuation in T+1
+  	from ValuationReportInstruction
+  	when ReportableProduct
+  	with type HKMAValuationReport
+
+eligibility rule ReportableProduct from ValuationReportInstruction: <"When eligible for HKMA">
+    [regulatoryReference HKMA Valuation
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+reporting rule ReportingTimestamp from ValuationReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference HKMA Valuation dataElement "4" field "Reporting Timestamp"
+        provision "Date and time when the contract was reported to the trade repository."]
+    Now
+        as "4 Reporting timestamp"
+
+reporting rule Counterparty1 from ValuationReportInstruction: <"Counterparty 1">
+    [regulatoryReference HKMA Valuation dataElement "6" field "Counterparty 1"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question.
+In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty."]
+    extract PartyLei(reportingSide -> reportingParty -> partyId)
+        as "6 Counterparty 1"
+
+reporting rule Counterparty2 from ValuationReportInstruction: <"Counterparty 2">
+    [regulatoryReference HKMA Valuation dataElement "7" field "Counterparty 2"
+        provision "Identifier of the second counterparty to an OTC derivative transaction.
+
+        For Party ID SWIFTBIC and BRN, party should input the first eight digits only. 
+        e.g. SwiftBIC: HKMAHKHHXXX should be inputted as HKMAHKHH
+            BRN: 12345678 - 000 - 04 - 11 - A should be inputted as 12345678.
+
+        For Party ID CICR, party should input all character(s) and digits.
+        e.g. For Local company (CI): Seven digits such as 9999999 .
+            For Non-local company (CR): Character(s) plus seven digits 
+                such as X9999999 or XX9999999.
+        "]
+    extract
+        PartyLeiAndPersonByRoles(
+                reportingSide -> reportingCounterparty,
+                reportingSide -> reportingParty
+            )
+        as "7 Counterparty 2"
+
+reporting rule Counterparty2Name from ValuationReportInstruction: <"Counterparty 2 name">
+    [regulatoryReference HKMA Valuation dataElement "8" field "Counterparty 2 name"
+        provision "If the identifier reported for Counterparty 2 is not an LEI, or SWIFTBIC, the legal name of Counterparty 2."]
+    extract reportingSide -> reportingCounterparty
+    then filter
+        partyId -> identifierType all <> PartyIdentifierTypeEnum -> LEI
+            and partyId -> identifier all <> "ANON"
+    then extract name
+        as "8 Counterparty 2 name"
+
+reporting rule Counterparty2IdentifierTypeIndicator from ValuationReportInstruction: <"Counterparty 2 identifier type indicator">
+    [regulatoryReference HKMA Valuation dataElement "9" field "Counterparty 2 identifier type indicator"
+        provision "Indicator of whether LEI was used to identify the Counterparty 2."]
+    extract reportingSide -> reportingCounterparty
+    then extract
+        if partyId -> identifierType only-element = PartyIdentifierTypeEnum -> LEI
+        then True
+        else False
+        as "9 Counterparty 2 identifier type indicator"
+
+reporting rule ValuationAmount from ValuationReportInstruction: <"Valuation Amount">
+    [regulatoryReference HKMA Valuation dataElement "34" field "Valuation Amount"
+        provision "Current value of the outstanding contract. without applying any valuation adjustments (i.e. any XVA adjustment such as CVA, DVA, etc). Valuation amount is expressed as the exit cost of the contract or components of the contract, i.e. the price that would be received to sell the contract (in the market in an orderly transaction at the valuation date)."]
+    extract valuationDetails -> valuation -> amount -> value
+        as "34 Valuation Amount"
+
+reporting rule ValuationCurrency from ValuationReportInstruction: <"Valuation Currency">
+    [regulatoryReference HKMA Valuation dataElement "35" field "Valuation Currency"
+        provision "Currency in which the valuation amount is denominated."]
+    extract valuationDetails -> valuation -> amount -> unit -> currency
+    then extract ConvertNonISOToISOCurrency
+        as "35 Valuation Currency"
+
+reporting rule ValuationTimestamp from ValuationReportInstruction: <"Valuation Timestamp">
+    [regulatoryReference HKMA Valuation dataElement "36" field "Valuation Timestamp"
+        provision "Date and time of the last valuation marked to market, provided by the central counterparty or calculated using the current or last available market price of the inputs. If for example a currency exchange rate is the basis for a transactions valuation, then the valuation timestamp reflects the moment in time that exchange rate was current."]
+    extract valuationDetails -> valuation -> timestamp
+        as "36 Valuation Timestamp"
+
+reporting rule ValuationMethod from ValuationReportInstruction: <"Valuation Method">
+    [regulatoryReference HKMA Valuation dataElement "37" field "Valuation Method"
+        provision "Source and method used for the valuation of the transaction by the reporting counterparty. If at least one valuation input is used that is classified as mark-to-model in the below table, then the whole valuation is classified as mark-to-model. If only inputs are used that are classified as mark-to-market in the table below, then the whole valuation is classified as mark-to-market."]
+    extract valuationDetails -> valuation
+    then extract cde.valuation.ValuationMethod to-enum ValuationType1Code
+        as "37 Valuation Method"
+
+reporting rule Delta from ValuationReportInstruction: <"Delta">
+    [regulatoryReference HKMA Valuation dataElement "85" field "Delta"
+        provision "The ratio of the change in the price of an OTC derivative transaction to the change in the price of the underlier, if applicable."]
+    extract valuationDetails -> valuation -> delta
+        as "85 Delta"
+
+reporting rule ActionType from ValuationReportInstruction: <"Action Type">
+    [regulatoryReference HKMA Valuation dataElement "134" field "Action Type"
+        provision "Type of action taken on the transaction or type of end-of-day reporting."]
+    extract
+        if valuationDetails -> tradeInformation -> action = VALU
+        then valuationDetails -> tradeInformation -> action
+        as "134 Action Type"
+
+// Sprint 13/2025 TH Comment: This symbol will be reviewed with firms to verify the usage
+reporting rule HKMAUniqueTransactionIdentifier from ValuationReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Valuation dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017."]
+    extract
+        if GetRegimeSpecificIdentifiers(
+                reportableInformation,
+                SupervisoryBodyEnum -> HKMA,
+                TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableInformation,
+                    SupervisoryBodyEnum -> HKMA,
+                    TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+                )
+        else if item -> valuationDetails -> tradeInformation -> uniqueTradeIdentifier -> identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+        then valuationDetails -> tradeInformation -> uniqueTradeIdentifier -> assignedIdentifier -> identifier
+    then distinct
+    then only-element
+
+reporting rule UniqueTransactionIdentifier from ValuationReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Valuation dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017. "]
+    HKMAUniqueTransactionIdentifier then filter IsMax32UpperCaseAlphanumericText = True
+        as "138 Unique Transaction Identifier (UTI)"
+
+reporting rule UniqueTransactionIdentifierProprietary from ValuationReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Valuation dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017. "]
+    if UniqueTransactionIdentifier is absent
+    then Extract_UTIPropietary
+        then Extract_HKMATradeIdentifier
+        as "138 Unique Transaction Identifier (UTI) Proprietary"
+
+reporting rule SubmitterIdentifier from ValuationReportInstruction: <"Submitter Identifier">
+    [regulatoryReference HKMA Valuation dataElement "153" field "Submitter Identifier"
+        provision "Identifier of the entity submitting the OTC derivative transaction to the Trade Repository."]
+    extract ExtractReportSubmittingPartyIdentifier(reportingSide)
+        as "153 Submitter identifier"
+
+reporting rule EntityResponsibleForReporting from ValuationReportInstruction: <"Entity responsible for reporting">
+    [regulatoryReference HKMA Valuation dataElement "154" field "Entity responsible for reporting"
+        provision "Identification code of the Reporting Party who has the obligation to report the transaction."]
+    extract ExtractPartyResponsibleForReportingIdentifier(reportingSide)
+        as "154 Entity responsible for reporting"
+
+reporting rule NumberRecords from ValuationReportInstruction: <"Number records">
+    [regulatoryReference HKMA Valuation dataElement "199" field "Number records"
+        provision "Indicates the number of trade action in the request file."]
+    empty
+        as "199 Number records"
+
+reporting rule TechnicalRecordId from ValuationReportInstruction: <"Technical record identification">
+    [regulatoryReference HKMA Valuation dataElement "200" field "Technical record identification"
+        provision "Unique identifier of a trade action used as part of error management and status advice message."]
+    extract reportableInformation -> partyInformation -> regimeInformation
+    then filter regimeName = RegimeNameEnum -> HKMA
+    then extract technicalRecordId
+    then distinct only-element
+        as "200 Technical record identification"
+
+reporting rule Remarks from ValuationReportInstruction: <"Remarks">
+    [regulatoryReference HKMA Valuation dataElement "201" field "Remarks"
+        provision "A TR Trade Reference generated by the HKTR for post-trade action correlation, if applicable, when the designated trade cannot be correlated by using the UTI."]
+    empty
+        as "201 Remarks"
+
+reporting rule Counterparty2IdentifierFormat from ValuationReportInstruction: <"Counterparty 2 Identifier Format">
+    [regulatoryReference HKMA Valuation field "Counterparty 2 Identifier Format (Non Reportable)"
+        provision "Determines the identifier format of Counterparty 2 based on role or identifier type"]
+    extract reportInstruction [
+        extract reportingSide -> reportingCounterparty
+        then extract
+            if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                    only-element
+            then PartyIdentifierFormat2Enum -> NaturalPerson
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+            then PartyIdentifierFormat2Enum -> Lei
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+            then PartyIdentifierFormat2Enum -> SWIFTBIC
+            else PartyIdentifierFormat2Enum -> Other
+    ]
+        as "Counterparty 2 Identifier Format (Non Reportable)"
+
+reporting rule Counterparty2SchemeName from ValuationReportInstruction: <"Counterparty 2 Scheme Name">
+    [regulatoryReference HKMA Valuation field "Counterparty 2 Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when identifier format is 'Other' for Counterparty 2"]
+    if Counterparty2IdentifierFormat = Other
+    then reportingSide -> reportingCounterparty
+        then drr.regulation.hkma.rewrite.trade.Filter_HKMAPriorityPartyIdentifiers
+        then drr.regulation.hkma.rewrite.trade.Extract_HKMASchemeName
+        as "Counterparty 2 Scheme Name (Non Reportable)"
+
+reporting rule UniqueTransactionIdentifierProprietarySchemeName from ValuationReportInstruction: <"Unique Transaction Identifier Proprietary Scheme Name">
+    [regulatoryReference HKMA Valuation field "Unique Transaction Identifier Proprietary Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when Unique Transaction Identifier is proprietary"]
+    if UniqueTransactionIdentifierProprietary exists
+    then Extract_UTIPropietary
+        then Extract_HKMATransactionSchemeName
+        as "Unique Transaction Identifier Proprietary Scheme Name (Non Reportable)"

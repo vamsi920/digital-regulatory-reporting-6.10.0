@@ -1,0 +1,69 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "bookingLocation" : "GB",
+  "callAmount" : 2325581.4,
+  "callCurrency" : "USD",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "PHYS",
+  "direction1" : "BYER",
+  "effectiveDate" : "2019-01-07",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 107.5,
+  "exchangeRateBasis" : "USD/JPY",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2019-04-26",
+  "finalContractualSettlementDate" : "2019-04-26",
+  "firstExerciseDate" : "2019-04-26",
+  "leg1" : {
+    "notionalAmount" : 250000001,
+    "notionalCurrency" : "JPY"
+  },
+  "leg2" : {
+    "notionalAmount" : 2325581.4,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 57000,
+  "optionPremiumCurrency" : "USD",
+  "optionStyle" : "EURO",
+  "optionType" : "OTHR",
+  "putAmount" : 250000001,
+  "putCurrency" : "JPY",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingSpecifiedPerson" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 107.5
+  },
+  "strikePriceCurrency" : "USD/JPY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

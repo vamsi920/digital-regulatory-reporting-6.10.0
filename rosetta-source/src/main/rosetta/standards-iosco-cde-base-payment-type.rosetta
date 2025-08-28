@@ -1,0 +1,37 @@
+namespace drr.standards.iosco.cde.base.payment
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+type PeriodicPayment:
+    fixedRateDayCountConvention InterestComputationMethod4Code (0..1)
+    floatingRateDayCountConvention InterestComputationMethod4Code (0..1)
+    fixedRatePaymentFrequencyPeriod FrequencyPeriodEnum (0..1)
+    floatingRatePaymentFrequencyPeriod FrequencyPeriodEnum (0..1)
+    fixedRatePaymentFrequencyPeriodMultiplier Max3Number (0..1)
+    floatingRatePaymentFrequencyPeriodMultiplier Max3Number (0..1)
+
+    condition DayCountConventionChoice:
+        optional choice fixedRateDayCountConvention, floatingRateDayCountConvention
+
+    condition PaymentFrequencyPeriodChoice:
+        optional choice fixedRatePaymentFrequencyPeriod, floatingRatePaymentFrequencyPeriod
+
+    condition PaymentFrequencyPeriodMultiplierChoice:
+        optional choice fixedRatePaymentFrequencyPeriodMultiplier, floatingRatePaymentFrequencyPeriodMultiplier
+
+type OtherPayment:
+    paymentType PaymentType4Code (0..1)
+    amount ShortFraction5DecimalNumber (0..1)
+    currency ISOCurrencyCodeEnum (0..1)
+    date date (0..1)
+    payer Min20Max72AlphaNumericText (0..1)
+    payerFormat PartyIdentifierFormatEnum (0..1)
+    receiver Min20Max72AlphaNumericText (0..1)
+    receiverFormat PartyIdentifierFormatEnum (0..1)
+    // TH Comment Sprint 13/2025: Workaround for current DSL limitation. Added payerSchemeName and receiverSchemeName (HKMA specific) directly in this type. These fields will be removed once the DSL issue is addressed.
+    payerSchemeName string (0..1)
+    receiverSchemeName string (0..1)

@@ -1,0 +1,58 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "bookingLocation" : "US",
+  "cleared" : "I",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "FORW",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2011-02-12",
+  "eventTimestamp" : "2011-02-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.9175,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2011-12-21",
+  "finalContractualSettlementDate" : "2011-12-21",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 9175000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIdentifier" : "MOCKUPFXSTRATEGYFOO17F16Y15G14E13T1",
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingSpecifiedPerson" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "swapLinkID" : "MOCKUPFXSTRATEGYFOO17F16Y15G14E13T1",
+  "uniqueTransactionIdentifier" : "MOCKUPFXSTRATEGYFO01"
+}

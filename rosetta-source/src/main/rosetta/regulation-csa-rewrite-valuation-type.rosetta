@@ -1,0 +1,184 @@
+namespace drr.regulation.csa.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.common.*
+import drr.regulation.csa.*
+import drr.standards.iso.*
+
+type CSAValuationReport:
+    [rootType]
+    counterparty1 LEIIdentifier (1..1)
+        [ruleReference Counterparty1]
+    counterparty2 Min20Max72AlphaNumericText (1..1)
+        [ruleReference Counterparty2]
+    counterparty2IdentifierSource Max4Text (1..1)
+        [ruleReference Counterparty2IdentifierSource]
+    reportingTimestamp zonedDateTime (1..1)
+        [ruleReference ReportingTimestamp]
+    uniqueTransactionIdentifier Max52AlphaNumericText (1..1)
+        [ruleReference UniqueTransactionIdentifier]
+    submitterIdentifier string (1..1)
+        [ruleReference SubmitterIdentifier]
+    variationMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference VariationMarginCollateralPortfolioCode]
+    initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference InitialMarginCollateralPortfolioCode]
+    actionType ActionTypeEnum (1..1)
+        [ruleReference ActionType]
+    valuationAmount ShortFraction5DecimalNumber (1..1)
+        [ruleReference ValuationAmount]
+    valuationCurrency ISOCurrencyCodeEnum (1..1)
+        [ruleReference ValuationCurrency]
+    valuationMethod ValuationType1Code (1..1)
+        [ruleReference ValuationMethod]
+    valuationTimestamp zonedDateTime (1..1)
+        [ruleReference ValuationTimestamp]
+    nextFloatingReferenceResetDateLeg1 date (0..1)
+        [ruleReference NextFloatingReferenceResetDateLeg1]
+    nextFloatingReferenceResetDateLeg2 date (0..1)
+        [ruleReference NextFloatingReferenceResetDateLeg2]
+    lastFloatingReferenceValueLeg1 Max11Number (0..1)
+        [ruleReference LastFloatingReferenceValueLeg1]
+    lastFloatingReferenceValueLeg2 Max11Number (0..1)
+        [ruleReference LastFloatingReferenceValueLeg2]
+    lastFloatingReferenceResetDateLeg1 date (0..1)
+        [ruleReference LastFloatingReferenceResetDateLeg1]
+    lastFloatingReferenceResetDateLeg2 date (0..1)
+        [ruleReference LastFloatingReferenceResetDateLeg2]
+    delta ShortFraction5DecimalNumber (0..1)
+        [ruleReference Delta]
+    uniqueProductIdentifier Max52AlphaNumericText (1..1)
+        [ruleReference UniqueProductIdentifier]
+    // DTCC additional fields
+    tradeParty1IDType PartyIdentifierTypeEnum (1..1)
+        [ruleReference DTCC_TradeParty1IDType]
+    submittingPartyIDType PartyIdentifierTypeEnum (1..1)
+        [ruleReference DTCC_SubmittingPartyIDType]
+    usiID string (1..1)
+        [ruleReference DTCC_USIID]
+    usiIDPrefix string (1..1)
+        [ruleReference DTCC_USIIDPrefix]
+    submittedForParty LEIIdentifier (1..1)
+        [ruleReference DTCC_SubmittedForParty]
+    tradeParty1ReportingDestination SupervisoryBodyEnum (1..*)
+        [ruleReference DTCC_TradeParty1ReportingDestination]
+    tradeParty2ReportingDestination SupervisoryBodyEnum (1..*)
+        [ruleReference DTCC_TradeParty2ReportingDestination]
+    primaryAssetClass AssetClassEnum (1..1)
+        [ruleReference DTCC_PrimaryAssetClass]
+    comment1 string (1..1)
+        [ruleReference DTCC_Comment1]
+    messageID string (1..1)
+        [ruleReference DTCC_MessageID]
+    messageType string (1..1)
+        [ruleReference DTCC_MessageType]
+    tradeParty2ExecutionAgentID string (0..1)
+	    [ruleReference DTCC_TradeParty2ExecutionAgentID]
+    tradeParty2ExecutionAgentIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_TradeParty2ExecutionAgentIDType]
+    tradeParty1ExecutionAgentID string (0..1)
+	    [ruleReference DTCC_TradeParty1ExecutionAgentID]
+    tradeParty1ExecutionAgentIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_TradeParty1ExecutionAgentIDType]
+    tradeParty1TransactionID string (0..1)
+	    [ruleReference DTCC_TradeParty1TransactionID]
+    version string (0..1)
+	    [ruleReference DTCC_Version]
+
+    condition DTCC_CSA_VR_0002_01: <"Counterparty 2 (non-reporting counterparty)">
+        [docReference DTCC Valuation dataElement "2" validationRule "Valuation"
+      provision "If [NoA - Action Type] = 'EROR', 'TERM', or 'PRTO', rules have been relaxed to allow for the termination of trades where the Counterparty's identifiers are not known as follows:
+        - Counterparty fields [Trade Party 2 - ID] and [Trade Party 2 - ID Type] do not have to match the [Trade Party 2 - ID] and [Trade Party 2 - ID Type] of the live trade.
+        - However, if there is more than one live trade (for the same UTI/USI)  where [Trade Party 1 - ID] and [Trade Party 1 - ID Type] are the same, the submission will NACK."]
+        [docReference DTCC ISDAWorkingGroup date "unknown"
+        provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DTCC_CSA_VR_0003_01: <"Counterparty 2 Identifier Source">
+        [docReference DTCC Valuation dataElement "3" validationRule "Valuation"
+      provision "If [NoA - Action Type] = 'EROR', 'TERM', or 'PRTO', rules have been relaxed to allow for the termination of trades where the Counterparty's identifiers are not known as follows:
+        - Counterparty fields [Trade Party 2 - ID] and [Trade Party 2 - ID Type] do not have to match the [Trade Party 2 - ID] and [Trade Party 2 - ID Type] of the live trade."]
+        [docReference DTCC ISDAWorkingGroup date "unknown"
+        provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DTCC_CSA_VR_0016_01: <"Unique Transaction Identifier">
+        [docReference DTCC Valuation dataElement "16" validationRule "Valuation"
+      provision "Required when [NoA - Action Type] = 'NEWT' or when [USI ID] is blank."]
+        if actionType = NEWT or usiID is absent
+        then uniqueTransactionIdentifier exists
+
+    condition DTCC_CSA_VR_0093_01: <"Variation Margin Collateral Portfolio Code">
+        [docReference DTCC Valuation dataElement "93" validationRule "Valuation"
+      provision "Reject if [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] are both blank.
+      Where a portfolio code is not applicable per the description, 'NOTAPPLICABLE' is an accepted value."]
+        if initialMarginCollateralPortfolioCode is absent
+                and variationMarginCollateralPortfolioCode is absent
+        then variationMarginCollateralPortfolioCode is absent
+
+    condition DTCC_CSA_VR_0094_01: <"Initial Margin Collateral Portfolio Code">
+        [docReference DTCC Valuation dataElement "94" validationRule "Valuation"
+      provision "Reject if [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] are both blank.
+      Where a portfolio code is not applicable per the description, 'NOTAPPLICABLE' is an accepted value."]
+        if initialMarginCollateralPortfolioCode is absent
+                and variationMarginCollateralPortfolioCode is absent
+        then initialMarginCollateralPortfolioCode is absent
+
+    condition CSA_VR_0098_01: <"Action Type">
+        [regulatoryReference CSA Valuation dataElement "98" validationRule "Valuation"
+      provision "M, must equal VALU"]
+        actionType = VALU
+
+    condition CSA_VR_0103_01: <"Valuation Method">
+        [regulatoryReference CSA Valuation dataElement "103" validationRule "Valuation"
+      provision "M, when populated with CCPV, [Cleared] must be Y"]
+        // TH 24/01/25: under investigation with DTCC
+        True
+
+    condition CSA_VR_0108_01: <"Delta">
+        [regulatoryReference CSA Valuation dataElement "108" validationRule "Valuation"
+      provision "C if UPI.[Instrument type] = Option, else {blank}."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+      provision "Not modelled until UPI is available."]
+        True
+
+    condition DTCC_CSA_VR_0108_01: <"Delta">
+        [docReference DTCC Valuation dataElement "108" validationRule "Valuation"
+      provision "CR/EQ/FX/IR - Required if UPI.[Instrument type] = Option, else {blank}."]
+        [docReference DTCC ISDAWorkingGroup date "unknown"
+      provision "Not modelled until UPI is available."]
+        True
+
+    condition DTCC_CSA_VR_DTCC_01: <"Submitted For Party">
+        [docReference DTCC DTCC_Harmonized validationRule "Transaction"
+      provision "If the value is not 'Party1' or 'BOTH', then the value must = the value in [Trade Party 1 - ID]."]
+        if ["Party1", "BOTH"] all <> submittedForParty
+        then submittedForParty = counterparty1
+
+    condition DTCC_CSA_VR_DTCC_02: <"Trade Party 1 - Execution Agent ID">
+        [docReference DTCC DTCC_Harmonized validationRule "Transaction"
+      provision "Required if [Trade Party 1 - Execution Agent ID Type] is populated."]
+        if tradeParty1ExecutionAgentIDType exists
+        then tradeParty1ExecutionAgentID exists
+
+    condition DTCC_CSA_VR_DTCC_03: <"Trade Party 2 - Execution Agent ID">
+        [docReference DTCC DTCC_Harmonized validationRule "Transaction"
+      provision "Required if [Trade Party 2 - Execution Agent ID Type] is populated."]
+        if tradeParty2ExecutionAgentIDType exists
+        then tradeParty2ExecutionAgentID exists
+
+    condition DTCC_CSA_VR_DTCC_04: <"Trade Party 1 - Execution Agent ID Type">
+        [docReference DTCC DTCC_Harmonized validationRule "Transaction"
+      provision "Required if [Trade Party 1 - Execution Agent ID] is populated."]
+        if tradeParty1ExecutionAgentID exists
+        then tradeParty1ExecutionAgentIDType exists
+
+    condition DTCC_CSA_VR_DTCC_05: <"Trade Party 2 - Execution Agent ID Type">
+        [docReference DTCC DTCC_Harmonized validationRule "Transaction"
+      provision "Required if [Trade Party 2 - Execution Agent ID] is populated."]
+        if tradeParty2ExecutionAgentID exists
+        then tradeParty2ExecutionAgentIDType exists

@@ -1,0 +1,61 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "E26EDV109X6EEPBKVH76",
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2019-01-31",
+  "eventTimestamp" : "2019-01-31T10:10:31Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.815394,
+  "exchangeRateBasis" : "EUR/GBP",
+  "executionTimestamp" : "2019-01-31T10:10:31Z",
+  "expirationDate" : "2019-02-20",
+  "leg1" : {
+    "notionalAmount" : 793234.88,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "notionalAmount" : 6000000,
+    "notionalCurrency" : "GBP"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "GBP",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "E26EDV109X6EEPBKVH76",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXFORWARDEXXMLXXXX02"
+}

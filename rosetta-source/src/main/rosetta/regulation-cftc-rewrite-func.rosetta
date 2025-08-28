@@ -1,0 +1,165 @@
+namespace drr.regulation.cftc.rewrite
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.party.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.regulation.common.util.*
+
+func PayerPartyLeg1:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwapFloatFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsCommoditySwapFixedFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> fixedPricePayout exists
+        then FixedPriceLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg1(ProductForEvent(reportableEvent)) -> payerReceiver -> payer
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsEquitySwap(TradableProductForEvent(reportableEvent))
+        then ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> payer
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func PayerPartyLeg2:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func ReceiverPartyLeg1:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwapFloatFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsCommoditySwapFixedFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> fixedPricePayout exists
+        then FixedPriceLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg1(ProductForEvent(reportableEvent)) -> payerReceiver -> receiver
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsEquitySwap(TradableProductForEvent(reportableEvent))
+        then ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> receiver
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func ReceiverPartyLeg2:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func PrimeBrokerageTransactionIndicatorFunc:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        indicator boolean (0..1)
+    alias primeBrokerExists:
+        ExtractPartyFromRelatedPartyByRole(
+                reportableEvent -> reportableInformation -> partyInformation -> relatedParty,
+                PartyRoleEnum -> PrimeBroker
+            )
+            exists
+    alias executingBrokerPartyInfo:
+        reportableEvent -> reportableInformation -> partyInformation
+            filter
+                partyReference = ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutingBroker
+                    )
+    alias executingBrokerIsUSPerson:
+        executingBrokerPartyInfo -> regimeInformation -> cftcPartyInformation -> isUSPerson
+    set indicator: primeBrokerExists and executingBrokerIsUSPerson
+
+func ValidatePartyIdentifierFormat:
+    inputs:
+        partyIdentifier string (0..1)
+        format PartyIdentifierFormatEnum (1..1)
+    output:
+        validOrEmpty boolean (1..1)
+
+    set validOrEmpty:
+        if partyIdentifier is absent
+        then True
+        else if format = PartyIdentifierFormatEnum -> Lei
+        then StringLength(partyIdentifier) = 20
+        else if format = PartyIdentifierFormatEnum -> LeiAndPerson
+        then StringLength(partyIdentifier) > 20 and StringLength(partyIdentifier) <= 72
+        else False

@@ -1,0 +1,25 @@
+namespace drr.standards.iosco.cde.base.payment
+version "${project.version}"
+
+import cdm.base.datetime.*
+
+import drr.standards.iso.*
+
+func MapCDEFrequencyPeriod:
+    inputs:
+        period PeriodExtendedEnum (0..1)
+    output:
+        periodValue FrequencyPeriodEnum (0..1)
+    set periodValue:
+        if period = PeriodExtendedEnum -> H
+        then FrequencyPeriodEnum -> HOUL
+        else if period = PeriodExtendedEnum -> D
+        then FrequencyPeriodEnum -> DAIL
+        else if period = PeriodExtendedEnum -> W
+        then FrequencyPeriodEnum -> WEEK
+        else if period = PeriodExtendedEnum -> M
+        then FrequencyPeriodEnum -> MNTH
+        else if period = PeriodExtendedEnum -> Y
+        then FrequencyPeriodEnum -> YEAR
+        else if period = PeriodExtendedEnum -> T
+        then FrequencyPeriodEnum -> EXPI

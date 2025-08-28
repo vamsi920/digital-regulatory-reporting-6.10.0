@@ -1,0 +1,35 @@
+<document xmlns="http://www.dtcc.com/DTCC/rds-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <submission>
+    <header>
+      <sender>213800IV9PCAC364HN60</sender>
+      <documentTrackingId>077749839555123459991234569BR7771234567892024-04-29T00:00Z</documentTrackingId>
+      <documentCreationTimestamp>2024-04-29T00:00:00Z</documentCreationTimestamp>
+    </header>
+    <core>
+      <messageId>077749839555123459991234569BR7771234567892024-04-29T00:00Z</messageId>
+      <messageType>RT</messageType>
+      <submittedForParty>213800IV9PCAC364HN60</submittedForParty>
+      <submittingPartyId>213800IV9PCAC364HN60</submittingPartyId>
+      <submittingPartyIdType>LEI</submittingPartyIdType>
+      <tradeParty1Id>213800IV9PCAC364HN60</tradeParty1Id>
+      <tradeParty1IdType>LEI</tradeParty1IdType>
+      <tradeParty1ReportingDestination>CFTC</tradeParty1ReportingDestination>
+      <tradeParty1TransactionId>WITHDRAWALTERMINAT01</tradeParty1TransactionId>
+      <tradeParty2Id>213800WWTABZ1GOJHH37</tradeParty2Id>
+      <tradeParty2IdType>LEID</tradeParty2IdType>
+      <utiId>WITHDRAWALTERMINAT02</utiId>
+      <reportingTimestamp>2024-04-29T00:00:00Z</reportingTimestamp>
+      <noaActionType>NEWT</noaActionType>
+    </core>
+    <harmonizedData>
+      <clearingStatus>N</clearingStatus>
+      <version>PPD1.0</version>
+      <noaActionType>NEWT</noaActionType>
+      <packageIndicator>false</packageIndicator>
+      <cdePlatformIdentifier>BILT</cdePlatformIdentifier>
+    </harmonizedData>
+    <harmonizedRepeatableData>
+      <tradeParty1ReportingDestination>CFTC</tradeParty1ReportingDestination>
+    </harmonizedRepeatableData>
+  </submission>
+</document>

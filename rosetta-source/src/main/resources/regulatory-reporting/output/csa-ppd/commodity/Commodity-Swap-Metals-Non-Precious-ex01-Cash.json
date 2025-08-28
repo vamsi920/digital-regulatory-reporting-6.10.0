@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "30292b1763024c758be20e5aeb3ae3442024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.ON.OSC", "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-01-01",
+  "eventTimestamp" : "2021-11-18T15:00:10.2261358Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-11-18T14:57:59Z",
+  "expirationDate" : "2022-03-31",
+  "leg1" : {
+    "notionalAmount" : 18734000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 3,
+    "quantityUnitOfMeasure" : "TONE",
+    "totalNotionalQuantity" : 2000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "COPPER-LME CASH",
+    "notionalAmount" : 18734000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 3,
+    "quantityUnitOfMeasure" : "TONE",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 2000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "COPPER-LME CASH",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 9367
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "TONE",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPMETAL01"
+}

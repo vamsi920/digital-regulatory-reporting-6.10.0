@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-hkma-trade",
+  "name" : "HKMA / Trade",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.hkma.rewrite.trade.reports.HKMATradeReportFunction",
+    "inputType" : "drr.regulation.common.TransactionReportInstruction",
+    "outputType" : "drr.regulation.hkma.rewrite.trade.HKMATransactionReport"
+  }
+}

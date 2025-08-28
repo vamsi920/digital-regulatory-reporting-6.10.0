@@ -1,0 +1,43 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CRDT",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "DUMMYLEI123456789001",
+  "counterparty2" : "DUMMYLEI123456789002",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "OPTL",
+  "direction1" : "SLLR",
+  "effectiveDate" : "2022-02-11",
+  "entityResponsibleForReporting" : "DUMMYLEI123456789001",
+  "eventIdentifier" : "DTDUnapproved11370814201DFCFTCRiskNewNewCre",
+  "eventTimestamp" : "2022-02-11T07:32:32Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-11T07:32:14Z",
+  "expirationDate" : "2023-07-20",
+  "finalContractualSettlementDate" : "2023-07-20",
+  "indexFactor" : 0.02,
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "nameOfTheUnderlyingIndex" : "CDX.NA.HY.18",
+  "reportSubmittingEntityID" : "DUMMYLEI123456789001",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "seniority" : "SBOD",
+  "series" : 2,
+  "seriesVersion" : 3,
+  "technicalRecordId" : "DTDUnapproved11370814201DFCFTCRiskNewNewCre",
+  "underlyingIdentification" : "USS17U16X151",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "CREDITINDEXCDXEXUS03S17U16X15E14X13D12C11X10E9D8N7I6"
+}

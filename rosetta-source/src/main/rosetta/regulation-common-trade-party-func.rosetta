@@ -1,0 +1,166 @@
+namespace drr.regulation.common.trade.party
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+func Beneficiary1_Validation: <"Beneficiary 1">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        beneficiary1 Min20Max72AlphaNumericText (0..1)
+        counterparty1 LEIIdentifier (1..1)
+        reportingEntity LEIIdentifier (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then beneficiary1 <> counterparty1 and beneficiary1 <> reportingEntity
+
+func Beneficiary1IdentifierTypeIndicator_Validation: <"Beneficiary 1 Identifier Type">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        beneficiary1 Min20Max72AlphaNumericText (0..1)
+        beneficiary1IdentifierTypeIndicator boolean (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and beneficiary1 exists
+        then beneficiary1IdentifierTypeIndicator exists
+        else beneficiary1IdentifierTypeIndicator is absent
+
+func Broker_Validation: <"Broker ">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        broker LEIIdentifier (1..1)
+        counterparty2 Min20Max72AlphaNumericText (0..1)
+        counterparty1 LEIIdentifier (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then broker <> counterparty1 and broker <> counterparty2
+
+func Counterparty_Validation: <"Counterpart 1 & 2">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        counterparty2IdentifierTypeIndicator boolean (1..1)
+        counterparty2 Min20Max72AlphaNumericText (0..1)
+        counterparty1 LEIIdentifier (1..1) // commonTransactionReport CommonTransactionReport (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> MARU, ActionTypeEnum -> REVI, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR, ActionTypeEnum -> TERM, ActionTypeEnum -> VALU] any = actionType
+                and counterparty2IdentifierTypeIndicator = True
+        then counterparty1 <> counterparty2
+
+func CountryOfCounterparty2_Validation: <"Country of CounterParty 2">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        counterparty2IdentifierTypeIndicator boolean (1..1)
+        countryOfTheCounterParty2 ISOCountryCodeEnum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and counterparty2IdentifierTypeIndicator = False
+        then countryOfTheCounterParty2 exists
+        else countryOfTheCounterParty2 is absent
+
+func ExecutionAgentOfCounterparty1_Validation: <"Execution agent of counterparty 1">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        counterparty1 LEIIdentifier (1..1)
+        counterparty2 Min20Max72AlphaNumericText (0..1)
+        executionAgentOfCounterparty1 string (0..1)
+        executionAgentOfCounterparty2 LEIIdentifier (0..1)
+        reportingEntity LEIIdentifier (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> VALU] any = actionType
+        then (executionAgentOfCounterparty1 <> counterparty1
+                and executionAgentOfCounterparty1 <> counterparty2
+                and executionAgentOfCounterparty1 <> reportingEntity)
+                and (if executionAgentOfCounterparty1 = "NOAP" then executionAgentOfCounterparty2 exists)
+
+func ExecutionAgentOfCounterparty2_Validation: <"Execution agent of counterparty 2">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        executionAgentOfCounterparty1 string (0..1)
+        executionAgentOfCounterparty2 LEIIdentifier (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> VALU] any = actionType
+        then if executionAgentOfCounterparty1 = "NOAP"
+            then executionAgentOfCounterparty2 exists
+
+func Direction1_Validation: <"Direction 1">
+    inputs:
+        direction1 Direction1Enum (0..1)
+        direction2Leg1 Direction2Enum (0..1)
+        direction2Leg2 Direction2Enum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if direction2Leg1 is absent and direction2Leg2 is absent
+        then direction1 exists
+        else if ((direction2Leg1 exists) or (direction2Leg2 exists))
+        then direction1 is absent
+
+func Direction2Leg1_Validation: <"Direction 2 leg 1">
+    inputs:
+        direction1 Direction1Enum (0..1)
+        direction2Leg1 Direction2Enum (0..1)
+        direction2Leg2 Direction2Enum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if direction1 is absent
+        then direction2Leg1 exists and direction2Leg1 <> direction2Leg2
+        else if direction1 exists
+        then direction2Leg1 is absent
+
+func Direction2Leg2_Validation: <"Direction 2 leg 2">
+    inputs:
+        actionType ActionTypeEnum (0..1)
+        direction1 Direction1Enum (0..1)
+        direction2Leg1 Direction2Enum (0..1)
+        direction2Leg2 Direction2Enum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and direction2Leg1 exists
+        then direction2Leg2 exists and direction2Leg1 <> direction2Leg2
+        else if direction1 is absent and direction2Leg1 is absent
+        then direction2Leg2 is absent
+
+func ExtractRegimeInformation:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (0..1)
+        party Party (0..1)
+    output:
+        result ReportingRegime (0..*)
+
+    set result:
+        transactionReportInstruction -> reportableInformation -> partyInformation
+            filter partyReference = party
+            then extract regimeInformation
+            then flatten distinct
+
+func ExtractPartySector:
+    inputs:
+        natureOfParty NatureOfPartyEnum (0..1)
+        corporateSector CorporateSector (0..*)
+    output:
+        sector string (0..*)
+    set sector:
+        if natureOfParty = NatureOfPartyEnum -> NonFinancial
+        then GetNonFinancialCorporateSector(corporateSector -> nonFinancialSector)
+        else if natureOfParty = NatureOfPartyEnum -> Financial
+        then GetFinancialCorporateSector(corporateSector -> financialSector)

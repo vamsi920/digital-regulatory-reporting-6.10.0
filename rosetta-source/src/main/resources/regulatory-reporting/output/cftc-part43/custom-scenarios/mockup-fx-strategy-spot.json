@@ -1,0 +1,63 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true
+  },
+  "cleared" : "I",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "countryOfTheCounterparty2" : "US",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2011-02-12",
+  "eventTimestamp" : "2011-02-04T16:42:18Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.918,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2011-02-04T16:21:47Z",
+  "expirationDate" : "2011-02-14",
+  "leg1" : {
+    "notionalAmount" : 50000000,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "notionalAmount" : 45175000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : true,
+  "platformIdentifier" : "XNAS",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPFXSTRATEGYSP01"
+}

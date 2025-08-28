@@ -1,0 +1,78 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true
+  },
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2019-04-03",
+  "eventTimestamp" : "2019-04-01T09:00:00Z",
+  "eventType" : "EXER",
+  "executionTimestamp" : "2018-05-01T10:15:36Z",
+  "expirationDate" : "2021-12-30",
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 16000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 16000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "EUR",
+          "NotionalSchedule" : "Constant",
+          "ReferenceRateTermUnit" : "YEAR",
+          "ReferenceRateTermValue" : 1,
+          "UnderlierID" : "EUR-EURIBOR-Telerate",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Fixed_Float"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 100000,
+  "optionPremiumCurrency" : "EUR",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "LEI1RPT0001IIIIEx"
+}

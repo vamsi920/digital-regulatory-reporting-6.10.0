@@ -1,0 +1,93 @@
+namespace drr.regulation.common.trade.basket
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.math.*
+import cdm.event.common.*
+import cdm.product.asset.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+
+func GetBasketConstituents: <"Extracts one product identifier per constituent from custom baskets and retrieves quantity references from tradeLots.">
+    inputs:
+        trade Trade (1..1)
+    output:
+        result BasketConstituent (0..*) <"Single product identifier per basket constituent.">
+
+    alias product: ProductForTrade(trade)
+    alias tradeLots: trade -> tradableProduct -> tradeLot
+
+    alias basketConstituents:
+        if UnderlierForProduct(product) -> basket -> basketConstituent exists
+        then UnderlierForProduct(product) -> basket -> basketConstituent
+        else if EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> basket -> basketConstituent exists
+        then EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> basket -> basketConstituent
+        else if EconomicTermsForProduct(product) -> payout -> commodityPayout -> underlier -> basket -> basketConstituent exists
+                and IsSingleCommodityPayoutProduct(product) = False
+        then EconomicTermsForProduct(product) -> payout -> commodityPayout -> underlier -> basket -> basketConstituent
+
+    alias referencePoolItems:
+        if EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> referencePool -> referencePoolItem -> referencePair -> referenceObligation exists
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> referencePool -> referencePoolItem
+
+    add result:
+        basketConstituents
+            then extract
+                BasketConstituent {
+                    quantity: GetQuantityForConstituent(item, tradeLots),
+                    security: security,
+                    loan: loan,
+                    commodity: commodity,
+                    index: index,
+                    ...
+                }
+
+    add result:
+        referencePoolItems
+            then extract
+                BasketConstituent {
+                    quantity: GetQuantityForReferencePoolItem(item),
+                    security: referencePair -> referenceObligation -> security,
+                    loan: referencePair -> referenceObligation -> loan,
+                    ...
+                }
+
+func GetQuantityForReferencePoolItem: <"Extracts the quantity from the Credit basket reference pool item constituents">
+    inputs:
+        constituent ReferencePoolItem (0..1)
+    output:
+        result NonNegativeQuantitySchedule (0..1)
+
+    set result:
+        NonNegativeQuantitySchedule {
+            value: constituent -> constituentWeight -> basketPercentage,
+            unit: UnitType {
+                financialUnit: FinancialUnitEnum -> Weight,
+                ...
+            },
+            ...
+        }
+
+func GetQuantityForConstituent: <"Extract the quantity from the tradeLots for custom basket constituents">
+    inputs:
+        constituent Product (0..1)
+        tradeLots TradeLot (0..*)
+    output:
+        result NonNegativeQuantitySchedule (0..1)
+
+    alias predicates:
+        if constituent -> security exists
+        then constituent -> security -> productIdentifier
+        else if constituent -> loan exists
+        then constituent -> loan -> productIdentifier
+        else if constituent -> commodity exists
+        then constituent -> commodity -> productIdentifier
+        else if constituent -> index exists
+        then constituent -> index -> productIdentifier
+
+    set result:
+        tradeLots -> priceQuantity
+            filter item -> observable -> productIdentifier all = predicates
+            then extract quantity
+            then flatten only-element

@@ -1,0 +1,43 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OTHR",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "OPTL",
+  "direction1" : "BYER",
+  "effectiveDate" : "2011-02-04",
+  "entityResponsibleForReporting" : "549300O5MFEP1XJ40B46",
+  "eventIdentifier" : "BANKX001",
+  "eventTimestamp" : "2011-02-04T15:38:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T15:38:00Z",
+  "expirationDate" : "2005-09-27",
+  "finalContractualSettlementDate" : "2005-09-27",
+  "firstExerciseDate" : "2001-07-13",
+  "leg1" : {
+    "notionalAmount" : 4800000,
+    "notionalCurrency" : "EUR",
+    "quantityUnitOfMeasure" : "SHAS",
+    "totalNotionalQuantity" : 150000
+  },
+  "optionPremiumAmount" : 405000,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2001-07-17",
+  "optionStyle" : "AMER",
+  "optionType" : "CALL",
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 32
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "technicalRecordId" : "BANKX001",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01"
+}

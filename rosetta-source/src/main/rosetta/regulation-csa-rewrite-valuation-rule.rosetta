@@ -1,0 +1,462 @@
+namespace drr.regulation.csa.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.csa.*
+import drr.regulation.csa.rewrite.trade.* as csaTrade
+import drr.standards.iosco.cde.version3.* as cde
+
+corpus Dissemination Valuation
+
+corpus Dissemination DTCC_Harmonized
+
+report CSA Valuation in T+1
+  	from ValuationReportInstruction
+  	when ReportableProduct
+  	with type CSAValuationReport
+
+eligibility rule ReportableProduct from ValuationReportInstruction: <"When eligible for CSA">
+    [regulatoryReference CSA Valuation
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+// CSA definitions
+reporting rule Counterparty1 from ValuationReportInstruction: <"Counterparty 1 (reporting counterparty)">
+    [regulatoryReference CSA Valuation dataElement "1" field "Counterparty 1 (reporting counterparty)"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question.
+    In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty.
+    In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty. However, if the allocation of the block trade to specific funds does not take place prior to the reporting deadline, then the fund manager executing the transaction behalf of the fund can be reported as the counterparty.
+    If a trading facility is fulfilling the reporting obligation, the identifier of Counterparty 1 identifies one of the counterparties to the transaction."]
+    [regulatoryReference CSA Valuation dataElement "1" field "Counterparty 1 (reporting counterparty)" footnote "4"
+        provision "References to OTC derivative and transaction in CDE data element explanations and in the Appendices to the Technical Manual should be read to mean derivative."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Counterparty 1 (reporting counterparty)"
+        provision "The same CDE Counterparty 1 extraction is required."]
+    [regulatoryReference ISDA CanadianDataAndReporting date "20250508" field "Counterparty 1 (reporting counterparty)"
+        provision "Reporting firms on the WG call said they would be using an LEI. There is only a possible use case for crypto trades reporting by SEFs; however, DRR is not going to model this case until is demanded by firms."]
+    extract PartyLei(reportingSide -> reportingParty -> partyId)
+        as "1 Counterparty 1 (reporting counterparty)"
+
+reporting rule Counterparty2 from ValuationReportInstruction: <"Counterparty 2 (non-reporting counterparty)">
+    [regulatoryReference CSA Valuation dataElement "2" field "Counterparty 2"
+        provision "Identifier of the second counterparty to an OTC derivative transaction. In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty. However, if the allocation of the block trade to specific funds does not take place prior to the reporting deadline, then the fund manager executing the transaction on behalf of the fund can be reported as the counterparty."]
+    [regulatoryReference CSA Valuation dataElement "2" field "Counterparty 2 (non-reporting counterparty)" footnote "5"
+        provision "Only one counterparty should be reported. In cases where multiple counterparties are legally responsible as the second counterparty (for example joint and several liability, or solidary liability in Quebec), report only one of the counterparties and use the same counterparty for all continuation data and lifecycle events."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Counterparty 2 (non-reporting counterparty)"
+        provision "The same CDE Counterparty 2 extraction is required."]
+    extract
+        PartyLeiAndPersonByRoles(
+                reportingSide -> reportingCounterparty,
+                reportingSide -> reportingParty
+            )
+        as "2 Counterparty 2 (non-reporting counterparty)"
+
+reporting rule Counterparty2IdentifierSource from ValuationReportInstruction: <"Counterparty 2 Identifier Source">
+    [regulatoryReference CSA Valuation dataElement "3" field "Counterparty 2 Identifier Source"
+        provision "Source used to identify the Counterparty 2."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Counterparty 2 Identifier Source"
+        provision "Improvement on the logic was done to consider first if person exists. If not, then consider party."]
+    extract reportingSide -> reportingCounterparty
+    then extract
+        if person exists
+                and [PersonIdentifierTypeEnum -> NPID, PersonIdentifierTypeEnum -> PLID] any = person -> personId -> identifierType
+        then (person -> personId -> identifierType
+            then filter ([NPID, PLID]) any = item
+            then first
+            then extract item to-string)
+        else if partyId -> identifierType any = LEI
+        then "LEID"
+        as "3 Counterparty 2 identifier source"
+
+reporting rule ReportingTimestamp from ValuationReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference CSA Valuation dataElement "15" field "Reporting Timestamp"
+        provision "Date and time of the submission of the report as reported to the trade repository."]
+    [regulatoryReference CSA Valuation dataElement "15" field "Reporting Timestamp" footnote "14"
+        provision "Reporting timestamp (#15) is recorded and reported by the submitter."]
+    Now
+        as "15 Reporting timestamp"
+
+reporting rule UniqueTransactionIdentifier from ValuationReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference CSA Valuation dataElement "16" field "Unique Transaction Identifier (UTI)"
+        provision "A unique identifier assigned at the transaction or position level which identifies them uniquely throughout their lifecycle and used for all recordkeeping and reporting."]
+    extract
+        if GetRegimeSpecificIdentifiers(
+                reportableInformation,
+                csaTrade.SupervisoryBodyForCSA,
+                TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableInformation,
+                    csaTrade.SupervisoryBodyForCSA,
+                    TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+                )
+        else valuationDetails -> tradeInformation -> uniqueTradeIdentifier -> assignedIdentifier -> identifier
+    then distinct
+    then only-element
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "16 Unique Transaction Identifier (UTI)"
+
+reporting rule SubmitterIdentifier from ValuationReportInstruction: <"Submitter Identifier">
+    [regulatoryReference CSA Valuation dataElement "21" field "Submitter Identifier"
+        provision "Identifier of the entity submitting the data to the swap data repository (TR), the submitter identifier will be the same as the reporting counterparty or  swap execution facility (SEF) unless they use a third-party service provider, to submit the data to SDR in which case, report the underlier of the third party service provider. "]
+    [regulatoryReference CSA Valuation dataElement "21" field "Submitter Identifier" footnote "15"
+        provision "References to swap data repository or SDR in CFTC data element explanations should be read to mean designated / recognized trade repository."]
+    [regulatoryReference CSA Valuation dataElement "21" field "Submitter Identifier" footnote "16"
+        provision "References to swap execution facility or SEF in CFTC data element explanations should be read to mean derivatives trading facility / facility or platform for trading derivatives."]
+    extract ExtractReportSubmittingPartyIdentifier(reportingSide)
+        as "21 Submitter identifier"
+
+reporting rule VariationMarginCollateralPortfolioCode from ValuationReportInstruction: <"Variation Margin Collateral Portfolio Code">
+    [regulatoryReference CSA Valuation dataElement "93" field "Variation Margin Collateral Portfolio Code"
+        provision "If collateral is reported on a portfolio basis, a unique code assigned by the reporting counterparty to the portfolio that tracks the aggregate variation margin related to a set of open transactions. This data element is not applicable if the collateralisation was performed on a transaction level basis, or if there is no collateral agreement, or if no collateral is posted or received. The portfolio code is required for both collateral reporting and valuation reporting in order to link the 2 data sets."]
+    [regulatoryReference CSA Valuation dataElement "93" field "Variation Margin Collateral Portfolio Code" footnote "46"
+        provision "If collateralization was performed on a transaction level basis, TRANSACTIONLEVEL is accepted. NOTAPPLICABLE is accepted if (i)collateralization was performed on a portfolio basis and there is no VM portfolio code, or (ii) it is a submission from a DCO."]
+    extract collateralDetails -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = VariationMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last
+        as "93 Variation Margin Collateral Portfolio Code"
+
+reporting rule InitialMarginCollateralPortfolioCode from ValuationReportInstruction: <"Initial Margin Collateral Portfolio Code">
+    [regulatoryReference CSA Valuation dataElement "94" field "Initial Margin Collateral Portfolio Code"
+        provision "If collateral is reported on a portfolio basis, a unique code assigned by the reporting counterparty to the portfolio that tracks the aggregate initial margin of a set of open transactions. This data element is not applicable if the collateralisation was performed on a transaction level basis, or if there is no collateral agreement, or if no collateral is posted or received. The portfolio code is required for both collateral reporting and valuation reporting in order to link the 2 data sets."]
+    [regulatoryReference CSA Valuation dataElement "94" field "Initial Margin Collateral Portfolio Code" footnote "47"
+        provision "If collateralization was performed on a transaction level basis, TRANSACTIONLEVEL is accepted. NOTAPPLICABLE is accepted if (i)collateralization was performed on a portfolio basis and there is no VM portfolio code, or (ii) it is a submission from a DCO."]
+    extract collateralDetails -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = InitialMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last
+        as "94 Initial Margin Collateral Portfolio Code"
+
+reporting rule ActionType from ValuationReportInstruction: <"Action Type">
+    [regulatoryReference CSA Valuation dataElement "98" field "Action Type"
+        provision "Type of action taken on the transaction or type of end-of-day reporting. See Appendix 3.8 for a description of the allowable values."]
+    [regulatoryReference CSA Valuation dataElement "98" field "Action Type" footnote "50"
+        provision "Only one Action type value is allowed per submission. Multiple Action type values should not be submitted in one transaction report. For example, if a data element needs to be corrected on a previously submitted transaction that is getting terminated, the Correct (CORR) value should be submitted as a separate submission prior to the submission of the Terminate (TERM) transaction."]
+    extract
+        if valuationDetails -> tradeInformation -> action = VALU
+        then valuationDetails -> tradeInformation -> action
+        as "98 Action Type"
+
+reporting rule ValuationAmount from ValuationReportInstruction: <"Valuation Amount">
+    [regulatoryReference CSA Valuation dataElement "101" field "Valuation Amount"
+        provision "Current value of the outstanding contract without applying any valuation adjustments (some examples include XVA adjustment such as CVA, DVA, etc). Valuation amount is expressed as the exit cost of the contract or components of the contract, i.e., the price that would be received to sell the contract (in the market in an orderly transaction at the valuation date)."]
+    [regulatoryReference CSA Valuation dataElement "101" field "Valuation Amount" footnote "51"
+        provision "Valuation amount must be reported daily regardless of whether there is a change in the value since the last reporting."]
+    extract valuationDetails -> valuation -> amount -> value
+        as "101 Valuation Amount"
+
+reporting rule ValuationCurrency from ValuationReportInstruction: <"Valuation Currency">
+    [regulatoryReference CSA Valuation dataElement "102" field "Valuation Currency"
+        provision "Currency in which the valuation amount is denominated."]
+    extract valuationDetails -> valuation -> amount -> unit -> currency
+    then extract ConvertNonISOToISOCurrency
+        as "102 Valuation Currency"
+
+reporting rule ValuationMethod from ValuationReportInstruction: <"Valuation Method">
+    [regulatoryReference CSA Valuation dataElement "103" field "Valuation Method"
+        provision "Source and method used for the valuation of the transaction by the reporting counterparty. If at least one valuation input is used that is classified as mark-to-model in Appendix 3.3, then the whole valuation is classified as mark-to-model. If only inputs are used that are classified as mark-tomarket in Appendix 3.3, then the whole valuation is classified as mark-to-market."]
+    extract valuationDetails -> valuation
+    then extract cde.valuation.ValuationMethod
+        as "103 Valuation Method"
+
+reporting rule ValuationTimestamp from ValuationReportInstruction: <"Valuation Timestamp">
+    [regulatoryReference CSA Valuation dataElement "104" field "Valuation Timestamp"
+        provision "Date and time of the last valuation marked to market, provided by the central counterparty (CCP) or calculated using the current or last available market price of the inputs. If for example a currency exchange rate is the basis for a transactions valuation, then the valuation timestamp reflects the moment in time that exchange rate was current."]
+    [regulatoryReference CSA Valuation dataElement "104" field "Valuation Timestamp" footnote "52"
+        provision "Reported by the clearing agency for cleared derivatives and by the derivatives dealer for uncleared derivatives."]
+    [regulatoryReference CSA Valuation dataElement "104" field "Valuation Timestamp" footnote "53"
+        provision "The timestamp portion is not required to be represented for Valuation timestamp. The format must be reported as YYYY-MM-DD."]
+    extract valuationDetails -> valuation -> timestamp
+        as "104 Valuation Timestamp"
+
+reporting rule NextFloatingReferenceResetDateLeg1 from ValuationReportInstruction: <"Next Floating Reference Reset Date-Leg 1">
+    [regulatoryReference CSA Valuation dataElement "105" field "Next Floating Reference Reset Date-Leg 1"
+        provision "The nearest date in the future that the floating reference resets on."]
+    extract valuationDetails -> tradeInformation -> nextFloatingReferenceResetDateLeg1
+        as "105 Next Floating Reference Reset Date-Leg 1"
+
+reporting rule NextFloatingReferenceResetDateLeg2 from ValuationReportInstruction: <"Next Floating Reference Reset Date-Leg 2">
+    [regulatoryReference CSA Valuation dataElement "105" field "Next Floating Reference Reset Date-Leg 2"
+        provision "The nearest date in the future that the floating reference resets on."]
+    extract valuationDetails -> tradeInformation -> nextFloatingReferenceResetDateLeg2
+        as "105 Next Floating Reference Reset Date-Leg 2"
+
+reporting rule LastFloatingReferenceValueLeg1 from ValuationReportInstruction: <"Last Floating Reference Value-Leg 1">
+    [regulatoryReference CSA Valuation dataElement "106" field "Last Floating Reference Value-Leg 1"
+        provision "The most recent sampling of the value of the floating reference for the purposes of determining cash flow. Ties to Last floating reference reset date data element."]
+    extract
+        valuationDetails -> tradeInformation -> lastFloatingReference -> lastFloatingReferenceValueLeg1
+        as "106 Last Floating Reference Value-Leg 1"
+
+reporting rule LastFloatingReferenceValueLeg2 from ValuationReportInstruction: <"Last Floating Reference Value-Leg 2">
+    [regulatoryReference CSA Valuation dataElement "106" field "Last Floating Reference Value-Leg 2"
+        provision "The most recent sampling of the value of the floating reference for the purposes of determining cash flow. Ties to Last floating reference reset date data element."]
+    extract
+        valuationDetails -> tradeInformation -> lastFloatingReference -> lastFloatingReferenceValueLeg2
+        as "106 Last Floating Reference Value-Leg 2"
+
+reporting rule LastFloatingReferenceResetDateLeg1 from ValuationReportInstruction: <"Last Floating Reference Reset Date-Leg 1">
+    [regulatoryReference CSA Valuation dataElement "107" field "Last Floating Reference Reset Date-Leg 1"
+        provision "The date of the most recent sampling of the floating reference for the purposes of determining cash flow. Ties to Last floating reference value data element."]
+    extract
+        valuationDetails -> tradeInformation -> lastFloatingReference -> lastFloatingReferenceResetDateLeg1
+        as "107 Last Floating Reference Reset Date-Leg 1"
+
+reporting rule LastFloatingReferenceResetDateLeg2 from ValuationReportInstruction: <"Last Floating Reference Reset Date-Leg 2">
+    [regulatoryReference CSA Valuation dataElement "107" field "Last Floating Reference Reset Date-Leg 2"
+        provision "The date of the most recent sampling of the floating reference for the purposes of determining cash flow. Ties to Last floating reference value data element."]
+    extract
+        valuationDetails -> tradeInformation -> lastFloatingReference -> lastFloatingReferenceResetDateLeg2
+        as "107 Last Floating Reference Reset Date-Leg 2"
+
+reporting rule Delta from ValuationReportInstruction: <"Delta">
+    [regulatoryReference CSA Valuation dataElement "108" field "Delta"
+        provision "The ratio of the change in the price of an OTC derivative transaction to the change in the price of the underlier."]
+    [regulatoryReference CSA Valuation dataElement "108" field "Delta" footnote "54"
+        provision "Delta must be reported daily regardless of whether there is a change in the value since the last reporting."]
+    extract valuationDetails -> valuation -> delta
+        as "108 Delta"
+
+reporting rule UniqueProductIdentifier from ValuationReportInstruction: <"Unique Product Identifier">
+    [regulatoryReference CSA Valuation dataElement "117" field "Unique Product Identifier"
+        provision "A unique set of characters that represents a particular OTC derivative."]
+    [regulatoryReference CSA Valuation dataElement "117" field "Unique Product Identifier" footnote "60"
+        provision "Refer to section 1.2.6 Use of UPI Instrument Types for explanation on Unique Product Identifiers."]
+    extract valuationDetails -> tradeInformation -> uniqueProductIdentifier
+    then filter source = UPI
+    then only-element
+    then extract identifier
+        as "117 Unique Product Identifier"
+
+reporting rule DTCC_TradeParty1IDType from ValuationReportInstruction: <"Trade Party 1 - ID Type">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 1 - ID Type"
+        provision "GTR required Control Field."]
+    [regulatoryReference ISDA CanadianDataAndReporting date "20250508" field "Trade Party 1 - ID Type"
+        provision "Reporting firms on the WG call said they would be using an LEI. There is only a possible use case for crypto trades reporting by SEFs; however, DRR is not going to model this case until is demanded by firms."]
+    extract
+        if PartyLei(reportingSide -> reportingParty -> partyId) exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Trade Party 1 - ID Type"
+
+reporting rule DTCC_SubmittingPartyIDType from ValuationReportInstruction: <"Submitting Party - ID Type">
+    [docReference DTCC Valuation DTCC_Harmonized field "Submitting Party - ID Type"
+        provision "GTR required Control Field."]
+    extract
+        if ExtractReportSubmittingPartyIdentifier(reportingSide) exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Submitting Party - ID Type"
+
+reporting rule DTCC_USIID from ValuationReportInstruction: <"USI ID">
+    [docReference DTCC Valuation DTCC_Harmonized dataElement "" field "USI ID"
+        provision "The USI is a unique identifier assigned to all swap transactions which identifies the transaction (the swap and its counterparties) uniquely throughout its duration. It consists of a namespace and a transaction identifier."]
+    extract
+        if GetRegimeSpecificIdentifiers(
+                reportableInformation,
+                csaTrade.SupervisoryBodyForCSA,
+                TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableInformation,
+                    csaTrade.SupervisoryBodyForCSA,
+                    TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+                )
+        else (extract valuationDetails -> tradeInformation -> uniqueTradeIdentifier
+        then filter identifierType = UniqueSwapIdentifier
+        then extract assignedIdentifier -> identifier)
+    then distinct
+    then only-element
+        as "USI ID"
+
+reporting rule DTCC_USIIDPrefix from ValuationReportInstruction: <"USI ID Prefix">
+    [docReference DTCC Valuation DTCC_Harmonized dataElement "" field "USI ID Prefix"
+        provision "The USI is a unique identifier assigned to all swap transactions which identifies the transaction (the swap and its counterparties) uniquely throughout its duration. It consists of a namespace and a transaction identifier."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250327" field "USI ID Prefix"
+        provision "The group agreed on not considering USI ID Prefix due to it comes from an old format and it had been agreed to only consider one field, that is USI ID, considering the concatenation of both fields. Thus, USI ID is the only field that needs to be populated."]
+    empty
+        as "USI ID Prefix"
+
+reporting rule DTCC_SubmittedForParty from ValuationReportInstruction: <"Submitted For Party">
+    [docReference DTCC Valuation DTCC_Harmonized field "Submitted For Party"
+        provision "Need field for GTR Processing."]
+    [regulatoryReference ISDA PeerReviewGroup date "20250507"
+        provision "Agreed to default the output to the LEI of the reporting party."]
+    extract PartyLei(reportingSide -> reportingParty -> partyId)
+        as "Submitted For Party"
+
+reporting rule DTCC_TradeParty1ReportingDestination from ValuationReportInstruction: <"Trade Party 1 - Reporting Destination">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 1 - Reporting Destination"
+        provision "Needed to report Jurisdiction."]
+    extract valuationReportInstruction [
+        reportableInformation -> partyInformation
+            then filter
+                item -> partyReference = valuationReportInstruction -> reportingSide -> reportingParty
+            then extract regimeInformation -> supervisoryBody distinct
+            then flatten
+            then extract
+                if csaTrade.SupervisoryBodyForCSA any = item
+                        or [SupervisoryBodyEnum -> CFTC, SupervisoryBodyEnum -> SEC] any = item
+                then item
+            then distinct
+    ]
+        as "Trade Party 1 - Reporting Destination"
+
+reporting rule DTCC_TradeParty2ReportingDestination from ValuationReportInstruction: <"Trade Party 2 - Reporting Destination">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 2 - Reporting Destination"
+        provision "Needed to report Jurisdiction."]
+    extract valuationReportInstruction [
+        reportableInformation -> partyInformation
+            then filter
+                item -> partyReference = valuationReportInstruction -> reportingSide -> reportingCounterparty
+            then extract regimeInformation -> supervisoryBody distinct
+            then flatten
+            then extract
+                if csaTrade.SupervisoryBodyForCSA all <> item
+                        and [SupervisoryBodyEnum -> CFTC, SupervisoryBodyEnum -> SEC] all <> item
+                then item
+            then distinct
+    ]
+        as "Trade Party 2 - Reporting Destination"
+
+reporting rule DTCC_PrimaryAssetClass from ValuationReportInstruction: <"Primary Asset Class">
+    [docReference DTCC Valuation DTCC_Harmonized field "Primary Asset Class"
+        provision "UPI RDL: Indicates whether the asset, benchmark or another derivatives contract underlying a derivatives contract is, or references, an equity, rate, credit, commodity or foreign exchange asset."]
+    extract valuationDetails -> tradeInformation -> assetClass
+    then extract
+        if item = INTR
+        then AssetClassEnum -> InterestRate
+        else if item = CRDT
+        then AssetClassEnum -> Credit
+        else if item = EQUI
+        then AssetClassEnum -> Equity
+        else if item = COMM
+        then AssetClassEnum -> Commodity
+        else if item = CURR
+        then AssetClassEnum -> ForeignExchange
+        as "Primary Asset Class"
+
+reporting rule DTCC_Comment1 from ValuationReportInstruction: <"Comment 1">
+    [docReference DTCC Valuation DTCC_Harmonized field "Comment 1"
+        provision "For CSV submissions if  populated with an * the entire line is treated as comment."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Comment 1"
+        provision "Empty because CSV submission is still not supported by current DRR model. This rule will be revisited once Harmonized CSV projection is included."]
+    empty
+        as "Comment 1"
+
+reporting rule DTCC_MessageID from ValuationReportInstruction: <"Message ID">
+    [docReference DTCC Valuation DTCC_Harmonized field "Message ID"
+        provision "Purpose of this field is to allow firms to submit a unique ID that will allow them to tie in specific submissions/modifications. For example if 5 modifications are submitted on a specific PET, this will allow the firm to ensure they receive responses for all 5 modifications."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" field "Message ID"
+        provision "Each Message ID must be unique, irrespective of the report type. This unique identification is achieved by concatenating with the Reporting Timestamp field."]
+    extract
+        common.link.TechnicalRecordId(item -> reportableInformation, CSA) + (ReportingTimestamp to-string)
+        as "Message ID"
+
+reporting rule DTCC_MessageType from ValuationReportInstruction: <"Message Type">
+    [docReference DTCC Valuation DTCC_Harmonized field "Message Type"
+        provision "Need to indicate what message is being submitted to GTR."]
+    "Valuation"
+        as "Message Type"
+
+reporting rule DTCC_TradeParty2ExecutionAgentID from ValuationReportInstruction: <"Trade Party 2 - Execution Agent ID">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 2 - Execution Agent ID"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    extract reportableValuation [
+        reportableValuation -> reportableInformation -> partyInformation
+            filter
+                partyReference = reportableValuation -> reportingSide -> reportingCounterparty
+            then distinct only-element
+            then extract
+                ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutionAgent
+                    )
+            then extract PartyLei(partyId)
+    ]
+        as "Trade Party 2 - Execution Agent ID"
+
+reporting rule DTCC_TradeParty2ExecutionAgentIDType from ValuationReportInstruction: <"Trade Party 2 - Execution Agent ID Type">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 2 - Execution Agent ID Type"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    extract reportableValuation [
+        reportableValuation -> reportableInformation -> partyInformation
+            filter
+                partyReference = reportableValuation -> reportingSide -> reportingCounterparty
+            then distinct only-element
+            then extract
+                ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutionAgent
+                    )
+            then extract
+                if PartyLei(partyId) exists
+                then PartyIdentifierTypeEnum -> LEI
+    ]
+        as "Trade Party 2 - Execution Agent ID Type"
+
+reporting rule DTCC_TradeParty1ExecutionAgentID from ValuationReportInstruction: <"Trade Party 1 - Execution Agent ID">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 1 - Execution Agent ID"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    extract reportableValuation [
+        reportableValuation -> reportableInformation -> partyInformation
+            filter partyReference = reportableValuation -> reportingSide -> reportingParty
+            then distinct only-element
+            then extract
+                ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutionAgent
+                    )
+            then extract PartyLei(partyId)
+    ]
+        as "Trade Party 1 - Execution Agent ID"
+
+reporting rule DTCC_TradeParty1ExecutionAgentIDType from ValuationReportInstruction: <"Trade Party 1 - Execution Agent ID Type">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 1 - Execution Agent ID Type"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    extract reportableValuation [
+        reportableValuation -> reportableInformation -> partyInformation
+            then filter
+                partyReference = reportableValuation -> reportingSide -> reportingParty
+            then distinct only-element
+            then extract
+                ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutionAgent
+                    )
+            then extract
+                if PartyLei(partyId) exists
+                then PartyIdentifierTypeEnum -> LEI
+    ]
+        as "Trade Party 1 - Execution Agent ID Type"
+
+reporting rule DTCC_TradeParty1TransactionID from ValuationReportInstruction: <"Trade Party 1 - Transaction ID">
+    [docReference DTCC Valuation DTCC_Harmonized field "Trade Party 1 - Transaction ID"
+        provision "Internal trade identifier for Counterparty 1 to map to their internal system."]
+    extract valuationReportInstruction [
+        valuationDetails -> tradeInformation -> uniqueTradeIdentifier
+            then filter
+                issuerReference = valuationReportInstruction -> reportingSide -> reportingParty
+            then filter
+                identifierType <> TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+                    and identifierType <> TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+            then extract assignedIdentifier -> identifier
+            then distinct
+            then only-element
+    ]
+        as "Valuation Trade Party 1 - Transaction ID"
+
+reporting rule DTCC_Version from ValuationReportInstruction: <"Version">
+    [docReference DTCC Valuation DTCC_Harmonized field "Version"
+        provision "Memo field. Used to identify the asset class and template type of submission."]
+    "CORE1.0"
+        as "Version"

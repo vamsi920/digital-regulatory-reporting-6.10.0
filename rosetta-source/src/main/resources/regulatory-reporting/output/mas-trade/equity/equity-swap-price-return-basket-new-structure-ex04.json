@@ -1,0 +1,84 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "OYRKAKYXVBMJ",
+    "source" : "ISIN"
+  }, {
+    "identifier" : "KNT1LZKJZWIJ",
+    "source" : "ISIN"
+  }, {
+    "identifier" : "SONJN5I2WMNQ",
+    "source" : "ISIN"
+  } ],
+  "bookingLocation" : "US",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "1DVPMCJ8SGH3GAK69P9Y",
+  "counterparty2" : "DR9JRPCXUUB4N3QGQNB2",
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2023-01-07",
+  "eventTimestamp" : "2023-01-07T20:16:40Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-01-07T19:49:58Z",
+  "expirationDate" : "2026-03-04",
+  "finalContractualSettlementDate" : "2026-03-04",
+  "leg1" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "leg2" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 75
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "enrichment" : {
+      "leiData" : [ {
+        "leiValidation" : false
+      } ],
+      "micData" : [ {
+        "city" : "N/A",
+        "countryCode" : "ZZ",
+        "creationDate" : "2005-10-24",
+        "lastUpdateDate" : "2005-10-24",
+        "marketCategory" : "OTHR",
+        "mic" : "XXXX",
+        "micType" : "OPRT",
+        "nameInstitutionDescription" : "NO MARKET (E.G. UNLISTED)",
+        "operatingMic" : "XXXX",
+        "status" : "ACTIVE"
+      } ],
+      "upiData" : [ {
+        "upiValidation" : false
+      } ]
+    }
+  },
+  "platformIdentifier" : "XXXX",
+  "price" : {
+    "monetary" : 83.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "SHAS",
+  "reportSubmittingEntityID" : "HHVW89ZPB1JW973C7BWB",
+  "reportingSpecifiedPerson" : "1DVPMCJ8SGH3GAK69P9Y",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueProductIdentifier" : "9LC8BUEP0YNB"
+}

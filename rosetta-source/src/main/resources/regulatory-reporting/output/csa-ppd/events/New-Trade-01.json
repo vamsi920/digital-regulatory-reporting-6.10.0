@@ -1,0 +1,68 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "BANKX00012024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "549300O5MFEP1XJ40B46",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "8G836JAF2",
+      "underlyingAssetIDType" : "SingleOther"
+    } ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2009-03-26",
+  "eventTimestamp" : "2011-03-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2014-06-20",
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 5000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DebtSeniority" : "SNDB",
+          "DeliveryType" : "OPTL"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : true,
+  "otherPayment" : [ {
+    "amount" : 1000,
+    "currency" : "USD",
+    "date" : "2009-03-28",
+    "payer" : "5493001RKR55V4X61F71",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "549300O5MFEP1XJ40B46",
+    "receiverFormat" : "Lei"
+  } ],
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

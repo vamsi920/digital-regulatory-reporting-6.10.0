@@ -1,0 +1,256 @@
+{
+  "id" : "test-pack-projection-hkma-tr-trade-report-to-iso20022-fx",
+  "pipelineId" : "pipeline-projection-hkma-tr-trade-report-to-iso20022",
+  "name" : "Fx",
+  "samples" : [ {
+    "id" : "fx-forward-ex01",
+    "name" : "FX Forward ex01",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-Forward-ex01.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-Forward-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-forward-ex02",
+    "name" : "FX Forward ex02",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-Forward-ex02.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-Forward-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-forward-ex03",
+    "name" : "FX Forward ex03",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-Forward-ex03.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-Forward-ex03.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-forward-ex04-party1-pays-eur",
+    "name" : "FX Forward ex04 Party1 pays EUR",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-Forward-ex04-Party1-pays-EUR.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-Forward-ex04-Party1-pays-EUR.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-forward-ex05-party1-pays-usd",
+    "name" : "FX Forward ex05 Party1 pays USD",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-Forward-ex05-Party1-pays-USD.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-Forward-ex05-Party1-pays-USD.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-forward-ex06",
+    "name" : "FX Forward ex06",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-Forward-ex06.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-Forward-ex06.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex01",
+    "name" : "FX NDF ex01",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex01.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex02",
+    "name" : "FX NDF ex02",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex02.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex03-bilateral",
+    "name" : "FX NDF ex03 Bilateral",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex03-Bilateral.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex03-Bilateral.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex04",
+    "name" : "FX NDF ex04",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex04.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex04.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex05-cleared",
+    "name" : "FX NDF ex05 Cleared",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex05-Cleared.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex05-Cleared.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex06",
+    "name" : "FX NDF ex06",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex06.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex06.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex07-beta",
+    "name" : "FX NDF ex07 Beta",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex07-Beta.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex07-Beta.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex08-gamma",
+    "name" : "FX NDF ex08 Gamma",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex08-Gamma.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex08-Gamma.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndf-ex09-confirmation",
+    "name" : "FX NDF ex09 Confirmation",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDF-ex09-Confirmation.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDF-ex09-Confirmation.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndo-ex01-european",
+    "name" : "FX NDO ex01 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDO-ex01-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDO-ex01-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-ndo-ex02-european",
+    "name" : "FX NDO ex02 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-NDO-ex02-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-NDO-ex02-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex01-european",
+    "name" : "FX VanillaOption ex01 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex01-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex01-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex02-european",
+    "name" : "FX VanillaOption ex02 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex02-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex02-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex03-european",
+    "name" : "FX VanillaOption ex03 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex03-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex03-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex04-european",
+    "name" : "FX VanillaOption ex04 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex04-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex04-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex05-american",
+    "name" : "FX VanillaOption ex05 American",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex05-American.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex05-American.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex06-european",
+    "name" : "FX VanillaOption ex06 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex06-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex06-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex07-european",
+    "name" : "FX VanillaOption ex07 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex07-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex07-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "fx-vanillaoption-ex08-european",
+    "name" : "FX VanillaOption ex08 European",
+    "inputPath" : "regulatory-reporting/output/hkma-trade/fx/FX-VanillaOption-ex08-European.json",
+    "outputPath" : "projection/output/hkma-tr-trade-report-to-iso20022/fx/FX-VanillaOption-ex08-European.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  } ]
+}

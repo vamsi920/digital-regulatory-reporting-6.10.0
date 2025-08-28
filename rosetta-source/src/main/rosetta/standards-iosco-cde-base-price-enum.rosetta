@@ -1,0 +1,8 @@
+namespace drr.standards.iosco.cde.base.price
+version "${project.version}"
+
+enum PriceNotationEnum:
+    Monetary
+    Percentage
+    Decimal
+    Basis

@@ -1,0 +1,42 @@
+namespace drr.standards.iosco.cde.version3.basket
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version2.* as cdeV2
+import drr.standards.iosco.cde.version3.* as cdeV3
+
+reporting rule CustomBasketCode from ReportableEvent: <"Custom basket code">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "97"
+        provision "If the OTC derivative transaction is based on a custom basket, unique code assigned by the structurer of the custom basket to link its constituents. This data element is not applicable if no custom basket is involved or no unique code has been assigned to it.
+        - Allowable Values: ISO 17442 Legal Entity Identifier (LEI) code of the basket structurer followed by a unique identifier up to 52 alphanumeric characters."]
+    cdeV2.basket.CustomBasketCode
+
+reporting rule BasketConstituentIdentifier from ReportableEvent: <"Identifier of the basket's constituents">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "98"
+        provision "An identifier that represents a constituent of an underlying custom basket in line with the Underlier ID within the ISO 4914 UPI reference data elements as maintained by the UPI Service Provider or in line with an identifier that would be reported as an Underlier ID (Other) where the UPI Underlier ID is OTHER. This data element is not applicable if no custom basket is involved.
+        - Format: Varchar(350)
+        - Allowable Values: An identifier that can be used to determine an asset, index or benchmark included in a basket. Up to 350 alphanumeric characters"]
+    cdeV2.basket.IdentifierOfBasketConstituents
+
+reporting rule BasketConstituentUnitOfMeasure from TransactionReportInstruction: <"Basket Constituent Unit Of Measure">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "99"
+        provision "Unit of measure in which the number of units of a particular custom basket constituent is expressed. This data element is not applicable if no custom basket is involved.
+        - Format: Char(4)
+        - Allowable Values: ISO 20022 approved external UnitOfMeasureCode codeset"]
+    cdeV2.basket.BasketConstituentUnitOfMeasure
+
+reporting rule BasketConstituentNumberOfUnits from TransactionReportInstruction: <"Basket Constituent Number Of Units">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "100"
+        provision "The number of units of a particular constituent in a custom basket. This data element is not applicable if no custom basket is involved."]
+    cdeV2.basket.BasketConstituentNumberOfUnits
+
+reporting rule BasketConstituentIdentifierSource from ReportableEvent: <"Source of the identifier of the basket constituents">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "101"
+        provision "The origin, or publisher, of the associated Basket constituent identifier, in line with the Underlier ID source within the ISO 4914 UPI reference data elements, as maintained by the UPI Service Provider or in line with the allowable value that would be reported as an Underlier ID (Other) source where the UPI Underlier ID is OTHER. This data element is not applicable if no custom basket is involved.
+        - Format: Varchar(350)
+        - Allowable Values: The origin, or publisher, of the associated basket constituent identifier. Up to 350 alphanumeric characters."]
+    cdeV2.basket.SourceOfTheIdentifierOfTheBasketConstituents
+
+reporting rule BasketConstituents from TransactionReportInstruction: <"Basket constituents">
+    cdeV2.basket.BasketConstituents

@@ -1,0 +1,128 @@
+{
+  "actionType" : "NEWT",
+  "basketConstituents" : [ {
+    "identifier" : "US22266T1097",
+    "numberOfUnits" : 129000.0,
+    "source" : "ISIN",
+    "unitOfMeasure" : "SHAS"
+  }, {
+    "identifier" : "US70438V1061",
+    "numberOfUnits" : 20000.0,
+    "source" : "ISIN",
+    "unitOfMeasure" : "SHAS"
+  }, {
+    "identifier" : "LU1778762911",
+    "numberOfUnits" : 3000.0,
+    "source" : "ISIN",
+    "unitOfMeasure" : "SHAS"
+  } ],
+  "cleared" : "N",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "HWR6ATEU4L0XN8IT6Y39",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketCode" : ".JPCDUSL1",
+  "customBasketIndicator" : true,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "37725013_WC0058345681_412696138_WCLT_12024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "7H6GLXDRUGQFU57RNE97",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.QC.AMF" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : ".JPCDUSL1",
+      "underlyingAssetIDType" : "Basket"
+    }, {
+      "underlyingAssetID" : "JPCDUSL1",
+      "underlyingAssetIDType" : "Basket"
+    }, {
+      "underlyingAssetID" : "JPM00JPC7",
+      "underlyingAssetIDType" : "Basket"
+    }, {
+      "underlyingAssetID" : "DE000SL0P5W9",
+      "underlyingAssetIDType" : "Basket"
+    }, {
+      "underlyingAssetID" : "HWR6ATEU4L0XN8IT6Y39JPCDUSL1 INDEX",
+      "underlyingAssetIDType" : "Basket"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2025-04-07",
+  "eventTimestamp" : "2025-04-07T20:16:40Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2025-04-07T19:49:58Z",
+  "expirationDate" : "2026-03-04",
+  "finalContractualSettlementDate" : "2026-03-04",
+  "interAffiliateIndicator" : false,
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "CA.QC.AMF" ],
+  "leg1" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "7H6GLXDRUGQFU57RNE97",
+    "receiverIdentifier" : "HWR6ATEU4L0XN8IT6Y39",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 99999999999999999999.99999
+  },
+  "leg2" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "HWR6ATEU4L0XN8IT6Y39",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "7H6GLXDRUGQFU57RNE97",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 75
+    },
+    "spreadNotation" : "Basis"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "enrichment" : {
+      "leiData" : [ {
+        "leiValidation" : false
+      } ],
+      "micData" : [ {
+        "city" : "N/A",
+        "countryCode" : "ZZ",
+        "creationDate" : "2005-10-24",
+        "lastUpdateDate" : "2005-10-24",
+        "marketCategory" : "OTHR",
+        "mic" : "XXXX",
+        "micType" : "OPRT",
+        "nameInstitutionDescription" : "NO MARKET (E.G. UNLISTED)",
+        "operatingMic" : "XXXX",
+        "status" : "ACTIVE"
+      } ],
+      "upiData" : [ {
+        "upiValidation" : false
+      } ]
+    },
+    "instrumentType" : "Swap",
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "price" : {
+    "monetary" : 83.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "SHAS",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueProductIdentifier" : "QZ3HXD0QWPVZ",
+  "uniqueTransactionIdentifier" : "7H6GLXDRUGQFU57RNE97PN37725013E00815881130724"
+}

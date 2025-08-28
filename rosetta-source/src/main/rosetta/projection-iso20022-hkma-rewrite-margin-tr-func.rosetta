@@ -1,0 +1,192 @@
+namespace drr.projection.iso20022.hkma.rewrite.margin.tr
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.regulation.hkma.rewrite.margin.*
+
+import iso20022.auth108.hkma.tr.*
+
+func Project_HKMATrMarginReportToIso20022:
+    [projection XML]
+    inputs:
+        marginReport HKMAMarginReport (1..1)
+    output:
+        iso20022Report Document (1..1)
+
+    add iso20022Report -> derivsTradMrgnDataRpt -> tradData -> rpt:
+        TradeReport34Choice__1 {
+            mrgnUpd: if marginReport -> actionType = MarginActionEnum -> MARU
+                then Create_MarginReportData(marginReport),
+            crrctn: if marginReport -> actionType = MarginActionEnum -> CORR
+                then Create_MarginReportData(marginReport)
+        }
+
+func Create_MarginReportData:
+    inputs:
+        marginReport HKMAMarginReport (1..1)
+    output:
+        details MarginReportData9__1 (1..1)
+
+    set details:
+        MarginReportData9__1 {
+            rptgTmStmp: marginReport -> reportingTimestamp,
+            evtDt: marginReport -> eventDate,
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: marginReport -> uniqueTransactionIdentifier,
+                prtry: GenericIdentification175__4 {
+                    id: if marginReport -> uniqueTransactionIdentifier exists
+                        then marginReport -> uniqueTransactionIdentifier,
+                    schmeNm: empty // TH Sprint 2025-07: Not possible to populate schmeNm.
+            }},
+            ctrPtyId: Create_CounterpartySpecificData(marginReport),
+            coll: MarginCollateralReport5__1 {
+                collstnCtgy: marginReport -> collateralisationCategory to-enum iso20022.auth108.hkma.tr.CollateralisationType3Code__1,
+                collPrtflCd: CollateralPortfolioCode6Choice__1 {
+                    mrgnPrtflCd: MarginPortfolio4 {
+                        initlMrgnPrtflCd: PortfolioCode5Choice {
+                            prtfl: if marginReport -> collateralPortfolioIndicator = True
+                                then PortfolioIdentification3 {
+                                    cd: marginReport -> initialMarginCollateralPortfolioCode,
+                                    prtflTxXmptn: marginReport -> portfolioContainingNonReportableComponentIndicator
+                                },
+                            noPrtfl: if marginReport -> collateralPortfolioIndicator = False
+                                then NotApplicable1Code -> NOAP
+                        },
+                        vartnMrgnPrtflCd: PortfolioCode5Choice {
+                            prtfl: if marginReport -> collateralPortfolioIndicator = True
+                                then PortfolioIdentification3 {
+                                    cd: marginReport -> variationMarginCollateralPortfolioCode,
+                                    prtflTxXmptn: marginReport -> portfolioContainingNonReportableComponentIndicator
+                                },
+                            noPrtfl: if marginReport -> collateralPortfolioIndicator = False
+                                then NotApplicable1Code -> NOAP
+                }}},
+                tmStmp: marginReport -> collateralTimestamp
+            },
+            pstdMrgnOrColl: Create_PostedMarginReport(marginReport),
+            rcvdMrgnOrColl: Create_ReceivedMarginReport(marginReport),
+            techAttrbts: TechnicalAttributes6__1 {
+                techRcrdId: marginReport -> technicalRecordId + "_" + marginReport -> reportingTimestamp to-string
+        },}
+
+func Create_CounterpartySpecificData:
+    inputs:
+        marginReport HKMAMarginReport (1..1)
+    output:
+        ctrPtySpcfcData TradeCounterpartyReport20__1 (1..1)
+
+    set ctrPtySpcfcData:
+        TradeCounterpartyReport20__1 {
+            rptgCtrPty: Counterparty45__1 {
+                id: PartyIdentification248Choice__1 {
+                    lgl: LegalPersonIdentification1__1 {
+                        id: OrganisationIdentification15Choice__1 {
+                            lei: marginReport -> counterparty1
+            }}}},
+            othrCtrPty: Counterparty46__1 {
+                idTp: PartyIdentification248Choice__2 {
+                    lgl: if marginReport -> counterparty2IdentifierTypeIndicator = True
+                        then LegalPersonIdentification1__2 {
+                            id: OrganisationIdentification15Choice__2 {
+                                lei: marginReport -> counterparty2,
+                                othr: OrganisationIdentification38__1 {
+                                    id: GenericIdentification175__1 {
+                                        id: marginReport -> counterparty2,
+                                        schmeNm: empty // TH Sprint 2025-07: Not possible to populate schmeNm.
+                                    },
+                                    nm: marginReport -> counterparty2Name
+                                },
+                                anyBIC: if marginReport -> counterparty2IdentifierFormat = PartyIdentifierFormat2Enum -> SWIFTBIC
+                                    then marginReport -> counterparty2
+                    },},
+                    ntrl: if marginReport -> counterparty2IdentifierTypeIndicator = False
+                        then NaturalPersonIdentification3__1 {
+                            id: NaturalPersonIdentification2__1 {
+                                id: GenericIdentification175__2 {
+                                    id: marginReport -> counterparty2
+            }}}}},
+            submitgAgt: GetSubmitgAgt(marginReport),
+            nttyRspnsblForRpt: OrganisationIdentification15Choice__1 {
+                lei: marginReport -> entityResponsibleForReporting
+        },}
+
+func GetSubmitgAgt:
+    inputs:
+        marginReport HKMAMarginReport (1..1)
+    output:
+        submitgAgt OrganisationIdentification15Choice__3 (1..1)
+
+    set submitgAgt:
+        Create_OrganisationIdentification15Choice__3(marginReport -> submitterIdentifier)
+
+func Create_OrganisationIdentification15Choice__3:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__3 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__3 {
+            lei: lei,
+            othr: OrganisationIdentification38__2 {
+                id: GenericIdentification175__3 {
+                    id: empty // TH Sprint 2025-07: Not possible to populate Othr/Id/Id only LEI.
+        }}}
+
+func Create_PostedMarginReport:
+    inputs:
+        marginReport HKMAMarginReport (1..1)
+    output:
+        postMarginData PostedMarginOrCollateral6__1 (1..1)
+
+    set postMarginData:
+        PostedMarginOrCollateral6__1 {
+            initlMrgnPstdPreHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> initialMarginPostedByTheReportingCounterparty1PreHaircut,
+                ccy: marginReport -> currencyOfInitialMarginPosted to-string
+            },
+            initlMrgnPstdPstHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> initialMarginPostedByTheReportingCounterparty1PostHaircut,
+                ccy: marginReport -> currencyOfInitialMarginPosted to-string
+            },
+            vartnMrgnPstdPreHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> variationMarginPostedByTheReportingCounterparty1PreHaircut,
+                ccy: marginReport -> currencyOfVariationMarginPosted to-string
+            },
+            vartnMrgnPstdPstHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> variationMarginPostedByTheReportingCounterparty1PostHaircut,
+                ccy: marginReport -> currencyOfVariationMarginPosted to-string
+            },
+            xcssCollPstd: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> excessCollateralPostedByTheCounterparty1,
+                ccy: marginReport -> currencyOfExcessCollateralPosted to-string
+        }}
+
+func Create_ReceivedMarginReport:
+    inputs:
+        marginReport HKMAMarginReport (1..1)
+    output:
+        rcvdMarginData ReceivedMarginOrCollateral6__1 (1..1)
+
+    set rcvdMarginData:
+        ReceivedMarginOrCollateral6__1 {
+            initlMrgnRcvdPreHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> initialMarginCollectedByTheReportingCounterparty1PreHaircut,
+                ccy: marginReport -> currencyOfInitialMarginCollected to-string
+            },
+            initlMrgnRcvdPstHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> initialMarginCollectedByTheReportingCounterparty1PostHaircut,
+                ccy: marginReport -> currencyOfInitialMarginCollected to-string
+            },
+            vartnMrgnRcvdPreHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> variationMarginCollectedByTheReportingCounterparty1PreHaircut,
+                ccy: marginReport -> currencyOfVariationMarginCollected to-string
+            },
+            vartnMrgnRcvdPstHrcut: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> variationMarginCollectedByTheReportingCounterparty1PostHaircut,
+                ccy: marginReport -> currencyOfVariationMarginCollected to-string
+            },
+            xcssCollRcvd: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: marginReport -> excessCollateralCollectedByTheCounterparty1,
+                ccy: marginReport -> currencyOfTheExcessCollateralCollected to-string
+        }}

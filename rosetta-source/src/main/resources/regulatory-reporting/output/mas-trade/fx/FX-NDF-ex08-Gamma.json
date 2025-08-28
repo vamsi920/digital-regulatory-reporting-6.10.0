@@ -1,0 +1,55 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "cleared" : "I",
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2022-02-23T12:51:31Z",
+  "confirmed" : "ECNF",
+  "contractType" : "FORW",
+  "counterparty1" : "G55DZBDJSDRJKFCRVK55",
+  "counterparty2" : "F226TOH6YD6XJB17KS62",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2022-02-23",
+  "eventTimestamp" : "2022-02-23T09:43:21Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 5.043317,
+  "executionTimestamp" : "2022-02-23T12:51:31Z",
+  "expirationDate" : "2022-03-18",
+  "finalContractualSettlementDate" : "2022-03-18",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1800,
+    "notionalCurrency" : "BRL",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 356.90796,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "BRL",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "reportSubmittingEntityID" : "G55DZBDJSDRJKFCRVK55",
+  "reportingSpecifiedPerson" : "G55DZBDJSDRJKFCRVK55",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXGAMMAXMLXXX03"
+}

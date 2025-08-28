@@ -1,0 +1,59 @@
+namespace drr.standards.iosco.cde.version1.price
+version "${project.version}"
+
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.price.*
+
+func GetReportablePricePeriod: <"Extracts the period for a price schedule">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        notation PriceNotationEnum (0..1)
+    output:
+        reportablePeriod PricePeriod (1..*)
+
+    alias customizedSchedule:
+        if Qualify_Commodity_Swap_FixedFloat(
+                    EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                )
+                or Qualify_Commodity_Swap_Basis(
+                        EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                    )
+        then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> commodityPayout -> schedule first
+        else if Qualify_Commodity_Option(
+                    EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                )
+                or Qualify_Commodity_Swaption(
+                        EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                    )
+        then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> optionPayout only-element -> schedule
+        else if Qualify_Commodity_Forward(
+                    EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                )
+        then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> forwardPayout only-element -> schedule
+
+    alias priceSchedule: Contract_Price(reportableEvent) only-element
+
+    add reportablePeriod:
+        GetReportableSchedulePeriod(priceSchedule, customizedSchedule, notation)
+
+func GetReportableStrikePricePeriod: <"Extracts the period for a strike price schedule">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        notation PriceNotationEnum (0..1)
+    output:
+        reportablePeriod PricePeriod (1..*)
+
+    alias customizedSchedule:
+        if IsCommodityOption(ProductForTrade(TradeForEvent(reportableEvent)))
+                or Qualify_Commodity_Swaption(
+                        EconomicTermsForProduct(
+                                ProductForTrade(TradeForEvent(reportableEvent))
+                            )
+                    )
+        then EconomicTermsForProduct(ProductForTrade(TradeForEvent(reportableEvent))) -> payout -> optionPayout -> schedule only-element
+
+    alias strikePriceSchedule: Contract_StrikePrice(reportableEvent) only-element
+    add reportablePeriod:
+        GetReportableSchedulePeriod(strikePriceSchedule, customizedSchedule, notation)

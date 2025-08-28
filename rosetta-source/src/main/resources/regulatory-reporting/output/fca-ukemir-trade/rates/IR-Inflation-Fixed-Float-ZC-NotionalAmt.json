@@ -1,0 +1,60 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioCode" : "123",
+  "collateralPortfolioIndicator" : true,
+  "confirmationTimestamp" : "2022-02-28T09:44:06Z",
+  "confirmed" : "ECNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "ORPI" ],
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2022-02-28",
+  "entityResponsibleForReporting" : "549300V2LQD6SX1WIG70",
+  "eventDate" : "2022-02-28",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-28T09:43:41Z",
+  "expirationDate" : "2029-02-28",
+  "finalContractualSettlementDate" : "2029-02-28",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 2,
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A020",
+      "fixedRatePaymentFrequencyPeriod" : "EXPI",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A020",
+      "floatingRatePaymentFrequencyPeriod" : "EXPI",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SRZXSC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "venueOfExecution" : "XXXX"
+}

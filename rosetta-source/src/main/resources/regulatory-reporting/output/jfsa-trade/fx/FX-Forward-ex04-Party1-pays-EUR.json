@@ -1,0 +1,37 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2020-11-10T05:44:46Z",
+  "confirmed" : "ECNF",
+  "contractType" : "FORW",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2020-11-10",
+  "entityResponsibleForReporting" : "W22LROWP2IHZNBB6K528",
+  "eventIdentifier" : "envuatuatExt194fb4f6f93f94a52bec31af33e3ee894",
+  "eventTimestamp" : "2020-11-10T05:44:46Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1.06,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2020-11-10T05:44:46Z",
+  "expirationDate" : "2022-03-25",
+  "finalContractualSettlementDate" : "2022-03-25",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 15240,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 16154.4,
+    "notionalCurrency" : "USD"
+  },
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "envuatuatExt194fb4f6f93f94a52bec31af33e3ee894"
+}

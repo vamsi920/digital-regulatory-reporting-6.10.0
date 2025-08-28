@@ -1,0 +1,83 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "DUMMY0000000000LEI01",
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "maturityDateOfTheUnderlier" : "2021-12-30",
+    "messageType" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true,
+    "settlementType" : "PHYS"
+  },
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2018-05-01",
+  "eventIdentifier" : "SEF123",
+  "eventTimestamp" : "2018-04-01T14:15:36Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-05-01T10:15:36Z",
+  "expirationDate" : "2021-12-30",
+  "finalContractualSettlementDate" : "2021-12-30",
+  "firstExerciseDate" : "2021-12-30",
+  "jurisdiction" : "MIXX",
+  "leg1" : {
+    "notionalAmount" : 16000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 16000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 100000,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2018-05-03",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI02",
+  "strikePrice" : {
+    "decimal" : 0.05
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "EXAMPLESUBMISSIONX01"
+}

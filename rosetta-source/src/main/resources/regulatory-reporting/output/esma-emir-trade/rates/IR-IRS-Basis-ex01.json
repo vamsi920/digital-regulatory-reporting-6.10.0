@@ -1,0 +1,81 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioCode" : "NOTAVAILABLE",
+  "collateralPortfolioIndicator" : true,
+  "confirmationTimestamp" : "2021-12-10T19:19:04Z",
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "INVF" ],
+  "counterparty1" : "TESTLEIINFBS00000002",
+  "counterparty2" : "TESTLEIINFBS00000001",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2021-03-11",
+  "entityResponsibleForReporting" : "TESTLEIINFBS00000002",
+  "eventDate" : "2021-03-09",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-09T13:12:38Z",
+  "expirationDate" : "2031-03-11",
+  "finalContractualSettlementDate" : "2031-03-11",
+  "intragroup" : false,
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "EFFR",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "DAIL",
+      "floatingRateReferencePeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 6
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "SOFR",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "DAIL",
+      "floatingRateReferencePeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "spread" : {
+      "basis" : 1
+    },
+    "spreadNotation" : "Basis"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SRAXSC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "TESTLEIINFBS00000002",
+  "reportTrackingNumber" : "RTNNotProvided",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "DUMMYTRADEIDENTIFY01IRSBASISEX01",
+  "venueOfExecution" : "XXXX"
+}

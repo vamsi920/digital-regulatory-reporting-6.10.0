@@ -1,0 +1,65 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "bookingLocation" : "CA",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2022-12-01",
+  "eventTimestamp" : "2021-11-19T17:52:40.7294089Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-11-19T17:49:49Z",
+  "expirationDate" : "2022-12-31",
+  "finalContractualSettlementDate" : "2022-12-31",
+  "firstExerciseDate" : "2022-12-31",
+  "leg1" : {
+    "notionalAmount" : 163742.4,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 65.76,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "TONE",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 65.76
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "PUTO",
+          "UnderlierID" : "ALUMINIUM ALLOY-LME CASH",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "USD",
+  "optionStyle" : "EURO",
+  "optionType" : "PUTO",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingSpecifiedPerson" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 2490
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONMET01"
+}

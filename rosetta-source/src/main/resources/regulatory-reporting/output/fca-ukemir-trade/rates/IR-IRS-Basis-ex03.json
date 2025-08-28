@@ -1,0 +1,76 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CSDS" ],
+  "corporateSectorOfTheCounterparty2" : [ "UCIT" ],
+  "counterparty1" : "G3SDK4EG3HH735DJJ456",
+  "counterparty2" : "F226TOH6YD6XJB17KS62",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2018-05-24",
+  "entityResponsibleForReporting" : "G3SDK4EG3HH735DJJ456",
+  "eventDate" : "2021-10-07",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-10-07T13:18:08Z",
+  "expirationDate" : "2025-05-24",
+  "finalContractualSettlementDate" : "2025-05-24",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 10000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "EURI",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 20
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 10000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "EURI",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 15
+    },
+    "spreadNotation" : "Basis"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "OTHR",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SRAXSC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "G3SDK4EG3HH735DJJ456",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRIRSBASISEXXMLXXX01",
+  "venueOfExecution" : "XXXX"
+}

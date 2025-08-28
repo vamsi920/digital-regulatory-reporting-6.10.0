@@ -1,0 +1,106 @@
+namespace drr.regulation.mas.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.regulation.mas.*
+import drr.standards.iso.*
+
+type MASValuationReport:
+    [rootType]
+    uniqueTransactionIdentifier Max52AlphaNumericText (0..1)
+        [ruleReference UniqueTransactionIdentifier]
+    uniqueTransactionIdentifierProprietary UTIProprietaryIDFormat (0..1)
+        [ruleReference UniqueTransactionIdentifierProprietary]
+    reportingSpecifiedPerson LEIIdentifier (0..1)
+        [ruleReference ReportingSpecifiedPerson]
+    counterparty1 LEIIdentifier (1..1)
+        [ruleReference Counterparty1]
+    counterparty2 Min20Max72AlphaNumericText (0..1)
+        [ruleReference Counterparty2]
+    counterparty2IdentifierType boolean (1..1)
+        [ruleReference Counterparty2IdentifierType]
+    actionType string (1..1)
+        [ruleReference ActionType]
+    reportingTimestamp zonedDateTime (1..1) 
+        [ruleReference ReportingTimestamp]
+    dataSubmitter string (1..1)
+        [ruleReference DataSubmitter]
+    valuationTimestamp zonedDateTime (0..1)
+        [ruleReference ValuationTimestamp]
+    valuationAmount ShortFraction5DecimalNumber (0..1) 
+        [ruleReference ValuationAmount]
+    valuationCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference ValuationCurrency]
+    valuationMethod ValuationType1Code (0..1)
+        [ruleReference ValuationMethod]
+    technicalRecordId string (0..1)
+        [ruleReference TechnicalRecordId]
+    executionAgentOfTheCounterparty1 LEIIdentifier (0..1)
+        [ruleReference ExecutionAgentOfCounterparty1DTCC]
+    executionAgentOfTheCounterparty2 LEIIdentifier (0..1)
+        [ruleReference ExecutionAgentOfCounterparty2DTCC]
+
+    condition DTCC_MAS_BR_0001_01: <"Counterparty 1 Condition">
+        [docReference MAS DTCC_Specs dataElement "1" field "Counterparty 1"
+            provision "When [Action Type] = NEWT, MODI, CORR, REVI, TERM, ERROR, MARU, VALU then [Counterparty 1] must NOT = [Counterparty 2] if [Counterparty 2 identifier type] is = LEI"]
+        if counterparty2IdentifierType = True
+        then counterparty1 <> counterparty2
+
+    condition DTCC_MAS_BR_0002_01: <"Counterparty 2 Condition">
+        [docReference MAS DTCC_Specs dataElement "2" field "Counterparty 2"
+            provision "When [Action Type] = NEWT, MODI, CORR, REVI, TERM, ERROR, MARU, VALU then [Counterparty 1] must NOT = [Counterparty 2] if [Counterparty 2 identifier type] is = LEI"]
+        if counterparty2IdentifierType = True
+        then counterparty1 <> counterparty2
+
+    condition DTCC_MAS_BR_0050_03: <"Reporting timestamp Condition">
+        [docReference MAS DTCC_Specs dataElement "50" field "Reporting timestamp"
+            provision "When [Action Type] = VALU then [Reporting timestamp] must be equal to or before the [Message Received timestamp] derived by the TR. Reject if the date value of the [Reporting timestamp] is more than 2 days before the date value of the [Message Received timestamp]. [Reporting timestamp] must be equal to or greater than the [Valuation timestamp]."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+            provision "The logic regarding the order between submissions is not modelled. The condition cannot be executed in a stateless environment."]
+        if ActionTypeEnum -> VALU to-string = actionType
+        then reportingTimestamp >= valuationTimestamp
+
+    condition DTCC_MAS_BR_0054_01: <"Valuation currency Condition">
+        [docReference MAS DTCC_Specs dataElement "54" field "Valuation currency"
+            provision "When [Action Type] = VALU then Reject if [Valuation currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS or XXX"]
+        if actionType = ActionTypeEnum -> VALU to-string
+                and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any = valuationCurrency
+        then False
+
+    condition DTCC_MAS_BR_0001a_01: <"Execution agent of the Counterparty 1">
+        [docReference MAS DTCC_Specs dataElement "[Not in regulation]" validationRule "Transaction"
+        provision "When [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, EROR, VALU then [Execution agent of Counterparty 1] must NOT = [Counterparty 1] or [Counterparty 2] or [Reporting Entity]. Reject if [Execution agent of Counterparty 1] = NOAP and Execution agent of Counterparty 2] is <blank>"]
+    [docReference ISDA APACJFSAPeerReviewGroup date "20230515"
+        provision "DTCC has provided clarification stating that the [Reporting Entity] in business rules for data field Execution Agent of the Counterparty 1 refers to [Data Submitter] field in MAS message spec v0.4."]
+        if [
+                ActionTypeEnum -> NEWT to-string,
+                ActionTypeEnum -> MODI to-string,
+                ActionTypeEnum -> CORR to-string,
+                ActionTypeEnum -> REVI to-string,
+                ActionTypeEnum -> TERM to-string,
+                ActionTypeEnum -> PRTO to-string,
+                ActionTypeEnum -> EROR to-string,
+                ActionTypeEnum -> VALU to-string
+            ] any = actionType
+        then (executionAgentOfTheCounterparty1 <> counterparty1
+                    or executionAgentOfTheCounterparty1 <> counterparty2
+                    or executionAgentOfTheCounterparty1 <> dataSubmitter)
+                and (if executionAgentOfTheCounterparty1 = "NOAP" then executionAgentOfTheCounterparty2 exists)
+
+    condition DTCC_MAS_BR_0002a_01: <"Execution agent of Counterparty 2">
+        [docReference MAS DTCC_Specs dataElement "[Not in regulation]" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, EROR, VALU then Required if [Execution agent of Counterparty 1] = NOAP."]
+        if [
+                ActionTypeEnum -> NEWT to-string,
+                ActionTypeEnum -> MODI to-string,
+                ActionTypeEnum -> CORR to-string,
+                ActionTypeEnum -> REVI to-string,
+                ActionTypeEnum -> TERM to-string,
+                ActionTypeEnum -> PRTO to-string,
+                ActionTypeEnum -> VALU to-string
+            ] any = actionType
+        then if executionAgentOfTheCounterparty1 = "NOAP"
+            then executionAgentOfTheCounterparty2 exists

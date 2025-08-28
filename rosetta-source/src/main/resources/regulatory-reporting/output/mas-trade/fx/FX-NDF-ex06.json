@@ -1,0 +1,57 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "bookingLocation" : "DE",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "FORW",
+  "counterparty1" : "549300ZK53CNGEEI6A29",
+  "counterparty2" : "R0MUWSFPU8MPRO8K5P83",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2020-12-03",
+  "eventTimestamp" : "2020-12-03T15:55:15Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1101.040808,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionTimestamp" : "2020-12-03T15:54:52Z",
+  "expirationDate" : "2021-02-03",
+  "finalContractualSettlementDate" : "2021-02-03",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1101040808,
+    "notionalCurrency" : "KRW",
+    "settlementCurrency" : "KRW"
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "KRW",
+          "UnderlierID" : "KRW",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "platformIdentifier" : "XXXX",
+  "reportSubmittingEntityID" : "549300ZK53CNGEEI6A29",
+  "reportingSpecifiedPerson" : "549300ZK53CNGEEI6A29",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02"
+}

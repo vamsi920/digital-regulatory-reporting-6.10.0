@@ -1,0 +1,57 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2021-03-10",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "DTDApproved2380084903EMIRRiskNewNewInterest",
+  "eventTimestamp" : "2021-03-09T13:32:39Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-09T13:32:20Z",
+  "expirationDate" : "2028-02-11",
+  "finalContractualSettlementDate" : "2028-02-11",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 12
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 0.15,
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "KRW",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A005",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "platformIdentifier" : "XXXX",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "DTDApproved2380084903EMIRRiskNewNewInterest",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRCCSFIXEDFLOATEXN03"
+}

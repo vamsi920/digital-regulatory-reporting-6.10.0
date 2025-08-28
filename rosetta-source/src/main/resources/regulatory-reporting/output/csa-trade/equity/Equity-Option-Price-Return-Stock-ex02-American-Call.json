@@ -1,0 +1,82 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "549300O5MFEP1XJ40B46",
+  "cleared" : "N",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "BANKX0012024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "549300O5MFEP1XJ40B46",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "STM-FP",
+      "underlyingAssetIDType" : "SingleOther"
+    }, {
+      "underlyingAssetID" : "STMicroelectronics N.V. ordinary shares",
+      "underlyingAssetIDType" : "SingleOther"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2011-02-04",
+  "eventIdentifier" : "BANKX001",
+  "eventTimestamp" : "2011-02-04T15:38:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T15:38:00Z",
+  "expirationDate" : "2005-09-27",
+  "finalContractualSettlementDate" : "2005-09-27",
+  "firstExerciseDate" : "2001-07-13",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 4800000,
+    "notionalCurrency" : "EUR",
+    "notionalQuantity" : 150000,
+    "quantityUnitOfMeasure" : "SHAS",
+    "totalNotionalQuantity" : 150000,
+    "underlierIDOther" : "STM-FP",
+    "underlierIDOtherSource" : "Other"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "OptionExerciseStyle" : "AMER",
+          "OptionType" : "CALL"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : true,
+  "optionPremiumAmount" : 405000,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2001-07-17",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "5493001RKR55V4X61F71",
+  "strikePrice" : {
+    "monetary" : 32
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01"
+}

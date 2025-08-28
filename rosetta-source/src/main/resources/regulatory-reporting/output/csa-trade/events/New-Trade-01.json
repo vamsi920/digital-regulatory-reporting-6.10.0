@@ -1,0 +1,84 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "5493001RKR55V4X61F71",
+  "cleared" : "N",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "BANKX00012024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "otherPaymentPayerIDType" : [ "LEI" ],
+    "otherPaymentReceiverIDType" : [ "LEI" ],
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "549300O5MFEP1XJ40B46",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "8G836JAF2",
+      "underlyingAssetIDType" : "SingleOther"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2009-03-26",
+  "eventTimestamp" : "2011-03-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2014-06-20",
+  "finalContractualSettlementDate" : "2014-06-20",
+  "interAffiliateIndicator" : true,
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 5000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "leg2" : {
+    "underlierIDOther" : "8G836JAF2",
+    "underlierIDOtherSource" : "Other"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DebtSeniority" : "SNDB",
+          "DeliveryType" : "OPTL"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : true,
+  "otherPayment" : [ {
+    "amount" : 1000,
+    "currency" : "USD",
+    "date" : "2009-03-28",
+    "payer" : "5493001RKR55V4X61F71",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "549300O5MFEP1XJ40B46",
+    "receiverFormat" : "Lei"
+  } ],
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "549300O5MFEP1XJ40B46"
+}

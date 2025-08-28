@@ -1,0 +1,70 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "brokerID" : "549300OL8KL0WCQ34V31",
+  "brokerIdentifierFormat" : "Lei",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWPT",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2018-04-01",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "SEF123",
+  "eventTimestamp" : "2018-04-01T14:15:36Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-04-01T14:15:36Z",
+  "expirationDate" : "2019-04-01",
+  "finalContractualSettlementDate" : "2024-04-03",
+  "firstExerciseDate" : "2019-04-01",
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 13000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 13000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "EURI",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 6
+    }
+  },
+  "maturityDateOfTheUnderlying" : "2024-04-03",
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 100000,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2018-04-01",
+  "optionStyle" : "EURO",
+  "optionType" : "OTHR",
+  "putAmount" : 13000,
+  "putCurrency" : "EUR",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 0.05
+  },
+  "strikePriceNotation" : "Decimal",
+  "technicalRecordId" : "HKMA-DUMMY0000000000LEI01-DUMMY0000000000LEI02-MOCKUPNATURALPERSO01-2018-04-01T14:15:36Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "MOCKUPNATURALPERSO01"
+}

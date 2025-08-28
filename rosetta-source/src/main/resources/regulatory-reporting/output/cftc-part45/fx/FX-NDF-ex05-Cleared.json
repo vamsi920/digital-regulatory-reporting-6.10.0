@@ -1,0 +1,82 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "I",
+  "clearingTimestamp" : "2020-12-01T10:15:17Z",
+  "counterparty1" : "F226TOH6YD6XJB17KS62",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "W22LROWP2IHZNBB6K528",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-12-01",
+  "eventIdentifier" : "envuatuatExt1f52ea2898b80492a837e3a6d1075dd69",
+  "eventTimestamp" : "2020-12-01T10:04:06Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 36.29,
+  "exchangeRateBasis" : "USD/RUB",
+  "executionTimestamp" : "2020-12-01T10:04:06Z",
+  "expirationDate" : "2021-01-25",
+  "finalContractualSettlementDate" : "2021-01-25",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "fixingDate" : "2021-01-22T00:00:00Z",
+    "notionalAmount" : 36290,
+    "notionalCurrency" : "RUB",
+    "payerIdentifier" : "W22LROWP2IHZNBB6K528",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "F226TOH6YD6XJB17KS62",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 1000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "F226TOH6YD6XJB17KS62",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "W22LROWP2IHZNBB6K528",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "RUB",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "F226TOH6YD6XJB17KS62",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

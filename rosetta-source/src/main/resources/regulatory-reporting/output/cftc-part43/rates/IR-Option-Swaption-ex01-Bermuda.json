@@ -1,0 +1,68 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "maturityDateOfTheUnderlier" : "2032-01-13",
+    "messageType" : "RT",
+    "optionStyle" : "BERM",
+    "optionType" : "CALL",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2021-12-06",
+  "eventTimestamp" : "2021-12-06T17:09:17Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:17Z",
+  "expirationDate" : "2022-07-13",
+  "firstExerciseDate" : "2022-07-13",
+  "leg1" : {
+    "notionalAmount" : 100000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 100000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 0
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 1244096.653,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 0.03
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "IROPTIONSWAPTIONEX02"
+}

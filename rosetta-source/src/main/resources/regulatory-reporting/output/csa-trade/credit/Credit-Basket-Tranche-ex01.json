@@ -1,0 +1,85 @@
+{
+  "actionType" : "NEWT",
+  "basketConstituents" : [ {
+    "identifier" : "US0089ABC985",
+    "source" : "ISIN"
+  }, {
+    "identifier" : "US0089ABC985",
+    "source" : "ISIN"
+  } ],
+  "buyerIdentifier" : "213800H14XVWOV87OI72",
+  "cdSIndexAttachmentPoint" : 0.03,
+  "cdSIndexDetachmentPoint" : 0.07,
+  "cleared" : "N",
+  "counterparty1" : "213800H14XVWOV87OI72",
+  "counterparty2" : "I7331LVCZKQKX5T7XV54",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketCode" : "CDSBASKETSAMPLE08912",
+  "customBasketIndicator" : true,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "GW0EB40A0q2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "213800H14XVWOV87OI72",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "CDSBASKETSAMPLE08912",
+      "underlyingAssetIDType" : "Basket"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2004-03-23",
+  "eventIdentifier" : "GW0EB40A0q",
+  "eventTimestamp" : "2004-01-24T04:36:35-08:00",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2015-01-24T16:20:47Z",
+  "expirationDate" : "2014-03-20",
+  "finalContractualSettlementDate" : "2014-03-20",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.006,
+    "notionalAmount" : 25000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A008",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    },
+    "settlementCurrency" : "USD"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "Underlying" : {
+            "UnderlierID" : "US0089ABC985",
+            "UnderlierIDSource" : "ISIN"
+          }
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "213800H14XVWOV87OI72",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "I7331LVCZKQKX5T7XV54",
+  "uniqueTransactionIdentifier" : "CREDITBASKETTRANCH01"
+}

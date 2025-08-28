@@ -1,0 +1,55 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "CTCaTO",
+    "numberOfUnits" : 1,
+    "source" : "Other"
+  } ],
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "effectiveDate" : "2020-12-14",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "56b4dc698dc540c49d70869f48dcf74d",
+  "eventTimestamp" : "2022-01-29T06:39:48.0169097Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-12-16T23:11:47Z",
+  "expirationDate" : "2022-12-19",
+  "finalContractualSettlementDate" : "2022-12-19",
+  "intragroup" : false,
+  "leg1" : {
+    "notionalAmount" : 8291615,
+    "notionalCurrency" : "CAD",
+    "notionalQuantity" : 1,
+    "totalNotionalQuantity" : 1
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 8291615,
+    "notionalCurrency" : "CAD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "CDOR",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO",
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3
+    }
+  },
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "HKMA-DUMMY0000000000LEI01-DUMMY0000000000LEI02-EQUITYSWAPPRICERET01-2022-01-29T06:39:48.016909700Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYSWAPPRICERET01"
+}

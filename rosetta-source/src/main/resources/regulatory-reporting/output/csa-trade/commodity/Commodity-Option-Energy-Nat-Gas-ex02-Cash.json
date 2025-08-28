@@ -1,0 +1,86 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "213800IV9PCAC364HN60",
+  "cleared" : "N",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "maturityDateOfTheUnderlying" : "2018-12-31",
+    "messageID" : "001229414555123459991234569BR7771234567892024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "Call",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Physical",
+    "submittedForParty" : "213800IV9PCAC364HN60",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "SO:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.QC.AMF", "CA.ON.OSC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "COMMODITYOPTIONENE01",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-03-17",
+  "eventIdentifier" : "001229414555123459991234569BR777123456789",
+  "eventTimestamp" : "2019-11-16T00:00:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2018-06-27",
+  "finalContractualSettlementDate" : "2018-12-31",
+  "firstExerciseDate" : "2018-06-27",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 5391200,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 10000,
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "totalNotionalQuantity" : 1840000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "NATURAL GAS-AECO C/NIT (US$/MMBTU)-CANADIAN GAS REPORTER",
+    "underlierIDOther" : "NATURAL GAS-AECO C/NIT (US$/MMBTU)-CANADIAN GAS REPORTER",
+    "underlierIDOtherSource" : "ISDACRP"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Swaption"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI01",
+  "strikePrice" : {
+    "monetary" : 2.93
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONENE02"
+}

@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-11-10",
+  "eventIdentifier" : "envuatuatExt194fb4f6f93f94a52bec31af33e3ee894",
+  "eventTimestamp" : "2020-11-10T05:44:46Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1.06,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2020-11-10T05:44:46Z",
+  "expirationDate" : "2022-03-25",
+  "finalContractualSettlementDate" : "2022-03-25",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "notionalAmount" : 15240,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "W22LROWP2IHZNBB6K528",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "MXKQVM4U1OHBQWFPG196",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 16154.4,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "MXKQVM4U1OHBQWFPG196",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "W22LROWP2IHZNBB6K528",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

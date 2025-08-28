@@ -1,0 +1,85 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "987654321ZZABCDEFG11",
+  "counterparty2" : "987654321ZZABCDEFG12",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2021-03-11",
+  "eventTimestamp" : "2021-03-09T13:29:51Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-09T13:29:14Z",
+  "expirationDate" : "2028-02-11",
+  "leg1" : {
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 12
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "fixedRate" : 0.15,
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    },
+    "settlementCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "NotionalCurrency" : "GBP",
+          "NotionalSchedule" : "Constant",
+          "OtherNotionalCurrency" : "USD",
+          "ReferenceRateTermUnit" : "MNTH",
+          "ReferenceRateTermValue" : 6,
+          "UnderlierID" : "GBP-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Cross_Currency_Fixed_Float"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "EDGE",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "987654321ZZABCDEFG11",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueProductIdentifier" : "EZ1HPK330CY8",
+  "uniqueTransactionIdentifier" : "DUMMYTRADEIDENTIFY01IRCCSFIXEDFLOAT"
+}

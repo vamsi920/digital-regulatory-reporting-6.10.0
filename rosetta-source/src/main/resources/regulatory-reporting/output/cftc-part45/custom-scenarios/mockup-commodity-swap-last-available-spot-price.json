@@ -1,0 +1,99 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "Commodity",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2014-02-01",
+  "eventIdentifier" : "001229414555123459991234569BR777123",
+  "eventTimestamp" : "2019-03-21T17:37:38Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2014-05-21",
+  "finalContractualSettlementDate" : "2014-05-21",
+  "leg1" : {
+    "notionalAmount" : 1872285,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 3744.571,
+    "payerIdentifier" : "213800IV9PCAC364HN60",
+    "payerIdentifierFormat" : "Lei",
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "TONE",
+    "receiverIdentifier" : "213800WWTABZ1GOJHH37",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 326.4
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 3744.57
+  },
+  "leg2" : {
+    "notionalAmount" : 1872285,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 3744.571,
+    "payerIdentifier" : "213800WWTABZ1GOJHH37",
+    "payerIdentifierFormat" : "Lei",
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "TONE",
+    "receiverIdentifier" : "213800IV9PCAC364HN60",
+    "receiverIdentifierFormat" : "Lei",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 3744.57
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "OIL-WTI-PLATTS MARKETWIRE",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPCOMMODITYSWA02"
+}

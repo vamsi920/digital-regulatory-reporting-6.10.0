@@ -1,0 +1,69 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CRDT",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "OPTL",
+  "direction1" : "SLLR",
+  "effectiveDate" : "2022-03-08",
+  "eventTimestamp" : "2022-03-08T13:46:04Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-08T13:38:00Z",
+  "expirationDate" : "2045-07-25",
+  "finalContractualSettlementDate" : "2045-07-25",
+  "leg1" : {
+    "fixedRate" : 0.0032,
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "nameOfTheUnderlyingIndex" : "ABX.HE.AA.06-1",
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "Underlying" : {
+            "UnderlierIDSource" : "CRIDX",
+            "UnderlyingCreditIndexSeries" : 2,
+            "UnderlyingCreditIndexVersion" : 2,
+            "UnderlyingInstrumentIndexTermUnit" : "YEAR"
+          },
+          "UnderlyingIssuerType" : "Corporate"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Index"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "otherPayment" : [ {
+    "amount" : 987.0001,
+    "currency" : "USD",
+    "date" : "2022-03-11",
+    "payer" : "549300V2LQD6SX1WIG70",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "549300CWK6F65W566G32",
+    "receiverFormat" : "Lei"
+  } ],
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingSpecifiedPerson" : "549300V2LQD6SX1WIG70",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentification" : "USX17E16E151",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "CREDITINDEXABXHEEX04"
+}

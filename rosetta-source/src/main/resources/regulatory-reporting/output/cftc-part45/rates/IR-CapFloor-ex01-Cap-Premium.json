@@ -1,0 +1,92 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "TESTCLIENTLEI0000009",
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "CALL",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "TESTCLIENTLEI0000009",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "TESTHOUSELEI00000001",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-12-23",
+  "eventIdentifier" : "envuatuatExt1a94bbf8749c744c58c9ca350ae26ea0d",
+  "eventTimestamp" : "2020-12-21T10:27:53.064Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-12-21T10:24:45Z",
+  "expirationDate" : "2023-12-21",
+  "finalContractualSettlementDate" : "2023-12-21",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "notionalAmount" : 5000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "OptionType" : "CALL",
+          "UnderlierID" : "USD-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML",
+          "UnderlyingInstrumentIndexTermUnit" : "MNTH"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "CapFloor"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 100,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2020-12-23",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "TESTCLIENTLEI0000009",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "TESTHOUSELEI00000001",
+  "strikePrice" : {
+    "decimal" : 0.03
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "IRCAPFLOOREXCAPPRE01"
+}

@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-csa-valuation",
+  "name" : "CSA / Valuation",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.csa.rewrite.valuation.reports.CSAValuationReportFunction",
+    "inputType" : "drr.regulation.common.ValuationReportInstruction",
+    "outputType" : "drr.regulation.csa.rewrite.valuation.CSAValuationReport"
+  }
+}

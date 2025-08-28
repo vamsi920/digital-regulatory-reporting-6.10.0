@@ -1,0 +1,16 @@
+{
+  "id" : "test-pack-projection-hkma-dtcc-valuation-report-to-iso20022-valuation",
+  "pipelineId" : "pipeline-projection-hkma-dtcc-valuation-report-to-iso20022",
+  "name" : "Valuation",
+  "samples" : [ {
+    "id" : "valuation-ex01",
+    "name" : "Valuation ex01",
+    "inputPath" : "regulatory-reporting/output/hkma-valuation/valuation/Valuation-ex01.json",
+    "outputPath" : "projection/output/hkma-dtcc-valuation-report-to-iso20022/valuation/Valuation-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  } ]
+}

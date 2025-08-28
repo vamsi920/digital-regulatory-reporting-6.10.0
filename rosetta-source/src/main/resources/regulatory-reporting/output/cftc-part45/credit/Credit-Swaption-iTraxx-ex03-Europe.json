@@ -1,0 +1,74 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "DUMMYLEI123456789002",
+  "cftcGuidebook" : {
+    "assetClass" : "Credit",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "maturityDateOfTheUnderlier" : "2024-12-20",
+    "messageType" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "CALL",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "PHYS"
+  },
+  "cleared" : "N",
+  "counterparty1" : "DUMMYLEI123456789002",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "DUMMYLEI123456789001",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-02-27",
+  "eventIdentifier" : "DTDUnapproved11370799001DFCFTCRiskNewNewCre",
+  "eventTimestamp" : "2022-02-11T07:48:32Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-11T07:48:14Z",
+  "expirationDate" : "2020-03-18",
+  "finalContractualSettlementDate" : "2024-12-20",
+  "firstExerciseDate" : "2020-03-18",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "notionalAmount" : 500000000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2020-02-27",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI123456789002",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMYLEI123456789001",
+  "strikePrice" : {
+    "decimal" : 0.01
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "CREDITSWAPTIONITRA02"
+}

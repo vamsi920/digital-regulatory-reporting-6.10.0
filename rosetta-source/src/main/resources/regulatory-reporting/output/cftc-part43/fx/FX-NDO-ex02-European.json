@@ -1,0 +1,78 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "callAmount" : 10000000,
+  "callCurrency" : "BRL",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-12-01",
+  "eventTimestamp" : "2020-12-01T13:15:44Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1.3,
+  "exchangeRateBasis" : "BRL/USD",
+  "executionTimestamp" : "2020-12-01T13:13:08Z",
+  "expirationDate" : "2021-01-12",
+  "firstExerciseDate" : "2021-01-12",
+  "leg1" : {
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "BRL",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 13000000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "BRL",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 60,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 13000000,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 1.3
+  },
+  "strikePriceCurrency" : "BRL/USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXNDOEXEUROPEANXML02"
+}

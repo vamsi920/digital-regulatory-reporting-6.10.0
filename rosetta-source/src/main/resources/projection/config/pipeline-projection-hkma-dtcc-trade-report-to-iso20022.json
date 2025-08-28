@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-hkma-dtcc-trade-report-to-iso20022",
+  "name" : "Hkma Dtcc Trade Report To Iso20022",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.iso20022.hkma.rewrite.trade.dtcc.functions.Project_HKMADtccTradeReportToIso20022",
+    "inputType" : "drr.regulation.hkma.rewrite.trade.HKMATransactionReport",
+    "outputType" : "iso20022.auth030.hkma.dtcc.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-hkma-trade",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/auth030-hkma-dtcc-rosetta-xml-config.json"
+  }
+}

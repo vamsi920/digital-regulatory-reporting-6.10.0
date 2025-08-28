@@ -1,0 +1,68 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "030463684555123459991234569BR7771234567892024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "InterestRate",
+    "submittedForParty" : "213800IV9PCAC364HN60",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "IRCAPFLOOREXCAPXML01",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2016-11-16",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2020-12-31",
+  "leg1" : {
+    "notionalAmount" : 81833063.11,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "OptionType" : "CALL",
+          "UnderlierID" : "USD-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML",
+          "UnderlyingInstrumentIndexTermUnit" : "MNTH"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "CapFloor"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 3
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "IRCAPFLOOREXCAPXML02"
+}

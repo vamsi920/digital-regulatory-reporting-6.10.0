@@ -1,0 +1,52 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "beneficiary1" : "549300V2LQD6SX1WIG70",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "ECNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INUN" ],
+  "corporateSectorOfTheCounterparty2" : [ "CSDS" ],
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2022-02-28",
+  "entityResponsibleForReporting" : "549300V2LQD6SX1WIG70",
+  "eventIdentifier" : "D8EBBB353F13A317E0538CB0CC0A5693",
+  "eventTimestamp" : "2022-02-28T09:23:51Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-28T09:15:38Z",
+  "expirationDate" : "2026-02-28",
+  "finalContractualSettlementDate" : "2026-02-28",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "EURI",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 6
+    }
+  },
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "priceNotation" : "Decimal",
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "HKMA-549300V2LQD6SX1WIG70-549300CWK6F65W566G32-2022-02-28T09:23:51Z",
+  "underlyingIdentificationType" : "X"
+}

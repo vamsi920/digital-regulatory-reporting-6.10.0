@@ -1,0 +1,81 @@
+{
+  "actionType" : "CORR",
+  "cleared" : "N",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "5U0XI89JRFVHWIBS4F54",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "D2F9D3C7AEF97KMZ92S2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "7H6GLXDRUGQFU57RNE97",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "COMMODITYCFDENERGY01",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-03-01",
+  "eventTimestamp" : "2021-08-18T14:17:08Z",
+  "executionTimestamp" : "2021-08-12T07:32:01Z",
+  "expirationDate" : "2023-10-31",
+  "leg1" : {
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "notionalQuantity" : 150,
+    "quantityFrequency" : "ADHO",
+    "quantityUnitOfMeasure" : "OTHR",
+    "totalNotionalQuantity" : 3000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "DUBAI",
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "notionalQuantity" : 150,
+    "quantityFrequency" : "ADHO",
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "JPY",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 3000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "DUBAI",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 10000
+  },
+  "priceCurrency" : "JPY",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYCFDENERGY02"
+}

@@ -1,0 +1,54 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWPT",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2018-04-01",
+  "eventTimestamp" : "2018-04-01T14:15:36Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-04-01T14:15:36Z",
+  "expirationDate" : "2019-04-01",
+  "finalContractualSettlementDate" : "2024-04-03",
+  "firstExerciseDate" : "2019-04-01",
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 13000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 13000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "optionPremiumAmount" : 100000,
+  "optionPremiumCurrency" : "EUR",
+  "optionStyle" : "EURO",
+  "optionType" : "OTHR",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingSpecifiedPerson" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 0.05
+  },
+  "strikePriceNotation" : "Decimal",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "MOCKUPNATURALPERSO01"
+}

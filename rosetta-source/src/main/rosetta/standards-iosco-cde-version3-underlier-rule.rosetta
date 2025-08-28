@@ -1,0 +1,304 @@
+namespace drr.standards.iosco.cde.version3.underlier
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.regulation.common.util.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version3.* as cdeV3
+
+reporting rule UnderlierIDOther from ReportableEvent: <"Underlier ID (Other)">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "102"
+        provision "The asset(s), index (indices) or benchmark underlying a contract or, in the case of a foreign Exchange derivative, identification of index. This data element is applicable when the value of Underlier ID is submitted as OTHER to the UPI service provider."]
+    extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source all <> ISIN
+        then GetUnderlierProductIdentifier first -> identifier
+        else if (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent)
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent)
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if (IsFRA and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent)
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName only-element
+        // Basket
+        else if EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> productIdentifier exists
+                and GetProductIdentifierFilteringISIN(
+                        EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> productIdentifier
+                    ) -> source <> ISIN
+        then GetProductIdentifierFilteringISIN(
+                    EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> productIdentifier
+                ) -> identifier
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier exists
+                and GetProductIdentifierFilteringISIN(
+                        EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier
+                    ) -> source <> ISIN
+        then GetProductIdentifierFilteringISIN(
+                    EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier
+                ) -> identifier
+        else if UnderlierForProduct -> basket -> productIdentifier exists
+                and GetProductIdentifierFilteringISIN(
+                        UnderlierForProduct -> basket -> productIdentifier
+                    ) -> source <> ISIN
+        then GetProductIdentifierFilteringISIN(
+                    UnderlierForProduct -> basket -> productIdentifier
+                ) -> identifier
+
+reporting rule UnderlierIDOtherLeg1 from ReportableEvent: <"Underlier ID (Other) - Leg 1">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "102"
+        provision "The asset(s), index (indices) or benchmark underlying a contract or, in the case of a foreign Exchange derivative, identification of index. This data element is applicable when the value of Underlier ID is submitted as OTHER to the UPI service provider."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250402" field "Underlier ID (Other) - Leg 1"
+        provision "For Credit Default Swaps, leg 1 is the interest rate. However, it is always a fixed rate; thus, for CDS no extraction of index is required at leg 1."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250417" field "Underlier ID (Other) - Leg 1"
+        provision "For Foreign Exchange, the underlier is the currency of the notional, as it is expected for AnnaDsb."]
+    extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifierLeg1 exists
+                and GetUnderlierProductIdentifierLeg1 -> source all <> ISIN
+        then GetUnderlierProductIdentifierLeg1 first -> identifier
+        else if GetOtherUnderlierLeg1 exists
+        then GetOtherUnderlierLeg1
+
+reporting rule UnderlierIDOtherLeg2 from ReportableEvent: <"Underlier ID (Other) - Leg 2">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "102"
+        provision "The asset(s), index (indices) or benchmark underlying a contract or, in the case of a foreign Exchange derivative, identification of index. This data element is applicable when the value of Underlier ID is submitted as OTHER to the UPI service provider."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250417" field "Underlier ID (Other) - Leg 2"
+        provision "For Foreign Exchange, the underlier is the currency of the notional, as it is expected for AnnaDsb."]
+    extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifierLeg2 exists
+                and GetUnderlierProductIdentifierLeg2 -> source all <> ISIN
+        then GetUnderlierProductIdentifierLeg2 first -> identifier
+        else if GetOtherUnderlierLeg2 exists
+        then GetOtherUnderlierLeg2
+
+reporting rule UnderlierIDOtherSource from ReportableEvent: <"Underlier ID (Other) Source">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "103"
+        provision "The origin, or publisher, of the associated Underlier ID (Other). This data element is applicable when the value of Underlier ID source is submitted as OTHER to the UPI service provider."]
+    extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source all <> ISIN
+        then GetUnderlierProductIdentifier first -> source
+        else if (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (IsFRA
+                    and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName exists)
+        then Name
+        // Basket
+        else if EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> productIdentifier exists
+                and GetProductIdentifierFilteringISIN(
+                        EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> productIdentifier
+                    ) -> source <> ISIN
+        then GetProductIdentifierFilteringISIN(
+                    EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> productIdentifier
+                ) -> source
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier exists
+                and GetProductIdentifierFilteringISIN(
+                        EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier
+                    ) -> source <> ISIN
+        then GetProductIdentifierFilteringISIN(
+                    EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier
+                ) -> source
+        else if UnderlierForProduct -> basket -> productIdentifier exists
+                and GetProductIdentifierFilteringISIN(
+                        UnderlierForProduct -> basket -> productIdentifier
+                    ) -> source <> ISIN
+        then GetProductIdentifierFilteringISIN(
+                    UnderlierForProduct -> basket -> productIdentifier
+                ) -> source
+
+reporting rule UnderlierIDOtherSourceLeg1 from ReportableEvent: <"Underlier ID (Other) Source - Leg 1">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "103"
+        provision "The origin, or publisher, of the associated Underlier ID (Other). This data element is applicable when the value of Underlier ID source is submitted as OTHER to the UPI service provider."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250402" field "Underlier ID (Other) - Leg 1"
+        provision "For Credit Default Swaps, leg 1 is the interest rate. However, it is always a fixed rate; thus, for CDS no extraction of index is required at leg 1."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250417" field "Underlier ID (Other) Source - Leg 1"
+        provision "For Foreign Exchange, the source is CCY, meaning 'currency', as it is expected for AnnaDsb."]
+    extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifierLeg1 exists
+                and GetUnderlierProductIdentifierLeg1 -> source all <> ISIN
+        then GetUnderlierProductIdentifierLeg1 first -> source to-string
+        else if IsFRA
+                and InterestRateLeg1 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent
+                and InterestRateLeg1 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName exists
+        then ProductIdTypeEnum -> Name to-string
+        else if IsFXForward or IsFXOption or IsFXSwap
+        then "CCY" // Should this be added to ProductIDTypeEnum?
+
+reporting rule UnderlierIDOtherSourceLeg2 from ReportableEvent: <"Underlier ID (Other) Source - Leg 2">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "103"
+        provision "The origin, or publisher, of the associated Underlier ID (Other). This data element is applicable when the value of Underlier ID source is submitted as OTHER to the UPI service provider."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250403" field "Underlier ID (Other) - Leg 2"
+        provision "For Foreign Exchange, the source is CCY, meaning 'currency', as it is expected for AnnaDsb."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250417" field "Underlier ID (Other) Source - Leg 2"
+        provision "For Foreign Exchange, the source is CCY, meaning 'currency', as it is expected for AnnaDsb."]
+    extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifierLeg2 exists
+                and GetUnderlierProductIdentifierLeg2 -> source all <> ISIN
+        then GetUnderlierProductIdentifierLeg2 first -> source to-string
+        else if (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (IsFRA
+                    and InterestRateLeg2 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent
+                    and InterestRateLeg2 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName exists)
+        then ProductIdTypeEnum -> Name to-string
+        else if IsFXForward or IsFXOption or IsFXSwap
+        then "CCY" // Should this be added to ProductIDTypeEnum?
+
+reporting rule UnderlyingAssetTradingPlatformIdentifierLeg1 from ReportableEvent: <"Underlying asset trading platform identifier">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "104"
+        provision "For a platform (e.g. exchange) traded underlying asset, the platform on which the asset is traded. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250423" field "Underlying asset trading platform identifier"
+        provision "CDM currently represents indexes as baskets with single basket constituents. Thus, a custom basket constituent is considered when basket is represented with more than one basket constituent."]
+    extract
+        if UnderlierForProduct(ProductForEvent) -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct(
+                    ProductForEvent
+                ) -> payout -> performancePayout -> underlier -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct(
+                    ProductForEvent
+                ) -> payout -> commodityPayout -> underlier -> basket -> basketConstituent count <= 1
+        then PayoutLeg1(
+                    TradableProductForEvent -> product,
+                    TradableProductForEvent -> tradeLot only-element,
+                    item -> reportableInformation
+                )
+    then extract
+        (if optionPayout -> underlier exists
+        then optionPayout -> underlier
+        else if forwardPayout -> underlier exists
+        then forwardPayout -> underlier
+        else if performancePayout -> underlier exists
+        then performancePayout -> underlier
+        else if commodityPayout -> underlier exists
+        then commodityPayout -> underlier)
+    then extract
+        (if commodity -> exchange exists
+        then commodity -> exchange
+        else if security -> exchange exists
+        then security -> exchange
+        else if basket -> basketConstituent -> security -> exchange only-element exists
+        then basket -> basketConstituent -> security -> exchange only-element)
+    then extract entityId
+    then filter
+        StringContains(
+                item -> scheme,
+                "http://www.fpml.org/coding-scheme/external/mifir/extension-iso10383"
+            )
+    then first
+
+reporting rule UnderlyingAssetTradingPlatformIdentifierLeg2 from ReportableEvent: <"Underlying asset trading platform identifier">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "104"
+        provision "For a platform (e.g. exchange) traded underlying asset, the platform on which the asset is traded. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250423" field "Underlying asset trading platform identifier"
+        provision "CDM currently represents indexes as baskets with single basket constituents. Thus, a custom basket constituent is considered when basket is represented with more than one basket constituent."]
+    extract
+        if UnderlierForProduct(ProductForEvent) -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct(
+                    ProductForEvent
+                ) -> payout -> performancePayout -> underlier -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct(
+                    ProductForEvent
+                ) -> payout -> commodityPayout -> underlier -> basket -> basketConstituent count <= 1
+        then PayoutLeg2(
+                    TradableProductForEvent -> product,
+                    TradableProductForEvent -> tradeLot only-element,
+                    item -> reportableInformation
+                )
+    then extract
+        (if optionPayout -> underlier exists
+        then optionPayout -> underlier
+        else if forwardPayout -> underlier exists
+        then forwardPayout -> underlier
+        else if performancePayout -> underlier exists
+        then performancePayout -> underlier
+        else if commodityPayout -> underlier exists
+        then commodityPayout -> underlier)
+    then extract
+        (if commodity -> exchange exists
+        then commodity -> exchange
+        else if security -> exchange exists
+        then security -> exchange
+        else if basket -> basketConstituent -> security -> exchange only-element exists
+        then basket -> basketConstituent -> security -> exchange only-element)
+    then extract entityId
+    then filter
+        StringContains(
+                item -> scheme,
+                "http://www.fpml.org/coding-scheme/external/mifir/extension-iso10383"
+            )
+    then first
+
+reporting rule UnderlyingAssetPriceSourceLeg1 from ReportableEvent: <"Underlying asset price source Leg 1">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "105"
+        provision "For an underlying asset or benchmark not traded on a platform, the source of the price used to determine the value or level of the asset or benchmark. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250514" field "Underlying asset price source Leg 1"
+        provision "CDM currently represents indexes as baskets with single basket constituents. Thus, a custom basket constituent is considered when basket is represented with more than one basket constituent."]
+    extract reportableEvent [
+        ProductForEvent
+            then if UnderlierForProduct -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> basketConstituent count <= 1
+                then (extract
+                    reportableEvent -> reportableInformation -> underlyingAssetPriceSource
+                then (if GetUnderlierProductIdentifierLeg1(ProductForEvent(reportableEvent))
+                            exists
+                            and GetUnderlierProductIdentifierLeg1(
+                                    ProductForEvent(reportableEvent)
+                                ) -> source all <> ISIN
+                    then filter
+                        productIdentifier -> identifier = GetUnderlierProductIdentifierLeg1(
+                                ProductForEvent(reportableEvent)
+                            ) -> identifier
+                    else if GetOtherUnderlierLeg1(ProductForEvent(reportableEvent)) exists
+                    then filter
+                        otherId = GetOtherUnderlierLeg1(ProductForEvent(reportableEvent)))
+                then extract underlyingAssetPriceSource
+                then distinct only-element)
+    ]
+
+reporting rule UnderlyingAssetPriceSourceLeg2 from ReportableEvent: <"Underlying asset price source Leg 2">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "105"
+        provision "For an underlying asset or benchmark not traded on a platform, the source of the price used to determine the value or level of the asset or benchmark. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250514" field "Underlying asset price source Leg 2"
+        provision "CDM currently represents indexes as baskets with single basket constituents. Thus, a custom basket constituent is considered when basket is represented with more than one basket constituent."]
+    extract reportableEvent [
+        ProductForEvent
+            then if UnderlierForProduct -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> basketConstituent count <= 1 and EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket -> basketConstituent count <= 1
+                then extract
+                    reportableEvent -> reportableInformation -> underlyingAssetPriceSource
+            then if GetUnderlierProductIdentifierLeg2(ProductForEvent(reportableEvent))
+                        exists
+                        and GetUnderlierProductIdentifierLeg2(
+                                ProductForEvent(reportableEvent)
+                            ) -> source all <> ISIN
+                then filter
+                    productIdentifier = GetUnderlierProductIdentifierLeg2(
+                            ProductForEvent(reportableEvent)
+                        )
+                else if GetOtherUnderlierLeg2(ProductForEvent(reportableEvent)) exists
+                then filter
+                    otherId = GetOtherUnderlierLeg2(ProductForEvent(reportableEvent))
+            then extract underlyingAssetPriceSource
+            then distinct only-element
+    ]
+
+reporting rule CryptoAssetUnderlyingIndicator from ReportableEvent: <"Crypto asset underlying indicator">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "106"
+        provision "Indicator of whether the underlying of the derivative is crypto asset. This element should be reported as true if any of the underlyings is a crypto asset (immediate or ultimate underlying as well as where the derivative is based on a mix of crypto assets and other underlyings)."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230614"
+        provision "Does not allow different crypto definitions for different reporting regimes. Thus, crypto indicator remains the same."]
+    extract
+        if reportableInformation -> cryptoBased exists
+        then reportableInformation -> cryptoBased
+        else False

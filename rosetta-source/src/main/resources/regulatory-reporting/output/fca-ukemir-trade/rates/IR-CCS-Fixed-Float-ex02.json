@@ -1,0 +1,72 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioCode" : "NOTAVAILABLE",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "CDTI" ],
+  "counterparty1" : "987654321ZZABCDEFG11",
+  "counterparty2" : "987654321ZZABCDEFG12",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2021-03-11",
+  "entityResponsibleForReporting" : "987654321ZZABCDEFG11",
+  "eventDate" : "2021-03-09",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-09T13:29:14Z",
+  "expirationDate" : "2028-02-11",
+  "finalContractualSettlementDate" : "2028-02-11",
+  "intragroup" : false,
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 12
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 15,
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SRCXCC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "987654321ZZABCDEFG11",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueProductIdentifier" : "EZ1HPK330CY8",
+  "uniqueTransactionIdentifier" : "DUMMYTRADEIDENTIFY01IRCCSFIXEDFLOAT",
+  "venueOfExecution" : "EDGE"
+}

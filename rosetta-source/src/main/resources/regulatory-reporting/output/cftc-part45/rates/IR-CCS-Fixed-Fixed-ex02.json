@@ -1,0 +1,91 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2022-02-24",
+  "eventIdentifier" : "D886530B9D286A80E0538CB0CC0AC653",
+  "eventTimestamp" : "2022-02-22T13:41:21Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-22T13:40:50Z",
+  "expirationDate" : "2026-02-24",
+  "finalContractualSettlementDate" : "2026-02-24",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "fixedRate" : 0.02,
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "payerIdentifier" : "549300V2LQD6SX1WIG70",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A005",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    },
+    "receiverIdentifier" : "549300CWK6F65W566G32",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "fixedRate" : 0.003,
+    "notionalAmount" : 0,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "549300CWK6F65W566G32",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    },
+    "receiverIdentifier" : "549300V2LQD6SX1WIG70",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "GBP",
+          "NotionalSchedule" : "Constant",
+          "OtherNotionalCurrency" : "USD"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Cross_Currency_Fixed_Fixed"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei",
+    "underlyingAssetType" : "Fixed_Fixed"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

@@ -1,0 +1,61 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CSDS" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2018-10-23",
+  "entityResponsibleForReporting" : "213800WWTABZ1GOJHH37",
+  "eventTimestamp" : "2021-12-06T17:09:11Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:11Z",
+  "expirationDate" : "2020-10-23",
+  "finalContractualSettlementDate" : "2020-10-23",
+  "intragroup" : false,
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 150000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "EXPI",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 150000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3
+    }
+  },
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "platformIdentifier" : "ICSU",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "IRIRSBASISEXXMLXXX01",
+  "technicalRecordId" : "HKMA-213800WWTABZ1GOJHH37-213800IV9PCAC364HN60-IRIRSBASISEXXMLXXX02-2021-12-06T17:09:11Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRIRSBASISEXXMLXXX02"
+}

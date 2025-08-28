@@ -1,0 +1,89 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "I",
+  "counterparty1" : "G3SDK4EG3HH735DJJ456",
+  "counterparty2" : "F226TOH6YD6XJB17KS62",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2018-05-24",
+  "eventTimestamp" : "2021-10-07T13:18:08Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-10-07T13:18:08Z",
+  "expirationDate" : "2025-05-24",
+  "leg1" : {
+    "notionalAmount" : 10000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 20
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "notionalAmount" : 10000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 15
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "EUR",
+          "NotionalSchedule" : "Constant",
+          "OtherLegReferenceRateTermUnit" : "MNTH",
+          "OtherLegReferenceRateTermValue" : 6,
+          "OtherLegUnderlierID" : "EUR-EURIBOR",
+          "OtherLegUnderlierIDSource" : "FPML",
+          "ReferenceRateTermUnit" : "MNTH",
+          "ReferenceRateTermValue" : 3,
+          "UnderlierID" : "EUR-EURIBOR",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Basis"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "G3SDK4EG3HH735DJJ456",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueProductIdentifier" : "MOCKUPI",
+  "uniqueTransactionIdentifier" : "IRIRSBASISEXXMLXXX01"
+}

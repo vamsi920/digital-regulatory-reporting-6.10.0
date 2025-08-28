@@ -1,0 +1,73 @@
+{
+  "actionType" : "NEWT",
+  "callAmount" : 19500000,
+  "callCurrency" : "USD",
+  "cleared" : "N",
+  "counterparty1" : "RR3QWICWWIPCS8A4S074",
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "AL1025104031by85df9m3ux9hhja2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "RR3QWICWWIPCS8A4S074",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2015-02-03",
+  "eventTimestamp" : "2015-02-03T13:26:29Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.822,
+  "exchangeRateBasis" : "USD/CHF",
+  "executionTimestamp" : "2015-02-03T13:26:29Z",
+  "expirationDate" : "2019-02-01",
+  "firstExerciseDate" : "2019-02-01",
+  "leg1" : {
+    "notionalAmount" : 16029000,
+    "notionalCurrency" : "CHF",
+    "settlementCurrency" : "CHF"
+  },
+  "leg2" : {
+    "notionalAmount" : 19500000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CHF",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 20022222.5,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "putAmount" : 16029000,
+  "putCurrency" : "CHF",
+  "reportSubmittingEntityID" : "RR3QWICWWIPCS8A4S074",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 0.822
+  },
+  "strikePriceCurrency" : "USD/CHF",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

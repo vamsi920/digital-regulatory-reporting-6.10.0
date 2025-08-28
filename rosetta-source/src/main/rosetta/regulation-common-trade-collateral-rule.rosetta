@@ -1,0 +1,18 @@
+namespace drr.regulation.common.trade.collateral
+version "${project.version}"
+
+import drr.regulation.common.*
+
+reporting rule InitialMarginCollateralPortfolioCode from TransactionReportInstruction: <"Initial Margin Collateral Portfolio Code">
+    extract TradeForEvent -> collateral -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = InitialMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last
+
+reporting rule VariationMarginCollateralPortfolioCode from TransactionReportInstruction: <"Variation Margin Collateral Portfolio Code">
+    extract TradeForEvent -> collateral -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = VariationMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last

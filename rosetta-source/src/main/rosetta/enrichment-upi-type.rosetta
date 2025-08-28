@@ -1,0 +1,17 @@
+namespace drr.enrichment.upi
+version "${project.version}"
+
+import drr.standards.iosco.upi.*
+
+type UpiData:
+    upiRecord AnnaDsbUpiRecord (0..1)
+    upiOfUnderlying boolean (0..1) // In case of swaption
+    upiValidation boolean (0..1) <"Specifies whether the UPI enrichment data should be used (True) or not (False).">
+
+    condition CardinalityVerification:
+        if upiValidation is absent or upiValidation = True
+        then upiOfUnderlying exists and upiRecord exists
+
+type AnnaDsbUpiRequestAndType:
+    request AnnaDsbUpiRequest (1..1)
+    requestType AnnaDsbUpiRequestTypeEnum (1..1)

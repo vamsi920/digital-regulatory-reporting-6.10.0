@@ -1,0 +1,80 @@
+{
+  "actionType" : "MODI",
+  "amendmentIndicator" : true,
+  "buyerIdentifier" : "DUMMY0000000000LEI02",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "DUMMY0000000000LEI01",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "1370814201P1P1YU87UJ",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "USX17N16O151",
+      "underlyingAssetIDType" : "Index"
+    } ],
+    "underlyingAssetName" : {
+      "underlyingAssetName" : [ "CDX.NA.HY.18" ]
+    },
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-02-11",
+  "eventIdentifier" : "example-12",
+  "eventTimestamp" : "2018-04-01T09:00:00Z",
+  "eventType" : "CREV",
+  "executionTimestamp" : "2018-04-01T15:01:30Z",
+  "expirationDate" : "2023-07-20",
+  "finalContractualSettlementDate" : "2023-07-20",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 18000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "Underlying" : {
+            "UnderlierIDSource" : "CRIDX",
+            "UnderlyingInstrumentIndexTermUnit" : "YEAR"
+          },
+          "UnderlyingIssuerType" : "Corporate"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Index"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI01",
+  "uniqueTransactionIdentifier" : "EXAMPLESUBMISSIONX02"
+}

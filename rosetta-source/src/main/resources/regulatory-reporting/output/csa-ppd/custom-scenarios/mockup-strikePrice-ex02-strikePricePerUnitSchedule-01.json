@@ -1,0 +1,69 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "ac605bcecd0f45389a8c10ac65bdb78e2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "Call",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "O-:OPT:OPT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-07-01",
+  "eventTimestamp" : "2021-12-04T04:51:01.797127Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-03T19:23:14Z",
+  "expirationDate" : "2022-08-31",
+  "firstExerciseDate" : "2022-07-31",
+  "leg1" : {
+    "commodityInstrumentID" : "NATURAL GAS-HENRY HUB-NYMEX",
+    "notionalQuantity" : 1000000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 2000000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "UnderlierID" : "NATURAL GAS-HENRY HUB-NYMEX",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 452500,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "MOCKUPSTRIKEPRICEE01"
+}

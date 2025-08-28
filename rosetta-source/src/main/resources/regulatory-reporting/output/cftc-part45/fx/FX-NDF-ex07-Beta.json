@@ -1,0 +1,80 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "messageType" : "Trade State",
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "I",
+  "counterparty1" : "F226TOH6YD6XJB17KS62",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "SDR6T61FGE31QCJGSK66",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2022-02-23",
+  "eventIdentifier" : "dee6f9f537994c02a7177d80e6ffe5ae",
+  "eventTimestamp" : "2022-02-23T09:43:21Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 5.043317,
+  "executionTimestamp" : "2022-02-23T12:51:31Z",
+  "expirationDate" : "2022-03-18",
+  "finalContractualSettlementDate" : "2022-03-18",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "fixingDate" : "2022-03-16T00:00:00Z",
+    "notionalAmount" : 1800,
+    "notionalCurrency" : "BRL",
+    "payerIdentifier" : "F226TOH6YD6XJB17KS62",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "SDR6T61FGE31QCJGSK66",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 356.90796,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "SDR6T61FGE31QCJGSK66",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "F226TOH6YD6XJB17KS62",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "BRL",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "F226TOH6YD6XJB17KS62",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXBETAXMLXXXX03"
+}

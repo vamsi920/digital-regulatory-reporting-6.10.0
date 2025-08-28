@@ -1,0 +1,238 @@
+namespace drr.regulation.hkma.rewrite.trade
+version "${project.version}"
+
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.event.qualification.*
+
+import drr.regulation.common.*
+import drr.regulation.common.util.*
+
+func IsAllowableActionForHKMA:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        isAllowableAction boolean (1..1)
+
+    set isAllowableAction:
+        IsActionTypeNEWT(reportableEvent)
+            or IsActionTypeMODI(reportableEvent)
+            or IsActionTypePositionMODI(reportableEvent)
+            or IsActionTypeCORR(reportableEvent)
+            or IsActionTypeREVI(reportableEvent)
+            or IsActionTypePOSC(reportableEvent)
+
+func Extract_BondConnect:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        bondConnectValue string (1..1)
+
+    set bondConnectValue:
+        reportableEvent
+            then extract TradeForEvent -> party -> partyId -> identifier
+            then filter scheme = 'https://www.hkma.gov.hk/cmu/account-id/bondconnect'
+            then first
+            then item
+
+func Extract_ReferenceEntityFormat: <"Determines the reference entity format (LEI or Country) from the entity ID of a credit default swap or credit swaption in a reportable event.">
+    inputs:
+        reportableEvent ReportableEvent (0..1)
+    output:
+        referenceEntityFormat ReferenceEntityFormatEnum (0..1)
+
+    alias product: ProductForEvent(reportableEvent)
+
+    alias referenceEntityProduct:
+        if IsCreditSwaption(product)
+        then UnderlierForProduct(product) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceEntity
+        else if IsCreditDefaultSwap(product)
+        then product -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceEntity
+
+    set referenceEntityFormat:
+        referenceEntityProduct -> entityId
+            then filter
+                (StringContains(
+                        item -> scheme,
+                        "http://www.fpml.org/coding-scheme/external/iso17442"
+                    ) // LEI
+                    or StringContains(
+                            item -> scheme,
+                            "http://www.fpml.org/coding-scheme/external/iso3166"
+                        )) // CountryCode
+            then first
+            then extract
+                if item -> scheme = "http://www.fpml.org/coding-scheme/external/iso17442"
+                then ReferenceEntityFormatEnum -> LEI
+                else if item -> scheme = "http://www.fpml.org/coding-scheme/external/iso3166"
+                then ReferenceEntityFormatEnum -> Country
+
+func SupervisoryBodyForHKMA:
+    output:
+        supervisoryBodyHKMA SupervisoryBodyEnum (1..*)
+
+    add supervisoryBodyHKMA: [HKMA]
+
+// TH Comment Sprint 13/2025: These functions collectively extract the HKMA transaction identifier scheme name (USI or TID) when the prior UTI and the Unique Transaction Identifier are proprietary. The process involves three main steps:
+//  1. Extract_PriorUTIProprietary and Extract_UTIProprietary: When the identifiers are proprietary, extract the prior UTI and the Unique Transaction Identifier from the reportable event.
+// 2. Extract_HKMATradeIdentifier: Retrieves the trade identifier value as a string from the tradeIdentifier object by selecting the first assigned identifier.
+// 3. Extract_HKMATransactionSchemeName: Determines the HKMA transaction scheme name ("UTI-USI" or "UTI-TID") based on the identifier type.
+func Extract_PriorUTIPropietary: <"Extracts the prior UTI when the trade identifier has changed and the event is not a compression.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        tradeIdentifier TradeIdentifier (1..1)
+
+    set tradeIdentifier:
+        reportableEvent
+            then extract
+                if TradeForEvent -> tradeIdentifier -> assignedIdentifier -> identifier <> BeforeTradeForEvent -> tradeIdentifier -> assignedIdentifier -> identifier
+                        and Qualify_Compression(originatingWorkflowStep -> businessEvent) = False
+                then (BeforeTradeForEvent
+                    then extract item -> tradeIdentifier
+                    then filter
+                        identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+                            or identifierType is absent
+                    then distinct
+                    then only-element)
+
+func Extract_UTIPropietary: <"Extracts the UTI from the trade details of a reportable event.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        tradeIdentifier TradeIdentifier (1..1)
+
+    set tradeIdentifier:
+        reportableEvent
+            then extract
+                if TradeForEvent exists
+                then TradeForEvent -> tradeIdentifier
+            then filter
+                identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+                    or identifierType is absent
+            then distinct
+            then only-element
+
+func Extract_HKMATradeIdentifier: <"Extracts the trade identifier string extracted from the assigned identifier.">
+    inputs:
+        tradeIdentifier TradeIdentifier (1..1)
+    output:
+        hkmaTradeIdentifiers string (1..1)
+
+    set hkmaTradeIdentifiers: tradeIdentifier -> assignedIdentifier first -> identifier
+
+func Extract_HKMATransactionSchemeName: <"Extracts the HKMA transaction identifier scheme (USI or TID) based on the identifier type">
+    inputs:
+        tradeIdentifier TradeIdentifier (1..1)
+    output:
+        schmeNm UTIProprietarySchemeNameEnum (1..1)
+
+    set schmeNm:
+        tradeIdentifier
+            then extract
+                if identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+                then UTIProprietarySchemeNameEnum -> UTI_USI
+                else if identifierType is absent
+                then UTIProprietarySchemeNameEnum -> UTI_TID
+
+// TH Comment Sprint 13/2025: These functions collectively extract the HKMA party identifier scheme name for specific parties involved in a transaction. The extraction process follows three main steps:
+//  1. Extract_ReportingCounterparty, Extract_CentralCounterparty, Extract_BrokerId, Extract_ClearingMember: Selects the relevant party object from the transaction based on its role.
+//  2. Filter_HKMAPriorityPartyIdentifiers: Applies HKMA-defined priority rules to filter and select the appropriate identifier(s) from the party.
+//  3. Extract_HKMAPartyIdentifier and Extract_HKMASchemeName: Retrieves the party identifier as a string, applying formatting rules based on the identifier type, and determines the corresponding scheme name according to HKTR code lists.
+func Extract_ReportingCounterparty: <"Filters the party based on a specific role within the transaction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+    output:
+        party Party (1..1)
+    set party:
+        if transactionReportInstruction -> reportingSide -> reportingCounterparty exists
+        then transactionReportInstruction -> reportingSide -> reportingCounterparty
+
+func Extract_CentralCounterparty: <"Filters the party based on a specific role within the transaction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+    output:
+        party Party (1..1)
+    set party:
+        if IsCleared(transactionReportInstruction -> originatingWorkflowStep)
+        then ExtractPartyFromRelatedPartyByRole(
+                    transactionReportInstruction -> reportableInformation -> partyInformation -> relatedParty,
+                    PartyRoleEnum -> ClearingOrganization
+                )
+
+func Extract_BrokerId: <"Filters the party based on a specific role within the transaction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+    output:
+        party Party (1..1)
+    set party:
+        ExtractPartyFromRelatedPartyByRole(
+                transactionReportInstruction -> reportableInformation -> partyInformation -> relatedParty,
+                PartyRoleEnum -> ArrangingBroker
+            )
+
+func Extract_ClearingMember: <"Filters the party based on a specific role within the transaction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+    output:
+        party Party (1..1)
+    set party:
+        if IsCleared(transactionReportInstruction -> originatingWorkflowStep)
+        then ExtractPartyFromRelatedPartyByRole(
+                    transactionReportInstruction -> reportableInformation -> partyInformation -> relatedParty,
+                    PartyRoleEnum -> ClearingFirm
+                )
+
+func Filter_HKMAPriorityPartyIdentifiers: <"Filters the party IDs of that party following the priority rules defined by HKMA">
+    inputs:
+        party Party (1..1)
+    output:
+        partyIdentifier PartyIdentifier (1..1)
+    set partyIdentifier:
+        if party -> partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+        then (party -> partyId
+            filter identifierType = PartyIdentifierTypeEnum -> BIC
+            then first)
+        else party -> partyId first
+
+func Extract_HKMAPartyIdentifier: <"Extracts the identifier as a string, applying specific formatting rules depending on the identifier type">
+    inputs:
+        partyIdentifier PartyIdentifier (1..1)
+    output:
+        hkmaPartyIdentifiers string (1..1)
+
+    set hkmaPartyIdentifiers:
+        if partyIdentifier -> identifierType = PartyIdentifierTypeEnum -> BIC
+        then PartyBIC(partyIdentifier)
+        else partyIdentifier -> identifier
+
+func Extract_HKMASchemeName: <"Extracts the identifiers scheme/type according to the corresponding HKTR codes">
+    inputs:
+        partyIdentifier PartyIdentifier (1..1)
+    output:
+        schmeNm HKTRPartyScheme (1..1)
+
+    set schmeNm:
+        partyIdentifier -> identifier
+            then extract
+                if item -> scheme = 'http://www.fpml.org/coding-scheme/external/hktr-business-registration-number'
+                then HKTRPartyScheme -> BRNO
+                else if item -> scheme = 'http://www.fpml.org/coding-scheme/external/hktr-certificate-of-incorporation-number-certificate-of-registration-number'
+                then HKTRPartyScheme -> CICR
+                else if item -> scheme = 'http://www.fpml.org/coding-scheme/external/hktr-transactional-entity-id'
+                then HKTRPartyScheme -> TRID
+                else if item -> scheme = 'http://www.fpml.org/coding-scheme/external/hktr-unique-business-identifier'
+                then HKTRPartyScheme -> UBIN
+                else if item -> scheme = 'http://www.fpml.org/coding-scheme/external/hktr-user-defined-code'
+                then HKTRPartyScheme -> USDC
+
+func PartyBIC: <"Returns a single BIC from a list of party identifiers">
+    inputs:
+        partyIdentifier PartyIdentifier (1..1)
+    output:
+        partyBIC string (0..1)
+    set partyBIC:
+        partyIdentifier
+            filter identifierType = PartyIdentifierTypeEnum -> BIC
+            then identifier

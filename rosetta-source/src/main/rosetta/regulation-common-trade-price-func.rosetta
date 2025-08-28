@@ -1,0 +1,241 @@
+namespace drr.regulation.common.trade.price
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.observable.event.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.*
+import drr.regulation.common.util.*
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iso.*
+
+func BarrierFromTriggerEvent:
+    inputs:
+        triggerEvent TriggerEvent (0..1)
+    output:
+        barrier BarrierPrice (0..1)
+    set barrier:
+        BarrierPrice {
+            price: cdebase.price.PriceFormat {
+                monetary: triggerEvent -> trigger -> level,
+                decimal: triggerEvent -> trigger -> levelPercentage,
+                ...
+            },
+            notation: if triggerEvent -> trigger -> level exists
+                then Monetary
+            else if triggerEvent -> trigger -> levelPercentage exists
+            then Decimal,
+            currency: triggerEvent -> featurePayment -> currency
+                extract ConvertNonISOToISOCurrency
+        }
+
+func OptionPremiumAmount_Validation: <"Option premium amount Condition - DTCC_ASIC_BR_1061_01, DTCC_MAS_BR_0107_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        contractType CommonContractType (0..1)
+        optionPremiumAmount ShortFraction5DecimalNumber (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+        then optionPremiumAmount exists and optionPremiumAmount >= 0
+
+func ExchangeRate_Validation: <"Exchange rate Condition for DTCC_MAS_BR_0109_01 & DTCC_ASIC_BR_1064_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        exchangeRate Max18D13Number (0..1)
+        contractType CommonContractType (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> CFDS, CommonContractType -> FORW, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR, CommonContractType -> OPTN] any = contractType
+                and assetClass = CommonAssetClass -> CURR
+        then exchangeRate exists and exchangeRate > 0
+
+func ExchangeRateBasisCurrency1_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        exchangeRateBasis ExchangeRateBasisStringFormat (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+                and [CommonContractType -> CFDS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR, CommonContractType -> FORW] any = contractType
+        then if ["XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XFU", "XPD", "XPT", "XTS"]
+                    any = SubString(exchangeRateBasis, 1, 3)
+            then False
+
+func ExchangeRateBasisCurrency2_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        exchangeRateBasis ExchangeRateBasisStringFormat (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+                and [CommonContractType -> CFDS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR, CommonContractType -> FORW] any = contractType
+        then if ["XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XFU", "XPD", "XPT", "XTS"]
+                    any = SubString(exchangeRateBasis, 3, 5)
+            then False
+
+func OptionPremiumCurrency_Validation: <"Option premium currency Condition - DTCC_ASIC_BR_1062_01, DTCC_MAS_BR_0108_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        optionPremiumAmount ShortFraction5DecimalNumber (0..1)
+        contractType CommonContractType (1..1)
+        optionPremiumCurrency ISOCurrencyCodeEnum (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+        then (if optionPremiumAmount exists
+            then optionPremiumCurrency exists
+                    and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] all <> optionPremiumCurrency)
+
+func StrikePriceCurrencyPair02_Validation: <"Strike price currency/currency pair - DTCC_ASIC_BR_1060_02 & DTCC_MAS_BR_0102_02">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        strikePriceCurrency string (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> CURR, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                and contractType = CommonContractType -> SWAP
+        then if ["XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XFU", "XPD", "XPT", "XTS"] any = strikePriceCurrency
+            then False
+
+func StrikePriceCurrencyPair03_Validation: <"Strike price currency/currency pair - Currency 1 - DTCC_ASIC_BR_1060_03 & DTCC_MAS_BR_0102_03">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        strikePriceCurrency string (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+        then if ["XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XFU", "XPD", "XPT", "XTS"]
+                    any = SubString(strikePriceCurrency, 1, 3)
+            then False
+
+func StrikePriceCurrencyPair04_Validation: <"Strike price currency/currency pair - Currency 2 - DTCC_ASIC_BR_1060_04 & DTCC_MAS_BR_0102_04">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        strikePriceCurrency string (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+        then if ["XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XFU", "XPD", "XPT", "XTS"]
+                    any = SubString(strikePriceCurrency, 5, 3)
+            then False
+
+func SpreadLeg1_01_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        fixedRateLeg1 Max11Number (1..1)
+        fixedRateLeg2 Max11Number (1..1)
+        spreadLeg1 cdebase.price.PriceFormat (1..1)
+        spreadLeg2 cdebase.price.PriceFormat (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> INTR and contractType = CommonContractType -> SWAP)
+        then if fixedRateLeg1 is absent and fixedRateLeg2 is absent and spreadLeg2 is absent
+            then spreadLeg1 exists
+            else if fixedRateLeg1 exists
+            then spreadLeg1 is absent
+
+func SpreadLeg2_01_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        fixedRateLeg1 Max11Number (1..1)
+        fixedRateLeg2 Max11Number (1..1)
+        spreadLeg1 cdebase.price.PriceFormat (1..1)
+        spreadLeg2 cdebase.price.PriceFormat (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> INTR and contractType = CommonContractType -> SWAP)
+        then if fixedRateLeg1 is absent and fixedRateLeg2 is absent and spreadLeg1 is absent
+            then spreadLeg2 exists
+            else if fixedRateLeg2 exists
+            then spreadLeg2 is absent
+
+func SpreadCurrencyLeg1_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        spreadLeg1 CommonLeg (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if spreadLeg1 -> spreadNotation = Monetary
+            then spreadLeg1 -> spreadCurrency exists
+            else if ((spreadLeg1 -> spreadNotation = Decimal or spreadLeg1 -> spreadNotation = Basis) and ([ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any <> spreadLeg1 -> spreadCurrency))
+            then spreadLeg1 -> spreadCurrency is absent
+
+func SpreadCurrencyLeg2_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        spreadLeg2 CommonLeg (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then (if spreadLeg2 -> spreadNotation = Monetary
+            then spreadLeg2 -> spreadCurrency exists
+            else if (spreadLeg2 -> spreadNotation = Decimal or spreadLeg2 -> spreadNotation = Basis)
+            then spreadLeg2 -> spreadCurrency is absent
+            else if [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any = spreadLeg2 -> spreadCurrency
+            then False)
+
+func IsDefaultPrice: <"This function evaluates the requirement of passing default value for Price for certain products types: 1. Votalitiy Swap, 2. Variance Swap and 3. Equity Other (with No Price)">
+    inputs:
+        transaction TransactionReportInstruction (1..1)
+    output:
+        isDefaultPrice boolean (0..1)
+
+    set isDefaultPrice:
+        IsVarianceSwap(ProductForEvent(transaction))
+            or IsVolatilitySwap(ProductForEvent(transaction))
+            or (IsEquityOther(ProductForEvent(transaction)) and cde.price.PriceNoFormat(transaction) is absent)
+
+func DefaultPercentageToDecimal:
+    inputs:
+        value cdebase.price.PriceNotationEnum (0..1)
+        forceDefault boolean (0..1)
+    output:
+        result cdebase.price.PriceNotationEnum (0..1)
+
+    set result:
+        if value = Percentage or forceDefault = True
+        then Decimal
+        else value

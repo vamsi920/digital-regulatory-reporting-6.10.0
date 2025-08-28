@@ -1,0 +1,56 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "brokerID" : "549300OL8KL0WCQ34V31",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2011-02-08",
+  "entityResponsibleForReporting" : "549300O5MFEP1XJ40B46",
+  "eventType" : "NOVA",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2016-02-08",
+  "finalContractualSettlementDate" : "2016-02-08",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 2.53,
+    "notionalAmount" : 2500000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A011",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 2500000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "level" : "TCTN",
+  "natureOfCounterparty1" : "F",
+  "priorUTI" : "PARTIALNOVATIONXML01",
+  "productClassification" : "SRCXSC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "venueOfExecution" : "XXXX"
+}

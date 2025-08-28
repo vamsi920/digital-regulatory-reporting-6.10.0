@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "d1b8d35a8ffc44d3b25539c9cce8f8252024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2018-02-09",
+  "eventTimestamp" : "2019-02-05T06:10:39.4158625Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-02-09T22:23:00Z",
+  "expirationDate" : "2019-02-11",
+  "leg1" : {
+    "notionalAmount" : 2002.10821,
+    "notionalCurrency" : "USD",
+    "quantityUnitOfMeasure" : "OTHR",
+    "totalNotionalQuantity" : 1820098.37
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "ELECTRICITY PJM-EASTERN HUB-REAL TIME",
+    "notionalAmount" : 23.232,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 21120,
+    "quantityFrequency" : "EXPI",
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 21120
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "ELECTRICITY PJM-EASTERN HUB-REAL TIME",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 0.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPINDEX01"
+}

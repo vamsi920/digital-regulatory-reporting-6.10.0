@@ -1,0 +1,733 @@
+namespace drr.regulation.cftc.rewrite
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.identifier.*
+import cdm.event.common.*
+import cdm.event.qualification.*
+import cdm.product.* as product
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version2.* as cde
+import drr.standards.iosco.cde.version3.* as cdeV3
+import drr.standards.iosco.uti.* as uti
+import drr.standards.iso.*
+
+body Authority CFTC <"Commodity Futures Trading Commission (CFTC): The Federal regulatory agency established by the Commodity Futures Trading Act of 1974 to administer the Commodity Exchange Act.">
+
+corpus Regulation "CFTC 17 CFR Parts 45 Version 3.0" Part45 <"Part 45 of the CFTCs regulations specifies the Commissions swap data recordkeeping and reporting requirements, pursuant to section 2(a)(13)(G) of the Commodity Exchange Act (CEA), which states that all swaps, whether cleared or uncleared, must be reported to a Swap Data Repository (SDR)">
+
+corpus Regulation "CFTC 17 CFR Parts 45 Version 3.1" Part45_V3_1 <"Part 45 of the CFTCs regulations specifies the Commissions swap data recordkeeping and reporting requirements, pursuant to section 2(a)(13)(G) of the Commodity Exchange Act (CEA), which states that all swaps, whether cleared or uncleared, must be reported to a Swap Data Repository (SDR).The modifications address 14 data elements for several swap data reporting topics including: clearing, counterparty identification, price, valuation, collateral and margin, and transaction-related data fields.">
+
+corpus Regulation "CFTC 17 CFR Parts 45 Version 3.2" Part45_V3_2 <"Part 45 of the CFTCs regulations specifies the Commissions swap data recordkeeping and reporting requirements, pursuant to section 2(a)(13)(G) of the Commodity Exchange Act (CEA), which states that all swaps, whether cleared or uncleared, must be reported to a Swap Data Repository (SDR).The modifications in Version 3.2 of the CFTC Technical Specification are: Implement UPI for credit, equity, foreign exchange, and interest rate asset classes to continue aligning reporting requirements with international standards developed by the CFTC and other global regulators; and Provide clarity to market participants with respect to compliance obligations.">
+
+corpus Regulation "CFTC 17 CFR Parts 43" Part43 <"Part 43 of the CFTCs regulations specifies the Commissions swap data recordkeeping and reporting requirements, pursuant to section 2(a)(13)(G) of the Commodity Exchange Act (CEA), which states that all swaps, whether cleared or uncleared, must be reported to a Swap Data Repository (SDR)">
+
+corpus Regulation "CFTC 17 CFR Parts 43 Version 3.1" Part43_V3_1 <"Part 43 of the CFTCs regulations specifies the Commissions swap data recordkeeping and reporting requirements, pursuant to section 2(a)(13)(G) of the Commodity Exchange Act (CEA), which states that all swaps, whether cleared or uncleared, must be reported to a Swap Data Repository (SDR).The modifications address 14 data elements for several swap data reporting topics including: clearing, counterparty identification, price, valuation, collateral and margin, and transaction-related data fields.">
+
+corpus Regulation "CFTC 17 CFR Parts 43 Version 3.2" Part43_V3_2 <"Part 43 of the CFTCs regulations specifies the Commissions swap data recordkeeping and reporting requirements, pursuant to section 2(a)(13)(G) of the Commodity Exchange Act (CEA), which states that all swaps, whether cleared or uncleared, must be reported to a Swap Data Repository (SDR).The modifications in Version 3.2 of the CFTC Technical Specification are: Implement UPI for credit, equity, foreign exchange, and interest rate asset classes to continue aligning reporting requirements with international standards developed by the CFTC and other global regulators; and Provide clarity to market participants with respect to compliance obligations.">
+
+report CFTC Part43 in T+1
+    from TransactionReportInstruction
+    when IsReportableEvent
+  	with type CFTCPart43TransactionReport
+
+report CFTC Part45 in T+1
+    from TransactionReportInstruction
+    when IsReportableEvent
+  	with type CFTCPart45TransactionReport
+
+reporting rule ClearingSwapUSIs from TransactionReportInstruction: <"Clearing Swap USIs">
+    extract
+        if ((IsCleared(originatingWorkflowStep) or (IntendedToClear(originatingWorkflowStep) and IsActionTypeTERM))
+                and cdeV3.event.EventType = CLRG)
+        then originatingWorkflowStep -> businessEvent
+    then extract businessEvent [
+        businessEvent -> after -> trade -> tradeIdentifier
+            filter
+                businessEvent -> instruction -> before -> trade -> tradeIdentifier all <> item
+            then filter identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+            then extract FindLatestAssignedIdentifier
+    ]
+    then extract identifier
+
+reporting rule ClearingSwapUTIs from TransactionReportInstruction: <"Clearing Swap UTIs">
+    extract
+        if ((IsCleared(originatingWorkflowStep) or (IntendedToClear(originatingWorkflowStep) and IsActionTypeTERM))
+                and cdeV3.event.EventType = CLRG)
+        then originatingWorkflowStep -> businessEvent
+    then extract businessEvent [
+        businessEvent -> after -> trade -> tradeIdentifier
+            filter
+                businessEvent -> instruction -> before -> trade -> tradeIdentifier all <> item
+            then filter
+                identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            then extract FindLatestAssignedIdentifier
+    ]
+    then extract identifier
+
+reporting rule OriginalSwapUSI from TransactionReportInstruction: <"Original Swap USI">
+    extract
+        if (IsCleared(originatingWorkflowStep) = True and IsActionTypeNEWT = True and cdeV3.event.EventType = CLRG)
+        then BeforeTradeForEvent
+    then extract tradeIdentifier
+    then filter identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+    then only-element
+    then extract assignedIdentifier -> identifier
+    then last
+
+reporting rule OriginalSwapUTI from TransactionReportInstruction: <"Original Swap UTI">
+    extract common.link.OriginalSwapUTI
+    then last
+
+reporting rule ClearingExceptionsAndExemptionsCounterparty1 from TransactionReportInstruction: <"Clearing Exceptions And Exemptions Counterparty 1">
+    filter
+        IsCleared(originatingWorkflowStep) = False
+            and IntendedToClear(originatingWorkflowStep) = False
+    then extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter partyReference = reportInstruction -> reportingSide -> reportingParty
+            then filter
+                regimeInformation -> clearingException -> clearingException any = True
+            then extract regimeInformation
+            then flatten
+            then filter supervisoryBody = SupervisoryBodyEnum -> CFTC
+            then extract clearingException -> clearingExceptionReason
+            then flatten
+            then extract ClearingExceptionsAndExemptions
+    ]
+
+reporting rule ClearingExceptionsAndExemptionsCounterparty2 from TransactionReportInstruction: <"Clearing Exceptions And Exemptions Counterparty 1">
+    filter
+        IsCleared(originatingWorkflowStep) = False
+            and IntendedToClear(originatingWorkflowStep) = False
+    then extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter
+                partyReference = reportInstruction -> reportingSide -> reportingCounterparty
+            then filter
+                regimeInformation -> clearingException -> clearingException any = True
+            then extract regimeInformation
+            then flatten
+            then filter supervisoryBody = SupervisoryBodyEnum -> CFTC
+            then extract clearingException -> clearingExceptionReason
+            then flatten
+            then extract ClearingExceptionsAndExemptions
+    ]
+
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1 (reporting counterparty)">
+    extract PartyLeiAndPersonByRoles(reportingSide -> reportingParty, empty)
+
+reporting rule Counterparty1Format from TransactionReportInstruction: <"Expected Counterparty 1 Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(reportingSide -> reportingParty)
+
+reporting rule Counterparty2Format from TransactionReportInstruction: <"Expected Counterparty 2 Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(reportingSide -> reportingCounterparty)
+
+reporting rule BuyerIdentifierFormat from TransactionReportInstruction: <"Expected Buyer Identifier Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(cde.party.Direction1BuyerParty(TradeForEvent))
+
+reporting rule SellerIdentifierFormat from TransactionReportInstruction: <"Expected Seller Identifier Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(cde.party.Direction1SellerParty(TradeForEvent))
+
+reporting rule PayerLeg1IdentifierFormat from TransactionReportInstruction: <"Expected Payer Leg 1 Identifier Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(PayerPartyLeg1)
+
+reporting rule PayerLeg2IdentifierFormat from TransactionReportInstruction: <"Expected Payer Leg 2 Identifier Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(PayerPartyLeg2)
+
+reporting rule ReceiverLeg1IdentifierFormat from TransactionReportInstruction: <"Expected Receiver Leg 1 Identifier Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(ReceiverPartyLeg1)
+
+reporting rule ReceiverLeg2IdentifierFormat from TransactionReportInstruction: <"Expected Receiver Leg 2 Identifier Format - LEI, or LEI and Person ID.">
+    extract PartyIdentifierFormat(ReceiverPartyLeg2)
+
+reporting rule Counterparty1FinancialEntityIndicator from TransactionReportInstruction: <"Counterparty 1 Financial Entity Indicator">
+    if IsCleared(item -> originatingWorkflowStep) = False
+    then (extract
+        common.party.ExtractRegimeInformation(item, item -> reportingSide -> reportingParty)
+    then if cftcPartyInformation -> financialEntity exists
+        then True
+        else False)
+
+reporting rule Counterparty2FinancialEntityIndicator from TransactionReportInstruction: <"Counterparty 2 Financial Entity  Indicator">
+    extract
+        common.party.ExtractRegimeInformation(
+                item,
+                item -> reportingSide -> reportingCounterparty
+            )
+    then if cftcPartyInformation -> financialEntity exists
+        then True
+        else False
+
+reporting rule PayerIdentifierLeg1 from TransactionReportInstruction: <"Payer Identifier Leg1">
+    extract PartyLeiAndPersonByRoles(PayerPartyLeg1, reportingSide -> reportingParty)
+
+reporting rule PayerIdentifierLeg2 from TransactionReportInstruction: <"Payer Identifier Leg2">
+    extract PartyLeiAndPersonByRoles(PayerPartyLeg2, reportingSide -> reportingParty)
+
+reporting rule ReceiverIdentifierLeg1 from TransactionReportInstruction: <"Receiver Identifier Leg1">
+    extract PartyLeiAndPersonByRoles(ReceiverPartyLeg1, reportingSide -> reportingParty)
+
+reporting rule ReceiverIdentifierLeg2 from TransactionReportInstruction: <"Receiver Identifier Leg2">
+    extract PartyLeiAndPersonByRoles(ReceiverPartyLeg2, reportingSide -> reportingParty)
+
+reporting rule Counterparty1FederalEntityIndicator from TransactionReportInstruction: <"Counterparty 1 Federal Entity Indicator">
+    extract
+        common.party.ExtractRegimeInformation(item, item -> reportingSide -> reportingParty)
+    then if cftcPartyInformation -> federalEntity exists
+        then True
+        else False
+
+reporting rule Counterparty2FederalEntityIndicator from TransactionReportInstruction: <"Counterparty 2 Federal Entity Indicator">
+    extract
+        common.party.ExtractRegimeInformation(
+                item,
+                item -> reportingSide -> reportingCounterparty
+            )
+    then if cftcPartyInformation -> federalEntity exists
+        then True
+        else False
+
+reporting rule EventType from TransactionReportInstruction: <"Event Type">
+    if Qualify_PartialTermination(item -> originatingWorkflowStep -> businessEvent) = True
+            and cdeV3.event.EventType = ETRM
+    then EventTypeEnum -> TRAD
+    else extract cdeV3.event.EventType
+
+reporting rule NotionalAmountLeg1 from TransactionReportInstruction: <"Notional Amount Leg 1">
+    extract cde.quantity.NotionalAmountLeg1(item, empty)
+
+reporting rule NotionalAmountLeg2 from TransactionReportInstruction: <"Notional Amount Leg 2">
+    extract cde.quantity.NotionalAmountLeg2(item, empty)
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call Amount">
+    if IsFXOption(ProductForEvent)
+    then extract cde.quantity.ExtractCallAmount(item, 99999999999999999999.99999)
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put Amount">
+    if IsFXOption(ProductForEvent)
+    then extract cde.quantity.ExtractPutAmount(item, 99999999999999999999.99999)
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call Currency">
+    if IsFXOption(ProductForEvent) then cde.quantity.CallCurrency
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put Currency">
+    if IsFXOption(ProductForEvent) then cde.quantity.PutCurrency
+
+reporting rule NotionalQuantityLeg1 from TransactionReportInstruction: <"Notional Quantity Leg 1">
+    if IsEquity(ProductForTrade(TradeForEvent)) = False
+    then common.quantity.NotionalQuantityLeg1
+
+reporting rule NotionalQuantityLeg2 from TransactionReportInstruction: <"Notional Quantity Leg 2">
+    extract common.quantity.NotionalQuantityLeg2
+
+reporting rule QuantityFrequencyLeg1 from TransactionReportInstruction: <"Quantity Frequency Leg 1">
+    extract common.quantity.QuantityFrequencyLeg1(item) -> period
+
+reporting rule QuantityFrequencyLeg2 from TransactionReportInstruction: <"Quantity Frequency Leg 2">
+    extract common.quantity.QuantityFrequencyLeg2(item) -> period
+
+reporting rule QuantityFrequencyMultiplierLeg1 from TransactionReportInstruction: <"Quantity Frequency Multiplier Leg 1">
+    extract common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier
+
+reporting rule QuantityFrequencyMultiplierLeg2 from TransactionReportInstruction: <"Quantity Frequency Multiplier Leg 2">
+    extract common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier
+
+reporting rule TotalNotionalQuantityLeg1 from TransactionReportInstruction: <"Total Notional Quantity Leg 1">
+    extract cde.quantity.TotalNotionalQuantityLeg1(item, empty)
+
+reporting rule TotalNotionalQuantityLeg2 from TransactionReportInstruction: <"Total Notional Quantity Leg 2">
+    extract cde.quantity.TotalNotionalQuantityLeg2(item, empty)
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package Identifier">
+    extract cde.link.PackageIdentifier
+
+reporting rule PackageTransactionPrice from TransactionReportInstruction: <"Package Transaction Price">
+    extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionPriceNoFormat,
+                PackageTransactionPriceNotation
+            )
+
+reporting rule PackageTransactionPriceNotation from TransactionReportInstruction: <"Package Transaction Price Notation Enum">
+    common.price.DefaultPercentageToDecimal(
+            cde.price.PackageTransactionPriceNotationEnum,
+            False
+        )
+
+reporting rule PackageTransactionSpread from TransactionReportInstruction: <"Package Transaction Spread">
+    extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionSpreadNoFormat,
+                PackageTransactionSpreadNotation
+            )
+
+reporting rule PackageTransactionSpreadNotation from TransactionReportInstruction: <"Package Transaction Spread Notation Enum">
+    common.price.DefaultPercentageToDecimal(
+            cde.price.PackageTransactionSpreadNotationEnum,
+            False
+        )
+
+reporting rule FixedRateDayCountConventionLeg1 from TransactionReportInstruction: <"Fixed rate day count convention-leg 1">
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter rateSpecification -> fixedRate exists
+    then extract cde.payment.DayCountConvention
+
+reporting rule FixedRateDayCountConventionLeg2 from TransactionReportInstruction: <"Fixed rate day count convention-leg 2">
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter rateSpecification -> fixedRate exists
+    then extract cde.payment.DayCountConvention
+
+reporting rule FloatingRateDayCountConventionLeg1 from TransactionReportInstruction: <"Floating rate day count convention-leg 1">
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then extract cde.payment.DayCountConvention
+
+reporting rule FloatingRateDayCountConventionLeg2 from TransactionReportInstruction: <"Floating rate day count convention-leg 2">
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then extract cde.payment.DayCountConvention
+
+reporting rule FloatingRateResetFrequencyPeriodLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract
+        if rateSpecification -> floatingRate exists
+                or rateSpecification -> inflationRate exists
+        then cdebase.payment.MapCDEFrequencyPeriod(resetDates -> resetFrequency -> period)
+
+reporting rule FloatingRateResetFrequencyPeriodLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract
+        if rateSpecification -> floatingRate exists
+                or rateSpecification -> inflationRate exists
+        then cdebase.payment.MapCDEFrequencyPeriod(resetDates -> resetFrequency -> period)
+
+reporting rule FloatingRateResetFrequencyPeriodMultiplierLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract
+        if rateSpecification -> floatingRate exists
+                or rateSpecification -> inflationRate exists
+        then resetDates -> resetFrequency -> periodMultiplier
+    then FormatToMax3Number
+
+reporting rule FloatingRateResetFrequencyPeriodMultiplierLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract
+        if rateSpecification -> floatingRate exists
+                or rateSpecification -> inflationRate exists
+        then resetDates -> resetFrequency -> periodMultiplier
+    then FormatToMax3Number
+
+reporting rule FixedRatePaymentFrequencyPeriodLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter rateSpecification -> fixedRate exists
+    then cde.payment.PaymentFrequencyPeriod
+
+reporting rule FixedRatePaymentFrequencyPeriodLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter rateSpecification -> fixedRate exists
+    then cde.payment.PaymentFrequencyPeriod
+
+reporting rule FloatingRatePaymentFrequencyPeriodLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then cde.payment.PaymentFrequencyPeriod
+
+reporting rule FloatingRatePaymentFrequencyPeriodLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then cde.payment.PaymentFrequencyPeriod
+
+reporting rule FixedRatePaymentFrequencyPeriodMultiplierLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter rateSpecification -> fixedRate exists
+    then cde.payment.PaymentFrequencyPeriodMultiplier
+
+reporting rule FixedRatePaymentFrequencyPeriodMultiplierLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter rateSpecification -> fixedRate exists
+    then cde.payment.PaymentFrequencyPeriodMultiplier
+
+reporting rule FloatingRatePaymentFrequencyPeriodMultiplierLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then cde.payment.PaymentFrequencyPeriodMultiplier
+
+reporting rule FloatingRatePaymentFrequencyPeriodMultiplierLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then cde.payment.PaymentFrequencyPeriodMultiplier
+
+reporting rule FixedRateLeg1 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract cde.price.InterestRateFixedRate(InterestRateLeg1)
+
+reporting rule FixedRateLeg2 from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract cde.price.InterestRateFixedRate(InterestRateLeg2)
+
+reporting rule PostPricedSwapIndicator from TransactionReportInstruction: <"Post-priced swap indicator">
+    extract reportableInformation -> partyInformation -> regimeInformation
+    then filter supervisoryBody = SupervisoryBodyEnum -> CFTC
+    then only-element
+    then if postPricedIndicator exists
+        then postPricedIndicator
+        else False
+
+reporting rule Price from TransactionReportInstruction: <"Price">
+    filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+            or IsFixedFloatZeroCouponSwapKnownAmount(ProductForEvent)
+    then extract
+        cdebase.price.PriceFormatFromNotation(cde.price.PriceNoFormat, PriceNotation)
+
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price Currency">
+    filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+            or IsFixedFloatZeroCouponSwapKnownAmount(ProductForEvent)
+    then extract cde.price.PriceCurrency
+
+reporting rule PriceNotation from TransactionReportInstruction: <"Price Notation">
+    filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+            or IsFixedFloatZeroCouponSwapKnownAmount(ProductForEvent)
+    then extract common.price.DefaultPercentageToDecimal(cde.price.PriceNotation, False)
+
+/*------------------------------------------------ Spread Leg 1 Starts------------------------------------------------*/
+reporting rule SpreadLeg1 from TransactionReportInstruction: <"SpreadLeg1">
+    extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.SpreadLeg1 -> value,
+                SpreadNotationLeg1
+            )
+
+reporting rule SpreadNotationLeg1 from TransactionReportInstruction: <"Spread Notation Leg 1 Enum">
+    common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg1NotationEnum, False)
+
+reporting rule SpreadCurrencyLeg1 from TransactionReportInstruction: <"Spread currency Leg 1">
+    extract cde.price.SpreadLeg1Currency
+
+/*------------------------------------------------  Spread Leg 1 Ends ------------------------------------------------*/
+/*------------------------------------------------ Spread Leg 2 Starts------------------------------------------------*/
+reporting rule SpreadLeg2 from TransactionReportInstruction: <"SpreadLeg2">
+    extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.SpreadLeg2 -> value,
+                SpreadNotationLeg2
+            )
+
+reporting rule SpreadNotationLeg2 from TransactionReportInstruction: <"Spread Notation Leg 2 Enum">
+    common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg2NotationEnum, False)
+
+reporting rule SpreadCurrencyLeg2 from TransactionReportInstruction: <"Spread currency Leg2">
+    extract cde.price.SpreadLeg2Currency
+
+/*------------------------------------------------ Spread Leg 2 Ends------------------------------------------------*/
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike Price">
+    extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.StrikePriceNoFormat,
+                StrikePriceNotation
+            )
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike Price Notation Enum">
+    [regulatoryReference ISDA PeerReviewGroup date "20230621"
+        provision "This is a CFTC specific function which converts Percentage notation into Decimal."]
+    common.price.DefaultPercentageToDecimal(cde.price.StrikePriceNotationEnum, False)
+
+reporting rule AllocationIndicator from TransactionReportInstruction: <"Allocation Indicator">
+    extract
+        if Qualify_Allocation(originatingWorkflowStep -> businessEvent)
+        then AllocationIndicatorEnum -> POST
+        else if originatingWorkflowStep -> nextEvent -> intent = EventIntentEnum -> Allocation
+        then AllocationIndicatorEnum -> PREA
+        else AllocationIndicatorEnum -> UNAL
+
+reporting rule NonStandardizedTermIndicator from TransactionReportInstruction: <"Non-standardized Term Indicator">
+    extract
+        if IsCleared(originatingWorkflowStep) = False
+                and originatingWorkflowStep -> nextEvent -> intent <> EventIntentEnum -> Clearing
+        then common.contract.NonStandardizedTermIndicator
+
+reporting rule BlockTradeElectionIndicator from TransactionReportInstruction: <"Block Trade Election Indicator">
+    extract
+        if reportableInformation -> largeSizeTrade exists
+        then reportableInformation -> largeSizeTrade
+        else False
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"ExpirationDate">
+    extract ProductForEvent
+    then extract cde.datetime.ExpirationDate
+
+reporting rule PlatformIdentifier from TransactionReportInstruction: <"Platform Identifier">
+    cde.execution.PlatformIdentifier
+
+reporting rule PrimeBrokerageTransactionIndicator from TransactionReportInstruction: <"Prime brokerage transaction indicator">
+    filter IsCleared(originatingWorkflowStep) = False
+    then extract PrimeBrokerageTransactionIndicatorFunc
+
+reporting rule PriorUTI from TransactionReportInstruction: <"Prior UTI">
+    extract common.link.GetPriorTransactionIdentifier(item, DoddFrankAct)
+
+reporting rule UniqueSwapIdentifier from TransactionReportInstruction: <"Unique Swap Identifier (USI)">
+    extract TradeForEvent
+    then extract tradeIdentifier
+    then filter identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+    then only-element
+    then extract assignedIdentifier -> identifier
+    then only-element
+
+reporting rule UniqueTransactionIdentifier from TransactionReportInstruction: <"Unique Transaction Identifier (UTI)">
+    extract uti.GetUniqueTransactionIdentifier(item, CFTC)
+
+reporting rule Jurisdiction from TransactionReportInstruction: <"Jurisdiction">
+    extract
+        if reportableInformation -> partyInformation -> regimeInformation -> supervisoryBody any = SupervisoryBodyEnum -> CFTC
+                and reportableInformation -> partyInformation -> regimeInformation -> supervisoryBody any = SupervisoryBodyEnum -> SEC
+        then JurisdictionEnum -> MIXX
+        else if reportableInformation -> partyInformation -> regimeInformation -> supervisoryBody any = SupervisoryBodyEnum -> SEC
+        then JurisdictionEnum -> SECH
+        else if reportableInformation -> partyInformation -> regimeInformation -> supervisoryBody any = SupervisoryBodyEnum -> CFTC
+        then JurisdictionEnum -> CFTC
+
+reporting rule NewSDRIdentifier from TransactionReportInstruction: <"New SDR Identifier">
+    extract common.link.NewSDRIdentifier
+
+reporting rule NextFloatingReferenceResetDate from TransactionReportInstruction: <"Next Floating Reference Reset Date">
+    empty // "Not Modelled"
+
+reporting rule InstrumentType from TransactionReportInstruction: <"Instrument Type (non-reportable)">
+    extract GetInstrumentType
+
+reporting rule LastFloatingReferenceValue from TransactionReportInstruction: <"Last Floating Reference Value">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "107" field "Last Floating Reference Value"
+        provision "The most recent sampling of the value of the floating reference for to determine cash flow. Ties to Last floating reference reset date data element."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "107 Last Floating Reference Value"
+
+reporting rule LastFloatingReferenceResetDate from TransactionReportInstruction: <"Last Floating Reference Reset Date">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "108" field "Last floating reference reset date"
+        provision "The date of the most recent sampling of the floating reference to determine cash flow. Ties to Last floating reference value data element."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "108 Last Floating Reference Reset Date"
+
+reporting rule Delta from TransactionReportInstruction: <"Delta">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "109" field "Delta"
+        provision "The ratio of the absolute change in price of an OTC derivative transaction to the change in price of the underlier, at the time a new transaction is reported or when a change in the notional amount is reported."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "109" field "Delta" footnote "77"
+        provision "Delta must be reported daily regardless of whether there is a change in the value since the last reporting."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "109 Delta"
+
+reporting rule ValuationAmount from TransactionReportInstruction: <"Valuation Amount">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "110" field "Valuation Amount"
+        provision "Current value of the outstanding contract. Valuation amount is expressed as the exit cost of the contract or components of the contract, i.e., the price that would be received to sell the contract (in the market in an orderly transaction at the valuation date)."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "110" field "Valuation Amount" footnote "78"
+        provision "Valuation amount must be reported daily regardless of whether there is a change in the value since the last reporting."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "110 Valuation Amount"
+
+reporting rule ValuationCurrency from TransactionReportInstruction: <"Valuation Currency">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "111" field "Valuation Currency"
+        provision "Currency in which the valuation amount is denominated."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "111 Valuation Currency"
+
+reporting rule ValuationMethod from TransactionReportInstruction: <"Valuation Method">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "112" field "Valuation Method"
+        provision "Source and method used for the valuation of the transaction by the reporting counterparty. If at least one valuation input is used that is classified as mark-to-model in appendix D, then the whole valuation is classified as mark-to-model. If only inputs are used that are classified as mark-to-market in appendix D, then the whole valuation is classified as mark-to-market."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "112 Valuation Method"
+
+reporting rule ValuationTimestamp from TransactionReportInstruction: <"Valuation Timestamp">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "113" field "Valuation Timestamp"
+        provision "Date and time of the last valuation marked to market, provided by the central counterparty (CCP) or calculated using the current or last available market price of the inputs. If for example a currency exchange rate is the basis for a transactions valuation, then the valuation timestamp reflects the moment in time that exchange rate was current."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "113" field "Valuation Timestamp" footnote "79"
+        provision "Reported by the derivatives clearing organization (DCO) for cleared swaps and by the swap dealer for uncleared swaps"]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "113" field "Valuation Timestamp" footnote "80"
+        provision "The timestamp portion is not required to be represented for Valuation timestamp. The format must be reported as YYYY-MM-DD."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "113 Valuation Timestamp"
+
+reporting rule AffiliatedCounterpartyForMarginAndCapitalIndicator from TransactionReportInstruction: <"Affiliated Counterparty For Margin And Capital Indicator">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "114" field "Affiliated Counterparty For Margin And Capital Indicator"
+        provision "Indicator of whether the current counterparty is deemed an affiliate for U.S. margin and capital rules (as per para 23.159)."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "114 Affiliated Counterparty For Margin And Capital Indicator"
+
+reporting rule CollateralisationCategory from TransactionReportInstruction: <"Collateralisation Category">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "115" field "Collateralisation Category"
+        provision "Indicator of whether a collateral agreement (or collateral agreements) between the counterparties exists (uncollateralised/partially collateralised/one-way collateralised/fully collateralised). This data element is provided for each transaction or each portfolio, depending on whether the collateralisation is performed at the transaction or portfolio level, and is applicable to both cleared and uncleared transactions."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "115 Collateralisation Category"
+
+reporting rule InitialMarginCollateralPortfolioCode from TransactionReportInstruction: <"Initial Margin Collateral Portfolio Code">
+    extract common.collateral.InitialMarginCollateralPortfolioCode
+
+reporting rule PortfolioContainingNonReportableComponentIndicator from TransactionReportInstruction: <"Portfolio Containing Non-Reportable Component Indicator">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "117" field "Portfolio Containing Non Reportable Component Indicator"
+        provision "If collateral is reported on a portfolio basis, indicator of whether the collateral portfolio includes swap transactions exempt from reporting."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "117 Portfolio Containing Non Reportable Component Indicator"
+
+reporting rule InitialMarginPostedByTheReportingCounterpartyPostHaircut from TransactionReportInstruction: <"Initial Margin Posted By The Reporting Counterparty Post Haircut">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "118" field "Initial Margin Posted By The Reporting Counterparty Post Haircut"
+        provision "Monetary value of initial margin that has been posted by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. If the collateralisation is performed at portfolio level, the initial margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin posted relates to such single transaction. This refers to the total current value of the initial margin after application of the haircut (if applicable), rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include default fund contributions, nor collateral posted against liquidity provisions to the central counterparty, i.e., committed credit lines. If the initial margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "118 Initial Margin Posted By The Reporting Counterparty Post Haircut"
+
+reporting rule InitialMarginPostedByTheReportingCounterpartyPreHaircut from TransactionReportInstruction: <"Initial Margin Posted By The Reporting Counterparty Pre Haircut">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "119" field "Initial Margin Posted By The Reporting Counterparty Pre Haircut"
+        provision "Monetary value of initial margin that has been posted by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. If the collateralisation is performed at portfolio level, the initial margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin posted relates to such single transaction. This refers to the total current value of the initial margin, rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include default fund contributions, nor collateral posted against liquidity provisions to the central counterparty, i.e., committed credit lines. If the initial margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "119 Initial Margin Posted By The Reporting Counterparty Pre Haircut"
+
+reporting rule CurrencyOfInitialMarginPosted from TransactionReportInstruction: <"Currency Of Initial Margin Posted">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "120" field "Currency Of Initial Margin Posted"
+        provision "Currency in which the initial margin posted is denominated. If the initial margin posted is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of posted initial margins."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "120" field "Currency Of Initial Margin Posted" footnote "79"
+        provision "For portfolio with multiple currencies, it must be converted in to a single currency chosen by the reporting counterparty and reported."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "120 Currency Of Initial Margin Posted"
+
+reporting rule InitialMarginCollectedByTheReportingCounterpartyPostHaircut from TransactionReportInstruction: <"Initial Margin Collected By The Reporting Counterparty Post Haircut">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "121" field "Initial Margin Collected By The Reporting Counterparty Post Haircut"
+        provision "Monetary value of initial margin that has been collected by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. If the collateralisation is performed at portfolio level, the initial margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin collected relates to such single transaction. This refers to the total current value of the initial margin after application of the haircut (if applicable), rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include collateral collected by the central counterparty as part of its investment activity. If the initial margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "121 Initial Margin Collected By The Reporting Counterparty Post Haircut"
+
+reporting rule InitialMarginCollectedByTheReportingCounterpartyPreHaircut from TransactionReportInstruction: <"Initial Margin Collected By The Reporting Counterparty Pre Haircut">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "122" field "Initial Margin Collected By The Reporting Counterparty Pre Haircut"
+        provision "Monetary value of initial margin that has been collected by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. If the collateralisation is performed at portfolio level, the initial margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin collected relates to such single transaction. This refers to the total current value of the initial margin, rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include collateral collected by the central counterparty as part of its investment activity. If the initial margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "122 Initial Margin Collected By The Reporting Counterparty Pre Haircut"
+
+reporting rule CurrencyOfInitialMarginCollected from TransactionReportInstruction: <"Currency Of Initial Margin Collected">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "123" field "Currency Of Initial Margin Collected"
+        provision "Currency in which the initial margin collected is denominated. If the initial margin collected is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of collected initial margins."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "123" field "Currency Of Initial Margin Collected" footnote "84"
+        provision "For portfolio with multiple currencies, it must be converted in to a single currency chosen by the reporting counterparty and reported."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "123 Currency Of Initial Margin Collected"
+
+reporting rule VariationMarginCollateralPortfolioCode from TransactionReportInstruction: <"Variation Margin Collateral Portfolio Code">
+    extract common.collateral.VariationMarginCollateralPortfolioCode
+
+reporting rule VariationMarginPostedByTheReportingCounterpartyPreHaircut from TransactionReportInstruction: <"Variation Margin Posted By The Reporting Counterparty Pre Haircut">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "125" field "Variation Margin Posted By The Reporting Counterparty Pre Haircut"
+        provision "Monetary value of the variation margin posted by the reporting counterparty (including the cash-settled one), and including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. Contingent variation margin is not included. If the collateralisation is performed at portfolio level, the variation margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the variation margin posted relates to such single transaction. This data element refers to the total current value of the variation margin, cumulated since the first reporting of variation margins posted for the portfolio/transaction. If the variation margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "125" field "Variation Margin Posted By The Reporting Counterparty Pre Haircut" footnote "87"
+        provision "This data element must be reported daily regardless of whether there is a change in the value since the last reporting."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "125 Variation Margin Posted By The Reporting Counterparty Pre Haircut"
+
+reporting rule CurrencyOfVariationMarginPosted from TransactionReportInstruction: <"Currency Of Variation Margin Posted">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "126" field "Currency Of Variation Margin Posted"
+        provision "Currency in which the variation margin posted is denominated. If the variation margin posted is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of posted variation margins."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "126 Currency Of Variation Margin Posted"
+
+reporting rule VariationMarginCollectedByTheReportingCounterpartyPreHaircut from TransactionReportInstruction: <"Variation Margin Collected By The Reporting Counterparty Pre Haircut">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "127" field "Variation Margin Collected By The Reporting Counterparty Pre Haircut"
+        provision "Monetary value of the variation margin collected by the reporting counterparty (including the cash-settled one), and including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. Contingent variation margin is not included. If the collateralisation is performed at portfolio level, the variation margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the variation margin collected relates to such single transaction. This refers to the total current value of the variation margin, cumulated since the first reporting of collected variation margins for the portfolio/ transaction. If the variation margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    [regulatoryReference CFTC Part45_V3_1 appendix "1" dataElement "127" field "Variation Margin Collected By The Reporting Counterparty Pre Haircut" footnote "88"
+        provision "This data element must be reported daily regardless of whether there is a change in the value since the last reporting."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "127 Variation Margin Collected By The Reporting Counterparty Pre Haircut"
+
+reporting rule CurrencyOfVariationMarginCollected from TransactionReportInstruction: <"Currency Of Variation Margin Collected">
+    [regulatoryReference CFTC Part45 appendix "1" dataElement "128" field "Currency Of Variation Margin Collected"
+        provision "Currency in which the variation margin collected is denominated. If the variation margin collected is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of collected variation margins."]
+    [regulatoryReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    extract "Not Modelled"
+        as "128 Currency Of Variation Margin Collected"

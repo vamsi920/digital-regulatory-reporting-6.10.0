@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-csa-trade",
+  "name" : "CSA / Trade",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.csa.rewrite.trade.reports.CSATradeReportFunction",
+    "inputType" : "drr.regulation.common.TransactionReportInstruction",
+    "outputType" : "drr.regulation.csa.rewrite.trade.CSATransactionReport"
+  }
+}

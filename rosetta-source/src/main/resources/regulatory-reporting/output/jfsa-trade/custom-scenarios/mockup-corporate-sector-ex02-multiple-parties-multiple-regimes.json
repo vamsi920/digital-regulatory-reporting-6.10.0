@@ -1,0 +1,54 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2011-02-12T15:41:08Z",
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "DIZES5CFO5K3I5R58746",
+  "counterparty2" : "E57ODZWZ7FF32TWEFA76",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2011-02-08",
+  "entityResponsibleForReporting" : "DIZES5CFO5K3I5R58746",
+  "eventIdentifier" : "123",
+  "eventTimestamp" : "2011-02-12T15:41:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-12T15:41:08Z",
+  "expirationDate" : "2016-02-08",
+  "finalContractualSettlementDate" : "2016-02-08",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "fixedRate" : 0.0253,
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A011",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "reportSubmittingEntityID" : "DIZES5CFO5K3I5R58746",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "123",
+  "underlyingIdentificationType" : "X",
+  "underlyingIndexIndicator" : "LIBO",
+  "uniqueTransactionIdentifier" : "MOCKUPCORPORATESEC02"
+}

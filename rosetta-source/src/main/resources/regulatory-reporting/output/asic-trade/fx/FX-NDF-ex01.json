@@ -1,0 +1,60 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "beneficiary1" : "GGDZP1UYGU9STUHRDP49",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "brokerID" : "ZWNFQ48RUL8VJZ2AIC12",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "contractType" : "FORW",
+  "counterparty1" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2" : "254900QEE322YIK4P067",
+  "counterparty2IdentifierType" : true,
+  "effectiveDate" : "2019-01-31",
+  "entityResponsibleForReporting" : "GGDZP1UYGU9STUHRDP48",
+  "eventIdentifier" : "SI17764828466sz33wbbkr6u3664g4adt",
+  "eventTimestamp" : "2019-01-31T08:56:02Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1111.11,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionAgentCounterparty1" : "NOAP",
+  "executionAgentCounterparty2" : "2549007904V5LEBO0B08",
+  "executionTimestamp" : "2019-01-31T08:56:02Z",
+  "expirationDate" : "2019-03-20",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 3763000000,
+    "notionalCurrency" : "KRW",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 38999950.3,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "KRW",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "platformIdentifier" : "XOFF",
+  "reportSubmittingEntityID" : "GGDZP1UYGU9STUHRDP48",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX01",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02",
+  "variationMarginCollateralPortfolioCode" : "988098"
+}

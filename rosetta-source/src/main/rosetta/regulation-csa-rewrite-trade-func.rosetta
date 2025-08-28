@@ -1,0 +1,475 @@
+namespace drr.regulation.csa.rewrite.trade
+version "${project.version}"
+
+import cdm.product.* as product
+import cdm.product.asset.*
+import cdm.product.common.settlement.*
+import cdm.product.template.*
+
+import drr.regulation.common.* as common
+
+/**
+ * # CSA Leg Ordering Namespace Documentation
+
+ * This namespace provides an extensible framework for implementing jurisdiction-specific leg ordering logic. Is intended to help define leg ordering strategies that align with firm-specific or regulatory jurisdiction rules. 
+
+ * Allows for custom leg ordering logic where the default ISDA DRR Best Practices leg ordering is insufficient or must be overridden to comply with jurisdictional or regulatory specifications.
+
+ * Builds on the default DRR leg ordering logic as defined by ISDA in the ISDA Best Practices document, reusing existing mechanisms wherever applicable. This avoids redundancy for products or scenarios that are either not covered by the specific regulation or where the ordering logic coincides with the default.
+
+ * ---
+
+ * ## Structure
+
+ * The namespace includes the following components:
+
+ * ### 1. Alignment Evaluation Functions
+
+ * - `Is[Jurisdiction]Leg1Aligned: boolean`
+ * - `Is[Jurisdiction]Leg2Aligned: boolean`
+
+ * These Boolean functions evaluate whether the leg ordering for a product under the jurisdiction-specific logic aligns with the default ISDA logic. 
+ * These are essential for integration in the leg-based regulatory reporting rules, enabling detection of deviations from standard behavior and model accordingly.
+
+ * ### 2. Payout-Based Extraction Functions
+
+ * For each leg type affected by jurisdiction-specific logic, include two functions:
+
+ * - `InterestRateLeg1: InterestRatePayout`, `InterestRateLeg2: InterestRatePayout`
+ * - `CreditLeg1: CreditDefaultPayout`, `CreditLeg2: CreditDefaultPayout`
+ * - `PerformanceLeg1: PerformancePayout`, `PerformanceLeg2: PerformancePayout`
+ * - `CommodityLeg1: CommodityPayout`, `CommodityLeg2: CommodityPayout`
+
+ * These functions extract leg-specific payout data tailored to the CSA ordering logic, preparing them for consistent comparison and sorting.
+
+ * ### 3. Product-Specific Ordering Functions
+
+ * Each supported product must have two dedicated functions implementing the custom leg ordering logic for each represented payout:
+
+ * - `InterestRateLeg1Basis: InterestRatePayout`, `InterestRateLeg2Basis: InterestRatePayout`
+ * - `InterestRateLeg1CreditDefaultSwap: InterestRatePayout`, `InterestRateLeg2CreditDefaultSwap: InterestRatePayout`,
+ * `CreditLeg1CreditDefaultSwap: CreditDefaultPayout`,
+ * `CreditLeg2CreditDefaultSwap: CreditDefaultPayout`
+
+ * These are the core implementations of the leg ordering logic. They determine the final leg arrangement according to the regulatory body's defined rules, overriding ISDA defaults where applicable.
+
+ * ## Usage Notes
+
+ * - This namespace is not a standalone replacement but an extension. Use it **in conjunction with** the default ISDA DRR leg ordering `drr.regulation.common`.
+ * - Ensure that every function is idempotent and produces deterministic output based on leg characteristics.
+ * - Clearly document any assumptions or conditions under which legs are considered aligned.
+
+ **/
+func PayoutMatches: <"Retrieves a match when both objects match even if both are absent">
+    inputs:
+        payout1 PayoutBase (0..1)
+        payout2 PayoutBase (0..1)
+    output:
+        matches boolean (1..1)
+
+    set matches:
+        (payout1 exists and payout2 exists and payout1 = payout2)
+            or (payout1 is absent and payout2 is absent)
+
+func IsCSALeg1Aligned: <"Determines whether Leg 1 of the CSA product is aligned with the corresponding DRR representation, based on asset class and payout structure.">
+    inputs:
+        reportableEvent common.ReportableEvent (1..1)
+    output:
+        result boolean (1..1)
+
+    alias product: common.ProductForTrade(common.TradeForEvent(reportableEvent))
+    alias economicTerms: common.EconomicTermsForProduct(product)
+
+    alias csaInterestRateLeg1: InterestRateLeg1(product)
+    alias drrInterestRateLeg1: common.InterestRateLeg1(product)
+
+    alias csaCommodityLeg1: CommodityLeg1(product)
+    alias drrCommodityLeg1: common.CommodityLeg1(product)
+
+    set result:
+        // Asset Class: IR
+        if product.qualification.Qualify_AssetClass_InterestRate(economicTerms)
+        then PayoutMatches(csaInterestRateLeg1, drrInterestRateLeg1)
+        // Asset Class: CO
+        else if product.qualification.Qualify_AssetClass_Commodity(economicTerms)
+        then PayoutMatches(csaCommodityLeg1, drrCommodityLeg1)
+        else True
+
+func IsCSALeg2Aligned: <"Determines whether Leg 2 of the CSA product is aligned with the corresponding DRR representation, based on asset class and payout structure.">
+    inputs:
+        transactionReportInstruction common.TransactionReportInstruction (1..1)
+    output:
+        result boolean (1..1)
+
+    alias product:
+        common.ProductForTrade(common.TradeForEvent(transactionReportInstruction))
+    alias economicTerms: common.EconomicTermsForProduct(product)
+
+    alias csaInterestRateLeg2: InterestRateLeg2(product)
+    alias drrInterestRateLeg2: common.InterestRateLeg2(product)
+
+    alias csaCommodityLeg2: CommodityLeg2(product)
+    alias drrCommodityLeg2: common.CommodityLeg2(product)
+
+    set result:
+        // Asset Class: IR
+        if product.qualification.Qualify_AssetClass_InterestRate(economicTerms)
+        then PayoutMatches(csaInterestRateLeg2, drrInterestRateLeg2)
+        // Asset Class: CO
+        else if product.qualification.Qualify_AssetClass_Commodity(economicTerms)
+        then PayoutMatches(csaCommodityLeg2, drrCommodityLeg2)
+        else True
+
+/**
+ * Payout-based leg ordering logic
+ **/
+func InterestRateLeg1: <"Extracts the Interest Rate Leg 1 based on the Leg Ordering defined in CSA.">
+    [regulatoryReference drr.regulation.csa.CSA drr.regulation.csa.CSA_2024
+        provision ""]
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg1 InterestRatePayout (0..1)
+    set interestRateLeg1:
+        // Fixed vs Float, Fixed vs Fixed, single currency, capfloor -> ordering overlaps
+        if common.IsInterestRateBasis(product)
+        then InterestRateLeg1Basis(product)
+        else if common.IsInterestRateCrossCurrency(product)
+        then InterestRateLeg1CrossCurrency(product)
+        else if common.IsInterestRateReturnSwap(product)
+        then InterestRateLeg1ReturnSwap(product)
+        else common.InterestRateLeg1(product)
+
+func InterestRateLeg2: <"Extracts the Interest Rate Leg 2 based on the Leg Ordering defined in CSA.">
+    [regulatoryReference drr.regulation.csa.CSA drr.regulation.csa.CSA_2024
+        provision ""]
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg2 InterestRatePayout (0..1)
+    set interestRateLeg2:
+        // Fixed vs Float, Fixed vs Fixed, single currency, capfloor -> ordering overlaps
+        if common.IsInterestRateBasis(product)
+        then InterestRateLeg2Basis(product)
+        else if common.IsInterestRateCrossCurrency(product)
+        then InterestRateLeg2CrossCurrency(product)
+        else if common.IsInterestRateReturnSwap(product)
+        then InterestRateLeg2ReturnSwap(product)
+        else common.InterestRateLeg2(product)
+
+func CommodityLeg1: <"Extracts the Commodity Leg 1 based on the Leg Ordering defined in CSA.">
+    [regulatoryReference drr.regulation.csa.CSA drr.regulation.csa.CSA_2024
+        provision ""]
+    inputs:
+        product Product (1..1)
+    output:
+        commodityLeg1 CommodityPayout (0..1)
+    alias commodityPayouts:
+        common.EconomicTermsForProduct(product) -> payout -> commodityPayout
+    set commodityLeg1:
+        if common.IsCommoditySwapFloatFloat(product)
+        then CommodityBasisLeg1(product)
+        else common.CommodityLeg1(product)
+
+func CommodityLeg2: <"Extracts the Commodity Leg 2 based on the Leg Ordering defined in CSA.">
+    [regulatoryReference drr.regulation.csa.CSA drr.regulation.csa.CSA_2024
+        provision ""]
+    inputs:
+        product Product (1..1)
+    output:
+        commodityLeg2 CommodityPayout (0..1)
+    alias commodityPayouts:
+        common.EconomicTermsForProduct(product) -> payout -> commodityPayout
+    set commodityLeg2:
+        if common.IsCommoditySwapFloatFloat(product)
+        then CommodityBasisLeg2(product)
+        else common.CommodityLeg2(product)
+
+func InterestRateLeg1Basis: <"Determines the ordering of Interest Rate Leg 1 in an Interest Rate Basis, based on the alphabetical order and tenor values of the floating rate payouts.">
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg1 InterestRatePayout (0..1)
+    alias interestRatePayouts:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout
+    set interestRateLeg1:
+        if interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+                distinct
+                count > 1
+        then interestRatePayouts
+            min [
+                item -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex to-string
+            ]
+        else if interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex count > 1 and interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+                distinct
+                count = 1
+        then interestRatePayouts
+            min [
+                common.PeriodCalculation(
+                        item -> rateSpecification -> floatingRate -> rateOption -> indexTenor -> period,
+                        item -> rateSpecification -> floatingRate -> rateOption -> indexTenor -> periodMultiplier
+                    )
+            ]
+
+func InterestRateLeg2Basis: <"Determines the ordering of Interest Rate Leg 2 in an Interest Rate Basis, based on the alphabetical order and tenor values of the floating rate payouts.">
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg2 InterestRatePayout (0..1)
+    alias interestRatePayouts:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout
+    set interestRateLeg2:
+        if interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+                distinct
+                count > 1
+        then interestRatePayouts
+            max [
+                item -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex to-string
+            ]
+        else if interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex count > 1 and interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+                distinct
+                count = 1
+        then interestRatePayouts
+            max [
+                common.PeriodCalculation(
+                        item -> rateSpecification -> floatingRate -> rateOption -> indexTenor -> period,
+                        item -> rateSpecification -> floatingRate -> rateOption -> indexTenor -> periodMultiplier
+                    )
+            ]
+
+func CommodityBasisLeg1: <"Determines the ordering of Commodity Leg 1 in a Commodity Basis, based on the alphabetical order and tenor values of the floating rate payouts.">
+    inputs:
+        product Product (1..1)
+    output:
+        commodityLeg1 CommodityPayout (0..1)
+    alias commodityPayouts:
+        common.EconomicTermsForProduct(product) -> payout -> commodityPayout
+    set commodityLeg1:
+        if common.IsCommoditySwapFloatFloat(product)
+        then (if commodityPayouts -> underlier -> commodity -> productIdentifier -> identifier
+                    distinct
+                    count > 1
+            then commodityPayouts
+                min [
+                    item -> underlier -> commodity -> productIdentifier -> identifier only-element
+                ]
+            else if commodityPayouts -> underlier -> commodity -> productIdentifier -> identifier
+                    distinct
+                    count = 1
+            then commodityPayouts min [ common.CalculationPeriodToDaysCommodities(item) ])
+
+func CommodityBasisLeg2: <"Determines the ordering of Commodity Leg 2 in a Commodity Basis, based on the alphabetical order and tenor values of the floating rate payouts.">
+    inputs:
+        product Product (1..1)
+    output:
+        commodityLeg2 CommodityPayout (0..1)
+    alias commodityPayouts:
+        common.EconomicTermsForProduct(product) -> payout -> commodityPayout
+    set commodityLeg2:
+        if common.IsCommoditySwapFloatFloat(product)
+        then (if commodityPayouts -> underlier -> commodity -> productIdentifier -> identifier
+                    distinct
+                    count > 1
+            then commodityPayouts
+                max [
+                    item -> underlier -> commodity -> productIdentifier -> identifier only-element
+                ]
+            else if commodityPayouts -> underlier -> commodity -> productIdentifier -> identifier
+                    distinct
+                    count = 1
+            then commodityPayouts max [ common.CalculationPeriodToDaysCommodities(item) ])
+
+func InterestRateLeg1CrossCurrency: <"Determines the Interest Rate Leg 1 of Cross-Currency products based on the alphabetical order of the underlier names in the Interest Rate payouts.">
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg1 InterestRatePayout (0..1)
+
+    alias interestRatePayouts:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout
+
+    alias floatingRateLegs:
+        interestRatePayouts filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias fixedRateLegs:
+        interestRatePayouts filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias csaInterestRateLeg1Basis: InterestRateLeg1Basis(product)
+
+    alias drrInterestRateLeg1CrossCurrency: common.InterestRateLeg1CrossCurrency(product)
+
+    set interestRateLeg1:
+        if floatingRateLegs count = 1
+        then fixedRateLegs only-element
+        else if floatingRateLegs count > 1
+        then csaInterestRateLeg1Basis
+        else drrInterestRateLeg1CrossCurrency
+
+func InterestRateLeg2CrossCurrency: <"Determines the Interest Rate Leg 2 of Cross-Currency products based on the alphabetical order of the underlier names in the Interest Rate payouts.">
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg2 InterestRatePayout (0..1)
+
+    alias interestRatePayouts:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout
+
+    alias floatingRateLegs:
+        interestRatePayouts filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias fixedRateLegs:
+        interestRatePayouts filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias csaInterestRateLeg2Basis: InterestRateLeg2Basis(product)
+
+    alias drrInterestRateLeg2CrossCurrency: common.InterestRateLeg2CrossCurrency(product)
+
+    set interestRateLeg2:
+        if floatingRateLegs count = 1
+        then floatingRateLegs only-element
+        else if floatingRateLegs count > 1
+        then csaInterestRateLeg2Basis
+        else drrInterestRateLeg2CrossCurrency
+
+func InterestRateLeg1ReturnSwap: <"Determines the Interest Rate Leg 1 of Return Swap products based on the alphabetical order of the names of the Interest Rate payouts, both at the product level and the underlier level."> //pending review
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg1 InterestRatePayout (0..1)
+
+    alias interestRateLegs:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout
+
+    alias fixedRateLegs:
+        interestRateLegs filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias floatingRateLegs:
+        interestRateLegs filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias floatingRateIndexes:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias flotingRateIndexSecurity:
+        IRPayoutSecurity -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias floatingRateIndexContractualProduct:
+        IRPayoutContractualProduct -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias IRPayoutContractualProduct:
+        common.EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> contractualProduct -> economicTerms -> payout -> interestRatePayout
+
+    alias IRPayoutSecurity:
+        common.EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> security -> economicTerms -> payout -> interestRatePayout
+
+    alias fixedRateLegContractualProduct:
+        IRPayoutContractualProduct
+            filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias floatingRateLegContractualProduct:
+        IRPayoutContractualProduct
+            filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias fixedRateLegSecurity:
+        IRPayoutSecurity filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias floatingRateLegSecurity:
+        IRPayoutSecurity filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias comparison:
+        [
+            floatingRateIndexes only-element to-string,
+            flotingRateIndexSecurity only-element to-string,
+            floatingRateIndexContractualProduct only-element to-string
+        ]
+
+    alias sortedReturnSwapIdentifier: comparison min
+
+    set interestRateLeg1:
+        if fixedRateLegs count > 0
+        then fixedRateLegs only-element
+        else if floatingRateLegs count > 0
+        then if IRPayoutContractualProduct exists
+            then if fixedRateLegContractualProduct count > 0
+                then fixedRateLegContractualProduct only-element
+                else if floatingRateLegContractualProduct exists
+                then if floatingRateIndexContractualProduct only-element to-string = sortedReturnSwapIdentifier
+                    then floatingRateLegContractualProduct only-element
+                    else floatingRateLegs only-element
+                else if IRPayoutSecurity exists
+                then if fixedRateLegSecurity count > 0
+                    then fixedRateLegSecurity only-element
+                    else if floatingRateLegSecurity exists
+                    then if flotingRateIndexSecurity only-element to-string = sortedReturnSwapIdentifier
+                        then floatingRateLegSecurity only-element
+                        else floatingRateLegs only-element
+
+func InterestRateLeg2ReturnSwap: <"Determines the Interest Rate Leg 2 of Return Swap products based on the alphabetical order of the names of the Interest Rate payouts, both at the product level and the underlier level.">
+    inputs:
+        product Product (1..1)
+    output:
+        interestRateLeg2 InterestRatePayout (0..1)
+
+    alias interestRateLegs:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout
+
+    alias fixedRateLegs:
+        interestRateLegs filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias floatingRateLegs:
+        interestRateLegs filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias floatingRateIndexes:
+        common.EconomicTermsForProduct(product) -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias flotingRateIndexSecurity:
+        IRPayoutSecurity -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias floatingRateIndexContractualProduct:
+        IRPayoutContractualProduct -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias IRPayoutContractualProduct:
+        common.EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> contractualProduct -> economicTerms -> payout -> interestRatePayout
+
+    alias IRPayoutSecurity:
+        common.EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> security -> economicTerms -> payout -> interestRatePayout
+
+    alias fixedRateLegContractualProduct:
+        IRPayoutContractualProduct
+            filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias floatingRateLegContractualProduct:
+        IRPayoutContractualProduct
+            filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias fixedRateLegSecurity:
+        IRPayoutSecurity filter leg [ leg -> rateSpecification -> fixedRate exists ]
+
+    alias floatingRateLegSecurity:
+        IRPayoutSecurity filter leg [ leg -> rateSpecification -> floatingRate exists ]
+
+    alias comparison:
+        [
+            floatingRateIndexes only-element to-string,
+            flotingRateIndexSecurity only-element to-string,
+            floatingRateIndexContractualProduct only-element to-string
+        ]
+
+    alias sortedReturnSwapIdentifier: comparison max
+
+    set interestRateLeg2:
+        if floatingRateLegs count > 0
+        then if IRPayoutContractualProduct exists
+            then if fixedRateLegContractualProduct count > 0
+                then fixedRateLegContractualProduct only-element
+                else if floatingRateLegContractualProduct exists
+                then if floatingRateIndexContractualProduct only-element to-string = sortedReturnSwapIdentifier
+                    then floatingRateLegContractualProduct only-element
+                    else floatingRateLegs only-element
+                else if IRPayoutSecurity exists
+                then if fixedRateLegSecurity count > 0
+                    then fixedRateLegSecurity only-element
+                    else if floatingRateLegSecurity exists
+                    then if flotingRateIndexSecurity only-element to-string = sortedReturnSwapIdentifier
+                        then floatingRateLegSecurity only-element
+                        else floatingRateLegs only-element
+                    else empty

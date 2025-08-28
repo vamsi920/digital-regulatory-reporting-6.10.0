@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-csa-margin",
+  "name" : "CSA / Margin",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.csa.rewrite.margin.reports.CSAMarginReportFunction",
+    "inputType" : "drr.regulation.common.CollateralReportInstruction",
+    "outputType" : "drr.regulation.csa.rewrite.margin.CSAMarginReport"
+  }
+}

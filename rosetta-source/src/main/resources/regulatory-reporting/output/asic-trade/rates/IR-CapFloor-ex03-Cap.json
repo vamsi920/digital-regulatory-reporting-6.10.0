@@ -1,0 +1,59 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "beneficiary1" : "213800IV9PCAC364HN60",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "OPTN",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "BYER",
+  "effectiveDate" : "2016-11-16",
+  "entityResponsibleForReporting" : "213800IV9PCAC364HN60",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2020-12-31",
+  "leg1" : {
+    "notionalAmount" : 81833063.11,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "OptionType" : "CALL",
+          "UnderlierID" : "USD-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML",
+          "UnderlyingInstrumentIndexTermUnit" : "MNTH"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "CapFloor"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "USD",
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "IRCAPFLOOREXCAPXML01",
+  "strikePrice" : {
+    "decimal" : 3
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "IRCAPFLOOREXCAPXML02"
+}

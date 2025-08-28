@@ -1,0 +1,516 @@
+{
+  "id" : "test-pack-projection-mas-trade-report-to-iso20022-rates",
+  "pipelineId" : "pipeline-projection-mas-trade-report-to-iso20022",
+  "name" : "Rates",
+  "samples" : [ {
+    "id" : "ir-capfloor-ex01-cap-premium",
+    "name" : "IR CapFloor ex01 Cap Premium",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CapFloor-ex01-Cap-Premium.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CapFloor-ex01-Cap-Premium.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-capfloor-ex02-cap-spread",
+    "name" : "IR CapFloor ex02 Cap Spread",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CapFloor-ex02-Cap-Spread.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CapFloor-ex02-Cap-Spread.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-capfloor-ex03-cap",
+    "name" : "IR CapFloor ex03 Cap",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CapFloor-ex03-Cap.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CapFloor-ex03-Cap.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-fixed-ex01",
+    "name" : "IR CCS Fixed Fixed ex01",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CCS-Fixed-Fixed-ex01.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CCS-Fixed-Fixed-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-fixed-ex02",
+    "name" : "IR CCS Fixed Fixed ex02",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CCS-Fixed-Fixed-ex02.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CCS-Fixed-Fixed-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-float-ex02",
+    "name" : "IR CCS Fixed Float ex02",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CCS-Fixed-Float-ex02.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CCS-Fixed-Float-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-float-ex03-nds",
+    "name" : "IR CCS Fixed Float ex03 NDS",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CCS-Fixed-Float-ex03-NDS.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CCS-Fixed-Float-ex03-NDS.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-float-ex04",
+    "name" : "IR CCS Fixed Float ex04",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-CCS-Fixed-Float-ex04.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-CCS-Fixed-Float-ex04.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-forward-debt-ex01",
+    "name" : "IR Forward Debt ex01",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Forward-Debt-ex01.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Forward-Debt-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-forward-debt-ex02",
+    "name" : "IR Forward Debt ex02",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Forward-Debt-ex02.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Forward-Debt-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-fra-ex01",
+    "name" : "IR FRA ex01",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-FRA-ex01.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-FRA-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-fra-ex02",
+    "name" : "IR FRA ex02",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-FRA-ex02.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-FRA-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-inflation-fixed-float-ex01-yoy",
+    "name" : "IR Inflation Fixed Float ex01 YoY",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Inflation-Fixed-Float-ex01-YoY.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Inflation-Fixed-Float-ex01-YoY.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-inflation-fixed-float-ex02-zc-fixedamt",
+    "name" : "IR Inflation Fixed Float ex02 ZC FixedAmt",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Inflation-Fixed-Float-ex02-ZC-FixedAmt.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Inflation-Fixed-Float-ex02-ZC-FixedAmt.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-inflation-fixed-float-zc-notionalamt",
+    "name" : "IR Inflation Fixed Float ZC NotionalAmt",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Inflation-Fixed-Float-ZC-NotionalAmt.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Inflation-Fixed-Float-ZC-NotionalAmt.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01",
+    "name" : "IR IRS Basis ex01",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Basis-ex01.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Basis-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-admitted-admitted",
+    "name" : "ir irs basis ex01 admitted admitted",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/ir-irs-basis-ex01-admitted-admitted.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/ir-irs-basis-ex01-admitted-admitted.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-admitted-notadmitted",
+    "name" : "ir irs basis ex01 admitted notadmitted",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/ir-irs-basis-ex01-admitted-notadmitted.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/ir-irs-basis-ex01-admitted-notadmitted.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-notadmitted-admitted",
+    "name" : "ir irs basis ex01 notadmitted admitted",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/ir-irs-basis-ex01-notadmitted-admitted.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/ir-irs-basis-ex01-notadmitted-admitted.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-notadmitted-notadmitted",
+    "name" : "ir irs basis ex01 notadmitted notadmitted",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/ir-irs-basis-ex01-notadmitted-notadmitted.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/ir-irs-basis-ex01-notadmitted-notadmitted.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex02",
+    "name" : "IR IRS Basis ex02",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Basis-ex02.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Basis-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex03",
+    "name" : "IR IRS Basis ex03",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Basis-ex03.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Basis-ex03.xml",
+    "assertions" : {
+      "modelValidationFailures" : 7,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex03-ois",
+    "name" : "IR IRS Basis ex03 OIS",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Basis-ex03-OIS.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Basis-ex03-OIS.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex03-xoff",
+    "name" : "ir irs basis ex03 xoff",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/ir-irs-basis-ex03-xoff.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/ir-irs-basis-ex03-xoff.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-1-1-a020",
+    "name" : "IR IRS Fixed Float DCF 1 1 A020",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-DCF-1-1-A020.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-DCF-1-1-A020.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-30e-360-isda-a007",
+    "name" : "IR IRS Fixed Float DCF 30E 360 ISDA A007",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-DCF-30E-360-ISDA-A007.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-DCF-30E-360-ISDA-A007.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-365l-a009",
+    "name" : "IR IRS Fixed Float DCF ACT 365L A009",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-365L-A009.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-DCF-ACT-365L-A009.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-act-afb-a010",
+    "name" : "IR IRS Fixed Float DCF ACT ACT AFB A010",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-AFB-A010.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-AFB-A010.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-act-icma-a006",
+    "name" : "IR IRS Fixed Float DCF ACT ACT ICMA A006",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ICMA-A006.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ICMA-A006.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-act-isda-a008",
+    "name" : "IR IRS Fixed Float DCF ACT ACT ISDA A008",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ISDA-A008.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ISDA-A008.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01",
+    "name" : "IR IRS Fixed Float ex01",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex01.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01-compensation-ois",
+    "name" : "IR IRS Fixed Float ex01 Compensation OIS",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex01-Compensation-OIS.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex01-Compensation-OIS.xml",
+    "assertions" : {
+      "modelValidationFailures" : 7,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01-conversion-ois",
+    "name" : "IR IRS Fixed Float ex01 Conversion OIS",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex01-Conversion-OIS.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex01-Conversion-OIS.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01-week",
+    "name" : "IR IRS Fixed Float ex01 Week",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex01-Week.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex01-Week.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex02",
+    "name" : "IR IRS Fixed Float ex02",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex02.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 7,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex02-zc",
+    "name" : "IR IRS Fixed Float ex02 ZC",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex02-ZC.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex02-ZC.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex03",
+    "name" : "IR IRS Fixed Float ex03",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex03.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex03.xml",
+    "assertions" : {
+      "modelValidationFailures" : 7,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex04-spread",
+    "name" : "IR IRS Fixed Float ex04 Spread",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex04-Spread.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex04-Spread.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex05",
+    "name" : "IR IRS Fixed Float ex05",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex05.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex05.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex06-ois",
+    "name" : "IR IRS Fixed Float ex06 OIS",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex06-OIS.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex06-OIS.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex07",
+    "name" : "IR IRS Fixed Float ex07",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex07.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex07.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex08",
+    "name" : "IR IRS Fixed Float ex08",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-ex08.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-ex08.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-submitter-id-1",
+    "name" : "IR IRS Fixed Float Submitter ID 1",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-Submitter-ID-1.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-Submitter-ID-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-submitter-id-2",
+    "name" : "IR IRS Fixed Float Submitter ID 2",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-Submitter-ID-2.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-Submitter-ID-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-submitter-id-3",
+    "name" : "IR IRS Fixed Float Submitter ID 3",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-Fixed-Float-Submitter-ID-3.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-Fixed-Float-Submitter-ID-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixedfloat-zc-knownamount",
+    "name" : "IR IRS FixedFloat ZC KnownAmount",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-IRS-FixedFloat-ZC-KnownAmount.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-IRS-FixedFloat-ZC-KnownAmount.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-option-debt-option-ex01",
+    "name" : "IR Option Debt Option ex01",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Option-Debt-Option-ex01.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Option-Debt-Option-ex01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-option-swaption-ex01-bermuda",
+    "name" : "IR Option Swaption ex01 Bermuda",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Option-Swaption-ex01-Bermuda.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Option-Swaption-ex01-Bermuda.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-option-swaption-ex02-europe",
+    "name" : "IR Option Swaption ex02 Europe",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Option-Swaption-ex02-Europe.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Option-Swaption-ex02-Europe.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-package-price",
+    "name" : "IR Package Price",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Package-Price.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Package-Price.xml",
+    "assertions" : {
+      "modelValidationFailures" : 7,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-package-spread",
+    "name" : "IR Package Spread",
+    "inputPath" : "regulatory-reporting/output/mas-trade/rates/IR-Package-Spread.json",
+    "outputPath" : "projection/output/mas-trade-report-to-iso20022/rates/IR-Package-Spread.xml",
+    "assertions" : {
+      "modelValidationFailures" : 7,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  } ]
+}

@@ -1,0 +1,408 @@
+namespace drr.mapping.fpml.recordkeeping.reportableevent
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.event.workflow.*
+import cdm.mapping.fpml.confirmation.workflowstep.*
+import cdm.observable.asset.*
+import cdm.product.collateral.*
+import cdm.product.common.settlement.*
+
+import drr.regulation.common.*
+
+synonym source FpML_5_RecordKeeping_To_ReportableEvent extends FpML_5_Confirmation_To_WorkflowStep
+{
+    ReportableEvent:
+        + reportableTrade
+            [value "ignore"]
+        + reportableInformation
+            [value "tradeHeader" path "trade"]
+            [value "tradeHeader" path "amendment->trade"]
+            [value "withdrawal"]
+            [value "tradeHeader" path "termination->originalTrade"]
+            [value "tradeHeader" path "novation->oldTrade"]
+            // [value "reportingRegime" path "trade->tradeHeader->partyTradeInformation"]
+            [hint "party"]
+            [hint "quote"]
+
+    ReportableInformation:
+        + largeSizeTrade
+            [set to True when "partyTradeInformation->largeSizeTrade" = True]
+            [set to False when "partyTradeInformation->largeSizeTrade" = False]
+        + executionVenueType
+            [set to ExecutionVenueTypeEnum -> OffFacility when "partyTradeInformation->executionVenueType" = "OffFacility"]
+            [set to ExecutionVenueTypeEnum -> SEF when "partyTradeInformation->executionVenueType" = "SEF"]
+            [set to ExecutionVenueTypeEnum -> DCM when "partyTradeInformation->executionVenueType" = "DCM"]
+        + partyInformation
+            [value "partyTradeInformation"]
+        + confirmationMethod
+            [value "confirmationMethod" path "partyTradeInformation"]
+        + cryptoBased
+            [value "partyTradeInformation" mapper "CryptoBased"]
+        + intragroup
+            [value "partyTradeInformation" mapper "Intragroup"]
+        // set based on nonpublicExecutionReport -> trade -> tradeHeader -> partyTradeInformation -> category <category categoryScheme="http://www.dtcc.com/intragroup">false</category>
+        // ToDo: This is a WiP proposal. A custom mapper is needed to filter category fields by an specific attribute value (https://www.fpml.org/coding-scheme/category-anonymous-execution-1-0.xml).
+        + affiliated // Reported at this level because the information is not party-specific and must be the same in the report globally.
+            [set to True when "partyTradeInformation->reportingRegime->tradePartyRelationshipType" = "Affiliated"]
+        + sefOrDcmAnonymousIndicator
+            [set to True when "partyTradeInformation->category" = "Anonymous"]
+            [set to False when "partyTradeInformation->category" = "Disclosed"]
+        + originalExecutionTimestamp
+            [value "executionDateTime" path "partyTradeInformation"]
+        + underlyingAssetLastAvailableSpotPrice
+            [value "quote" set when "quote->measureType" = "LastAvailableSpotPrice"]
+        + reportableAction
+            [value "reason"]
+
+    FixedPrice:
+        - price
+        + price
+            [value "fixedPrice" meta "price"]
+            [hint "fixedStrike"]
+            [value "fixedPriceSchedule"]
+
+    Trade:
+        - collateral
+        + collateral
+            [value "partyTradeInformation" path "tradeHeader"]
+
+    // TODO move to CDM
+    TradeState:
+        + trade
+            [hint "partyTradeIdentifier"]
+
+    PartyRole:
+        + partyReference
+            [value "partyReference" maps 2 meta "href"]
+        + role
+            [value "role" maps 2]
+        + ownershipPartyReference
+            [value "partyReference" maps 2 set when "role" exists meta "href"]
+
+    Collateral:
+        + collateralProvisions
+            [value "ignore"]
+        + portfolioIdentifier
+            [hint "collateralPortfolio"]
+
+    ReportingRegime:
+        + regimeName
+            [value "name" meta "reportingRegimeNameScheme"]
+        + supervisoryBody
+            [value "supervisoryBody" path "supervisorRegistration" meta "supervisoryBodyScheme"]
+            [value "supervisoryBody"]
+        + mandatorilyClearable
+            [value "mandatorilyClearable"]
+        + reportingRole
+            [value "reportingRole"]
+        + esmaPartyInformation
+            [hint "partyEntityClassification"]
+            [hint "entityClassification"]
+            [hint "exceedsClearingThreshold"]
+            [hint "directlyLinkedActivity"]
+            [hint "name"]
+        + fcaPartyInformation
+            [hint "partyEntityClassification"]
+            [hint "entityClassification"]
+            [hint "exceedsClearingThreshold"]
+            [hint "directlyLinkedActivity"]
+            [hint "name"]
+        + hkmaPartyInformation
+            [hint "partyEntityClassification"]
+            [hint "entityClassification"]
+            [hint "name"]
+        + cftcPartyInformation
+            [value "partyEntityClassification"] // set when "supervisorRegistration->supervisoryBody" = "CFTC" ]
+        + postPricedIndicator
+            [value "postPricedIndicator"]
+
+    ESMAPartyInformation:
+        + natureOfParty
+            [value "entityClassification" set when "name" = "EMIR" /* meta "entityClassificationScheme"*/ ]
+            [value "entityClassification" path "partyEntityClassification" set when "name" = "EMIR"]
+        + exceedsClearingThreshold
+            [value "exceedsClearingThreshold" set when "name" = "EMIR"]
+        + directlyLinkedActivity
+            [value "directlyLinkedActivity" set when "name" = "EMIR"]
+
+    FCAPartyInformation:
+        + natureOfParty
+            [value "entityClassification" set when "name" = "UKEMIR" /* meta "entityClassificationScheme"*/ ]
+            [value "entityClassification" path "partyEntityClassification" set when "name" = "UKEMIR"]
+        + exceedsClearingThreshold
+            [value "exceedsClearingThreshold" set when "name" = "UKEMIR"]
+        + directlyLinkedActivity
+            [value "directlyLinkedActivity" set when "name" = "UKEMIR"]
+
+    HKMAPartyInformation:
+        + natureOfParty
+            [value "entityClassification" set when "name" = "HKTR" /* meta "entityClassificationScheme"*/ ]
+            [value "entityClassification" path "partyEntityClassification" set when "name" = "HKTR"]
+
+    // isUSPerson // boolean
+    PartyInformation:
+        + partyReference
+            [value "partyReference" maps 2 meta "href"]
+        + relatedParty
+            [value "relatedParty"]
+        + relatedPerson
+            [value "relatedPerson" mapper "NaturalPerson"]
+        + regimeInformation
+            [value "reportingRegime"]
+            [hint "party"]
+            [value "partyReference" mapper "RegimeInformation"]
+
+    Party:
+        + personRole
+            [value "person" mapper "NaturalPersonParty"]
+
+    CFTCPartyInformation:
+        + financialEntity
+            [value "entityClassification"]
+        + federalEntity
+            [value "organizationType"]
+
+    ClearingException:
+        + clearingException
+            [value "endUserException"]
+        + clearingExceptionReason
+            [value "endUserExceptionReason"]
+
+    EventInstruction:
+        + intent
+            [set to EventIntentEnum -> Allocation when "eventType" = "Trade:Cancellation:Block"]
+            [set to EventIntentEnum -> ContractTermsAmendment when "eventType" = "Trade:Amendment"]
+            [set to EventIntentEnum -> ContractTermsAmendment when "eventType" = "Trade:Amendment:Restructure"]
+            [set to EventIntentEnum -> ContractTermsAmendment when "eventType" = "Trade:Undo:Amendment:Restructure"]
+            [set to EventIntentEnum -> Novation when "eventType" = "Trade:Inception:Novation"]
+            [set to EventIntentEnum -> Novation when "eventType" = "Trade:Termination:Full:Novation"]
+            [set to EventIntentEnum -> ContractFormation when "eventType" = "Trade:Inception"]
+            [set to EventIntentEnum -> ContractFormation when "eventType" = "Trade:Inception:PortfolioAssignment"]
+
+    DebtEconomics:
+        + debtSeniority
+            [value "seniority" path "bond" maps 2]
+            [value "seniority" path "convertibleBond" maps 2]
+            [value "seniority" path "mortgage" maps 2]
+
+    enums
+
+    RegimeNameEnum:
+        + ASIC
+            [value "ASIC"]
+        + CSA
+            [value "CA.Rule.91-507"]
+            [value "CSA"]
+        + DoddFrankAct
+            [value "DoddFrankAct"]
+        + EMIR
+            [value "EMIR"]
+        + UKEMIR
+            [value "UKEMIR"]
+        + HKMA
+            [value "HKTR"]
+        + JFSA
+            [value "JFSA"]
+        + MAS
+            [value "MAS"]
+        + MiFID
+            [value "MiFID"]
+        + MiFIDII
+            [value "MiFIDII"]
+        + MiFIR
+            [value "MiFIR"]
+        + ODRF
+            [value "ODRF"]
+        + RussianFederation
+            [value "RussianFederation"]
+        + SFTR
+            [value "SFTR"]
+
+    SupervisoryBodyEnum:
+        + ASIC
+            [value "ASIC"]
+        + BankOfRussia
+            [value "BankOfRussia"]
+        + CA_AB_ASC
+            [value "CA.AB.ASC"]
+        + CA_BC_BCSC
+            [value "CA.BC.BCSC"]
+        + CA_MB_MSC
+            [value "CA.MB.MSC"]
+        + CA_NB_FCSC
+            [value "CA.NB.FCSC"]
+        + CA_NL_DSS
+            [value "CA.NL.DSS"]
+        + CA_NS_NSSC
+            [value "CA.NS.NSSC"]
+        + CA_NT_NTSO
+            [value "CA.NT.NTSO"]
+        + CA_NU_NSO
+            [value "CA.NU.NSO"]
+        + CA_ON_OSC
+            [value "CA.ON.OSC"]
+        + CA_PEI_OSS
+            [value "CA.PEI.OSS"]
+        + CA_QC_AMF
+            [value "CA.QC.AMF"]
+        + CA_SK_FCAA
+            [value "CA.SK.FCAA"]
+        + CA_YT_OSS
+            [value "CA.YT.OSS"]
+        + CFTC
+            [value "CFTC"]
+        + ESMA
+            [value "ESMA"]
+        + FCA
+            [value "FCA"]
+        + Fed
+            [value "Fed"]
+        + HKMA
+            [value "HKMA"]
+        + JFSA
+            [value "JFSA"]
+        + MAS
+            [value "MAS"]
+        + ODRF
+            [value "ODRF"]
+        + SEC
+            [value "SEC"]
+
+    ClearingExceptionReasonEnum:
+        + Agent_Affiliate
+            [value "Agent-Affiliate"]
+        + Cooperative
+            [value "Cooperative"]
+        + End_User
+            [value "End-User"]
+        + Exception
+            [value "Exception"]
+        + Inter_Affiliate
+            [value "Inter-Affiliate"]
+        + NoActionLetter
+            [value "NoActionLetter"]
+        + SmallBank
+            [value "SmallBank"]
+        + Treasury_Affiliate
+            [value "Treasury-Affiliate"]
+
+    ConfirmationMethodEnum:
+        + Electronic
+            [value "Electronic"]
+        + NonElectronic
+            [value "NonElectronic"]
+        + NotConfirmed
+            [value "NotConfirmed"]
+
+    ReportingRoleEnum:
+        + Agent
+            [value "Agent"]
+        + Counterparty
+            [value "Counterparty"]
+        + FullyDelegated
+            [value "FullyDelegated"]
+        + Independent
+            [value "Independent"]
+        + PartiallyDelegated
+            [value "PartiallyDelegated"]
+        + Principal
+            [value "Principal"]
+        + ReportingParty
+            [value "ReportingParty"]
+        + VoluntaryParty
+            [value "VoluntaryParty"]
+
+    NatureOfPartyEnum:
+        + CentralCounterparty
+            [value "CentralCounterparty"]
+        + Exempt
+            [value "Exempt"]
+        + Financial
+            [value "Financial"]
+        + NonFinancial
+            [value "NonFinancial"]
+
+    CFTCEntityClassificationEnum:
+        + MSP
+            [value "MSP"]
+        + NaturalPerson
+            [value "NaturalPerson"]
+        + non_SD_MSP
+            [value "non-SD/MSP"]
+        + SD
+            [value "SD"]
+
+    CFTCFederalEntityClassificationEnum:
+        + Agency
+            [value "Agency"]
+        + GovernmentCorporation
+            [value "GovernmentCorporation"]
+        + GovernmentSponsoredEnterprise
+            [value "GovernmentSponsoredEnterprise"]
+        + FederallyFundedResearchAndDevelopmentCenter
+            [value "FederallyFundedResearchAndDevelopmentCenter"]
+        + USCListedExecutiveDepartment
+            [value "USCListedExecutiveDepartment"]
+        + CharteredPursuantToFederalLaw
+            [value "CharteredPursuantToFederalLaw"]
+        + EstablishedByFederalEntity
+            [value "EstablishedByFederalEntity"]
+
+    CFTCFinancialEntityClassificationEnum:
+        + SD
+            [value "SD"]
+        + SBSD
+            [value "SBSD"]
+        + MSP
+            [value "MSP"]
+        + MSBSP
+            [value "MSBSP"]
+        + CommodityPool
+            [value "CommodityPool"]
+        + PrivateFund
+            [value "PrivateFund"]
+        + EmployeeBenefitPlan
+            [value "EmployeeBenefitPlan"]
+        + FinancialSectorPerson
+            [value "FinancialSectorPerson"]
+        + None
+            [value "None"]
+
+    PartyIdentifierTypeEnum:
+        + MIC
+            [value "http://www.fpml.org/coding-scheme/external/exchange-id-MIC"]
+            [value "http://www.fpml.org/coding-scheme/external/mifir/extension-iso10383"]
+
+    MandatorilyClearableEnum:
+        + ProductAndCptyMandatory
+            [value "true"]
+        + ProductMandatoryButNotCpty
+            [value "false"]
+        + ProductNotMandatory
+            [value "X"]
+
+    PriceTypeEnum:
+        + AssetPrice
+            [value "LastAvailableSpotPrice"]
+
+    DebtSeniorityEnum:
+        + Senior
+            [value "Senior"]
+            [value "SeniorLossAbsorbingCapacity"]
+            [value "SeniorSec"]
+            [value "SeniorUnSec"]
+        + Subordinated
+            [value "Subordinate"]
+            [value "SubLowerTier2"]
+            [value "SubTier1"]
+            [value "SubTier3"]
+        + Secured
+            [value "Other"]
+
+    ReportableActionEnum:
+        + Error
+            [value "RaisedInError"]
+}

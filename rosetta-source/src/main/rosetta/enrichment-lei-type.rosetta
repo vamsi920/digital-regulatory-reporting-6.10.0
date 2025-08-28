@@ -1,0 +1,24 @@
+namespace drr.enrichment.lei
+version "${project.version}"
+
+type LeiData: <"LEI data from GLEIF.">
+
+    lei string (0..1) <"LEI identifier.">
+    entityName string (0..1) <"LEI legal entity name.">
+    entityCategory LeiCategoryEnum (0..1) <"LEI legal entity category.">
+    entityStatus LeiStatusEnum (0..1) <"LEI legal entity status.">
+    branchEntityStatus LeiStatusEnum (0..1) <"LEI branch entity status.">
+    generalCategory LeiGeneralCategoryEnum (0..1)
+    registrationStatus LeiRegistrationStatusEnum (0..1) <"LEI registration status.">
+    registrationDate zonedDateTime (0..1) <"LEI registration date.">
+    published boolean (0..1) <"The LEI is included in the LEI data as published by GLEIF.">
+    leiValidation boolean (0..1) <"Specifies whether the LEI enrichment data should be used (True) or not (False).">
+
+    condition CardinalityVerification:
+        if leiValidation is absent or leiValidation = True
+        then lei exists
+                and entityCategory exists
+                and entityStatus exists
+                and registrationStatus exists
+                and registrationDate exists
+                and published exists

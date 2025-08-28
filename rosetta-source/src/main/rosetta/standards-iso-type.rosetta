@@ -1,0 +1,185 @@
+namespace drr.standards.iso
+version "${project.version}"
+
+type MicData:
+    mic string (0..1)
+    operatingMic string (0..1)
+    micType MicTypeEnum (0..1)
+    nameInstitutionDescription string (0..1)
+    legalEntityName string (0..1)
+    marketCategory MicMarketCategoryEnum (0..1)
+    marketCategoryEsma MicMarketCategoryEnum (0..1)
+    marketCategoryFca MicMarketCategoryEnum (0..1)
+    acronym string (0..1)
+    countryCode string (0..1)
+    city string (0..1)
+    website string (0..1)
+    status string (0..1)
+    creationDate date (0..1)
+    lastUpdateDate date (0..1)
+    lastValidationDate date (0..1)
+    expiryDate date (0..1)
+    micValidation boolean (0..1) <"Specifies whether the MIC enrichment data should be used (True) or not (False).">
+
+    condition MICIsNotXOFFOrXXXX:
+        if mic exists and mic <> "XXXX" and mic <> "XOFF"
+        then nameInstitutionDescription exists
+                and countryCode exists
+                and city exists
+                and status exists
+                and creationDate exists
+
+    condition CardinalityVerification:
+        if micValidation is absent or micValidation = True
+        then micType exists
+
+typeAlias BaseOne18Rate: <"Rate expressed as a decimal, for example, 0.7 is 7/10 and 70%.">
+    number(digits: 18, fractionalDigits: 13)
+
+typeAlias BaseOneRate: <"Rate expressed as a decimal, for example, 0.7 is 7/10 and 70%.">
+    number(digits: 11, fractionalDigits: 10)
+
+typeAlias BasisFormat: <"Prices expressed as a Basis points, for example, 0.0007 is 7.">
+    number(digits: 5)
+
+typeAlias CountryCode: string(pattern: "[A-Z]{2,2}")
+
+typeAlias CFIOct2015Identifier: <"Classification type of the financial instrument, as per the ISO 10962 Classification of Financial Instrument (CFI) codification, for example, common share with voting rights, fully paid, or registered.">
+    string(pattern: "[A-Z]{6,6}")
+
+typeAlias EICIdentifier: <"Energy identification coding scheme.">
+    string(pattern: "[A-Z0-9\\-]{16}")
+
+typeAlias ISINOct2015Identifier: <"The International Securities Identification Number is a code allocated to financial instruments as well as referential instruments, as described in the ISO 6166 standard, associated with the minimum descriptive data.  The ISIN consists of a prefix using the alpha-2 country codes or reserved codes specified in ISO 3166 or other prefixes as may be determined by the Registration Authority for the ISO 6166 standard, a nine characters (alphanumeric) basic code and a check digit.">
+    string(pattern: "[A-Z]{2,2}[A-Z0-9]{9,9}[0-9]{1,1}")
+
+typeAlias ISODate: <"A particular point in the progression of time in a calendar year expressed in the YYYY-MM-DD format. This representation is defined in \"XML Schema Part 2: Datatypes Second Edition - W3C Recommendation 28 October 2004\" which is aligned with ISO 8601.">
+    date
+
+typeAlias LEIIdentifier: <"Legal Entity Identifier is a code allocated to a party as described in ISO 17442 \"Financial Services - Legal Entity Identifier (LEI)\".">
+    string(pattern: "[A-Z0-9]{18,18}[0-9]{2,2}")
+
+typeAlias Max20D19Number: <"Represents as 20 digit number with support for 19 decimal">
+    number(digits: 20, fractionalDigits: 19)
+
+typeAlias Max3Number: <"Number (max 999) of objects represented as an integer.">
+    int(digits: 3)
+
+typeAlias Max11Number: <"Represents as 11 digit number with support for 10 decimal">
+    number(digits: 11, fractionalDigits: 10)
+
+typeAlias Max21D10Number: <"Represents as 21 digit number with support for 10 decimal">
+    number(digits: 21, fractionalDigits: 10)
+
+typeAlias Max30D5Number: <"Represents as 30 digit number with support for 5 decimal">
+    number(digits: 30, fractionalDigits: 5)
+
+typeAlias Max31D13Number: <"Represents as 31 digit number with support for 13 decimal">
+    number(digits: 31, fractionalDigits: 13)
+
+typeAlias Max18D13Number: <"Represents as 18 digit number with support for 13 decimal">
+    number(digits: 18, fractionalDigits: 13)
+
+typeAlias ExchangeRateBasisStringFormat: <"This shall contain 7 characters representing two currency codes separated by / .">
+    string(minLength: 7, maxLength: 7, pattern: "[A-Z]{3,3}/[A-Z]{3,3}")
+
+typeAlias Max35AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 35 characters.">
+    string(minLength: 1, maxLength: 35, pattern: "[a-zA-Z0-9]{1,35}")
+
+typeAlias Max42AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 42 characters.">
+    string(minLength: 1, maxLength: 42, pattern: "[a-zA-Z0-9]{1,42}")
+
+typeAlias Max50AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 50 characters.">
+    string(minLength: 1, maxLength: 50, pattern: "[a-zA-Z0-9]{1,50}")
+
+typeAlias Max50AlphaNumericTextAllSplChars: <"Specifies an alphanumeric string with a maximum length of 50 characters. All special characters are also included.">
+    string(minLength: 1, maxLength: 50, pattern: ".{1,50}")
+
+typeAlias Max52AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 52 characters.">
+    string(minLength: 1, maxLength: 52, pattern: "[a-zA-Z0-9]{1,52}")
+
+typeAlias Max100AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 100 characters.">
+    string(minLength: 1, maxLength: 100, pattern: "[a-zA-Z0-9]{1,100}")
+
+typeAlias Max72AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 72 characters.">
+    string(minLength: 1, maxLength: 72, pattern: "[a-zA-Z0-9]{1,72}")
+
+typeAlias Min20Max72AlphaNumericText: <"Specifies an alphanumeric string with a minimum length of 20 characters and a maximum length of 72 characters.">
+    string(minLength: 20, maxLength: 72, pattern: "[a-zA-Z0-9]{1,72}")
+
+typeAlias Max105AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 105 characters.">
+    string(minLength: 1, maxLength: 105, pattern: "[a-zA-Z0-9]{1,105}")
+
+typeAlias Max210AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 210 characters.">
+    string(minLength: 1, maxLength: 210, pattern: "[a-zA-Z0-9]{1,210}")
+
+typeAlias Max210AlphaNumericTextSemicolonExcluded: <"Specifies an alphanumeric string with a maximum length of 210 characters. Special characters allowed: !#$%&'*+/=?^_`{|}~.-. Semicolon (;) is not allowed.">
+    string(minLength: 1, maxLength: 210, pattern: "^[a-zA-Z0-9\\x20-\\x7E&&[^;]]{1,210}$")
+
+typeAlias Max255AlphaNumericText: <"Specifies an alphanumeric string with a maximum length of 255 characters.">
+    string(minLength: 1, maxLength: 255, pattern: "[a-zA-Z0-9]{1,255}")
+
+typeAlias Max50AlphaNumericTextWithSplChars: <"Specifies an alphanumeric string with a maximum length of 50 characters.">
+    string(minLength: 1, maxLength: 50, pattern: "[a-zA-Z0-9 \\:.\\-_\\&]{1,50}")
+
+typeAlias Max350AlphaNumericTextWithSplChars: <"Specifies an alphanumeric string with a maximum length of 350 characters.">
+    string(minLength: 1, maxLength: 350, pattern: "[a-zA-Z0-9 \\:.\\-_]{1,350}")
+
+typeAlias Max350AlphaNumericTextAllSplChars: <"Specifies an alphanumeric string with a maximum length of 350 characters. All special characters are also included.">
+    string(minLength: 1, maxLength: 350, pattern: ".{1,350}")
+
+typeAlias Max52Text: string(minLength: 1, maxLength: 52)
+
+typeAlias UTIIdentifier: <"Unique Transaction Identifier (UTI). Unique number allocated to a financial transaction as agreed among the parties and/or within the regulatory system under which it is formed. The UTI is described in the latest edition of the international standard ISO 23897:2020.">
+    string(pattern: "[A-Z0-9]{18}[0-9]{2}[A-Z0-9]{0,32}")
+
+typeAlias UTIdentifier: <"Unique Transaction Identifier (UTI). Unique number allocated to a financial transaction as agreed among the parties and/or within the regulatory system under which it is formed. The UTI is described in the latest edition of the international standard ISO 23897:2020.">
+    string(pattern: "[A-Z0-9]{18}[0-9]{2}[A-Z0-9  \\:.\\-_]{0,32}") // UT Identifier with Special Characters
+
+typeAlias Max1Text: <"Specifies an alphabetical string with a maximum length of 1 character.">
+    string(minLength: 1, maxLength: 1, pattern: "[a-zA-Z]")
+
+typeAlias Max4Text: <"Specifies an string with a maximum length of 4 characters.">
+    string(minLength: 1, maxLength: 4)
+
+typeAlias Max5Text: <"Specifies an string with a maximum length of 5 characters.">
+    string(minLength: 1, maxLength: 5)
+
+typeAlias Max12Text: <"Specifies an string with a maximum length of 12 characters.">
+    string(minLength: 1, maxLength: 12)
+
+typeAlias Max50Text: <"Specifies an string with a maximum length of 50 characters.">
+    string(minLength: 1, maxLength: 50)
+
+typeAlias Max150Text: <"Specifies an string with a maximum length of 150 characters.">
+    string(minLength: 1, maxLength: 150)
+
+typeAlias Max100Text: <"Specifies an string with a maximum length of 100 characters.">
+    string(minLength: 1, maxLength: 100)
+
+typeAlias Max210Text: <"Specifies an string with a maximum length of 210 characters.">
+    string(minLength: 1, maxLength: 210)
+
+typeAlias NumericChar1to4: <"Specifies a character string with a maximum length of 1 character. Allowable Values: [1, 2, 3, 4]. To be used for Notation fields">
+    string(minLength: 1, maxLength: 1, pattern: "[1-4]")
+
+typeAlias ShortFraction5DecimalNumber: <"Specifies a number with a maximum length of 25 numeric characters including up to 5 decimals.">
+    number(digits: 25, fractionalDigits: 5)
+
+typeAlias NonNegativeShortFraction5DecimalNumber: <"Specifies a non-negative number with a maximum length of 25 numeric characters including up to 5 decimals.">
+    number(digits: 25, fractionalDigits: 5, min: 0)
+
+typeAlias Max5Int: <"Number (max 99999) of objects represented as an integer.">
+    int(digits: 5)
+
+typeAlias ShortFraction10DecimalNumber: <"Specifies a number with a maximum length of 11 numeric characters including up to 10 decimals.">
+    number(digits: 11, fractionalDigits: 10)
+
+typeAlias CollateralUTIString: <"max 52 alphanumerical characters. Four special characters are allowed ':', '.',  '-', '_' .  Special characters not allowed at the beginning or the end">
+    string(maxLength: 52, pattern: "[a-zA-Z0-9]{1}[a-zA-Z0-9\\:.\\-_]{0,50}[a-zA-Z0-9]{1}")
+
+typeAlias UTIIdentifierLegacy: <"Unique Transaction Identifier (UTI), legacy format accepting special characters: max 52 alphanumerical characters. Four special characters are allowed ':', '.',  '-', '_' .  Special characters not allowed at the beginning or the end">
+    string(maxLength: 52, pattern: "[a-zA-Z0-9]{1}[a-zA-Z0-9\\:.\\-_]{0,50}[a-zA-Z0-9]{1}")
+
+typeAlias UTIProprietaryIDFormat: <"Unique Transaction Identifier (UTI), accepting special characters: max 72 alphanumerical characters. Four special characters are allowed ':', '.',  '-', '_' .  Special characters not allowed at the beginning or the end">
+    string(maxLength: 72, pattern: "[a-zA-Z0-9]{1}[a-zA-Z0-9\\:.\\-_]{0,70}[a-zA-Z0-9]{1}")

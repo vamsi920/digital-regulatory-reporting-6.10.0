@@ -1,0 +1,22 @@
+namespace drr.regulation.common.trade.price
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.price.*
+
+type SingleOrUpperAndLowerBarrier:
+    _single BarrierPrice (0..1)
+    upper BarrierPrice (0..1)
+    lower BarrierPrice (0..1)
+
+    condition SingleOrUpperAndLowerBarrier: <"Condition to ensure Upper barrier and Lower barrier are both populated or only Single barrier is populated">
+        if _single exists
+        then upper is absent and lower is absent
+        else upper exists and lower exists
+
+type BarrierPrice:
+    price PriceFormat (1..1)
+    notation PriceNotationEnum (1..1)
+    currency ISOCurrencyCodeEnum (0..1)

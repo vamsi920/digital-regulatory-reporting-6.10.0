@@ -1,0 +1,80 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "Equity",
+    "messageType" : "RT",
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "RVMT7T363UGS4I4POLKN",
+  "counterparty2" : "32Q2SGL4G2QFFP1Q2A2L",
+  "customBasketIndicator" : true,
+  "effectiveDate" : "2025-04-07",
+  "eventTimestamp" : "2025-04-07T20:16:40Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2025-04-07T19:49:58Z",
+  "expirationDate" : "2026-03-04",
+  "leg1" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 75
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "enrichment" : {
+      "leiData" : [ {
+        "leiValidation" : false
+      } ],
+      "micData" : [ {
+        "city" : "N/A",
+        "countryCode" : "ZZ",
+        "creationDate" : "2005-10-24",
+        "lastUpdateDate" : "2005-10-24",
+        "marketCategory" : "OTHR",
+        "mic" : "XXXX",
+        "micType" : "OPRT",
+        "nameInstitutionDescription" : "NO MARKET (E.G. UNLISTED)",
+        "operatingMic" : "XXXX",
+        "status" : "ACTIVE"
+      } ],
+      "upiData" : [ {
+        "upiValidation" : false
+      } ]
+    },
+    "instrumentType" : "Swap",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "price" : {
+    "monetary" : 83.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "SHAS",
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "YJ8WHZ63VMZOHSI99R3H",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueProductIdentifier" : "QZ3HXD0QWPVZ"
+}

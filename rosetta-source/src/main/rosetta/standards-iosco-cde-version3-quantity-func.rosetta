@@ -1,0 +1,98 @@
+namespace drr.standards.iosco.cde.version3.quantity
+version "${project.version}"
+
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.quantity.*
+import drr.standards.iosco.cde.version2.* as cdeV2
+
+func NotionalAmountLeg1:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        notionalAmountLeg1 number (0..1)
+    set notionalAmountLeg1:
+        GetProductForQuantity(transactionReportInstruction)
+            extract
+                PayoutLeg1(
+                        item -> product,
+                        item -> tradeLot only-element,
+                        transactionReportInstruction -> reportableInformation
+                    )
+            then extract
+                (if NotionalLeg -> value = 0
+                        and Qualify_AssetClass_ForeignExchange(
+                                EconomicTermsForProduct(
+                                        ProductForEvent(transactionReportInstruction)
+                                    )
+                            )
+                then defaultValue
+                else if commodityPayout exists
+                then FormatToShortFraction5DecimalNumber(NotionalLeg -> value)
+                else FormatToNonNegativeShortFraction5DecimalNumber(NotionalLeg -> value))
+
+func NotionalAmountLeg2:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        notionalAmountLeg2 number (0..1)
+    set notionalAmountLeg2:
+        GetProductForQuantity(transactionReportInstruction)
+            then extract
+                PayoutLeg2(
+                        item -> product,
+                        item -> tradeLot only-element,
+                        transactionReportInstruction -> reportableInformation
+                    )
+            then extract
+                (if NotionalLeg -> value = 0
+                        and Qualify_AssetClass_ForeignExchange(
+                                EconomicTermsForProduct(
+                                        ProductForEvent(transactionReportInstruction)
+                                    )
+                            )
+                then defaultValue
+                else if commodityPayout exists
+                then FormatToShortFraction5DecimalNumber(NotionalLeg -> value)
+                else FormatToNonNegativeShortFraction5DecimalNumber(NotionalLeg -> value))
+
+func TotalNotionalQuantityLeg1:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        totalTotalNotionalQuantityLeg1 number (0..1)
+    set totalTotalNotionalQuantityLeg1:
+        cdeV2.quantity.TotalNotionalQuantityLeg1(transactionReportInstruction, defaultValue)
+
+func TotalNotionalQuantityLeg2:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        totalTotalNotionalQuantityLeg2 number (0..1)
+    set totalTotalNotionalQuantityLeg2:
+        cdeV2.quantity.TotalNotionalQuantityLeg2(transactionReportInstruction, defaultValue)
+
+func ExtractCallAmount: <"CDE Call Amount with error value provided as this can differ between jurisdiction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        callAmount number (0..1)
+
+    set callAmount:
+        cdeV2.quantity.ExtractCallAmount(transactionReportInstruction, defaultValue)
+
+func ExtractPutAmount: <"CDE Put Amount with error value provided as this can differ between jurisdiction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        putAmount number (0..1)
+
+    set putAmount:
+        cdeV2.quantity.ExtractPutAmount(transactionReportInstruction, defaultValue)

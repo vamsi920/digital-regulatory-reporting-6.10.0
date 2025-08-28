@@ -1,0 +1,216 @@
+namespace drr.standards.iosco.cde.version1.quantity
+version "${project.version}"
+
+import cdm.base.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.base.quantity.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+
+reporting rule Delta from ReportableEvent: <"Delta">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "71"
+        provision "The ratio of the absolute change in price of an OTC derivative transaction to the change in price of the underlier, at the time a new transaction is reported or when a change in the notional amount is reported."]
+    extract GetValuation -> delta
+    then FormatToShortFraction5DecimalNumber
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call Amount">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "72"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to buy."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // BlackRock
+        provision "The Call Amount can be determined as the currency amount being received by the buyer of the option"]
+    extract ExtractCallAmount(item, empty)
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put Amount">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "73"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to sell."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // REGnosys
+        provision "The Call Amount can be determined as the currency amount being received by the buyer of the option"]
+    extract ExtractPutAmount(item, empty)
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call Currency">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "75"
+        provision "For foreign exchange options, the currency in which the Call amount is denominated."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown" // REGnosys-Saeid
+        provision "The call currency is determined by a validation rule which determines who is the buyer of the option."]
+    extract GetTradeForQuantity
+    then extract ProductForTrade
+    then extract
+        if IsCallOption
+        then if Qualify_Commodity_Option(contractualProduct -> economicTerms)
+            then contractualProduct -> economicTerms -> payout -> optionPayout -> exerciseTerms -> strike -> strikePrice -> unit -> currency
+            else if Qualify_Commodity_Swaption(contractualProduct -> economicTerms)
+            then FixedPriceLeg1(UnderlierForProduct) -> fixedPrice -> price -> unit -> currency
+            // Equity option with monetary quantity schedule
+            else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> currency exists
+            then contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> currency
+            // Equity option with non-monetary quantity schedule
+            else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+            then contractualProduct -> economicTerms -> payout -> optionPayout -> exerciseTerms -> strike -> strikePrice -> unit -> currency
+            else CallQuantity -> unit -> currency
+        else CallQuantity -> unit -> currency
+    then extract ConvertNonISOToISOCurrency
+    then only-element
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put Currency">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "76"
+        provision "For foreign exchange options, the currency in which the Put amount is denominated."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown" // REGnosys-Saeid
+        provision "The put currency is determined by a validation rule which determines who is the buyer of the option."]
+    extract GetTradeForQuantity
+    then extract ProductForTrade
+    then extract
+        if IsPutOption
+        then if Qualify_Commodity_Option(contractualProduct -> economicTerms)
+            then contractualProduct -> economicTerms -> payout -> optionPayout -> exerciseTerms -> strike -> strikePrice -> unit -> currency
+            else if Qualify_Commodity_Swaption(contractualProduct -> economicTerms)
+            then FixedPriceLeg1(UnderlierForProduct) -> fixedPrice -> price -> unit -> currency
+            // Equity option with monetary quantity schedule
+            else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> currency exists
+            then contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> currency
+            // Equity option with non-monetary quantity schedule
+            else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+            then contractualProduct -> economicTerms -> payout -> optionPayout -> exerciseTerms -> strike -> strikePrice -> unit -> currency
+            else PutQuantity -> unit -> currency
+        else PutQuantity -> unit -> currency
+    then extract ConvertNonISOToISOCurrency
+    then only-element
+
+reporting rule QuantityUnitOfMeasureLeg1 from TransactionReportInstruction: <"Quantity unit of measure">
+    extract TradeForEvent
+    then extract
+        if Qualify_Commodity_Swap_Basis(
+                    ProductForTrade -> contractualProduct -> economicTerms
+                ) = True
+        then CommodityObservablePriceQuantity(
+                    tradableProduct -> tradeLot only-element,
+                    CommodityLeg1(ProductForTrade)
+                ) -> quantity
+        else if Qualify_Commodity_Swap_FixedFloat(
+                    ProductForTrade -> contractualProduct -> economicTerms
+                ) = True
+        then CommodityFixedPriceQuantity(tradableProduct -> tradeLot only-element) -> quantity
+        else if Qualify_Commodity_Swaption(
+                        tradableProduct -> product -> contractualProduct -> economicTerms
+                    ) = True
+                and Qualify_Commodity_Swap_Basis(
+                        UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                    )
+        then CommodityObservablePriceQuantity(
+                    tradableProduct -> tradeLot only-element,
+                    CommodityLeg1(UnderlierForProduct(ProductForTrade))
+                ) -> quantity
+        else if Qualify_Commodity_Swaption(
+                        tradableProduct -> product -> contractualProduct -> economicTerms
+                    ) = True
+                and Qualify_Commodity_Swap_FixedFloat(
+                        UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                    )
+        then CommodityFixedPriceQuantity(tradableProduct -> tradeLot only-element) -> quantity
+        else if IsCommodityOption(tradableProduct -> product)
+        then tradableProduct -> tradeLot -> priceQuantity -> quantity
+        else if IsSingleCommodityPayoutProduct(ProductForTrade)
+                or IsCommodityFloatingPriceForward(ProductForTrade)
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> commodityPayout only-element -> priceQuantity -> quantitySchedule
+        else if IsCommodityFixedPriceForward(ProductForTrade)
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> fixedPricePayout only-element -> priceQuantity -> quantitySchedule
+        else if IsEquityOption(ProductForTrade)
+                and tradableProduct -> tradeLot -> priceQuantity -> quantity -> unit -> financialUnit exists
+        then tradableProduct -> tradeLot -> priceQuantity -> quantity
+        else if IsEquityForward(ProductForTrade)
+        then (if EconomicTermsForProduct(ProductForTrade) -> payout -> forwardPayout only-element -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+            then EconomicTermsForProduct(ProductForTrade) -> payout -> forwardPayout only-element -> priceQuantity -> quantitySchedule
+            else if tradableProduct -> tradeLot -> priceQuantity -> quantity -> unit -> financialUnit exists
+            then (tradableProduct -> tradeLot only-element -> priceQuantity -> quantity
+                then filter unit -> financialUnit exists
+                then only-element))
+        else if EconomicTermsForProduct(ProductForTrade) -> payout -> performancePayout only-element -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> performancePayout only-element -> priceQuantity -> quantitySchedule
+        else if IsEquity(ProductForTrade)
+                and tradableProduct -> tradeLot -> priceQuantity -> quantity -> unit -> financialUnit exists
+        then (tradableProduct -> tradeLot only-element -> priceQuantity -> quantity
+            then filter unit -> financialUnit exists
+            then only-element)
+    then extract QuantityUnitOfMeasure
+    then last
+
+reporting rule QuantityUnitOfMeasureLeg2 from TransactionReportInstruction:
+    extract TradeForEvent
+    then extract
+        if IsCommoditySwap(tradableProduct -> product)
+        then CommodityObservablePriceQuantity(
+                    tradableProduct -> tradeLot only-element,
+                    CommodityLeg2(ProductForTrade)
+                ) -> quantity
+        else if IsEquity(ProductForTrade)
+                and InterestRateLeg2(ProductForTrade) -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then InterestRateLeg2(ProductForTrade) -> priceQuantity -> quantitySchedule
+    then extract QuantityUnitOfMeasure
+    then last
+
+reporting rule NotionalCurrencyLeg1 from TransactionReportInstruction: <"Notional Currency Leg 1">
+    extract reportableEvent [
+        GetProductForQuantity
+            then extract
+                PayoutLeg1(
+                        item -> product,
+                        item -> tradeLot only-element,
+                        reportableEvent -> reportableInformation
+                    )
+            then extract NotionalLeg -> unit -> currency
+    ]
+    then extract ConvertNonISOToISOCurrency
+
+reporting rule NotionalCurrencyLeg2 from TransactionReportInstruction: <"Notional Currency Leg 2">
+    extract reportableEvent [
+        GetProductForQuantity
+            then extract
+                PayoutLeg2(
+                        item -> product,
+                        item -> tradeLot only-element,
+                        reportableEvent -> reportableInformation
+                    )
+            then extract NotionalLeg -> unit -> currency
+    ]
+    then extract ConvertNonISOToISOCurrency
+
+reporting rule NotionalAmountScheduleLeg1 from TransactionReportInstruction: <"Notional Amount Schedule">
+    extract TradeForEvent
+    then extract GetLeg1ResolvablePriceQuantity -> quantitySchedule
+    then filter unit -> currency exists
+    then extract datedValue
+    then extract notionalAmountPeriod [
+        // use value and dates from quantity period
+        NotionalPeriod {
+            value: notionalAmountPeriod -> value
+                then FormatToNonNegativeShortFraction5DecimalNumber,
+            effectiveDate: notionalAmountPeriod -> date,
+            endDate: empty
+        }
+    ]
+
+reporting rule NotionalAmountScheduleLeg2 from TransactionReportInstruction: <"Notional Amount Schedule">
+    extract TradeForEvent
+    then extract GetLeg2ResolvablePriceQuantity -> quantitySchedule
+    then filter unit -> currency exists
+    then extract datedValue
+    then extract notionalAmountPeriod [
+        // use value and dates from quantity period
+        NotionalPeriod {
+            value: notionalAmountPeriod -> value
+                then FormatToNonNegativeShortFraction5DecimalNumber,
+            effectiveDate: notionalAmountPeriod -> date,
+            endDate: empty
+        }
+    ]
+
+reporting rule NotionalQuantityScheduleLeg1 from TransactionReportInstruction: <"Notional quantity schedule - Leg 1">
+    extract TradeForEvent
+    then extract GetReportableQuantityPeriodLeg1
+    then sort [ item -> effectiveDate ]
+
+reporting rule NotionalQuantityScheduleLeg2 from TransactionReportInstruction: <"Notional quantity schedule - Leg 2">
+    extract TradeForEvent
+    then extract GetReportableQuantityPeriodLeg2
+    then sort [ item -> effectiveDate ]

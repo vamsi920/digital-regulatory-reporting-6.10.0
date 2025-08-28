@@ -1,0 +1,1726 @@
+namespace drr.regulation.hkma.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.math.*
+import cdm.base.staticdata.* as staticdata
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.product.* as product
+import cdm.product.qualification.*
+
+import drr.regulation.*
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.common.trade.basket.* as basket
+import drr.regulation.hkma.*
+import drr.standards.*
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.base.payment.* as payment
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.upi.* as upi
+import drr.standards.iosco.uti.* as uti
+import drr.standards.iso.*
+
+corpus Dissemination Trade
+
+report HKMA Trade in T+1
+  	from TransactionReportInstruction
+  	when ReportableProduct
+  	with type HKMATransactionReport
+    with source HKMARules
+
+eligibility rule ReportableProduct from TransactionReportInstruction:
+    [regulatoryReference HKMA Trade
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+rule source HKMARules
+{
+    HKMATransactionReport:
+        - effectiveDate
+        + effectiveDate
+            [ruleReference EffectiveDate] // 1 Effective date
+        - expirationDate
+        + expirationDate
+            [ruleReference ExpirationDate] // 2 Expiration date
+        - earlyTerminationDate
+        + earlyTerminationDate
+        [ruleReference EarlyTerminationDate] // 3 Early termination date
+        - reportingTimestamp
+        + reportingTimestamp 
+            [ruleReference ReportingTimestamp] // 4 Reporting Timestamp
+        - executionTimestamp
+        + executionTimestamp
+            [ruleReference ExecutionTimestamp] // 5 Execution Timestamp
+        - counterparty1
+        + counterparty1
+             [ruleReference Counterparty1] // 6 Counterparty 1
+        - counterparty2
+        + counterparty2
+            [ruleReference Counterparty2] // 7 Counterparty 2
+        - counterparty2Name
+        + counterparty2Name
+            [ruleReference Counterparty2Name] // 8 Counterparty 2 name
+        - counterparty2IdentifierType
+        + counterparty2IdentifierType
+            [ruleReference cde.party.Counterparty2IdentifierTypeIndicator] // 9 Counterparty 2 Identifier Type Indicator
+        - direction1
+        + direction1
+            [ruleReference Direction1] // 10 Direction 1
+        - cleared
+        + cleared
+            [ruleReference Cleared] // 13 Cleared
+        - centralCounterparty
+        + centralCounterparty
+            [ruleReference CentralCounterparty] // 14 Central Counterparty
+        - clearingMember
+        + clearingMember
+            [ruleReference ClearingMember] // 15 Clearing member
+        - platformIdentifier
+        + platformIdentifier
+            [ruleReference PlatformIdentifier] // 16 Platform Identifier
+        - confirmed
+        + confirmed
+            [ruleReference Confirmed] // 17 Confirmed
+        - finalContractualSettlementDate
+        + finalContractualSettlementDate
+      [ruleReference FinalContractualSettlementDate] // 18 Final contractual settlement date
+            /*     + fixedRateDayCountConventionLeg1
+             *    [ruleReference FixedRateDayCountConventionLeg1] // 22 Fixed rate day count convention - Leg 1
+             *      + floatingRateDayCountConventionLeg1
+             *    [ruleReference FloatingRateDayCountConventionLeg1] // 23 Floating rate day count convention - Leg 1
+             *      + fixedRateDayCountConventionLeg2
+             *    [ruleReference FixedRateDayCountConventionLeg2] // 24 Fixed rate day count convention - Leg 2
+             *      + floatingRateDayCountConventionLeg2
+             *    [ruleReference FloatingRateDayCountConventionLeg2] // 25 Floating rate day count convention - Leg 2
+             *      + fixedRatePaymentFrequencyPeriodLeg1
+             *    [ruleReference FixedRatePaymentFrequencyPeriodLeg1] // 26 Fixed rate payment frequency period - Leg 1
+             *      + floatingRatePaymentFrequencyPeriodLeg1
+             *    [ruleReference FloatingRatePaymentFrequencyPeriodLeg1] // 27 Floating rate payment frequency period - Leg 1
+             *      + fixedRatePaymentFrequencyPeriodLeg2
+             *    [ruleReference FixedRatePaymentFrequencyPeriodLeg2] // 28 Fixed rate payment frequency period - Leg 2
+             *      + floatingRatePaymentFrequencyPeriodLeg2
+             *    [ruleReference FloatingRatePaymentFrequencyPeriodLeg2] // 29 Floating rate payment frequency period - Leg 2
+             *      + fixedRatePaymentFrequencyPeriodMultiplierLeg1
+             *    [ruleReference FixedRatePaymentFrequencyPeriodMultiplierLeg1] // 30 Fixed rate payment frequency period multiplier - Leg 1
+             *      + floatingRatePaymentFrequencyPeriodMultiplierLeg1
+             *    [ruleReference FloatingRatePaymentFrequencyPeriodMultiplierLeg1] // 31 Floating rate payment frequency period multiplier - Leg 1
+             *      + fixedRatePaymentFrequencyPeriodMultiplierLeg2
+             *    [ruleReference FixedRatePaymentFrequencyPeriodMultiplierLeg2] // 32 Fixed rate payment frequency period multiplier - Leg 2
+             *      + floatingRatePaymentFrequencyPeriodMultiplierLeg2
+             *    [ruleReference FloatingRatePaymentFrequencyPeriodMultiplierLeg2] // 33 Floating rate payment frequency period multiplier - Leg
+             * 
+             *    - settlementCurrencyLeg1
+             *      + settlementCurrencyLeg1
+             *    [ruleReference SettlementCurrencyLeg1] // 19 Settlement currency - Leg 1
+             *      - settlementCurrencyLeg2
+             *      + settlementCurrencyLeg2
+             *    [ruleReference SettlementCurrencyLeg2] // 20 Settlement currency - Leg 2
+
+             *    - fixedRateLeg1
+             *      + fixedRateLeg1
+             *    [ruleReference FixedRateLeg1] // 63 Fixed rate - Leg 1
+             *      - fixedRateLeg2
+             *      + fixedRateLeg2
+             *    [ruleReference FixedRateLeg2] // 64 Fixed rate - Leg 2
+
+             *    - notionalAmountLeg1
+             *      + notionalAmountLeg1
+             *    [ruleReference NotionalAmountLeg1] // 83 Notional amount - Leg 1
+             *      - notionalAmountLeg2
+             *      + notionalAmountLeg2
+             *    [ruleReference NotionalAmountLeg2] // 84 Notional amount - Leg 2
+
+             *    - notionalCurrencyLeg1
+             *      + notionalCurrencyLeg1
+             *    [ruleReference NotionalCurrencyLeg1] // 88 Notional currency - Leg 1
+             *      - notionalCurrencyLeg2
+             *      + notionalCurrencyLeg2
+             *    [ruleReference NotionalCurrencyLeg2] // 89 Notional currency - Leg 2
+
+             *     - notionalAmountScheduleLeg1
+             *      + notionalAmountScheduleLeg1
+             *    [ruleReference NotionalAmountScheduleLeg1]
+             *      // Fields 94/96/98 - Managed through NotionalAmountScheduleLeg1
+             *      - notionalAmountScheduleLeg2
+             *      + notionalAmountScheduleLeg2
+             *    [ruleReference NotionalAmountScheduleLeg2]
+             *      // Fields 95/97/99 - Managed through NotionalAmountScheduleLeg2
+             *      - totalNotionalQuantityLeg1
+             *      + totalNotionalQuantityLeg1
+             *          [ruleReference TotalNotionalQuantityLeg1] // 100 Total notional quantity - Leg 1
+             *      - totalNotionalQuantityLeg2
+             *      + totalNotionalQuantityLeg2
+             *    [ruleReference TotalNotionalQuantityLeg2] // 101 Total notional quantity - Leg 2
+             */
+        // 56-58 Managed through PriceAndNotation
+        - priceUnitOfMeasure
+        + priceUnitOfMeasure
+      [ruleReference PriceUnitOfMeasure] // 59 Price unit of measure
+        - priceSchedule
+        + priceSchedule
+      [ruleReference ContractPriceSchedule] // 60/62-$ 60 Price schedule
+            // 65-70 Managed through SpreadLeg1
+            // 65-70 Managed through SpreadLeg2
+            // 71-73 Managed through StrikePriceAndNotation
+            // 74-76 Managed through StrikePriceScheduleReport
+        - optionPremiumAmount
+        + optionPremiumAmount
+      [ruleReference OptionPremiumAmount] // 77 Option premium amount
+        - optionPremiumCurrency
+        + optionPremiumCurrency
+      [ruleReference OptionPremiumCurrency] // 78 Option premium currency
+        - optionPremiumPaymentDate
+        + optionPremiumPaymentDate
+      [ruleReference OptionPremiumPaymentDate] // 79 Option premium payment date
+        - firstExerciseDate
+        + firstExerciseDate
+      [ruleReference FirstExerciseDate] // 80 First Exercise date
+        - exchangeRate
+        + exchangeRate
+      [ruleReference ExchangeRate] // 81 Exchange rate
+        - exchangeRateBasis
+        + exchangeRateBasis
+      [ruleReference ExchangeRateBasis] // 82 Exchange rate basis
+        - callAmount
+        + callAmount
+      [ruleReference CallAmount] // 86 Call amount
+        - putAmount
+        + putAmount
+      [ruleReference PutAmount] // 87 Put amount
+        - callCurrency
+        + callCurrency
+      [ruleReference CallCurrency] // 90 Call currency
+        - putCurrency
+        + putCurrency
+      [ruleReference PutCurrency] // 91 Put currency
+            // Fields 102/104/106 - Managed through NotionalQuantityScheduleLeg1
+            // Fields 103/105/107 - Managed through NotionalQuantityScheduleLeg2
+        - cdSIndexAttachmentPoint
+        + cdSIndexAttachmentPoint
+        [ruleReference CdsIndexAttachmentPoint] // 108 CDS index attachment point
+        - cdSIndexDetachmentPoint
+        + cdSIndexDetachmentPoint
+        [ruleReference CdsIndexDetachmentPoint] // 109 CDS index detachment point
+        - otherPayment
+        + otherPayment
+            [ruleReference OtherPayment] // 110-115 Managed through trade.payment.OtherPaymentReport
+        - packageIdentifier
+        + packageIdentifier
+            [ruleReference PackageIdentifier] // 116 Package identifier
+            // Fields 117-119 Managed with subType PackageTransactionPrice
+            // Fields 120-122 Managed with subType PackageTransactionPrice
+        + priorUTI
+            [ruleReference PriorUTI] // 123 Prior UTI (for one-to-one and one-to-many relations between transactions)
+        + priorUTIProprietary
+            [ruleReference PriorUTIProprietary] // 123 Prior UTI (for one-to-one and one-to-many relations between transactions)
+        + customBasketCode
+            [ruleReference CustomBasketCode] // 124 Custom basket code
+        - basketConstituents
+        + basketConstituents
+            [ruleReference BasketConstituents] // Fields 125-128 Basket constituent
+        - actionType
+        + actionType
+        [ruleReference ActionType] // 134 Action type
+        - eventType
+        + eventType
+        [ruleReference EventType] // 135 Event type
+        - eventTimestamp
+        + eventTimestamp
+        [ruleReference EventTimestamp] // 136 Event timestamp
+        - eventIdentifier
+        + eventIdentifier
+        [ruleReference EventIdentifier] // 137 Event identifier
+        + uniqueTransactionIdentifier
+        [ruleReference UniqueTransactionIdentifier] // 138 Unique Transaction Identifier (UTI)
+        + uniqueTransactionIdentifierProprietary
+        [ruleReference UniqueTransactionIdentifierProprietary] // 138 Unique Transaction Identifier (UTI) (Proprietary)
+        - uniqueProductIdentifier
+        + uniqueProductIdentifier
+        [ruleReference UniqueProductIdentifier] // 139 Unique Product Identifier (UPI)
+        + uniqueProductIdentifierProprietary
+        [ruleReference UniqueProductIdentifierProprietary] // 139 Unique Product Identifier (Proprietary)
+        - indexFactor
+        + indexFactor
+        [ruleReference IndexFactor] // 148 Index factor
+        - embeddedOptionType
+        + embeddedOptionType
+        [ruleReference EmbeddedOptionType] // 149 Embedded option type
+        + initialMarginCollateralPortfolioCode
+        [ruleReference InitialMarginCollateralPortfolioCode] // 150 Initial margin collateral portfolio code
+        + variationMarginCollateralPortfolioCode
+        [ruleReference VariationMarginCollateralPortfolioCode] // 152 Variation margin collateral portfolio code
+        - reportSubmittingEntityID
+        + reportSubmittingEntityID
+        [ruleReference SubmitterIdentifier] // 153 Submitter Identifier
+        - countryOfTheCounterparty2
+        + countryOfTheCounterparty2
+        [ruleReference CountryOfTheCounterparty2] // 155 Country of the counterparty 2
+        - contractType
+        + contractType
+        [ruleReference ContractType] // 157 Contract type
+        - assetClass
+        + assetClass
+        [ruleReference AssetClass] // 158 Asset class
+        - nameOfTheUnderlyingIndex
+        + nameOfTheUnderlyingIndex
+        [ruleReference NameOfTheUnderlyingIndex] // 161 Name of the underlying index
+        - clearingTimestamp
+        + clearingTimestamp
+        [ruleReference ClearingTimestamp] // 162 Clearing timestamp
+        + baseProduct
+            [ruleReference BaseProduct] // 174 Base product
+        + subProduct
+            [ruleReference SubProduct] // 175 Sub-product
+        + furtherSubProduct
+            [ruleReference FurtherSubProduct] // 176 Further sub-product
+        - optionStyle
+        + optionStyle
+            [ruleReference OptionStyle] // 178 Option style
+        - maturityDateOfTheUnderlying
+        + maturityDateOfTheUnderlying
+            [ruleReference MaturityDateOfTheUnderlyingDerivative] // 179 Maturity date of the underlying derivative
+        - seniority
+        + seniority
+            [ruleReference Seniority] // 180 Seniority
+        + referenceEntity
+            [ruleReference ReferenceEntity] // 181 Reference entity
+        - series
+        + series
+            [ruleReference Series] // 182 Series
+        + seriesVersion
+            [ruleReference SeriesVersion] // 183 Series Version
+        - tradingCapacity
+        + tradingCapacity
+       [ruleReference TradingCapacity] // 185 Trading capacity
+        + swapLinkID
+        [ruleReference SwapLinkID] // 186 Swap Link ID
+        - traderLocation
+        + traderLocation
+        [ruleReference TraderLocation] // 187 Trader location
+        - bookingLocation
+        + bookingLocation
+        [ruleReference BookingLocation] // 188 Booking location
+        + intragroup
+        [ruleReference Intragroup] // 189 Intragroup
+        + nonStandardizedTermIndicator
+        [ruleReference NonStandardizedTermIndicator] // 192 Non-standardized term indicator
+        + secondaryTransactionIdentifier
+            [ruleReference SecondaryTransactionIdentifier] // 193 Secondary transaction identifier
+        + leg1
+            [ruleReference Leg1Report]
+        + leg2
+            [ruleReference Leg2Report]
+        + productDescription
+        [ruleReference ProductDescription] // 197 Product description
+        + beneficiary
+        [ruleReference Beneficiary] // 198 Beneficiary
+        + technicalRecordId
+            [ruleReference TechnicalRecordIdentification] // 200 Technical record identification
+        - executionAgentCounterparty1
+        + executionAgentCounterparty1
+        [ruleReference ExecutionAgentCounterparty1]
+        - executionAgentCounterparty2
+        + executionAgentCounterparty2
+        [ruleReference ExecutionAgentCounterparty2]
+        - strikePriceSchedule
+        + strikePriceSchedule
+            [ruleReference StrikePriceSchedule]
+        - strikePrice
+        + strikePrice
+        [ruleReference StrikePrice] // 71 Strike Price
+        - strikePriceNotation
+        + strikePriceNotation
+            [ruleReference StrikePriceNotation]
+        - strikePriceCurrency
+        + strikePriceCurrency
+        [ruleReference StrikePriceCurrencyCurrencyPair]
+        - price
+        + price
+            [ruleReference Price]
+        - priceNotation
+        + priceNotation
+            [ruleReference PriceNotation]
+        - priceCurrency
+        + priceCurrency
+            [ruleReference PriceCurrency]
+        - packageTransactionPrice
+        + packageTransactionPrice
+            [ruleReference PackageTransactionPrice]
+        - packageTransactionPriceNotation
+        + packageTransactionPriceNotation
+            [ruleReference PackageTransactionPriceNotation]
+        - packageTransactionPriceCurrency
+        + packageTransactionPriceCurrency
+            [ruleReference PackageTransactionPriceCurrency]
+        - packageTransactionSpread
+        + packageTransactionSpread
+            [ruleReference PackageTransactionSpread]
+        - packageTransactionSpreadNotation
+        + packageTransactionSpreadNotation
+            [ruleReference PackageTransactionSpreadNotation]
+        - packageTransactionSpreadCurrency
+        + packageTransactionSpreadCurrency
+            [ruleReference PackageTransactionSpreadCurrency]
+        - packageTransactionPriceNotation
+        + packageTransactionPriceNotation
+             [ruleReference PackageTransactionPriceNotation]
+        - packageTransactionPriceCurrency
+        + packageTransactionPriceCurrency
+             [ruleReference PackageTransactionPriceCurrency]
+        - packageTransactionSpreadNotation
+        + packageTransactionSpreadNotation
+             [ruleReference PackageTransactionSpreadNotation]
+        - packageTransactionSpreadCurrency
+        + packageTransactionSpreadCurrency
+             [ruleReference PackageTransactionSpreadCurrency]
+}
+
+reporting rule Leg1Report from TransactionReportInstruction: <"Leg 1 Report">
+    filter IsAllowableActionForHKMA
+    then if item exists
+        then common.LegEnrichment(
+                    cde.Leg1(item, SpreadNotationLeg1, 9999999999999999999999999),
+                    cde.quantity.NotionalAmountScheduleLeg1,
+                    cde.quantity.NotionalQuantityScheduleLeg1,
+                    common.quantity.NotionalQuantityLeg1,
+                    empty,
+                    empty,
+                    common.datetime.FixingDateLeg1,
+                    common.quantity.QuantityFrequencyLeg1(item) -> period,
+                    common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier,
+                    common.underlier.FloatingRateIndicatorLeg1,
+                    common.underlier.FloatingRateIdentifierLeg1,
+                    common.underlier.FloatingRateReferencePeriodLeg1,
+                    common.underlier.FloatingRateReferencePeriodMultiplierLeg1,
+                    common.underlier.NameOfTheFloatingRateOfLeg1
+                )
+
+reporting rule Leg2Report from TransactionReportInstruction: <"Leg 2 Report">
+    filter IsAllowableActionForHKMA
+    then if item exists
+        then common.LegEnrichment(
+                    cde.Leg2(item, SpreadNotationLeg2, 9999999999999999999999999),
+                    cde.quantity.NotionalAmountScheduleLeg2,
+                    cde.quantity.NotionalQuantityScheduleLeg2,
+                    common.quantity.NotionalQuantityLeg2,
+                    empty,
+                    empty,
+                    common.datetime.FixingDateLeg2,
+                    common.quantity.QuantityFrequencyLeg2(item) -> period,
+                    common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier,
+                    common.underlier.FloatingRateIndicatorLeg2,
+                    common.underlier.FloatingRateIdentifierLeg2,
+                    common.underlier.FloatingRateReferencePeriodLeg2,
+                    common.underlier.FloatingRateReferencePeriodMultiplierLeg2,
+                    common.underlier.NameOfTheFloatingRateOfLeg2
+                )
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective Date">
+    [regulatoryReference HKMA Trade dataElement "1" field "Effective Date"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction come into effect, as included in the confirmation. 
+        For new contracts stemming from lifecycle events, the effective date should be the effective date of the new contract.
+        For credit default swaps on a credit index, effective date should be the effective date of the contract, not the roll date of the underlying index. 
+        For FRAs, effective date should be the effective date of the contract, not the settlement date.
+        For options & swaptions, the effective date should be the effective date of the contract, not the underlier."]
+    filter IsAllowableActionForHKMA
+    then common.datetime.EffectiveDate
+        as "1 Effective date"
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"Expiration Date">
+    [regulatoryReference HKMA Trade dataElement "2" field "Expiration Date"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction stop being effective, as included in the confirmation, if applicable. Early termination does not affect this data element."]
+    filter IsAllowableActionForHKMA
+    then common.datetime.ExpirationDate
+        as "2 Expiration date"
+
+reporting rule EarlyTerminationDate from TransactionReportInstruction: <"Early termination date">
+    [regulatoryReference HKMA Trade dataElement "3" field "Early termination date"
+        provision "Effective date of the early termination (expiry) of the reported transaction, if applicable.
+        This data element is applicable if the termination of the transaction occurs prior to its maturity due to an ex-interim decision of a counterparty (or counterparties).
+        Examples of early terminations (expiry) are: negotiated early termination; early termination under an optional early termination provision (mutual put); novation; offsetting (netting) transaction;option exercise; compression; early termination clause specified in the original contract which is a callable swap (bought embedded option); mutual credit break."]
+    filter (IsActionTypeCORR or IsActionTypeTERM or IsActionTypeREVI)
+    then cde.datetime.EarlyTerminationDate
+        as "3 Early termination date"
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference HKMA Trade dataElement "4" field "Reporting timestamp"
+        provision "Date and time when the contract was reported to the trade repository."]
+    cde.datetime.ReportingTimestamp
+        as "4 Reporting Timestamp"
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution Timestamp">
+    [regulatoryReference HKMA Trade dataElement "5" field "Execution Timestamp"
+        provision "Date and time a transaction was originally executed, resulting in the generation of a new UTI. This data element remains unchanged throughout the life of the UTI."]
+    filter IsAllowableActionForHKMA or IsActionTypeTERM
+    then cde.datetime.ExecutionTimestamp
+        as "5 Execution Timestamp"
+
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1">
+    [regulatoryReference HKMA Trade dataElement "6" field "Counterparty 1"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question.
+In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty."]
+    extract cde.party.Counterparty1
+        as "6 Counterparty 1"
+
+reporting rule Counterparty2 from TransactionReportInstruction: <"Counterparty 2">
+    [regulatoryReference HKMA Trade dataElement "7" field "Counterparty 2"
+        provision "Identifier of the second counterparty to an OTC derivative transaction.
+
+        For Party ID SWIFTBIC and BRN, party should input the first eight digits only. 
+        e.g. SwiftBIC: HKMAHKHHXXX should be inputted as HKMAHKHH
+            BRN: 12345678 - 000 - 04 - 11 - A should be inputted as 12345678.
+
+        For Party ID CICR, party should input all character(s) and digits.
+        e.g. For Local company (CI): Seven digits such as 9999999 .
+            For Non-local company (CR): Character(s) plus seven digits 
+                such as X9999999 or XX9999999.
+        "]
+    // TH Comment Sprint 13/2025: Parties in HKMA can be represented by Lei, Natural Person, BIC and Other Identifiers. The changes below enable extraction and formatting of all supported identifier types.
+    extract
+        if common.party.Counterparty2 exists
+        then common.party.Counterparty2
+        else (Extract_ReportingCounterparty
+            then Filter_HKMAPriorityPartyIdentifiers
+            then identifier)
+        as "7 Counterparty 2"
+
+reporting rule Counterparty2Name from TransactionReportInstruction: <"Counterparty 2 name">
+    [regulatoryReference HKMA Trade dataElement "8" field "Counterparty 2 name"
+        provision "Indicator of whether LEI was used to identify the Counterparty 2."]
+    extract common.party.Counterparty2Name
+        as "8 Counterparty 2 name"
+
+reporting rule Counterparty2IdentifierTypeIndicator from TransactionReportInstruction: <"Counterparty 2 identifier type indicator">
+    [regulatoryReference HKMA Trade dataElement "9" field "Counterparty 2 identifier type indicator"
+        provision "Indicator of whether LEI was used to identify the Counterparty 2."]
+    extract cde.party.Counterparty2IdentifierTypeIndicator
+        as "9 Counterparty 2 Identifier Type Indicator"
+
+reporting rule Direction1 from TransactionReportInstruction: <"Direction 1">
+    [regulatoryReference HKMA Trade dataElement "10" field "Direction 1"
+        provision "Indicator of whether the counterparty 1 is the buyer or the seller as determined at the time of the transaction, if applicable."]
+    filter IsAllowableActionForHKMA
+    then drr.regulation.common.trade.party.Direction1
+        as "10 Direction 1"
+
+reporting rule Cleared from TransactionReportInstruction: <"Cleared">
+    [regulatoryReference HKMA Trade dataElement "13" field "Cleared"
+        provision "Indicator of whether the contract has been cleared, or is intended to be cleared, by a central counterparty."]
+    filter IsAllowableActionForHKMA
+    then cde.execution.Cleared
+        as "13 Cleared"
+
+reporting rule CentralCounterparty from TransactionReportInstruction: <"Central Counterparty">
+    [regulatoryReference HKMA Trade dataElement "14" field "Central counterparty"
+        provision "Identifier of the central counterparty that cleared the transaction, if applicable.
+This data element is not applicable if the value of the data element Cleared is N (No, not centrally cleared) or I (Intent to clear)."]
+// TH Comment Sprint 13/2025: Parties in HKMA can be represented by Lei, Natural Person, BIC and Other Identifiers. The changes below enable extraction and formatting of all supported identifier types.
+    filter IsAllowableActionForHKMA
+    then if cde.execution.CentralCounterparty exists
+        then cde.execution.CentralCounterparty
+        else (Extract_CentralCounterparty
+            then Filter_HKMAPriorityPartyIdentifiers
+            then identifier)
+        as "14 Central Counterparty"
+
+reporting rule ClearingMember from TransactionReportInstruction: <"Clearing member">
+    [regulatoryReference HKMA Trade dataElement "15" field "Clearing member"
+        provision "Identifier of the clearing member through which a derivative transaction was cleared at a central counterparty, if applicable.
+
+This data element is applicable to cleared transactions under both the agency clearing model and the principal clearing model.
+ - In the case of the principal clearing model, the clearing member is identified as clearing member and also as a counterparty in both transactions resulting from clearing: (i) in the transaction between the central counterparty and the clearing member; and (ii) in the transaction between the clearing member and the counterparty to the original alpha transaction.
+ - In the case of the agency clearing model, the clearing member is identified as clearing member but not as the counterparty to transactions resulting from clearing. Under this model, the counterparties are the central counterparty and the client.
+
+This data element is not applicable if the value of the data element Cleared is N (No, not centrally cleared) or I (Intent to clear)."]
+// TH Comment Sprint 13/2025: Parties in HKMA can be represented by Lei, Natural Person, BIC and Other Identifiers. The changes below enable extraction and formatting of all supported identifier types.
+    filter IsAllowableActionForHKMA
+    then if cde.execution.ClearingMember exists
+        then cde.execution.ClearingMember
+        else (Extract_ClearingMember
+            then Filter_HKMAPriorityPartyIdentifiers
+            then identifier)
+        as "15 Clearing member"
+
+reporting rule PlatformIdentifier from TransactionReportInstruction: <"Platform Identifier">
+    [regulatoryReference HKMA Trade dataElement "16" field "Platform Identifier"
+        provision "Identifier of the trading facility (eg exchange, multilateral trading facility, swap execution facility) on which the transaction was executed, if applicable."]
+    filter IsAllowableActionForHKMA
+    then common.execution.PlatformIdentifier
+        as "16 Platform Identifier"
+
+reporting rule Confirmed from TransactionReportInstruction: <"Confirmed">
+    [regulatoryReference HKMA Trade dataElement "17" field "Confirmed"
+        provision "For new reportable transactions (as defined by the CPMI-IOSCO Technical Guidance: Harmonisation of the Unique Transaction Identifier), whether the Legally binding terms of an OTC derivatives contract were documented and agreed upon (confirmed) or not (unconfirmed). If documented and agreed, whether such confirmation was done:
+        - via a shared confirmation facility or platform, or a private/bilateral electronic system (electronic);
+        - via a human-readable written document, such as fax, paper or manually processed e-mails (non- electronic)."]
+    filter IsAllowableActionForHKMA
+    then filter (IsCleared(originatingWorkflowStep) = False)
+    then extract cde.execution.Confirmed
+        as "17 Confirmed"
+
+reporting rule FinalContractualSettlementDate from TransactionReportInstruction: <"Final Contractual Settlement Date">
+    [regulatoryReference HKMA Trade dataElement "18" field "Final contractual settlement date"
+        provision "Unadjusted date as per the contract, by which all transfer of cash or assets should take place and the counterparties should no longer have any outstanding obligations to each other under that contract, if applicable.
+                    For products that may not have a final contractual settlement date (eg American options), this data element reflects the date by which the transfer of cash or asset would take place if termination were to occur on the expiration date."]
+    filter IsAllowableActionForHKMA
+    then extract
+        if Qualify_InterestRate_Fra(
+                    TradeForEvent -> tradableProduct -> product -> contractualProduct -> economicTerms
+                )
+        then InterestRateLeg2(ProductForTrade(TradeForEvent)) -> paymentDate -> unadjustedDate
+        else cde.execution.FinalContractualSettlementDate
+        as "18 Final contractual settlement date"
+
+reporting rule SettlementCurrencyLeg1 from TransactionReportInstruction: <"Settlement currency - Leg 1">
+    [regulatoryReference HKMA Trade dataElement "19" field "Settlement currency - Leg 1"
+        provision "Currency for the cash settlement of the transaction when applicable.
+For multicurrency products that do not net, the settlement currency of the leg 1.
+This data element is not applicable for physically settled products (eg physically settled swaptions)."]
+    filter IsAllowableActionForHKMA
+    then extract common.execution.SettlementCurrencyLeg1
+        as "19 Settlement currency - Leg 1"
+
+reporting rule SettlementCurrencyLeg2 from TransactionReportInstruction: <"Settlement currency - Leg 2">
+    [regulatoryReference HKMA Trade dataElement "20" field "Settlement currency - Leg 2"
+        provision "Currency for the cash settlement of the transaction when applicable.
+For multicurrency products that do not net, the settlement currency of the leg 2.
+This data element is not applicable for physically settled products (eg physically settled swaptions)."]
+    filter IsAllowableActionForHKMA
+    then extract common.execution.SettlementCurrencyLeg2
+        as "20 Settlement currency - Leg 2"
+
+reporting rule SettlementLocation from TransactionReportInstruction: <"Settlement Location Leg 1">
+    filter IsAllowableActionForHKMA
+    then extract cde.execution.SettlementLocation
+
+reporting rule Price from TransactionReportInstruction: <"Price">
+    [regulatoryReference HKMA Trade dataElement "56" field "Price"
+        provision "Price specified in the OTC derivative transaction, if applicable. It does not include fees, taxes or commissions, if applicable.
+
+For commodity fixed/float swaps and similar products with periodic payments, this data element refers to the fixed price of the fixed Leg(s).
+
+For commodity and equity forwards and similar products, this data element refers to the forward price of the underlying or reference asset.
+
+For equity swaps, portfolios swaps, and similar products, this data element refers to the initial price of the underlying or reference asset.
+
+For contracts for difference and similar products, this data element refers to the initial price of the underlier.
+
+This data element is not applicable to:
+- Interest rate swaps and forward rate agreements, as it is understood that the information included in the data elements Fixed rate and Spread may be interpreted as the price of the transaction.
+- Interest rate options and interest rate swaptions, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+- Commodity basis swaps, as it is understood that the information included in the data element Spread may be interpreted as the price of the transaction.
+- Foreign exchange swaps, forwards and options, as it is understood that the information included in the data elements Exchange rate, Strike price, and Option premium may be interpreted as the price of the transaction.
+- Equity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+- Credit default swaps and credit total return swaps, as it is understood that the information included in the data elements Fixed rate, Spread and Upfront payment (Other payment type: Upfront payment) may be interpreted as the price of the transaction.
+- Commodity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+
+Where the price is not known when a new transaction is reported, the price is updated as it becomes available.
+For transactions that are part of a package, this data element contains the price of the component transaction where applicable."]
+    filter IsAllowableActionForHKMA
+    then extract
+        cdebase.price.PriceFormatFromNotation(cde.price.PriceNoFormat, PriceNotation)
+
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price Currency">
+    [regulatoryReference HKMA Trade dataElement "57" field "Price currency"
+        provision "Currency in which the price is denominated, if applicable.
+                Price currency is only applicable if Price notation = 1."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.PriceCurrency
+        as "57 Price currency"
+
+reporting rule PriceNotation from TransactionReportInstruction: <"Price notation Enum">
+    [regulatoryReference HKMA Trade dataElement "58" field "Price notation"
+        provision "Manner in which the price is expressed, if applicable."]
+    filter IsAllowableActionForHKMA
+    then common.price.DefaultPercentageToDecimal(cde.price.PriceNotation, False)
+        as "58 Price notation"
+
+reporting rule PriceUnitOfMeasure from TransactionReportInstruction: <"Price Unit Of Measure">
+    [regulatoryReference HKMA Trade dataElement "59" field "Price Unit Of Measure"
+        provision "Unit of measure in which the price is expressed, if applicable."]
+    filter IsAllowableActionForHKMA
+    then if cde.price.PriceUnitOfMeasure exists
+        then cde.price.PriceUnitOfMeasure
+        else if Qualify_AssetClass_InterestRate(EconomicTermsForProduct(ProductForEvent))
+                and cde.price.PriceNoFormat exists
+        then "ACCY"
+        as "59 Price unit of measure"
+
+reporting rule ContractPriceSchedule from TransactionReportInstruction: <"Contract Price Schedule">
+    [regulatoryReference HKMA Trade dataElement "60-62" field "Contract Price Schedule"
+        provision "Fields 60-62 are repeatable. Price schedule is only applicable if the price varies per schedule."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.GetReportablePricePeriod(item, PriceNotation)
+
+reporting rule SpreadNotationLeg1 from TransactionReportInstruction: <"Spread notation - Leg 1">
+    [regulatoryReference HKMA Trade dataElement "20" field "Spread notation of Leg 1"
+        provision "Where applicable: manner in which the spread is expressed for leg 1."]
+    extract
+        if cde.price.SpreadLeg1NotationEnum = Percentage
+        then cdebase.price.PriceNotationEnum -> Decimal
+        else cde.price.SpreadLeg1NotationEnum
+
+reporting rule SpreadNotationLeg2 from TransactionReportInstruction: <"Spread notation - Leg 2">
+    [regulatoryReference HKMA Trade dataElement "70" field "Spread notation of Leg 2"
+        provision "Where applicable: manner in which the spread is expressed for leg 2."]
+    extract
+        if cde.price.SpreadLeg2NotationEnum = Percentage
+        then cdebase.price.PriceNotationEnum -> Decimal
+        else cde.price.SpreadLeg2NotationEnum
+
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike Price">
+    [regulatoryReference HKMA Trade dataElement "71" field "Strike Price"
+        provision "Where applicable:
+- For options other than FX options, swaptions and similar products, price at which the owner of an option can buy or sell the underlying asset of the option.
+- For foreign exchange options, exchange rate at which the option can be exercised, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426.Where the strike price is not known when a new transaction is reported, the strike price is updated as it becomes available.
+- For volatility and variance swaps and similar products the volatility strike price is reported in this data element."]
+    filter IsAllowableActionForHKMA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.StrikePriceNoFormat,
+                StrikePriceNotation
+            )
+        as "71 Strike Price"
+
+reporting rule StrikePriceCurrencyCurrencyPair from TransactionReportInstruction: <"Strike price currency/currency pair">
+    [regulatoryReference HKMA Trade dataElement "72" field "Strike price currency/currency pair"
+        provision "Where applicable:
+For equity options, commodity options, and similar products, currency in which the strike price is denominated.
+For foreign exchange options: Currency pair and order in which the strike price is expressed. It is expressed as unit currency/quoted currency. 
+Strike price currency/currency pair is only applicable if Strike price notation = 1."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.StrikePriceCurrency
+        as "72 Strike price currency/currency pair"
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike price notation">
+    [regulatoryReference HKMA Trade dataElement "73" field "Strike price notation"
+        provision "Manner in which the Strike price is expressed, if applicable."]
+    filter IsAllowableActionForHKMA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.StrikePriceNotationEnum,
+                cde.price.StrikePriceNotationEnum = Monetary
+                    and (IsVarianceSwap(ProductForEvent) or IsVolatilitySwap(ProductForEvent))
+            )
+        as "73 Strike price notation"
+
+reporting rule StrikePriceSchedule from TransactionReportInstruction: <"Strike Price Schedule">
+    [regulatoryReference HKMA Trade dataElement "74-76" field "Strike Price Schedule"
+        provision "Fields 74-76 are repeatable. Strike Price schedule is only applicable if the Strike Price varies per schedule."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.GetReportableStrikePricePeriod(item, StrikePriceNotation)
+
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option premium amount">
+    [regulatoryReference HKMA Trade dataElement "77" field "Option premium amount"
+        provision "For options and swaptions of all asset classes, monetary amount paid by the option buyer. This data element is not applicable if the instrument is not an option or does not embed any optionality, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract trade.price.OptionPremiumAmount
+        as "77 Option premium amount"
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction: <"Option premium currency">
+    [regulatoryReference HKMA Trade dataElement "78" field "Option premium currency"
+        provision "For options and swaptions of all asset classes, currency in which the option premium amount is denominated. This data element is not applicable if the instrument is not an option or does not embed any optionality, if applicable."]
+    filter IsAllowableActionForHKMA
+    then cde.price.OptionPremiumCurrency
+        as "78 Option premium currency"
+
+reporting rule OptionPremiumPaymentDate from TransactionReportInstruction: <"Option premium payment date">
+    [regulatoryReference HKMA Trade dataElement "79" field "Option premium payment date"
+        provision "Unadjusted date on which the option premium is paid, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.OptionPremiumPaymentDate
+        as "79 Option premium payment date"
+
+reporting rule FirstExerciseDate from TransactionReportInstruction: <"First Exercise date">
+    [regulatoryReference HKMA Trade dataElement "80" field "First Exercise date"
+        provision "First unadjusted date during the exercise period in which an option can be exercised, if applicable.
+
+For European-style options, this date is same as the Expiration date.
+For American-style options, the first possible exercise date is the unadjusted date included in the execution timestamp.
+For knock-in options, where the first exercise date is not known when a new transaction is reported, the first exercise date is updated as it becomes available.
+
+This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.FirstExerciseDate
+        as "80 First Exercise date"
+
+reporting rule ExchangeRate from TransactionReportInstruction: <"Exchange rate">
+    [regulatoryReference HKMA Trade dataElement "81" field "Exchange rate"
+        provision "Exchange rate between the two different currencies specified in the OTC derivative transaction agreed by the counterparties at the inception of the transaction, expressed as the rate of exchange from converting the unit currency into the quoted currency, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.ExchangeRate
+        as "81 Exchange rate"
+
+reporting rule ExchangeRateBasis from TransactionReportInstruction: <"Exchange rate basis">
+    [regulatoryReference HKMA Trade dataElement "82" field "Exchange rate basis"
+        provision "Currency pair and order in which the exchange rate is denominated, expressed as unit currency/quoted currency, if applicable.
+
+In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency, USD 1 = EUR 0.9426."]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.ExchangeRateBasis
+        as "82 Exchange rate basis"
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call amount">
+    [regulatoryReference HKMA Trade dataElement "86" field "Call amount"
+        provision "[For any options, the monetary amount that the option gives the right to buy.]*"]
+    filter IsAllowableActionForHKMA
+    then extract cde.quantity.ExtractCallAmount(item, 9999999999999999999999999)
+        as "86 Call amount"
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put amount">
+    [regulatoryReference HKMA Trade dataElement "87" field "Put amount"
+        provision "[For any options, the monetary amount that the option gives the right to sell.]*"]
+    filter IsAllowableActionForHKMA
+    then extract cde.quantity.ExtractPutAmount(item, 9999999999999999999999999)
+        as "87 Put amount"
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call currency">
+    [regulatoryReference HKMA Trade dataElement "90" field "Call currency"
+        provision "[For any options, the currency in which the Call amount is denominated.]*"]
+    filter IsAllowableActionForHKMA
+    then extract cde.quantity.CallCurrency
+        as "90 Call currency"
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put currency">
+    [regulatoryReference HKMA Trade dataElement "91" field "Put currency"
+        provision "[For any options, the currency in which the Put amount is denominated.]*"]
+    filter IsAllowableActionForHKMA
+    then extract cde.quantity.PutCurrency
+        as "91 Put currency"
+
+// *********************** Notional Amount Schedule - Leg 1 **************************
+reporting rule NotionalAmountScheduleLeg1 from TransactionReportInstruction: <"Notional Amount Schedule - Leg 1">
+    [regulatoryReference HKMA Trade dataElement "94/96/98" field "Notional Amount Schedule - Leg 1"
+        provision "Fields 94/96/98 are repeatable and shall be populated in the case of derivatives involving notional amount schedules
+         The initial notional amount and associated unadjusted effective and end date are reported as the first values of the schedule.
+         This data element is not applicable to OTC derivative transactions with notional amounts that are condition- or event-dependent."]
+    filter IsAllowableActionForHKMA
+    then extract TradeForEvent
+    then extract GetLeg1ResolvablePriceQuantity -> quantitySchedule
+    then filter unit -> currency exists
+    then extract datedValue
+    then extract notionalAmountPeriod [
+        cdebase.quantity.NotionalPeriod {
+            value: empty,
+            effectiveDate: empty,
+            endDate: empty
+        }
+    ]
+
+// *********************** Notional Amount Schedule - Leg 2 **************************
+reporting rule NotionalAmountScheduleLeg2 from TransactionReportInstruction: <"Notional Amount Schedule - Leg 2">
+    [regulatoryReference HKMA Trade dataElement "95/97/99" field "Notional Amount Schedule - Leg 2"
+        provision "Fields 94/96/98 are repeatable and shall be populated in the case of derivatives involving notional amount schedules
+         The initial notional amount and associated unadjusted effective and end date are reported as the first values of the schedule.
+         This data element is not applicable to OTC derivative transactions with notional amounts that are condition- or event-dependent."]
+    filter IsAllowableActionForHKMA
+    then extract TradeForEvent
+    then extract GetLeg2ResolvablePriceQuantity -> quantitySchedule
+    then filter unit -> currency exists
+    then extract datedValue
+    then extract notionalAmountPeriod [
+        // use value and dates from quantity period
+        cdebase.quantity.NotionalPeriod {
+            value: empty,
+            effectiveDate: empty,
+            endDate: empty
+        }
+    ]
+
+reporting rule NotionalQuantityScheduleLeg1 from TransactionReportInstruction: <"Notional Quantity Schedule-Leg 1">
+    [regulatoryReference HKMA Trade dataElement "102/104/106" field "Notional Quantity Schedule - Leg 1"
+        provision "Fields 102/104/106 are repeatable and shall be populated in the case of derivatives involving notional quantity schedules."]
+    filter IsAllowableAction
+    then cde.quantity.NotionalQuantityScheduleLeg1
+
+reporting rule NotionalQuantityScheduleLeg2 from TransactionReportInstruction: <"Notional Quantity Schedule-Leg 2">
+    [regulatoryReference HKMA Trade dataElement "103/105/107" field "Notional Quantity Schedule - Leg 2"
+        provision "Fields 103/105/107 are repeatable and shall be populated in the case of derivatives involving notional quantity schedules."]
+    filter IsAllowableAction
+    then cde.quantity.NotionalQuantityScheduleLeg2
+
+reporting rule CdsIndexAttachmentPoint from TransactionReportInstruction: <"CDS index attachment point">
+    [regulatoryReference HKMA Trade dataElement "108" field "CDS index attachment point"
+        provision "Defined lower point at which the level of losses in the underlying portfolio reduces the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% will be reduced after 3% of losses in the portfolio have occurred. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    filter IsAllowableActionForHKMA
+    then extract cde.index.CDSIndexAttachmentPoint
+        as "108 CDS index attachment point"
+
+reporting rule CdsIndexDetachmentPoint from TransactionReportInstruction: <"CDS index detachment point">
+    [regulatoryReference HKMA Trade dataElement "109" field "CDS index detachment point"
+        provision "Defined point beyond which losses in the underlying portfolio no longer reduce the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% and a detachment point of 6% will be reduced after there have been 3% of losses in the portfolio. 6% losses in the portfolio deplete the notional of the tranche. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    filter IsAllowableActionForHKMA
+    then extract cde.index.CDSIndexDetachmentPoint
+        as "109 CDS index detachment point"
+
+// Repeatable Field modelling
+reporting rule OtherPayment from TransactionReportInstruction: <"Other Payment">
+    filter IsAllowableActionForHKMA or IsActionTypeTERM
+    then extract transactionReportInstruction [
+        TradeStateForEvent
+            then extract transferHistory
+            then filter IsOtherPayment
+            then extract
+                cdebase.payment.OtherPayment {
+                    paymentType: cde.payment.OtherPaymentType to-enum PaymentType4Code,
+                    amount: cde.payment.OtherPaymentAmount
+                        then extract
+                            RoundToPrecision(item, 5, RoundingDirectionEnum -> Nearest)
+                        then FormatToShortFraction5DecimalNumber,
+                    currency: cde.payment.OtherPaymentCurrency,
+                    date: cde.payment.OtherPaymentDate,
+                    payer: OtherPaymentPayer,
+                    payerFormat: OtherPaymentPayerFormat,
+                    receiver: OtherPaymentReceiver,
+                    receiverFormat: OtherPaymentReceiverFormat,
+                    payerSchemeName: OtherPaymentPayerSchemeName,
+                    receiverSchemeName: OtherPaymentReceiverSchemeName
+                }
+    ]
+
+// TH Comment Sprint 13/2025: HKMA Specific
+reporting rule OtherPaymentPayer from TransferState: <"Other Payment Payer">
+    [regulatoryReference HKMA Trade dataElement "114" field "Other payment payer"
+        provision "Identifier of the payer of Other payment amount, if applicable."]
+    filter IsOtherPayment
+    then extract transfer -> payerReceiver -> payerPartyReference
+    then Filter_HKMAPriorityPartyIdentifiers
+    then Extract_HKMAPartyIdentifier
+        as "110/115-$ 114 Other payment payer"
+
+// TH Comment Sprint 13/2025: HKMA Specific
+reporting rule OtherPaymentPayerFormat from TransferState: <"Other Payment Payer Format">
+    [regulatoryReference HKMA Trade field "Other Payment Payer Format (Non Reportable)"]
+    filter IsOtherPayment
+    then extract transfer -> payerReceiver -> payerPartyReference
+    then extract
+        if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                only-element
+        then PartyIdentifierFormatEnum -> NaturalPerson
+        else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+        then PartyIdentifierFormatEnum -> Lei
+        else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+        then PartyIdentifierFormatEnum -> SWIFTBIC
+        else PartyIdentifierFormatEnum -> Other
+        as "110/115-$ 114 Other Payment Payer Format (non-reportable)"
+
+// TH Comment Sprint 13/2025: HKMA Specific
+reporting rule OtherPaymentPayerSchemeName from TransferState: <"Other Payment Payer Scheme Name">
+    [regulatoryReference HKMA Trade field "Other Payment Payer Scheme Name (Non Reportable)"]
+    filter IsOtherPayment
+    then if OtherPaymentPayerFormat = Other
+        then extract transfer -> payerReceiver -> payerPartyReference
+    then Filter_HKMAPriorityPartyIdentifiers
+    then Extract_HKMASchemeName to-string
+        as "110/115-$ 114 Other Payment Payer Scheme Name (non-reportable)"
+
+// TH Comment Sprint 13/2025: HKMA Specific
+reporting rule OtherPaymentReceiver from TransferState: <"Other Payment Receiver">
+    [regulatoryReference HKMA Trade dataElement "115" field "Other payment receiver"
+        provision "Identifier of the receiver of Other payment amount, if applicable."]
+    filter IsOtherPayment
+    then extract transfer -> payerReceiver -> receiverPartyReference
+    then Filter_HKMAPriorityPartyIdentifiers
+    then Extract_HKMAPartyIdentifier
+        as "110/115-$ 115 Other payment receiver"
+
+// TH Comment Sprint 13/2025: HKMA Specific
+reporting rule OtherPaymentReceiverFormat from TransferState: <"Other Payment Receiver Format">
+    [regulatoryReference HKMA Trade field "Other Payment Receiver Format (Non Reportable)"]
+    filter IsOtherPayment
+    then extract transfer -> payerReceiver -> receiverPartyReference
+    then extract
+        if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                only-element
+        then PartyIdentifierFormatEnum -> NaturalPerson
+        else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+        then PartyIdentifierFormatEnum -> Lei
+        else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+        then PartyIdentifierFormatEnum -> SWIFTBIC
+        else PartyIdentifierFormatEnum -> Other
+        as "110/115-$ 115 Other Payment Receiver Format (non-reportable)"
+
+// TH Comment Sprint 13/2025: HKMA Specific
+reporting rule OtherPaymentReceiverSchemeName from TransferState: <"Other Payment Receiver Scheme Name">
+    filter IsOtherPayment
+    then if OtherPaymentReceiverFormat = Other
+        then extract transfer -> payerReceiver -> receiverPartyReference
+    then Filter_HKMAPriorityPartyIdentifiers
+    then Extract_HKMASchemeName to-string
+        as "110/115-$ 115 Other Payment Receiver Scheme Name (non-reportable)"
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package identifier">
+    [regulatoryReference HKMA Trade dataElement "116" field "Package identifier"
+        provision "Where applicable: identifier (determined by the Reporting Party) in order to connect
+- two or more transactions that are reported separately by the reporting counterparty, but that are negotiated together as the product of a single economic agreement.
+- two or more reports pertaining to the same transaction whenever jurisdictional reporting requirement does not allow the transaction to be reported with a single report to TRs.
+A package may include reportable and non-reportable transactions. 
+
+This data element is not applicable
+- if no package is involved, or
+- to allocations
+
+Where the package identifier is not known when a new transaction is reported, the package identifier is updated as it becomes available."]
+    filter IsAllowableActionForHKMA
+    then if IsFXSwap(ProductForEvent)
+        then empty
+        else extract cde.link.PackageIdentifier
+        as "116 Package identifier"
+
+reporting rule PackageTransactionPrice from TransactionReportInstruction: <"Package transaction price">
+    [regulatoryReference HKMA Trade dataElement "117" field "Package transaction price (Decimal)"
+        provision "Where applicable: traded price of the entire package in which the reported derivative transaction is a component. This data element is not applicable if
+- no package is involved, or
+- package transaction spread is used
+Prices and related data elements of the transactions (Price currency, Price notation, Price unit of measure) that represent individual components of the package are reported when available.
+The package transaction price may not be known when a new transaction is reported but may be updated later."]
+    filter IsAllowableActionForHKMA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionPriceNoFormat,
+                PackageTransactionPriceNotation
+            )
+
+reporting rule PackageTransactionPriceCurrency from TransactionReportInstruction: <"Package transaction price currency">
+    [regulatoryReference HKMA Trade dataElement "118" field "Package transaction price currency"
+        provision "Where applicable: currency in which the Package transaction price is denominated. 
+
+This data element is not applicable if
+- no package is involved, or
+- Package transaction spread is used, or
+- Package transaction price notation = 3"]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.PackageTransactionPriceCurrency
+        as "118 Package transaction price currency"
+
+reporting rule PackageTransactionPriceNotation from TransactionReportInstruction: <"Package transaction price notation">
+    [regulatoryReference HKMA Trade dataElement "119" field "Package transaction price notation"
+        provision "Where applicable: manner in which the Package transaction price is expressed. 
+
+        This data element is not applicable if
+        - no package is involved, or
+        - Package transaction spread is used"]
+    filter IsAllowableActionForHKMA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionPriceNotationEnum,
+                False
+            )
+        as "119 Package transaction price notation"
+
+reporting rule PackageTransactionSpread from TransactionReportInstruction: <"Package transaction spread">
+    [regulatoryReference HKMA Trade dataElement "120" field "Package transaction spread"
+        provision "Where applicable: traded price of the entire package in which the reported derivative transaction is a component of a package transaction.
+Package transaction price when the price of the package is expressed as a spread, difference between two reference prices.
+This data element is not applicable if no package is involved, or if package transaction price is used
+Spread and related data elements of the transactions (spread currency, Spread notation) that represent individual components of the package are reported when available.
+Package transaction spread may not be known when a new transaction is reported but may be updated later."]
+    filter IsAllowableActionForHKMA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionSpreadNoFormat,
+                PackageTransactionSpreadNotation
+            )
+
+reporting rule PackageTransactionSpreadCurrency from TransactionReportInstruction: <"Package transaction spread currency">
+    [regulatoryReference HKMA Trade dataElement "121" field "Package transaction spread currency"
+        provision "Where applicable: currency in which the Package transaction spread is denominated. 
+
+This data element is not applicable if
+- no package is involved, or
+- Package transaction price is used, or
+- Package transaction spread notation = 3 or = 4"]
+    filter IsAllowableActionForHKMA
+    then extract cde.price.PackageTransactionSpreadCurrency
+        as "121 Package transaction spread currency"
+
+reporting rule PackageTransactionSpreadNotation from TransactionReportInstruction: <"Package transaction spread notation">
+    [regulatoryReference HKMA Trade dataElement "122" field "Package transaction spread notation"
+        provision "Where applicable: manner in which the Package transaction spread is expressed. 
+            This data element is not applicable if no package is involved, or if package transaction price is used"]
+    filter IsAllowableActionForHKMA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionSpreadNotationEnum,
+                False
+            )
+        as "122 Package transaction spread notation"
+
+reporting rule PriorUTI from TransactionReportInstruction: <"Prior UTI (for one-to-one and one-to-many relations between transactions)">
+    [regulatoryReference HKMA Trade dataElement "123" field "Prior UTI (for one-to-one and one-to-many relations between transactions)"
+        provision "Where applicable: UTI assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (eg in the case of a novation, when a transaction is terminated, and a new transaction is generated) or in a one- to-many relation between transactions (eg in clearing or if a transaction is split into several different transactions).
+This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (eg in the case of a compression)."]
+    filter IsAllowableActionForHKMA
+    then common.link.GetPriorTransactionIdentifier(item, HKMA)
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "123 Prior UTI (for one-to-one and one-to-many relations between transactions)"
+
+reporting rule PriorUTIProprietary from TransactionReportInstruction: <"Prior UTI (for one-to-one and one-to-many relations between transactions) (Proprietary)">
+    [regulatoryReference HKMA Trade dataElement "123" field "Prior UTI (for one-to-one and one-to-many relations between transactions)"
+        provision "Where applicable: UTI assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (eg in the case of a novation, when a transaction is terminated, and a new transaction is generated) or in a one- to-many relation between transactions (eg in clearing or if a transaction is split into several different transactions).
+    This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (eg in the case of a compression)."]
+    if PriorUTI is absent then Extract_PriorUTIPropietary then Extract_HKMATradeIdentifier
+        as "123 Prior UTI (for one-to-one and one-to-many relations between transactions) (Proprietary)"
+
+reporting rule CustomBasketCode from TransactionReportInstruction: <"Custom basket code">
+    [regulatoryReference HKMA Trade dataElement "124" field "Custom basket code"
+        provision "Where applicable: if the OTC derivative transaction is based on a custom basket, unique code assigned by the structurer of the custom basket to link its constituents. This data element is not applicable if no custom basket is involved or no unique code has been assigned to it."]
+    filter IsAllowableActionForHKMA
+    then extract cde.basket.CustomBasketCode
+        as "124 Custom basket code"
+
+reporting rule BasketConstituents from TransactionReportInstruction: <"Basket constituents">
+    filter IsAllowableActionForHKMA
+    then extract TradeForEvent
+    then extract common.basket.GetBasketConstituents
+    then extract
+        cdebase.basket.BasketConstituentsReport {
+            identifier: BasketConstituentIdentifier,
+            source: BasketConstituentIdentifierSource,
+            numberOfUnits: BasketConstituentNumberOfUnits,
+            unitOfMeasure: BasketConstituentUnitOfMeasure
+        }
+
+reporting rule BasketConstituentIdentifier from product.template.BasketConstituent: <"Basket constituent identifier">
+    [regulatoryReference HKMA Trade dataElement "125" field "Basket constituent identifier"
+        provision "An identifier that represents a constituent of an underlying custom basket,in line with the Underlier ID within the ISO 4914 UPI reference data elements, as maintained by the UPI Service Provider or in line with an identifier that would be reported as an Underlier ID (Other) where the UPI Underlier ID is OTHER. This data element is not applicable if no custom basket is involved."]
+    extract common.basket.BasketConstituentIdentifier
+        as "125/128-$ 125 Basket constituent identifier"
+
+reporting rule BasketConstituentUnitOfMeasure from product.template.BasketConstituent: <"Basket constituent unit of measure">
+    [regulatoryReference HKMA Trade dataElement "126" field "Basket constituent unit of measure"
+        provision "Where applicable: unit of measure in which the number of units of a particular custom basket constituent is expressed. This data element is not applicable if no custom basket is involved."]
+    extract common.basket.BasketConstituentUnitOfMeasure
+        as "125/128-$ 126 Basket constituent unit of measure"
+
+reporting rule BasketConstituentNumberOfUnits from product.template.BasketConstituent: <"Basket constituent number of units">
+    [regulatoryReference HKMA Trade dataElement "127" field "Basket constituent number of units"
+        provision "Where applicable: the number of units of a particular constituent in a custom basket. This data element is not applicable if no custom basket is involved."]
+    extract common.basket.BasketConstituentNumberOfUnits
+        as "125/128-$ 127 Basket constituent number of units"
+
+reporting rule BasketConstituentIdentifierSource from product.template.BasketConstituent: <"Basket constituent identifier source">
+    [regulatoryReference HKMA Trade dataElement "125" field "Basket constituent identifier source"
+        provision "Where applicable: the origin, or publisher, of the associated Basket constituent identifier, in line with the Underlier ID source within the ISO 4914 UPI reference data elements as maintained by the UPI Service Provider or in line with the allowable value that would be reported as an Underlier ID (Other) source where the UPI Underlier ID is OTHER. This data element is not applicable if no custom basket is involved."]
+    extract common.basket.BasketConstituentIdentifierSource
+        as "125/128-$ 128 Basket constituent identifier source"
+
+reporting rule UnderlierIdOther from TransactionReportInstruction: <"Underlier ID (OTHER)">
+    filter IsAllowableActionForHKMA
+    then extract cde.underlier.UnderlierIDOther
+
+reporting rule UnderlierIdOtherSource from TransactionReportInstruction: <"Underlier ID (OTHER) source">
+    filter IsAllowableActionForHKMA
+    then extract cde.underlier.UnderlierIDOtherSource
+
+reporting rule UnderlyingAssetTradingPlatformIdentifier from TransactionReportInstruction: <"Underlying asset trading platform identifier">
+    filter IsAllowableActionForHKMA
+    then extract
+        if cde.underlier.UnderlyingAssetTradingPlatformIdentifierLeg1 exists
+        then cde.underlier.UnderlyingAssetTradingPlatformIdentifierLeg1
+        else cde.underlier.UnderlyingAssetTradingPlatformIdentifierLeg2
+
+reporting rule UnderlyingAssetPriceSource from TransactionReportInstruction: <"Underlying asset price source">
+    filter IsAllowableActionForHKMA
+    then extract
+        if cde.underlier.UnderlyingAssetPriceSourceLeg1 exists
+        then cde.underlier.UnderlyingAssetPriceSourceLeg1
+        else cde.underlier.UnderlyingAssetPriceSourceLeg2
+
+reporting rule ActionType from TransactionReportInstruction: <"Action type">
+    [regulatoryReference HKMA Trade dataElement "134" field "Action type"
+        provision "Type of action taken on the transaction or type of end-of-day reporting."]
+    extract cde.event.ActionType
+        as "134 Action type"
+
+reporting rule EventType from TransactionReportInstruction: <"Event type">
+    [regulatoryReference HKMA Trade dataElement "135" field "Event type"
+        provision "Explanation or reason for the action being taken on the transaction."]
+    extract cde.event.EventType
+        as "135 Event type"
+
+reporting rule EventTimestamp from TransactionReportInstruction: <"Event timestamp">
+    [regulatoryReference HKMA Trade dataElement "136" field "Event timestamp"
+        provision "Date and time of occurrence of the event.
+
+In the case of a modification agreed for a future date, this data element should reflect the date, the modification occurs (becomes effective) and not when it was negotiated.
+
+In the case of a correction, this data element should reflect the date and time as of when the correction is applicable.
+
+In the case of a clearing event, this data element should reflect the recorded date and time when the alpha transaction is accepted by the central counterparty (CCP) for clearing."]
+    filter IsAllowableActionForHKMA or IsActionTypeTERM
+    then extract cde.datetime.EventTimestamp
+        as "136 Event timestamp"
+
+reporting rule EventIdentifier from TransactionReportInstruction: <"Event identifier">
+    [regulatoryReference HKMA Trade dataElement "137" field "Event identifier"
+        provision "Where applicable: Unique identifier to link transactions entering into and resulting from an event, which may be, but is not limited to, compression or other post trade risk reduction exercises, credit event, etc. The unique identifier may be assigned by the reporting counterparty or a service provider or CCP providing the service."]
+    filter IsAllowableActionForHKMA or IsActionTypeTERM or IsActionTypeEROR
+    then extract cde.event.EventIdentifier
+        as "137 Event identifier"
+
+reporting rule UniqueTransactionIdentifier from TransactionReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Trade dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017. "]
+    uti.GetUniqueTransactionIdentifier(item, HKMA)
+        then filter IsMax32UpperCaseAlphanumericText = True
+        as "138 Unique Transaction Identifier (UTI)"
+
+reporting rule UniqueTransactionIdentifierProprietary from TransactionReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Trade dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017. "]
+    if UniqueTransactionIdentifier is absent
+    then Extract_UTIPropietary
+        then Extract_HKMATradeIdentifier
+        as "138 Unique Transaction Identifier (Proprietary)"
+
+reporting rule UniqueProductIdentifier from TransactionReportInstruction: <"Unique Product Identifier (UPI)">
+    [regulatoryReference HKMA Trade dataElement "139" field "Unique Product Identifier (UPI)"
+        provision "A unique set of characters that represents a particular OTC derivative."]
+    filter IsAllowableActionForHKMA
+    then extract upi.UniqueProductIdentifier
+        as "139 Unique Product Identifier (UPI)"
+
+reporting rule UniqueProductIdentifierProprietary from TransactionReportInstruction: <"Unique Product Identifier (UPI)">
+    [regulatoryReference HKMA Trade dataElement "139" field "Unique Product Identifier (UPI)"
+        provision "A unique set of characters that represents a particular OTC derivative."]
+    filter IsAllowableActionForHKMA
+    then if UniqueProductIdentifier is absent and Extract_BondConnect exists
+        then "ForeignExchange:Spot"
+        as "139 Unique Product Identifier (Proprietary)"
+
+reporting rule IndexFactor from TransactionReportInstruction: <"Index factor">
+    [regulatoryReference HKMA Trade dataElement "148" field "Index factor"
+        provision "The index version factor or percent, expressed as a decimal value, that multiplied by the Notional amount yields the notional amount covered by the seller of protection for credit default swap, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.index.IndexFactor
+        as "148 Index factor"
+
+reporting rule EmbeddedOptionType from TransactionReportInstruction: <"Embedded option type">
+    [regulatoryReference HKMA Trade dataElement "149" field "Embedded option type"
+        provision "Type of option or optional provision embedded in a contract, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.contract.EmbeddedOptionType
+        as "149 Embedded option type"
+
+reporting rule InitialMarginCollateralPortfolioCode from TransactionReportInstruction: <"Initial margin collateral portfolio code">
+    [regulatoryReference HKMA Trade dataElement "150" field "Initial margin collateral portfolio code"
+        provision "If collateral is reported on a portfolio basis, a unique code assigned by the reporting counterparty to the portfolio that tracks the aggregate initial margin of a set of open swap transactions, if applicable.
+
+This data element is not applicable if the collateralisation was performed on a transaction level basis, or if there is no collateral agreement, or if no collateral is posted or received or if only one collateral portfolio of amounts of margin that does not distinguish between margin that is initial margin and margin that is variation margin."]
+    filter IsAllowableActionForHKMA
+    then extract common.collateral.InitialMarginCollateralPortfolioCode
+        as "150 Initial margin collateral portfolio code"
+
+reporting rule VariationMarginCollateralPortfolioCode from TransactionReportInstruction: <"Variation margin collateral portfolio code">
+    [regulatoryReference HKMA Trade dataElement "152" field "Variation margin collateral portfolio code"
+        provision "If collateral is reported on a portfolio basis, a unique code assigned by the reporting counterparty to the portfolio that tracks the aggregate variation margin related to a set of open swap transactions, if applicable.
+
+This data element is not applicable if the collateralisation was performed on a transaction level basis, or if there is no collateral agreement, or if no collateral is posted or received or if only one collateral portfolio of amounts of margin that does not distinguish between margin that is initial margin and margin that is variation margin."]
+    filter IsAllowableActionForHKMA
+    then extract common.collateral.VariationMarginCollateralPortfolioCode
+        as "152 Variation margin collateral portfolio code"
+
+reporting rule SubmitterIdentifier from TransactionReportInstruction: <"Submitter Identifier">
+    [regulatoryReference HKMA Trade dataElement "153" field "Submitter Identifier"
+        provision "[Identifier of the entity submitting the OTC derivative transaction to the Trade Repository.]*"]
+    extract common.party.ReportSubmittingEntity
+        as "153 Submitter Identifier"
+
+reporting rule CountryOfTheCounterparty2 from TransactionReportInstruction: <"Country of the counterparty 2">
+    [regulatoryReference HKMA Trade dataElement "155" field "Country of the counterparty 2"
+        provision "The code of country where the registered office of the other counterparty is located or country of residence in case that the other counterparty is a natural person."]
+    filter IsAllowableActionForHKMA
+    then extract common.party.CountryOfCounterparty2
+        as "155 Country of the counterparty 2"
+
+reporting rule BrokerId from TransactionReportInstruction: <"Broker ID">
+    [regulatoryReference HKMA Trade dataElement "156" field "Broker ID"
+        provision "If a broker acted as intermediary for the Reporting Entity in relation to the Reportable Transaction, without becoming a counterparty to the OTC Derivative the subject of the Reportable Transaction, the current LEI of the broker."]
+    // TH Comment Sprint 13/2025: Parties in HKMA can be represented by Lei, Natural Person, BIC and Other Identifiers. The changes below enable extraction and formatting of all supported identifier types.
+    filter IsAllowableActionForHKMA
+    then extract
+        if common.party.BrokerID exists
+        then common.party.BrokerID
+        else (Extract_BrokerId
+            then Filter_HKMAPriorityPartyIdentifiers
+            then identifier)
+        as "156 Broker ID"
+
+reporting rule ContractType from TransactionReportInstruction: <"Contract type">
+    [regulatoryReference HKMA Trade dataElement "157" field "Contract type"
+        provision "Each reported contract shall be classified according to its type, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.contract.ContractType
+        as "157 Contract type"
+
+reporting rule AssetClass from TransactionReportInstruction: <"Asset class">
+    [regulatoryReference HKMA Trade dataElement "158" field "Asset class"
+        provision "Each reported contract shall be classified according to the asset class it is based on, if applicable."]
+    filter
+        IsAllowableActionForHKMA or IsActionTypeEROR or IsActionTypePRTO or IsActionTypeTERM
+    then common.contract.AssetClass
+        as "158 Asset class"
+
+reporting rule UnderlyingIdentificationType from TransactionReportInstruction: <"Underlying identification Type">
+    filter IsAllowableActionForHKMA
+    then if GetUnderlyingIdentificationType exists
+        then GetUnderlyingIdentificationType
+
+reporting rule UnderlyingIdentification from TransactionReportInstruction: <"Underlying identification">
+    filter IsAllowableActionForHKMA
+    then extract
+        (if IsCreditSwaption(ProductForEvent) or IsIRSwaption(ProductForEvent)
+        then UnderlierForProduct(ProductForEvent)
+        else ProductForEvent)
+    then extract
+        // Underlying Identification Type = I for ISIN
+        if UnderlierForProduct -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (UnderlierForProduct -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then identifier)
+        else if UnderlierForProduct -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (UnderlierForProduct -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if (IsProductETD and UnderlierForProduct -> commodity -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN)
+        then (UnderlierForProduct -> commodity -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if (IsProductETD and EconomicTermsForProduct -> payout -> performancePayout -> underlier -> commodity -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN)
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> commodity -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if (IsProductETD and EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> commodity -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN and IsSingleCommodityPayoutProduct = False)
+        then (EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> commodity -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        // Underlying Identification Type = X for Index
+        else if UnderlierForProduct -> index exists
+        then (UnderlierForProduct -> index -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then last
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> index exists
+        then EconomicTermsForProduct -> payout -> performancePayout -> underlier -> index -> productIdentifier -> identifier
+        else if EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> index exists
+                and IsSingleCommodityPayoutProduct = False
+        then EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> index -> productIdentifier -> identifier
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId
+        else if IsFRA
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId
+        else if Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then ([EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first, EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> inflationRate -> rateOption -> indexReferenceInformation -> indexId first] only-element)
+    then last
+
+reporting rule NameOfTheUnderlyingIndex from TransactionReportInstruction: <"Name of the underlying index">
+    [regulatoryReference HKMA Trade dataElement "161" field "Name of the underlying index"
+        provision "The full name of the underlying index as assigned by the index provider, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.underlier.NameOfTheUnderlyingIndex
+        as "161 Name of the underlying index"
+
+reporting rule ClearingTimestamp from TransactionReportInstruction: <"Clearing timestamp">
+    [regulatoryReference HKMA Trade dataElement "162" field "Clearing timestamp"
+        provision "Time and date when clearing took place, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.datetime.ClearingTimestamp
+        as "162 Clearing timestamp"
+
+reporting rule DeliveryType from TransactionReportInstruction: <"Delivery type">
+    [regulatoryReference HKMA Trade dataElement "163" field "Delivery type"
+        provision "Indicates whether the contract is settled physically or in cash, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract ProductForEvent
+    then extract DeliveryTypeForProducts
+        as "163 Delivery type"
+
+reporting rule BaseProduct from TransactionReportInstruction: <"Base product">
+    [regulatoryReference HKMA Trade dataElement "174" field "Base product"
+        provision "Base product as specified in the classification of commodities in Table 4 of the Annex to Implementing Regulation (EU) 2022/1860."]
+    filter IsAllowableActionForHKMA
+    then extract
+        ExtractCommodityClassification(
+                EconomicTermsForProduct(ProductForEvent),
+                TaxonomySourceEnum -> EMIR, // TH Comment Sprint 13/2025: Requires analysis. There is no HKMA-specific taxonomy source supported.
+                1
+            )
+        as "174 Base product"
+
+reporting rule SubProduct from TransactionReportInstruction: <"Sub-product">
+    [regulatoryReference HKMA Trade dataElement "175" field "Sub-product"
+        provision "Sub-product as specified in the classification of commodities in Table 4 of the Annex to Implementing Regulation (EU) 2022/1860.
+This field requires a specific base product in field."]
+    filter IsAllowableActionForHKMA
+    then extract
+        ExtractCommodityClassification(
+                EconomicTermsForProduct(ProductForEvent),
+                TaxonomySourceEnum -> EMIR, // TH Comment Sprint 13/2025: Requires analysis. There is no HKMA-specific taxonomy source supported.
+                2
+            )
+        as "175 Sub-product"
+
+reporting rule FurtherSubProduct from TransactionReportInstruction: <"Further sub-product">
+    [regulatoryReference HKMA Trade dataElement "176" field "Further sub-product"
+        provision "Further sub product as specified in the classification of commodities in Table 4 of the Annex to Implementing Regulation (EU) 2022/1860.
+This field requires a specific sub product in field."]
+    filter IsAllowableActionForHKMA
+    then extract
+        ExtractCommodityClassification(
+                EconomicTermsForProduct(ProductForEvent),
+                TaxonomySourceEnum -> EMIR, // TH Comment Sprint 13/2025: Requires analysis. There is no HKMA-specific taxonomy source supported.
+                3
+            )
+        as "176 Further sub-product"
+
+reporting rule OptionStyle from TransactionReportInstruction: <"Option style">
+    [regulatoryReference HKMA Trade dataElement "178" field "Option style"
+        provision "Indicates whether the option may be exercised only at a fixed date (European), a series of pre-specified dates (Bermudan) or at any time during the life of the contract (American), if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.contract.OptionStyle
+        as "178 Option style"
+
+reporting rule MaturityDateOfTheUnderlyingDerivative from TransactionReportInstruction: <"Maturity date of the underlying derivative">
+    [regulatoryReference HKMA Trade dataElement "179" field "Maturity date of the underlying derivative"
+        provision "[Expiration date of the underlying derivative.
+For swaptions, the expiration date of the underlying swap.
+For OTC derivative transactions with one or more legs that reference an exchange traded future or exchange traded option, for each leg of the transaction, where applicable, it is the expiration date of the derivative referred to in that leg that is used to determine the value of the leg on each pricing date.]*"]
+    filter IsAllowableActionForHKMA
+    then extract common.datetime.MaturityDateOfTheUnderlier
+        as "179 Maturity date of the underlying derivative"
+
+reporting rule Seniority from TransactionReportInstruction: <"Seniority">
+    [regulatoryReference HKMA Trade dataElement "180" field "Seniority"
+        provision "Indicates the seniority of the debt security, or debt basket or index underlying a derivative, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.index.Seniority
+        as "180 Seniority"
+
+reporting rule ReferenceEntity from TransactionReportInstruction: <"Reference entity">
+    [regulatoryReference HKMA Trade dataElement "181" field "Reference entity"
+        provision "Identification of the underlying reference entity, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract ExtractReferenceEntity
+        as "181 Reference entity"
+
+reporting rule Series from TransactionReportInstruction: <"Series">
+    [regulatoryReference HKMA Trade dataElement "182" field "Series"
+        provision "The series number of the composition of the index if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.index.Series
+        as "182 Series"
+
+reporting rule SeriesVersion from TransactionReportInstruction: <"Series Version">
+    [regulatoryReference HKMA Trade dataElement "183" field "Series Version"
+        provision "A new version of a series is issued if one of the constituents defaults and the index has to be reweighted to account for the new number of total constituents within the index, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.index.Version
+        as "183 Series Version"
+
+reporting rule TradingCapacity from TransactionReportInstruction: <"Trading capacity">
+    [regulatoryReference HKMA Trade dataElement "185" field "Trading capacity"
+        provision "Identifies the trading capacity of the seller."]
+    filter IsAllowableActionForHKMA
+    then extract common.execution.Extract_TradingCapacity(item, HKMA)
+        as "185 Trading capacity"
+
+reporting rule SwapLinkID from TransactionReportInstruction: <"Swap Link ID">
+    [regulatoryReference HKMA Trade dataElement "186" field "Swap Link ID"
+        provision "A linking element used to link the Near Leg and Far Leg of an FX Swap, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.link.SwapLinkID
+
+reporting rule TraderLocation from TransactionReportInstruction: <"Trader location">
+    [regulatoryReference HKMA Trade dataElement "187" field "Trader location"
+        provision "Location of the trading desk or trader responsible for the decision of entering into or execution of the transaction."]
+    filter IsAllowableActionForHKMA
+    then extract common.execution.TraderLocation
+        as "187 Trader location"
+
+reporting rule BookingLocation from TransactionReportInstruction: <"Booking location">
+    [regulatoryReference HKMA Trade dataElement "188" field "Booking location"
+        provision "Location of the trade party or the branch/office of the trade party to which the transaction is booked."]
+    filter IsAllowableActionForHKMA
+    then extract common.execution.BookingLocation
+        as "188 Booking location"
+
+reporting rule Intragroup from TransactionReportInstruction: <"Intragroup">
+    [regulatoryReference HKMA Trade dataElement "189" field "Intragroup"
+        provision "Indicates whether the contract was entered into as an intragroup transaction. Usage: When absent, default value is false."]
+    filter IsAllowableActionForHKMA
+    then extract common.party.Intragroup
+        as "189 Intragroup"
+
+reporting rule NatureOfTheCounterparty1 from TransactionReportInstruction: <"Nature of the counterparty 1">
+    [regulatoryReference HKMA Trade dataElement "190" field "Nature of the counterparty 1"
+        provision "Indicate if the counterparty 1 is a CCP, a financial, non-financial counterparty or other type of counterparty."]
+    // TH Comment Sprint 13/2025: This field allowable values are aligned with ESMA. Requires upgrade for type HKMAPartyInformation and resolve ingestion
+    filter IsAllowableActionForHKMA
+    then ExtractNatureOfCounterparty(
+                common.party.ExtractRegimeInformation(
+                        item,
+                        item -> reportingSide -> reportingParty
+                    ) -> hkmaPartyInformation only-element -> natureOfParty
+            )
+        as "190 Nature of the counterparty 1"
+
+reporting rule NatureOfTheCounterparty2 from TransactionReportInstruction: <"Nature of the counterparty 2">
+    [regulatoryReference HKMA Trade dataElement "191" field "Nature of the counterparty 2"
+        provision "Indicate if the counterparty 2 is a CCP, a financial, non-financial counterparty or other type of counterparty."]
+    // TH Comment Sprint 13/2025: This field allowable values are aligned with ESMA. Requires upgrade for type HKMAPartyInformation and resolve ingestion
+    filter IsAllowableActionForHKMA
+    then ExtractNatureOfCounterparty(
+                common.party.ExtractRegimeInformation(
+                        item,
+                        item -> reportingSide -> reportingCounterparty
+                    ) -> hkmaPartyInformation only-element -> natureOfParty
+            )
+        as "191 Nature of the counterparty 2"
+
+reporting rule NonStandardizedTermIndicator from TransactionReportInstruction: <"Non-standardized term indicator">
+    [regulatoryReference HKMA Trade dataElement "192" field "Non-standardized term indicator"
+        rationale "Taken from CFTC for now without logic related to Cleared"
+        provision "indicates whether the derivative transaction has one or more additional terms or provisions that materially affect the price of the transaction."]
+    filter IsAllowableActionForHKMA
+    then extract common.contract.NonStandardizedTermIndicator
+        as "192 Non-standardized term indicator"
+
+reporting rule SecondaryTransactionIdentifier from TransactionReportInstruction: <"Secondary transaction identifier">
+    [regulatoryReference HKMA Trade dataElement "193" field "Secondary transaction identifier"
+        provision "For internal client code, if applicable."]
+    filter IsAllowableActionForHKMA
+    then extract common.link.SecondaryTransactionIdentifier
+        as "193 Secondary transaction identifier"
+
+reporting rule barrier from TransactionReportInstruction: <"barrier">
+    filter IsAllowableActionForHKMA
+    then common.price.SingleOrUpperAndLowerBarrier
+
+reporting rule ProductDescription from TransactionReportInstruction: <"Product description">
+    [regulatoryReference HKMA Trade dataElement "197" field "Product description"
+        provision "Where applicable: indicates the transaction is rising from Bond Connect investment needs."]
+    filter IsAllowableActionForHKMA
+    then if Extract_BondConnect exists then "BONDCONNECT"
+        as "197 Product description"
+
+reporting rule Beneficiary from TransactionReportInstruction: <"Beneficiary">
+    [regulatoryReference HKMA Trade dataElement "198" field "Beneficiary"
+        provision "Where applicable: the CMU Sub-account Number of the Eligible investor for Bond Connect trades."]
+    filter IsAllowableActionForHKMA
+    then Extract_BondConnect to-string
+        as "198 Beneficiary"
+
+reporting rule TechnicalRecordIdentification from TransactionReportInstruction: <"Technical record identification">
+    (["HKMA", Counterparty1, Counterparty2, UniqueTransactionIdentifier, EventTimestamp to-string]) // UUID?
+        then join "-"
+
+reporting rule ExecutionAgentCounterparty1 from TransactionReportInstruction: <"Execution agent of Counterparty 1">
+    [regulatoryReference HKMA Trade dataElement "216" field "Execution agent of Counterparty 1"]
+    extract common.party.ExecutionAgentCounterparty1
+        as "216 Execution agent of Counterparty 1"
+
+reporting rule ExecutionAgentCounterparty2 from TransactionReportInstruction: <"Execution agent of Counterparty 2">
+    [regulatoryReference HKMA Trade dataElement "217" field "Execution agent of Counterparty 2"]
+    extract common.party.ExecutionAgentCounterparty2
+        as "217 Execution agent of Counterparty 1"
+
+reporting rule SectorOfTheCounterparty1 from TransactionReportInstruction: <"Sector of the Counterparty 1">
+    [regulatoryReference HKMA Trade field "Sector of the Counterparty 1 (Non Reportable)"
+        provision "Determines the corporate sector for Counterparty 1"]
+    filter IsAllowableActionForHKMA
+    then common.party.ExtractPartySector(
+                common.party.ExtractRegimeInformation(
+                        item,
+                        item -> reportingSide -> reportingParty
+                    ) -> hkmaPartyInformation only-element -> natureOfParty,
+                common.party.ExtractRegimeInformation(
+                        item,
+                        item -> reportingSide -> reportingParty
+                    ) -> hkmaPartyInformation only-element -> corporateSector
+            )
+        as "Sector of the Counterparty 1 (Non Reportable)"
+
+reporting rule SectorOfTheCounterparty2 from TransactionReportInstruction: <"Sector of the Counterparty 2">
+    [regulatoryReference HKMA Trade field "Sector of the Counterparty 2 (Non Reportable)"
+        provision "Determines the corporate sector for Counterparty 2"]
+    filter IsAllowableAction
+    then common.party.ExtractPartySector(
+                common.party.ExtractRegimeInformation(
+                        item,
+                        item -> reportingSide -> reportingCounterparty
+                    ) -> hkmaPartyInformation only-element -> natureOfParty,
+                common.party.ExtractRegimeInformation(
+                        item,
+                        item -> reportingSide -> reportingCounterparty
+                    ) -> hkmaPartyInformation only-element -> corporateSector
+            )
+        as "Sector of the Counterparty 2 (Non Reportable)"
+
+reporting rule Counterparty2IdentifierFormat from TransactionReportInstruction: <"Nature of the Counterparty 2">
+    [regulatoryReference HKMA Trade field "Counterparty 2 Identifier Format (Non Reportable)"
+        provision "Determines the identifier format type for Counterparty 2"]
+    extract reportInstruction [
+        extract reportingSide -> reportingCounterparty
+        then extract
+            if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                    only-element
+            then PartyIdentifierFormat2Enum -> NaturalPerson
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+            then PartyIdentifierFormat2Enum -> Lei
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+            then PartyIdentifierFormat2Enum -> SWIFTBIC
+            else PartyIdentifierFormat2Enum -> Other
+    ]
+        as "Counterparty 2 Identifier Format (Non Reportable)"
+
+reporting rule Counterparty2SchemeName from TransactionReportInstruction: <"Counterparty 2 Scheme Name">
+    [regulatoryReference HKMA Trade field "Counterparty 2 Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when identifier format is 'Other' for Counterparty 2"]
+    if Counterparty2IdentifierFormat = Other
+    then reportingSide -> reportingCounterparty
+        then Filter_HKMAPriorityPartyIdentifiers
+        then Extract_HKMASchemeName
+        as "Counterparty 2 Scheme Name (Non Reportable)"
+
+//CentralCounterparty (Non-reportable rules) Format and Scheme Name
+reporting rule CentralCounterpartyIdentifierFormat from TransactionReportInstruction: <"Central Counterparty Identifier Format">
+    [regulatoryReference HKMA Trade field "Central Counterparty Identifier Format (Non Reportable)"
+        provision "Determines the identifier format type for Central Counterparty"]
+    extract reportInstruction [
+        extract Extract_CentralCounterparty
+        then extract
+            if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                    only-element
+            then PartyIdentifierFormat2Enum -> NaturalPerson
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+            then PartyIdentifierFormat2Enum -> Lei
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+            then PartyIdentifierFormat2Enum -> SWIFTBIC
+            else PartyIdentifierFormat2Enum -> Other
+    ]
+        as "Central Counterparty Identifier Format (Non Reportable)"
+
+reporting rule CentralCounterpartySchemeName from TransactionReportInstruction: <"Central Counterparty Scheme Name">
+    [regulatoryReference HKMA Trade field "Central Counterparty Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when identifier format is 'Other' for Central Counterparty"]
+    if CentralCounterpartyIdentifierFormat = Other
+    then Extract_CentralCounterparty
+        then Filter_HKMAPriorityPartyIdentifiers
+        then Extract_HKMASchemeName
+        as "Central Counterparty Scheme Name (Non Reportable)"
+
+//Broker Id (Non-reportable rules) Format and Scheme Name
+reporting rule BrokerIdentifierFormat from TransactionReportInstruction: <"Broker Identifier Format">
+    [regulatoryReference HKMA Trade field "Broker Identifier Format (Non Reportable)"
+        provision "Determines the identifier format type for Broker"]
+    extract reportInstruction [
+        extract Extract_BrokerId
+        then extract
+            if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                    only-element
+            then PartyIdentifierFormat2Enum -> NaturalPerson
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+            then PartyIdentifierFormat2Enum -> Lei
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+            then PartyIdentifierFormat2Enum -> SWIFTBIC
+            else PartyIdentifierFormat2Enum -> Other
+    ]
+        as "Broker Identifier Format (Non Reportable)"
+
+reporting rule BrokerSchemeName from TransactionReportInstruction: <"Broker Scheme Name">
+    [regulatoryReference HKMA Trade field "Broker Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when identifier format is 'Other' for Broker"]
+    if BrokerIdentifierFormat = Other then Extract_BrokerId
+        then Filter_HKMAPriorityPartyIdentifiers
+        then Extract_HKMASchemeName
+        as "Broker Scheme Name (Non Reportable)"
+
+//ClearingMember (Non-reportable rules) Format and Scheme Name
+reporting rule ClearingMemberIdentifierFormat from TransactionReportInstruction: <"Clearing Member Identifier Format">
+    [regulatoryReference HKMA Trade field "Clearing Member Identifier Format (Non Reportable)"
+        provision "Determines the identifier format type for Clearing Member"]
+    extract reportInstruction [
+        extract Extract_ClearingMember
+        then extract
+            if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                    only-element
+            then PartyIdentifierFormat2Enum -> NaturalPerson
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+            then PartyIdentifierFormat2Enum -> Lei
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+            then PartyIdentifierFormat2Enum -> SWIFTBIC
+            else PartyIdentifierFormat2Enum -> Other
+    ]
+        as "Clearing Member Identifier Format (Non Reportable)"
+
+reporting rule ClearingMemberSchemeName from TransactionReportInstruction: <"Clearing Member Scheme Name">
+    [regulatoryReference HKMA Trade field "Clearing Member Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when identifier format is 'Other' for Clearing Member"]
+    if ClearingMemberIdentifierFormat = Other
+    then Extract_ClearingMember
+        then Filter_HKMAPriorityPartyIdentifiers
+        then Extract_HKMASchemeName
+        as "Clearing Member Scheme Name (Non Reportable)"
+
+reporting rule ReferenceEntityFormat from TransactionReportInstruction: <"Reference Entity">
+    [regulatoryReference HKMA Trade field "Reference Entity Format (Non Reportable)"
+        provision "Determines the identifier format type for Reference Entity"]
+    extract Extract_ReferenceEntityFormat
+        as "Reference Entity Format (Non Reportable)"
+
+reporting rule DerivativeBasedOnCryptoAssets from TransactionReportInstruction: <"Derivative based on crypto-assets">
+    filter IsAllowableActionForHKMA
+    then extract cde.underlier.CryptoAssetUnderlyingIndicator
+
+reporting rule PriorUTIProprietarySchemeName from TransactionReportInstruction: <"Prior UTI Proprietary Scheme Name">
+    [regulatoryReference HKMA Trade field "Prior UTI Proprietary Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when Prior UTI is proprietary"]
+    if PriorUTIProprietary exists then Extract_PriorUTIPropietary
+        then Extract_HKMATransactionSchemeName
+        as "Prior UTI Proprietary Scheme Name (Non Reportable)"
+
+reporting rule UniqueTransactionIdentifierProprietarySchemeName from TransactionReportInstruction: <"Unique Transaction Identifier Proprietary Scheme Name">
+    [regulatoryReference HKMA Trade field "Unique Transaction Identifier Proprietary Scheme Name (Non Reportable)"
+        provision "Provides the scheme name when Unique Transaction Identifier is proprietary"]
+    if UniqueTransactionIdentifierProprietary exists
+    then Extract_UTIPropietary
+        then Extract_HKMATransactionSchemeName
+        as "Unique Transaction Identifier Proprietary Scheme Name (Non Reportable)"

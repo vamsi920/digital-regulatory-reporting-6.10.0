@@ -1,0 +1,250 @@
+namespace drr.regulation.asic.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.asic.*
+import drr.regulation.common.*
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iso.*
+
+corpus Dissemination Valuation
+
+report ASIC Valuation in T+1
+  	from ValuationReportInstruction
+  	when ReportableProduct
+  	with type ASICValuationReport
+
+eligibility rule ReportableProduct from ValuationReportInstruction: <"When eligible for ASIC">
+    [regulatoryReference ASIC Valuation
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+//ASIC Definitions
+reporting rule ASICUniqueTransactionIdentifier from ValuationReportInstruction: <"Unique transaction identifier">
+    [regulatoryReference ASIC Valuation table "1" dataElement "1" field "Unique transaction identifier"
+        provision "For a Reportable Transaction of the kind referred to in 1.2.5(1)(b)(i), (iii) or (iv), a UTI as referred to in Rule 2.2.9.
+            For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c) a UTI as referred to in Rule 2.2.9.
+            For a Reportable Transaction of the kind referred to in subparagraph 1.2.5(1)(b)(ii) in relation to an OTC Derivative or for a report made under paragraph 2.2.2(2)(a) or (b) or Rule 2.4.1 in relation to an OTC Derivative:
+                if a UTI was reported for the initial Reportable Transaction in relation to the OTC Derivativethat UTI; and
+                if a UTI was not reported for the initial Reportable Transaction  a transaction identifier that was reported for the initial Reportable Transaction."]
+    extract
+        if GetRegimeSpecificIdentifiers(
+                reportableInformation,
+                SupervisoryBodyEnum -> ASIC,
+                TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableInformation,
+                    SupervisoryBodyEnum -> ASIC,
+                    TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+                )
+        else valuationDetails -> tradeInformation -> uniqueTradeIdentifier -> assignedIdentifier -> identifier
+    then distinct
+    then only-element
+
+reporting rule UniqueTransactionIdentifier from ValuationReportInstruction: <"Unique transaction identifier">
+    [regulatoryReference ASIC Valuation table "1" dataElement "1" field "Unique transaction identifier"
+        provision "For a Reportable Transaction of the kind referred to in 1.2.5(1)(b)(i), (iii) or (iv), a UTI as referred to in Rule 2.2.9.
+            For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c) a UTI as referred to in Rule 2.2.9.
+            For a Reportable Transaction of the kind referred to in subparagraph 1.2.5(1)(b)(ii) in relation to an OTC Derivative or for a report made under paragraph 2.2.2(2)(a) or (b) or Rule 2.4.1 in relation to an OTC Derivative:
+                if a UTI was reported for the initial Reportable Transaction in relation to the OTC Derivativethat UTI; and
+                if a UTI was not reported for the initial Reportable Transaction  a transaction identifier that was reported for the initial Reportable Transaction."]
+    ASICUniqueTransactionIdentifier then filter IsMax32UpperCaseAlphanumericText = True
+        as "10 Unique Transaction Identifier (UTI)"
+
+reporting rule UniqueTransactionIdentifierProprietary from ValuationReportInstruction: <"Unique transaction identifier">
+    [regulatoryReference ASIC Valuation table "1" dataElement "1" field "Unique transaction identifier"
+        provision "For a Reportable Transaction of the kind referred to in 1.2.5(1)(b)(i), (iii) or (iv), a UTI as referred to in Rule 2.2.9.
+            For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c) a UTI as referred to in Rule 2.2.9.
+            For a Reportable Transaction of the kind referred to in subparagraph 1.2.5(1)(b)(ii) in relation to an OTC Derivative or for a report made under paragraph 2.2.2(2)(a) or (b) or Rule 2.4.1 in relation to an OTC Derivative:
+                if a UTI was reported for the initial Reportable Transaction in relation to the OTC Derivativethat UTI; and
+                if a UTI was not reported for the initial Reportable Transaction  a transaction identifier that was reported for the initial Reportable Transaction."]
+    ASICUniqueTransactionIdentifier then filter IsMax32UpperCaseAlphanumericText = False
+        as "10 Unique Transaction Identifier (Proprietary)"
+
+reporting rule ReportingEntity from ValuationReportInstruction: <"Reporting entity">
+    [regulatoryReference ASIC Valuation table "1" dataElement "5" field "Reporting entity"
+        provision "The current LEI of the Reporting Entity"]
+    extract ExtractPartyResponsibleForReportingIdentifier(reportingSide)
+        as "1.5 Reporting entity"
+
+reporting rule Counterparty1 from ValuationReportInstruction: <"Counterparty 1">
+    [regulatoryReference ASIC Valuation table "1" dataElement "6" field "Counterparty 1"
+        provision "The current LEI of:
+            If the Reporting Entity is an RE, Trustee or corporate director of the managed investment scheme, trust or CCIV that holds the OTC Derivative the subject of the Reportable Transaction, the managed investment scheme, trust or CCIV.
+            Otherwise, the Reporting Entity."]
+    extract PartyLei(reportingSide -> reportingParty -> partyId)
+        as "1.6 Counterparty 1"
+
+reporting rule Counterparty2 from ValuationReportInstruction: <"Counterparty 2">
+    [regulatoryReference ASIC Valuation table "1" dataElement "7" field "Counterparty 2"
+        provision "The LEI or another identifier, determined in accordance with subrule S1.3.1(2), of the entity that is:
+        if the counterparty of the OTC Derivative the subject of the Reportable Transaction whose identifier is not reported at item 6 is an RE or Trustee of the managed investment scheme or trust that holds the OTC Derivative the subject of the Reportable Transaction, the managed investment scheme or trust; 
+        otherwise, the counterparty of the OTC Derivative the subject of the Reportable Transaction whose identifier is not reported for Counterparty 1 (item 6 above).
+    If the OTC Derivative the subject of the Reportable Transaction was entered into on or through a facility and cleared by a CCP, and the identities of the counterparties were not disclosed to each other, an anonymity identifier."]
+    extract
+        if (reportingSide -> reportingCounterparty -> partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+                or reportingSide -> reportingCounterparty -> personRole -> role any = NaturalPersonRoleEnum -> Buyer
+                or reportingSide -> reportingCounterparty -> personRole -> role any = NaturalPersonRoleEnum -> Seller)
+        then PartyLeiAndPersonByRoles(
+                    reportingSide -> reportingCounterparty,
+                    reportingSide -> reportingParty
+                )
+        else reportingSide -> reportingCounterparty -> partyId -> identifier first
+        as "1.7 Counterparty 2"
+
+reporting rule Counterparty2IdentifierTypeIndicator from ValuationReportInstruction: <"Counterparty 2 identifier type indicator">
+    [regulatoryReference ASIC Valuation table "1" dataElement "8" field "Counterparty 2 identifier type indicator"
+        provision "For the identifier reported for Counterparty 2 (item 7 above), the applicable True or False value specified in column 5 of this item."]
+    extract reportingSide -> reportingCounterparty
+    then extract
+        if personRole -> role any = NaturalPersonRoleEnum -> Buyer
+                or personRole -> role any = NaturalPersonRoleEnum -> Seller
+                or partyId -> identifierType all <> PartyIdentifierTypeEnum -> LEI
+        then False
+        else if PartyLei(partyId) exists
+        then True
+        as "1.8 Counterparty 2 identifier type indicator"
+
+reporting rule ExecutionAgentOfTheCounterparty1 from ValuationReportInstruction: <"Execution agent of the Counterparty 1">
+    [regulatoryReference ASIC Valuation table "1" dataElement "13" field "Execution agent of the Counterparty 1"
+        provision "If applicable, the LEI of the entity that entered into the Reportable Transaction as agent for the Reporting Entity without becoming a counterparty themselves."]
+    extract ReportableValuation [
+        ReportableValuation -> reportableInformation -> partyInformation
+            filter partyReference = ReportableValuation -> reportingSide -> reportingParty
+            then distinct only-element
+            then extract
+                ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutionAgent
+                    )
+            then extract PartyLei(partyId)
+    ]
+        as "1.13 Execution agent of the Counterparty 1"
+
+reporting rule ActionType from ValuationReportInstruction: <"Action type">
+    [regulatoryReference ASIC Valuation table "1" dataElement "101" field "Action type"
+        provision "An indicator of whether the report being made relates to:
+            a Reportable Transaction that is an entry into an OTC Derivative;
+            a Reportable Transaction that is a modification of an OTC Derivative; or
+            a Reportable Transaction that is a full termination of an OTC Derivative.
+        For a report of a change under subrule 2.2.2(1), a notation to indicate whether the change relates to:
+            a correction to information in a report previously made;
+            a cancellation of a report previously made in error;
+            the reinstatement of a Reportable Transaction that was cancelled, terminated, matured or expired in error; or
+            the transfer of a Reportable Transaction from one Derivative Trade Repository to another Derivative Trade Repository."]
+    extract
+        if valuationDetails -> tradeInformation -> action = ActionTypeEnum -> VALU
+        then valuationDetails -> tradeInformation -> action to-string
+        as "1.101 Action type"
+
+reporting rule ReportSubmittingEntity from ValuationReportInstruction: <"Report submitting entity">
+    [regulatoryReference ASIC Valuation table "1" dataElement "104" field "Report submitting entity"
+        provision "The LEI of the person submitting the report of a Reportable Transaction."]
+    extract ExtractReportSubmittingPartyIdentifier(reportingSide)
+        as "1.104 Report submitting entity"
+
+reporting rule SmallScaleBuySideEntityIndicator from ValuationReportInstruction: <"Small-scale buy-side Entity indicator">
+    [regulatoryReference ASIC Valuation table "2" dataElement "4" field "Small-scale buy-side Entity indicator"
+        provision "If applicable, an indicator that the Reporting Entity is making the report as a Small-scale Buy-side Entity."]
+    [regulatoryReference ISDA PeerReviewGroup date "20240207"
+        provision "in FpML a small bank indicator exists in clearing exceptions (http://www.fpml.org/coding-scheme/cftc-clearing-exception-and-exemptions-1-1.xml), also http://www.fpml.org/coding-scheme/party-role-3-9.xml when value is ExecutionAgent is defined as 'The (generally buy-side) organization'  we could use this data as a base to define the indicator in CDM"]
+    extract reportInstruction [
+        reportableInformation -> partyInformation
+            then filter partyReference = reportInstruction -> reportingSide -> reportingParty
+            then extract regimeInformation -> asicPartyInformation
+            then flatten
+            then only-element
+            then extract
+                if smallScaleBuySideIndicator exists and smallScaleBuySideIndicator = True
+                then "SSBS"
+    ]
+        as "2.4 Small-scale buy-side Entity indicator"
+
+reporting rule ValuationTimestamp from ValuationReportInstruction: <"Valuation Timestamp">
+    [regulatoryReference ASIC Valuation table "2" dataElement "6" field "Valuation timestamp"
+        provision "The date, or date and time, that the amount reported as Valuation amount (item 7 below) was determined."]
+    extract valuationDetails -> valuation -> timestamp
+        as "2.6 Valuation Timestamp"
+
+reporting rule ValuationAmount from ValuationReportInstruction: <"Valuation amount">
+    [regulatoryReference ASIC Valuation table "2" dataElement "7" field "Valuation amount"
+        provision "The unadjusted value of the OTC Derivative the subject of the Reportable Transaction, calculated as the amount that would be paid to terminate the OTC Derivative in an orderly market on the valuation date.
+            A value greater than zero is reported if the amount would be paid by Counterparty 2 to Counterparty 1.
+            A value less than zero is reported if the amount would be paid by Counterparty 1 to Counterparty 2.
+            A value of zero is reported if no amount would be paid by either Counterparty 1 or Counterparty 2."]
+    extract valuationDetails -> valuation -> amount -> value
+    then FormatToShortFraction5DecimalNumber
+        as "2.7 Valuation amount"
+
+reporting rule ValuationCurrency from ValuationReportInstruction: <"Valuation currency">
+    [regulatoryReference ASIC Valuation table "2" dataElement "8" field "Valuation currency"
+        provision "The currency code for the currency in which the Valuation amount (item 7 above) is denominated."]
+    extract valuationDetails -> valuation -> amount -> unit -> currency
+    then extract ConvertNonISOToISOCurrency
+        as "2.8 Valuation currency"
+
+reporting rule ValuationMethod from ValuationReportInstruction: <"Valuation method">
+    [regulatoryReference ASIC Valuation table "2" dataElement "9" field "Valuation method"
+        provision "An Indicator of the source and method used to determine the amount reported as Valuation amount (item 7 above). "]
+    extract valuationDetails -> valuation
+    then extract cde.valuation.ValuationMethod to-enum ValuationType1Code
+        as "2.9 Valuation method"
+
+reporting rule Delta from ValuationReportInstruction: <"Delta">
+    [regulatoryReference ASIC Valuation table "2" dataElement "10" field "Delta"
+        provision "For OTC Derivatives that are options, the ratio of the change in the price of the OTC Derivative to the change in the price of the underlier that is the underlier applicable to the ne1t time that the option may be exercised."]
+    extract valuationDetails -> valuation -> delta
+    then FormatToShortFraction5DecimalNumber
+        as "2.10 Delta"
+
+reporting rule NextFloatingReferenceResetDateLeg1 from ValuationReportInstruction: <"Next floating reference reset date - Leg 1">
+    [regulatoryReference ASIC Valuation table "2" dataElement "11" field "Next floating reference reset date - Leg 1"
+        provision "If applicable and other than for floating reference rates that reset on a daily frequency, the unadjusted nearest date in the future on which the interest rate reference rate of Leg 1 will be reset."]
+    extract valuationDetails -> tradeInformation -> nextFloatingReferenceResetDateLeg1
+        as "2.11 Next floating reference reset date - Leg 1"
+
+reporting rule NextFloatingReferenceResetDateLeg2 from ValuationReportInstruction: <"Next floating reference reset date - Leg 2">
+    [regulatoryReference ASIC Valuation table "2" dataElement "12" field "Next floating reference reset date - Leg 2"
+        provision "If applicable and other than for floating reference rates that reset on a daily frequency, the unadjusted nearest date in the future on which the interest rate reference rate of Leg 2 will be reset."]
+    extract valuationDetails -> tradeInformation -> nextFloatingReferenceResetDateLeg2
+        as "2.12 Next floating reference reset date - Leg 2"
+
+reporting rule TechnicalRecordId from ValuationReportInstruction: <"Technical Record Id (ISO)">
+    [regulatoryReference ASIC Valuation dataElement "[Internal]" field "Technical Record Id (ISO)"
+        provision "Unique technical identification of the original data for which the status is provided for the BDR."]
+    extract reportableInformation -> partyInformation -> regimeInformation
+    then filter
+        reportingRole = ReportingRoleEnum -> ReportingParty
+            and regimeName = RegimeNameEnum -> ASIC
+    then extract technicalRecordId
+    then distinct only-element
+        as "[Internal] Technical Record Id (ISO)"
+
+reporting rule ReportingTimestamp from ValuationReportInstruction: <"Reporting timestamp">
+    [regulatoryReference ASIC Valuation dataElement "[Not in regulation]" field "Reporting timestamp"
+        provision "The date and time of the submission of a  report of a Reportable Transaction to the Derivative Trade Repository."]
+    Now
+        as "[Not in regulation] Reporting timestamp"
+
+reporting rule ExecutionAgentOfTheCounterparty2DTCC from ValuationReportInstruction: <"Execution Agent of Counterparty 2">
+    [regulatoryReference ASIC Valuation dataElement "[Not in Regulation]" field "Execution Agent of Counterparty 2"
+        provision "The Execution agent of Counterparty 2"]
+    extract reportableValuation [
+        reportableValuation -> reportableInformation -> partyInformation
+            filter
+                partyReference = reportableValuation -> reportingSide -> reportingCounterparty
+            then distinct only-element
+            then extract
+                ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> ExecutionAgent
+                    )
+            then extract PartyLei(partyId)
+    ]
+        as "[Not in regulation] Execution Agent of Counterparty 2"

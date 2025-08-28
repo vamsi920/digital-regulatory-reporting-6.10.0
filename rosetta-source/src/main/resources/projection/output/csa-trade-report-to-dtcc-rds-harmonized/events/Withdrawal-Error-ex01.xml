@@ -1,0 +1,37 @@
+<document xmlns="http://www.dtcc.com/DTCC/rds-1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <submission>
+    <header>
+      <sender>549300K7EEOSKRJDRI19</sender>
+      <documentTrackingId>X0012024-04-29T00:00Z</documentTrackingId>
+      <documentCreationTimestamp>2024-04-29T00:00:00Z</documentCreationTimestamp>
+    </header>
+    <core>
+      <messageId>X0012024-04-29T00:00Z</messageId>
+      <messageType>Trade State</messageType>
+      <submittedForParty>549300K7EEOSKRJDRI19</submittedForParty>
+      <submittingPartyId>549300K7EEOSKRJDRI19</submittingPartyId>
+      <submittingPartyIdType>LEI</submittingPartyIdType>
+      <tradeParty1Id>549300K7EEOSKRJDRI19</tradeParty1Id>
+      <tradeParty1IdType>LEI</tradeParty1IdType>
+      <tradeParty2Id>549300O5MFEP1XJ40B46</tradeParty2Id>
+      <tradeParty2IdType>LEID</tradeParty2IdType>
+      <utiId>WITHDRAWALERROREXX01</utiId>
+      <reportingTimestamp>2024-04-29T00:00:00Z</reportingTimestamp>
+      <noaActionType>EROR</noaActionType>
+    </core>
+    <harmonizedData>
+      <clearingStatus>N</clearingStatus>
+      <version>CORE1.0</version>
+      <level>TCTN</level>
+      <allocationType>UNAL</allocationType>
+      <noaActionType>EROR</noaActionType>
+      <eventIdentifier>X001</eventIdentifier>
+      <packageIndicator>false</packageIndicator>
+      <cdePlatformIdentifier>BILT</cdePlatformIdentifier>
+    </harmonizedData>
+    <harmonizedRepeatableData>
+      <tradeParty1LocalCounterpartyJurisdiction>NON-CA</tradeParty1LocalCounterpartyJurisdiction>
+      <tradeParty2LocalCounterpartyJurisdiction>NON-CA</tradeParty2LocalCounterpartyJurisdiction>
+    </harmonizedRepeatableData>
+  </submission>
+</document>

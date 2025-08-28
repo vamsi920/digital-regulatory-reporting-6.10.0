@@ -1,0 +1,83 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "213800WWTABZ1GOJHH37",
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "maturityDateOfTheUnderlier" : "2032-01-13",
+    "messageType" : "Trade State",
+    "optionStyle" : "BERM",
+    "optionType" : "CALL",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2021-12-06",
+  "eventTimestamp" : "2021-12-06T17:09:17Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:17Z",
+  "expirationDate" : "2022-07-13",
+  "finalContractualSettlementDate" : "2032-01-13",
+  "firstExerciseDate" : "2022-07-13",
+  "leg1" : {
+    "notionalAmount" : 100000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 100000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifierFormat" : "Lei",
+    "spread" : {
+      "basis" : 0
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 1244096.653,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2021-01-13",
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "213800IV9PCAC364HN60",
+  "strikePrice" : {
+    "decimal" : 0.03
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "IROPTIONSWAPTIONEX02"
+}

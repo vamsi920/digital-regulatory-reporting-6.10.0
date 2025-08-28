@@ -1,0 +1,68 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2021-01-04",
+  "eventTimestamp" : "2020-11-16T00:00:00Z",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2021-01-29",
+  "finalContractualSettlementDate" : "2021-01-29",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalQuantity" : 3000,
+    "quantityFrequency" : "HOUL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OZTR",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0.003
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 2000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalQuantity" : 3000,
+    "quantityFrequency" : "HOUL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OZTR",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 4000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "PALLADIUM-NYMEX",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingSpecifiedPerson" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPINDEX02"
+}

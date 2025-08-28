@@ -1,0 +1,93 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "MXKQVM4U1OHBQWFPG196",
+  "callAmount" : 100,
+  "callCurrency" : "EUR",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "messageType" : "Trade State",
+    "optionStyle" : "AMER",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "W22LROWP2IHZNBB6K528",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-11-18",
+  "eventIdentifier" : "envuatuatExt1c7b35f7cf35543d3a181a69cb15ee8f2",
+  "eventTimestamp" : "2020-11-18T14:13:20Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1.1,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2020-11-18T14:12:30Z",
+  "expirationDate" : "2020-11-20",
+  "finalContractualSettlementDate" : "2020-11-24",
+  "firstExerciseDate" : "2020-11-18",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "notionalAmount" : 100,
+    "notionalCurrency" : "EUR",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 110,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "AMER",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 500,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2020-11-20",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 110,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "MXKQVM4U1OHBQWFPG196",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "W22LROWP2IHZNBB6K528",
+  "strikePrice" : {
+    "monetary" : 1.1
+  },
+  "strikePriceCurrency" : "EUR/USD",
+  "strikePriceNotation" : "Monetary"
+}

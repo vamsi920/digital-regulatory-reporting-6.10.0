@@ -1,0 +1,10 @@
+namespace drr.regulation.csa
+version "${project.version}"
+
+body Authority CSA <"The Canadian Securities Administrators (CSA) is the umbrella organization of Canada's provincial and territorial securities regulators whose objective is to improve, coordinate and harmonize regulation of the Canadian capital markets.">
+
+body Authority DTCC <"The Depository Trust & Clearing Corporation (DTCC) is an American financial market infrastructure company that provides clearing, settlement and trade reporting services to financial market participants. It performs the exchange of securities on behalf of buyers and sellers and functions as a central securities depository by providing central custody of securities.">
+
+corpus Regulations "CSA Derivatives Data Technical Manual 2024 Version 1.0" CSA_2024 <"The technical specifications in this CSA Derivatives Data Technical Manual (the Technical Manual) specify the definition, format, and allowable values for each data element that is required to be reported under Manitoba Securities Commission Rule 91-507 Derivatives: Trade Reporting, Ontario Securities Commission Rule 91-507 Derivatives: Trade Reporting, Regulation 91-507 respecting Trade Repositories and Derivatives Data Reporting (Qubec) and, in the remaining provinces and territories, Multilateral Instrument 96-101 Derivatives: Trade Reporting (collectively, the TR Rules) and are sourced primarily from the Revised CDE Technical Guidance - version 3: Harmonisation of critical OTC derivatives data elements (other than UTI and UPI)1 (the CDE Technical Guidance).">
+
+corpus Specifications "DTCC Specs" DTCC_Specs <"Document providing the message specifications required for inbound message for DTCC for CSA.">

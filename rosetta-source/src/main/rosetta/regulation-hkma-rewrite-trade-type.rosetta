@@ -1,0 +1,1223 @@
+namespace drr.regulation.hkma.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.common.util.*
+import drr.regulation.hkma.*
+import drr.standards.iosco.cde.base.* as cde
+import drr.standards.iso.*
+
+type HKMATransactionReport extends common.CommonTransactionReport:
+    [rootType]
+    override technicalRecordId string (1..1)
+        [regulatoryReference HKMA Trade dataElement "200" field "Technical record identification"
+            provision "Unique identifier of a trade action used as part of error management and status advice message."]
+        [label "200 Technical record identification"]
+    override leg1 common.CommonLeg (0..1)
+    //PeriodicPayment
+        [label for periodicPayment -> fixedRateDayCountConvention "22 Fixed rate day count convention - Leg 1"]
+        [regulatoryReference for periodicPayment -> fixedRateDayCountConvention HKMA Trade dataElement "22" field "Fixed rate day count convention - Leg 1"
+            provision "Where applicable: day count convention of leg 1 (often also referred to as day count fraction or day count basis or day count method) that determines how interest payments are calculated. It is used to compute the year fraction of the calculation period, and indicates the number of days in the calculation period divided by the number of days in the year."]
+
+        [label for periodicPayment -> floatingRateDayCountConvention "23 Floating rate day count convention - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRateDayCountConvention HKMA Trade dataElement "23" field "Floating rate day count convention - Leg 1"
+            provision "Where applicable: day count convention (often also referred to as day count fraction or day count basis or day count method) that determines how interest payments for the floating rate of leg 1 are calculated. It is used to compute the year fraction of the calculation period, and indicates the number of days in the calculation period divided by the number of days in the year."]
+
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriod "26 Fixed rate payment frequency period-Leg 1"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriod HKMA Trade dataElement "26" field "Payment frequency period"
+            provision "Where applicable: time unit associated with the frequency of payments, eg day, week, month, year or term of the stream for the fixed rate of leg 1."]
+
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriod "27 Floating rate payment frequency period - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriod HKMA Trade dataElement "27" field "Payment frequency period"
+            provision "Where applicable: time unit associated with the frequency of payments, eg day, week, month, year or term of the stream for the floating rate of leg 1."]
+
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier "30 Fixed rate payment frequency period multiplier - Leg 1"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier HKMA Trade dataElement "30" field "Payment frequency period multiplier"
+            provision "Where applicable: number of time units (as expressed by the payment frequency period) that determines the frequency at which periodic payment dates occur for the fixed rate of leg 1.
+            For example, a transaction with payments occurring every two months is represented with a payment frequency period of MNTH (monthly) and a payment frequency period multiplier of 2.
+            This data element is not applicable if the payment
+            frequency period is ADHO. If payment frequency period is EXPI, then the payment frequency period multiplier is 1. If the payment frequency is intraday, then the payment frequency period is DAIL and the payment frequency multiplier is 0."]
+
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier "31 Floating rate payment frequency period multiplier - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier HKMA Trade dataElement "31" field "Payment frequency period multiplier"
+            provision "Where applicable: number of time units (as expressed by the payment frequency period) that determines the frequency at which periodic payment dates occur for the floating rate of leg 1. For example, a transaction with payments occurring every two months is represented with a payment frequency period of MNTH (monthly) and a payment frequency period multiplier of 2.
+            This data element is not applicable if the payment frequency period is ADHO. If payment frequency period is EXPI, then the payment frequency period multiplier is 1. If the payment frequency is intraday, then the payment frequency period is DAIL and the payment frequency multiplier is 0."]
+
+        [label for periodicPayment -> floatingRateIdentifier "164 Identifier of the floating rate - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRateIdentifier HKMA Trade dataElement "164" field "Identifier of the floating rate - Leg 1"
+            provision "Where applicable: an identifier of the interest rates used which are reset at predetermined intervals by reference to a market reference rate of leg 1."]
+       
+        [label for periodicPayment -> floatingRateIndicator "165 Indicator of the floating rate - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRateIndicator HKMA Trade dataElement "165" field "Indicator of the floating rate - Leg 1"
+            provision "An indication of the interest rate of leg 1, where available."]
+       
+        [label for periodicPayment -> floatingRateReferencePeriod "167 Floating rate reference period - Leg 1  time period"]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriod HKMA Trade dataElement "167" field "Floating rate reference period - Leg 1  time period"
+            provision "Time period describing the reference period for the floating rate of leg 1, if applicable."]
+       
+        [label for periodicPayment -> floatingRateReferencePeriodMultiplier "168 Floating rate reference period - Leg 1  multiplier"]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriodMultiplier HKMA Trade dataElement "168" field "Floating rate reference period - Leg 1  multiplier"
+            provision "Multiplier of the time period describing the reference period for the floating rate of leg 1, if applicable."]
+      
+        [label for periodicPayment -> nameOfTheFloatingRate "166 Name of the floating rate - Leg 1"]
+        [regulatoryReference for periodicPayment -> nameOfTheFloatingRate HKMA Trade dataElement "166" field "Name of the floating rate - Leg 1"
+            provision "The full name of the interest rate as assigned by the index provider of leg 1, if applicable."]
+     
+        [label for notionalAmount "83 Notional amount - Leg 1"]
+        [regulatoryReference for notionalAmount HKMA Trade dataElement "83" field "Notional amount - Leg 1"
+            provision "Where applicable: Notional amount of leg 1.
+            - for OTC derivative transactions negotiated in monetary amounts, amount specified in the contract.
+            - for OTC derivative transactions negotiated in non-monetary amounts:
+                (1) Equity options and similar products: Product of the strike price and the number of shares or index units
+                (2) Equity forwards and similar products: Product of the forward price and the number of shares or index units
+                (3) Equity dividend swaps and similar products: Product of the period fixed strike and the number of shares or index units.
+                (4) Equity swaps, portfolio swaps and similar products: Product of the initial price and the number of shares or index units.
+                (5) Equity variance swaps and similar products: Vega notional amount
+                (6) Equity volatility swaps and similar products: Vega notional amount
+                (7) Equity CFDs and similar products: Product of the initial price and the number of shares or index units
+                (8) Commodity options and similar products: Product of the strike price and the total notional quantity
+                (9) Commodity forwards and similar products: Product of the forward price and the total notional quantity
+                (10) Commodity fixed/float swaps and similar products: Product of the fixed price and the total notional quantity
+                (11) Commodity basis swaps and similar products: Product of the last available spot price at the time of the transaction of the underlying asset of the leg with no spread and the total notional quantity of the leg with no spread
+                (12) Commodity swaptions and similar products: Notional amount of the underlying contract
+                (13) Commodity CFDs and similar products: Product of the initial price and the total notional quantity
+                Notes to the conversion table for OTC derivative transactions negotiated in non-monetary amounts:
+                Note 1: for transactions where the quantity unit of measure differs from the price unit of measure, the price or total quantity is converted to a unified unit of measure.
+                Note 2: if applicable to the transaction, the notional amount reflects any multipliers and option entitlements.
+                Note 3: for basket-type contracts, the notional amount of the transaction is the sum of the notional amounts of each constituent of the basket.
+
+                In addition:
+                For OTC derivative transactions with a notional amount schedule, the initial notional amount, agreed by the counterparties at the inception of the transaction, is reported in this data element.
+                For OTC foreign exchange options, in addition to this data element, the amounts are reported using the data elements Call amount and Put amount. For amendments or lifecycle events, the resulting outstanding notional amount is reported; (steps in notional amount schedules are not considered to be amendments or lifecycle events);
+                Where the notional amount is not known when a new transaction is reported, the notional amount is updated as it becomes available."]
+        
+     //Leg
+        [label for notionalAmountSchedule -> value "98 Notional amount schedule - Notional amount - Leg 1"]
+        [regulatoryReference for notionalAmountSchedule -> value HKMA Trade dataElement "98" field "Notional amount schedule - Notional amount - Leg 1"
+            provision "Where applicable: for OTC derivative transactions negotiated in monetary amounts with a notional amount schedule: Notional amount which becomes effective on the associated unadjusted effective date of leg 1."]
+       
+        [label for notionalAmountSchedule -> effectiveDate "94 Notional amount schedule - Effective date - Leg 1"]
+        [regulatoryReference for notionalAmountSchedule -> effectiveDate HKMA Trade dataElement "94" field "Notional amount schedule - Effective date - Leg 1"
+            provision "Where applicable: for OTC derivative transactions negotiated in monetary amounts with a notional amount schedule: Unadjusted date on which the associated notional amount becomes effective of leg 1."]
+    
+        [label for notionalAmountSchedule -> endDate "96 Notional amount schedule - End date - Leg 1"]
+        [regulatoryReference for notionalAmountSchedule -> endDate HKMA Trade dataElement "96" field "Notional amount schedule - End date - Leg 1"
+            provision "Where applicable: for OTC derivative transactions negotiated in monetary amounts with a notional amount schedule: Unadjusted end date of the notional amount of leg 1 (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)"]
+   
+        [label for notionalQuantitySchedule -> value "106 Notional quantity schedule - Notional quantity - Leg 1"]
+        [regulatoryReference for notionalQuantitySchedule -> effectiveDate HKMA Trade dataElement "106" field "Notional quantity schedule - Notional quantity - Leg 1"
+            provision "Where applicable: for OTC derivative transactions negotiated in non-monetary amounts with a Notional quantity schedule: Notional quantity which becomes effective on the associated unadjusted effective date of leg 1. The initial notional quantity and associated unadjusted effective and end date are be reported as the first values of the schedule.This data element is not applicable to OTC derivative transactions with notional quantities that are condition- or event-dependent."]
+
+        [label for notionalQuantitySchedule -> effectiveDate "102 Notional quantity schedule - Effective date - Leg 1"]
+        [regulatoryReference for notionalQuantitySchedule -> effectiveDate HKMA Trade dataElement "102" field "Notional quantity schedule - Effective date - Leg 1"
+            provision "Where applicable: for OTC derivative transactions negotiated in non-monetary amounts with a Notional quantity schedule: Unadjusted date on which the associated notional quantity becomes effective of leg 1. The initial notional quantity and associated unadjusted effective and end date are be reported as the first values of the schedule. This data element is not applicable to OTC derivative transactions with notional quantities that are condition- or event-dependent."]
+
+        [label for notionalQuantitySchedule -> endDate "104 Notional quantity schedule - End date - Leg 1"]
+        [regulatoryReference for notionalQuantitySchedule -> effectiveDate HKMA Trade dataElement "104" field "Notional quantity schedule - End date - Leg 1"
+            provision "Where applicable: for OTC derivative transactions negotiated in non-monetary amounts with a Notional quantity schedule: Unadjusted end date of the notional quantity of leg 1. (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period) The initial notional quantity and associated unadjusted effective and end date are be reported as the first values of the schedule. This data element is not applicable to OTC derivative transactions with notional quantities that are condition- or event-dependent."]
+
+        [label for totalNotionalQuantity "100 Total notional quantity - Leg 1"]
+        [regulatoryReference for totalNotionalQuantity HKMA Trade dataElement "100" field "Total notional quantity - Leg 1"
+            provision "Where applicable: aggregate Notional quantity of the underlying asset for the term of the transaction of leg 1, if applicable.
+                     Where the Total notional quantity is not known when a new transaction is reported, the Total notional quantity is updated as it becomes available."]
+
+        [label for notionalQuantity "140 Notional quantity - Leg 1"]
+        [regulatoryReference for notionalQuantity HKMA Trade dataElement "140" field "Notional quantity - Leg 1"
+            provision "Where applicable, Notional quantity of leg 1. 
+                    For swap transactions negotiated in non-monetary amounts with fixed notional quantity for each schedule period (i.e., 50 barrels per month).
+                    
+                    The frequency is reported in Quantity frequency and the unit of measure is reported in Quantity unit of measure."]
+     
+        [label for fixedRate "63 Fixed rate - Leg 1"]
+        [regulatoryReference for fixedRate HKMA Trade dataElement "63" field "Fixed rate - Leg 1"
+            provision "Where applicable: for OTC derivative transactions with periodic payments, per annum rate of the fixed rate of leg 1."]
+     
+        [label for fixingDate "146 Fixing date - Leg 1"]
+        [regulatoryReference for fixingDate HKMA Trade dataElement "146" field "Fixing date - Leg 1"
+            provision "Describes the specific date when a non-deliverable forward as well as various types of FX OTC options such as cash-settled options that will \"fix\" against a particular exchange rate, which will be used to compute the ultimate cash settlement of leg 1, if applicable."]
+     
+        [label for quantityFrequency "142 Quantity frequency - Leg 1"]
+        [regulatoryReference for quantityFrequency HKMA Trade dataElement "142" field "Quantity frequency - Leg 1"
+            provision "The rate at which the quantity is quoted on the leg 1 of the swap transaction. e.g., hourly, daily, weekly, monthly, if applicable."]
+     
+        [label for quantityFrequencyMultiplier "144 Quantity frequency multiplier - Leg 1"]
+        [regulatoryReference for quantityFrequencyMultiplier HKMA Trade dataElement "144" field "Quantity frequency multiplier - Leg 1"
+            provision "The number of time units for the Quantity frequency of leg 1, if applicable."]
+     
+        [label for notionalCurrency "88 Notional currency - Leg 1"]
+        [regulatoryReference for notionalCurrency HKMA Trade dataElement "88" field "Notional currency - Leg 1"
+            provision "Where applicable: the currency in which the notional amount of leg 1 is denominated."]
+     
+        [label for settlementCurrency "19 Settlement currency - Leg 1"]
+     
+        [label for spread -> monetary "65 Spread - Leg 1 (Monetary)"]
+        [label for spread -> decimal "65 Spread - Leg 1 (Percentage)"]
+        [label for spread -> basis "65 Spread - Leg 1 (Basis)"]
+        [regulatoryReference for spread -> basis HKMA Trade dataElement "65" field "Spread - Leg 1  (Basis)"
+            provision "An indication of the spread of leg 1, Where applicable: for OTC derivative transactions with periodic payments (eg interest rate fixed/float swaps, interest rate basis swaps, commodity swaps), 
+        - spread on the individual floating leg(s) index reference price, in the case where there is a spread on a floating leg(s) 
+        - difference between the reference prices of the two floating leg indexes."]
+  
+        [label for spreadNotation "69 Spread notation - Leg 1"]
+        [regulatoryReference for spreadNotation HKMA Trade dataElement "20" field "Spread notation of Leg 1"
+            provision "Where applicable: manner in which the spread is expressed for leg 1."]
+   
+        [label for spreadCurrency "67 Spread currency - Leg 1"]
+        [regulatoryReference for spreadCurrency HKMA Trade dataElement "67" field "Spread currency - Leg 1"
+            provision "Where applicable: currency in which the spread of leg 1 is denominated.
+        This data element is only applicable if Spread notation = 1."]
+
+        [label for quantityUnitOfMeasure "92 Quantity unit of measure - Leg 1"]
+        [regulatoryReference for quantityUnitOfMeasure HKMA Trade dataElement "92" field "Quantity unit of measure - Leg 1"
+            provision "Where applicable: unit of measure in which the Total notional quantity and the Notional quantity schedules are expressed of leg 1."]
+
+        [label for direction2 "11 Direction 2 - Leg 1"]
+        [regulatoryReference for direction2 HKMA Trade dataElement "11" field "Direction 2 - Leg 1"
+            provision "Indicator of whether the counterparty 1 is the payer or the receiver of leg 1 as determined at the time of the conclusion of the derivative, if applicable."]
+    override leg2 common.CommonLeg (0..1)
+    //Periodic Payment
+        [label for periodicPayment -> fixedRateDayCountConvention "24 Fixed rate day count convention - Leg 2"]
+        [regulatoryReference for periodicPayment -> fixedRateDayCountConvention HKMA Trade dataElement "24" field "Fixed rate day count convention leg 2"
+            provision "Where applicable: day count convention (often also referred to as day count fraction or day count basis or day count method) that determines how interest payments are calculated. It is used to compute the year fraction of the calculation period, and indicates the number of days in the calculation period divided by the number of days in the year."]
+      
+        [label for periodicPayment -> floatingRateDayCountConvention "25 Floating rate day count convention - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateDayCountConvention HKMA Trade dataElement "25" field "Floating rate day count convention of leg 2"
+            provision "Where applicable: day count convention (often also referred to as day count fraction or day count basis or day count method) that determines how interest payments for the floating rate of leg 2 are calculated. It is used to compute the year fraction of the calculation period, and indicates the number of days in the calculation period divided by the number of days in the year."]
+      
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriod "28 Fixed rate payment frequency period - Leg 2"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriod HKMA Trade dataElement "28" field "Fixed rate payment frequency period - Leg 2"
+            provision "Where applicable: time unit associated with the frequency of payments, eg day, week, month, year or term of the stream for the fixed rate of leg 2."]
+      
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriod "29 Floating rate payment frequency period - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriod HKMA Trade dataElement "29" field "Floating rate payment frequency period - Leg 2"
+            provision "Where applicable: time unit associated with the frequency of payments, eg day, week, month, year or term of the stream for the floating rate of leg 2."]
+       
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier "32 Fixed rate payment frequency period multiplier - Leg 2"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier HKMA Trade dataElement "32" field "Fixed rate payment frequency period multiplier - Leg 2"
+            provision "Where applicable: number of time units (as expressed by the payment frequency period) that determines the frequency at which periodic payment dates occur for the fixed rate of leg 2. For example, a transaction with payments occurring every two months is represented with a payment frequency period of MNTH (monthly) and a payment frequency period multiplier of 2.
+            This data element is not applicable if the payment frequency period is ADHO. If payment frequency period is EXPI, then the payment frequency period multiplier is 1. If the payment frequency is intraday, then the payment frequency period is DAIL and the payment frequency multiplier is 0."]
+       
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier "29 Floating rate payment frequency period multiplier-Leg 2"]
+        [regulatoryReference HKMA Trade dataElement "29" field "Payment frequency period multiplier"
+            provision "Where applicable: number of time units (as expressed by the payment frequency period) that determines the frequency at which periodic payment dates occur for the floating rate of leg 2. For example, a transaction
+            with payments occurring every two months is represented with a payment frequency period of MNTH (monthly) and a payment frequency period multiplier of 2.
+            This data element is not applicable if the payment frequency period is ADHO. If payment frequency period is EXPI, then the payment frequency period multiplier is 1. If the payment frequency is intraday, then the payment frequency period is DAIL and the payment frequency multiplier is 0."]
+       
+        [label for periodicPayment -> floatingRateIdentifier "169 Identifier of the floating rate - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateIdentifier HKMA Trade dataElement "169" field "Identifier of the floating rate - Leg 2"
+            provision "Where applicable: an identifier of the interest rates used which are reset at predetermined intervals by reference to a market reference rate of leg 2."]
+       
+        [label for periodicPayment -> floatingRateIndicator "170 Indicator of the floating rate - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateIndicator HKMA Trade dataElement "170" field "Indicator of the floating rate - Leg 2"
+            provision "An indication of the interest rate of leg 2, where available."]
+       
+        [label for periodicPayment -> floatingRateReferencePeriod "172 Floating rate reference period - Leg 2  time period"]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriod HKMA Trade dataElement "172" field "Floating rate reference period - Leg 2  time period"
+            provision "Time period describing the reference period for the floating rate of leg 2, if applicable."]
+      
+        [label for periodicPayment -> floatingRateReferencePeriodMultiplier "173 Floating rate reference period - Leg 2  multiplier"]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriodMultiplier HKMA Trade dataElement "173" field "Floating rate reference period - Leg 2  multiplier"
+            provision "Multiplier of the time period describing the reference period for the floating rate of leg 2, if applicable."]
+       
+        [label for periodicPayment -> nameOfTheFloatingRate "171 Name of the floating rate - Leg 2"]
+        [regulatoryReference for periodicPayment -> nameOfTheFloatingRate HKMA Trade dataElement "171" field "Name of the floating rate - Leg 2"
+            provision "The full name of the interest rate as assigned by the index provider of leg 2, if applicable."]
+    
+    //Leg
+        [label for notionalAmount "84 Notional amount - Leg 2"]
+        [regulatoryReference for notionalAmount HKMA Trade dataElement "84" field "Notional amount - Leg 2"
+            provision "Where applicable: Notional amount of leg 2.
+        - for OTC derivative transactions negotiated in monetary amounts, amount specified in the contract.
+        - for OTC derivative transactions negotiated in non-monetary amounts:
+            (1) Equity options and similar products: Product of the strike price and the number of shares or index units
+            (2) Equity forwards and similar products: Product of the forward price and the number of shares or index units
+            (3) Equity dividend swaps and similar products: Product of the period fixed strike and the number of shares or index units.
+            (4) Equity swaps, portfolio swaps and similar products: Product of the initial price and the number of shares or index units.
+            (5) Equity variance swaps and similar products: Vega notional amount
+            (6) Equity volatility swaps and similar products: Vega notional amount
+            (7) Equity CFDs and similar products: Product of the initial price and the number of shares or index units
+            (8) Commodity options and similar products: Product of the strike price and the total notional quantity
+            (9) Commodity forwards and similar products: Product of the forward price and the total notional quantity
+            (10) Commodity fixed/float swaps and similar products: Product of the fixed price and the total notional quantity
+            (11) Commodity basis swaps and similar products: Product of the last available spot price at the time of the transaction of the underlying asset of the leg with no spread and the total notional quantity of the leg with no spread
+            (12) Commodity swaptions and similar products: Notional amount of the underlying contract
+            (13) Commodity CFDs and similar products: Product of the initial price and the total notional quantity
+
+            Notes to the conversion table for OTC derivative transactions negotiated in non-monetary amounts:
+            Note 1: for transactions where the quantity unit of measure differs from the price unit of measure, the price or total quantity is converted to a unified unit of measure.
+            Note 2: if applicable to the transaction, the notional amount reflects any multipliers and option entitlements.
+            Note 3: for basket-type contracts, the notional amount of the transaction is the sum of the notional amounts of each constituent of the basket.
+
+            In addition:
+            For OTC derivative transactions with a notional amount schedule, the initial notional amount, agreed by the counterparties at the inception of the transaction, is reported in this data element.
+            For OTC foreign exchange options, in addition to this data element, the amounts are reported using the data elements Call amount and Put amount. For amendments or lifecycle events, the resulting outstanding notional amount is reported; (steps in notional amount schedules are not considered to be amendments or lifecycle events);
+            Where the notional amount is not known when a new transaction is reported, the notional amount is updated as it becomes available."]
+      
+        [label for notionalAmountSchedule -> value "99 Notional amount schedule - Notional amount - Leg 2"]
+        [regulatoryReference for notionalAmountSchedule -> value HKMA Trade dataElement "99" field "Notional amount schedule - Notional amount - Leg 2"
+            provision "Where applicable: for OTC derivative transactions negotiated in monetary amounts with a notional amount schedule: Notional amount which becomes effective on the associated unadjusted effective date of leg 2.
+             The initial notional amount and associated unadjusted effective and end date are reported as the first values of the schedule.
+             This data element is not applicable to OTC derivative transactions with notional amounts that are condition- or event-dependent."]
+       
+        [label for notionalAmountSchedule -> effectiveDate "95 Notional amount schedule - Effective date - Leg 2"]
+        [regulatoryReference for notionalAmountSchedule -> effectiveDate HKMA Trade dataElement "95" field "Notional amount schedule - Effective date - Leg 2"
+            provision "Where applicable: for OTC derivative transactions negotiated in monetary amounts with a notional amount schedule: Unadjusted date on which the associated notional amount becomes effective of leg 2."]
+       
+        [label for notionalAmountSchedule -> endDate "97 Notional amount schedule - End date - Leg 2"]
+        [regulatoryReference for notionalAmountSchedule -> endDate HKMA Trade dataElement "97" field "Notional amount schedule - End date - Leg 2"
+            provision "Where applicable: for OTC derivative transactions negotiated in monetary amounts with a notional amount schedule: Unadjusted end date of the notional amount of leg 2 (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)"]
+       
+        [label for notionalQuantitySchedule -> value "107 Notional quantity schedule - Notional quantity - Leg 2"]
+        [regulatoryReference for notionalQuantitySchedule -> effectiveDate HKMA Trade dataElement "107" field "Where applicable: for OTC derivative transactions negotiated in non-monetary amounts with a Notional quantity schedule: Notional quantity which becomes effective on the associated unadjusted effective date of leg 2. The initial notional quantity and associated unadjusted effective and end date are be reported as the first values of the schedule. This data element is not applicable to OTC derivative transactions with notional quantities that are condition- or event-dependent."]
+
+        [label for notionalQuantitySchedule -> effectiveDate "103 Notional quantity schedule - Effective date - Leg 2"]
+        [regulatoryReference for notionalQuantitySchedule -> effectiveDate HKMA Trade dataElement "103" field "Notional quantity schedule - Effective date - Leg 2"
+            provision "Where applicable: for OTC derivative transactions negotiated in non-monetary amounts with a Notional quantity schedule: Unadjusted date on which the associated notional quantity becomes effective of leg 2. The initial notional quantity and associated unadjusted effective and end date are be reported as the first values of the schedule. This data element is not applicable to OTC derivative transactions with notional quantities that are condition- or event-dependent."]
+
+        [label for notionalQuantitySchedule -> endDate "105 Notional quantity schedule - End date - Leg 2"]
+        [regulatoryReference for notionalQuantitySchedule -> effectiveDate HKMA Trade dataElement "105" field "Notional quantity schedule - End date - Leg 2"
+            provision "Where applicable: for OTC derivative transactions negotiated in non-monetary amounts with a Notional quantity schedule: Unadjusted end date of the notional quantity of leg 2. (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period) The initial notional quantity and associated unadjusted effective and end date are be reported as the first values of the schedule.This data element is not applicable to OTC derivative transactions with notional quantities that are condition- or event-dependent."]
+
+        [label for totalNotionalQuantity "101 Total notional quantity - Leg 2"]
+        [regulatoryReference for totalNotionalQuantity HKMA Trade dataElement "101" field "Total notional quantity - Leg 2"
+            provision "Where applicable: aggregate Notional quantity of the underlying asset for the term of the transaction of leg 2, if applicable.
+        Where the Total notional quantity is not known when a new transaction is reported, the Total notional quantity is updated as it becomes available."]
+
+        [label for notionalQuantity "141 Notional quantity - Leg 2"]
+        [regulatoryReference for notionalQuantity HKMA Trade dataElement "140" field "Notional quantity - Leg 2"
+            provision "Where applicable, Notional quantity of leg 2.
+                        For swap transactions negotiated in non-monetary amounts with fixed notional quantity for each schedule period (i.e., 50 barrels per month).
+
+                        The frequency is reported in Quantity frequency and the unit of measure is reported in Quantity unit of measure."]
+      
+        [label for fixedRate "64 Fixed rate - Leg 2"]
+        [regulatoryReference for fixedRate HKMA Trade dataElement "64" field "Fixed rate - Leg 2"
+            provision "Where applicable: for OTC derivative transactions with periodic payments, per annum rate of the fixed rate of leg 2."]
+       
+        [label for fixingDate "147 Fixing date - Leg 2"]
+        [regulatoryReference for fixingDate HKMA Trade dataElement "147" field "Fixing date - Leg 2"
+            provision "Describes the specific date when a non-deliverable forward as well as various types of FX OTC options such as cash-settled options that will \"fix\" against a particular exchange rate, which will be used to compute the ultimate cash settlement of leg 2, if applicable."]
+       
+        [label for quantityFrequency "143 Quantity frequency - Leg 2"]
+        [regulatoryReference for quantityFrequency HKMA Trade dataElement "143" field "Quantity frequency - Leg 2"
+            provision "The rate at which the quantity is quoted on the leg 2 of the swap transaction. e.g., hourly, daily, weekly, monthly, if applicable."]
+       
+        [label for quantityFrequencyMultiplier "145 Quantity frequency multiplier - Leg 2"]
+        [regulatoryReference for quantityFrequencyMultiplier HKMA Trade dataElement "145" field "Quantity frequency multiplier - Leg 2"
+            provision "The number of time units for the Quantity frequency of leg 2, if applicable."]
+       
+        [label for notionalCurrency "89 Notional currency - Leg 2"]
+        [regulatoryReference for notionalCurrency HKMA Trade dataElement "89" field "Notional currency - Leg 2"
+            provision "Where applicable: the currency in which the notional amount of leg 2 is denominated."]
+       
+        [label for settlementCurrency "20 Settlement currency - Leg 2"]
+        
+        [label for spread -> monetary "66 Spread - Leg 2 (Monetary)"]
+        [label for spread -> decimal "66 Spread - Leg 2 (Percentage)"]
+        [label for spread -> basis "66 Spread - Leg 2 (Basis)"]
+        [regulatoryReference for spread HKMA Trade dataElement "66" field "Spread - Leg 2  (Basis)"
+            provision "An indication of the spread of leg 2, Where applicable: for OTC derivative transactions with periodic payments (eg interest rate fixed/float swaps, interest rate basis swaps, commodity swaps), 
+        - spread on the individual floating leg(s) index reference price, in the case where there is a spread on a floating leg(s) 
+        - difference between the reference prices of the two floating leg indexes."]
+       
+        [label for spreadNotation "70 Spread notation - Leg 2"]
+        [regulatoryReference for spreadNotation HKMA Trade dataElement "70" field "Spread notation of Leg 2"
+            provision "Where applicable: manner in which the spread is expressed for leg 2."]
+       
+        [label for spreadCurrency "68 Spread currency - Leg 2"]
+        [regulatoryReference for spreadCurrency HKMA Trade dataElement "68" field "Spread currency - Leg 2"
+            provision "Where applicable: currency in which the spread of leg 2 is denominated. This data element is only applicable if Spread notation = 1."]
+
+        [label for quantityUnitOfMeasure  "93 Quantity unit of measure - Leg 2"]
+        [regulatoryReference for quantityUnitOfMeasure HKMA Trade dataElement "93" field "Quantity unit of measure - Leg 2"
+            provision "Where applicable: unit of measure in which the Total notional quantity and the Notional quantity schedules are expressed of leg 2."]
+
+        [label for direction2 "12 Direction 2 - Leg 2"]
+        [regulatoryReference for direction2 HKMA Trade dataElement "12" field "Direction 2 - Leg 2"
+            provision "Indicator of whether the counterparty 1 is the payer or the receiver of leg 2 as determined at the time of the conclusion of the derivative, if applicable."]
+    override underlyingIdOther Max210AlphaNumericText (0..1)
+        [label "129 Underlier ID (OTHER)"]
+        [regulatoryReference HKMA Trade dataElement "129" field "Underlier ID (OTHER)"
+            provision "Where applicable: the asset(s), index (indices) or benchmark underlying a contract or, in the case of a foreign exchange derivative, identification of index. This data element is applicable when the value of Underlier ID is submitted as OTHER to the UPI service provider."]
+        [ruleReference UnderlierIdOther]
+    override underlyingIdOtherSource ProductIdTypeEnum (0..1)
+        [label "130 Underlier ID (OTHER) source"]
+        [regulatoryReference HKMA Trade dataElement "130" field "Underlier ID (OTHER) source"
+            provision "Where applicable: the origin, or publisher, of the associated Underlier ID (Other).
+This data element is applicable when the value of Underlier ID source is submitted as OTHER to the UPI service provider."]
+        [ruleReference UnderlierIdOtherSource]
+    override underlyingAssetTradingPlatformIdentifier Max4Text (0..1)
+        [label "131 Underlying asset trading platform identifier"]
+        [regulatoryReference HKMA Trade dataElement "131" field "Underlying asset trading platform identifier"
+            provision "Where applicable: for a platform (e.g. exchange) traded underlying asset, the platform on which the asset is traded. 
+ This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+        [ruleReference UnderlyingAssetTradingPlatformIdentifier]
+    override underlyingAssetPriceSource Max50AlphaNumericText (0..1)
+        [label "132 Underlying asset price source"]
+        [regulatoryReference HKMA Trade dataElement "132" field "Underlying asset price source"
+            provision "Where applicable: for an underlying asset or benchmark not traded on a platform, the source of the price used to determine the value or level of the asset or benchmark. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+        [ruleReference UnderlyingAssetPriceSource]
+    override settlementLocation ISOCountryCodeEnum (0..1)
+        [label "21 Settlement location"]
+        [regulatoryReference HKMA Trade dataElement "21" field "Settlement location"
+            provision "Place of settlement of the transaction as stipulated in the contract, if applicable. This data element is only applicable for transactions that involve an offshore currency (i.e. a currency which is not included in the ISO 4217 currency list, for example CNH)."]
+        [ruleReference SettlementLocation]
+    override cryptoAssetUnderlyingIndicator boolean (0..1)
+        [label "133 Crypto asset underlying indicator"]
+        [regulatoryReference HKMA Trade dataElement "133" field "Crypto asset underlying indicator"
+            provision "Where applicable: indicator of whether the underlying of the derivative is crypto asset. This element should be reported as true if any of the underlyings is a crypto asset (immediate or ultimate underlying as well as where the derivative is based on a mix of crypto assets and other underlyings)."]
+        [ruleReference DerivativeBasedOnCryptoAssets]
+    override price cde.price.PriceFormat (0..1)
+            [label for decimal "56 Price"]
+            [label for monetary "56 Price"]
+    override packageTransactionPrice cde.price.PriceFormat (0..1)
+            [label for decimal "117 Package transaction price"]
+            [label for monetary "117 Package transaction price"]
+    override packageTransactionSpread cde.price.PriceFormat (0..1)
+            [label for decimal "120 Package transaction spread"]
+            [label for monetary "120 Package transaction spread"]
+    override strikePriceSchedule cde.price.PricePeriod (0..*)
+        [label for price -> monetary "74/76-$ 76 Strike Price schedule - Strike Price"]
+        [label for price -> decimal "74/76-$ 76 Strike Price schedule - Strike Price"]
+        [label for effectiveDate "74/76-$ 74 Strike Price schedule - Effective date"]
+        [label for endDate "74/76-$ 75 Strike Price schedule - End date"]
+        [regulatoryReference for price HKMA Trade dataElement "76" field "Strike Price schedule - Strike Price"
+            provision "Where applicable: for options, swaptions and similar products with strike prices varying throughout the life of the transaction: Strike price in effect between the unadjusted effective date and unadjusted end date inclusive."]
+        [regulatoryReference for effectiveDate HKMA Trade dataElement "74" field "Strike Price schedule - Effective date"
+            provision "Where applicable: for options, swaptions and similar products with strike prices varying throughout the life of the transaction: Unadjusted effective date of the strike price."]
+        [regulatoryReference for endDate HKMA Trade dataElement "75" field "Strike Price schedule - End date"
+            provision "Where applicable: for options, swaptions and similar products with strike prices varying throughout the life of the transaction: Unadjusted end date of the strike price.
+		(not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)."]
+    override priceSchedule cde.price.PricePeriod (0..*)
+        [label for price -> monetary "60/62-$ 62 Price schedule - Price"]
+        [label for price -> decimal "60/62-$ 62 Price schedule - Price"]
+        [label for effectiveDate "60/62-$ 60 Price schedule - Effective date"]
+        [label for endDate "60/62-$ 61 Price schedule - End date"]
+        [regulatoryReference for price HKMA Trade dataElement "62" field "Price schedule - Price"
+            provision "Where applicable: for OTC derivative transactions with prices varying throughout the life of the transaction: Price in effect between the unadjusted effective date and unadjusted end date inclusive."]
+        [regulatoryReference for effectiveDate HKMA Trade dataElement "60" field "Price schedule - Effective date"
+            provision "Where applicable: for OTC derivative transactions with prices varying throughout the life of the transaction: Unadjusted effective date of the price."]
+        [regulatoryReference for endDate HKMA Trade dataElement "61" field "Price schedule - End date"
+            provision "Where applicable: for OTC derivative transactions with prices varying throughout the life of the transaction: Unadjusted end date of the price. (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)."]
+    override otherPayment cde.payment.OtherPayment (0..*)
+        [label for paymentType "110/115-$ 111 Other payment type"]
+        [regulatoryReference for paymentType HKMA Trade dataElement "111" field "Other payment type"
+            provision "Type of Other payment amount, if applicable.
+        Option premium payment is not included as a payment type as premiums for option are reported using the option premium dedicated data element."]
+        [label for amount "110-115 $ 110 Other payment amount"]
+        [regulatoryReference for amount HKMA Trade dataElement "110" field "Other payment amount"
+            provision "Payment amounts with corresponding payment types to accommodate requirements of transaction descriptions from different asset classes, if applicable."]
+        [label for currency "110/115-$ 112 Other payment currency"]
+        [regulatoryReference for currency HKMA Trade dataElement "112" field "Other payment currency"
+            provision "Currency in which Other payment amount is denominated, if applicable."]
+        [label for date "110/115-$ 113 Other payment date"]
+        [regulatoryReference HKMA Trade dataElement "113" field "Other payment date"
+            provision "Unadjusted date on which the other payment amount is paid, if applicable."]
+        [label for payer "110/115-$ 114 Other payment payer"]
+        [regulatoryReference for payer HKMA Trade dataElement "114" field "Other payment payer"
+            provision "Identifier of the payer of Other payment amount, if applicable."]
+        [label for payerFormat "110/115-$ 114 Other Payment Payer Format (non-reportable)"]
+        [label for receiver "110/115-$ 115 Other payment receiver"]
+        [regulatoryReference for receiver HKMA Trade dataElement "115" field "Other payment receiver"
+            provision "Identifier of the receiver of Other payment amount, if applicable."]
+        [label for receiverFormat "110/115-$ 115 Other Payment Receiver Format (non-reportable)"]
+        [label for payerSchemeName "110/115-$ 115 Other Payment Payer Scheme Name (Non Reportable)"]
+        [label for receiverSchemeName "110/115-$ 115 Other Payment Payer Scheme Name (Non Reportable)"]
+    override brokerID LEIIdentifier (0..1)
+        [label "156 Broker ID"]
+        [regulatoryReference HKMA Trade dataElement "156" field "Broker ID"
+            provision "If a broker acted as intermediary for the Reporting Entity in relation to the Reportable Transaction, without becoming a counterparty to the OTC Derivative the subject of the Reportable Transaction, the current LEI of the broker."]
+        [ruleReference BrokerId]
+    override eventTimestamp zonedDateTime (1..1)
+    override contractType CommonContractType (1..1)
+    override assetClass CommonAssetClass (1..1)
+    override counterparty2IdentifierType boolean (1..1)
+    override initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+    override variationMarginCollateralPortfolioCode Max52AlphaNumericText (1..1)
+    override nonStandardizedTermIndicator boolean (0..1)
+    override secondaryTransactionIdentifier Max72AlphaNumericText (0..1)
+    override swapLinkID Max35AlphaNumericText (0..1)
+    /* fixedRateDayCountConventionLeg1 InterestComputationMethod4Code (0..1)
+     *  floatingRateDayCountConventionLeg1 InterestComputationMethod4Code (0..1)
+     *  fixedRateDayCountConventionLeg2 InterestComputationMethod4Code (0..1)
+     *  floatingRateDayCountConventionLeg2 InterestComputationMethod4Code (0..1)
+     *  fixedRatePaymentFrequencyPeriodLeg1 FrequencyPeriodEnum (0..1)
+     *  fixedRatePaymentFrequencyPeriodLeg2 FrequencyPeriodEnum (0..1)
+     *  floatingRatePaymentFrequencyPeriodLeg1 FrequencyPeriodEnum (0..1)
+     *  floatingRatePaymentFrequencyPeriodLeg2 FrequencyPeriodEnum (0..1)
+     *  fixedRatePaymentFrequencyPeriodMultiplierLeg1 Max3Number (0..1)
+     *  fixedRatePaymentFrequencyPeriodMultiplierLeg2 Max3Number (0..1)
+     *  floatingRatePaymentFrequencyPeriodMultiplierLeg1 Max3Number (0..1)
+     *  floatingRatePaymentFrequencyPeriodMultiplierLeg2 Max3Number (0..1)
+     */
+    override baseProduct string (0..1)
+    override subProduct string (0..1)
+    override furtherSubProduct string (0..1)
+    override intragroup boolean (0..1)
+    override entityResponsibleForReporting drr.standards.iso.LEIIdentifier (1..1)
+        [label "154 Entity responsible for reporting"]
+        [regulatoryReference HKMA Trade dataElement "154" field "Entity responsible for reporting"
+            provision "Identification code of the Reporting Party who has the obligation to report the transaction."]
+    override basketConstituents cde.basket.BasketConstituentsReport (0..*)
+        [ruleReference BasketConstituents]
+    override clearingAccountOrigin ClearingAccountOriginEnum (0..1)
+        [ruleReference empty]
+    override originalSwapUTI Max52AlphaNumericText (0..1)
+        [ruleReference empty]
+    override originalSwapSDRIdentifier LEIIdentifier (0..1)
+        [ruleReference empty]
+    override clearingReceiptTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override buyerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override sellerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override priorUSI Max42AlphaNumericText (0..1)
+        [ruleReference empty]
+    override subsequentPositionUTI UTIIdentifierLegacy (0..1)
+        [ruleReference empty]
+    override masterAgreementType common.contract.MasterAgreementEnum (0..1)
+        [ruleReference empty]
+    override masterAgreementVersion int (0..1)
+        [ruleReference empty]
+    override level ReportLevelEnum (0..1)
+        [ruleReference empty]
+    override amendmentIndicator boolean (0..1)
+        [ruleReference empty]
+    override packageIndicator boolean (0..1)
+        [ruleReference empty]
+    override countryOfTheCounterparty2 ISOCountryCodeEnum (0..1)
+        [ruleReference empty]
+    override valuationAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference empty]
+    override valuationCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference empty]
+    override valuationTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override confirmationTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override delta ShortFraction5DecimalNumber (0..1)
+        [ruleReference empty]
+    override seriesVersion Max5Int (0..1)
+        [ruleReference empty]
+    override counterparty2IdentifierSource Counterparty2IdentifierEnum (0..1)
+        [ruleReference empty]
+    override customBasketIndicator boolean (0..1)
+        [ruleReference empty]
+    override nonReportable common.NonReportable (0..1)
+        [ruleReference for enrichment empty]
+        [ruleReference for preUpiData empty]
+        [ruleReference for postUpiData empty]
+    override customBasketCode Min20Max72AlphaNumericText (0..1)
+    override underlyingIdentification ISINOct2015Identifier (0..1)
+        [label "160 Underlying identification"]
+        [regulatoryReference HKMA Trade dataElement "160" field "Underlying identification"
+            provision "The direct underlying shall be identified by using a unique identification for this underlying based on its type. For Credit Default Swaps, the ISIN of the reference obligation should be provided, if applicable."]
+        [ruleReference UnderlyingIdentification]
+    override underlyingIdentificationType common.underlier.UnderlyingIdentificationTypeEnum (0..1)
+        [label "159 Underlying identification type"]
+        [regulatoryReference HKMA Trade dataElement "159" field "Underlying identification Type"
+            provision "The type of relevant underlying identifier, if applicable."]
+        [ruleReference UnderlyingIdentificationType]
+    override barrier common.price.SingleOrUpperAndLowerBarrier (0..1)
+        [label for lower "194 Lower barrier level"]
+        [label for upper "195 Upper barrier level"]
+        [label for _single "196 Single barrier level"]
+        [regulatoryReference HKMA Trade dataElement "194" field "Lower barrier level"
+            provision "[For a barrier option, involving two barrier prices the predetermined lower price of an underlier at which the occurrence of a barrier event (e.g. knock-out) is determined.]*"]
+        [ruleReference barrier]
+    override natureOfCounterparty1 common.party.NatureOfCounterpartyEnum (1..1)
+        [regulatoryReference HKMA Trade dataElement "190" field "Nature of the counterparty 1"
+            provision "Indicate if the counterparty 1 is a CCP, a financial, non-financial counterparty or other type of counterparty."]
+        [ruleReference NatureOfTheCounterparty1]
+    override natureOfCounterparty2 common.party.NatureOfCounterpartyEnum (0..1)
+        [regulatoryReference HKMA Trade dataElement "191" field "Nature of the counterparty 2"
+            provision "Indicate if the counterparty 2 is a CCP, a financial, non-financial counterparty or other type of counterparty."]
+        [ruleReference NatureOfTheCounterparty2]
+    override corporateSectorOfTheCounterparty1 Max4Text (0..*)
+        [nonReportable]
+        [ruleReference SectorOfTheCounterparty1]
+    override corporateSectorOfTheCounterparty2 Max4Text (0..*)
+        [nonReportable]
+        [ruleReference SectorOfTheCounterparty2]
+    basketConstituentNumberOfUnits Max18D13Number (0..*)
+    basketConstituentUnitOfMeasure Max4Text (0..*)
+    productDescription Max255AlphaNumericText (0..1)
+    beneficiary Max72AlphaNumericText (0..1)
+    remarks string (0..1)
+        [regulatoryReference HKMA Trade dataElement "201" field "Remarks"
+            provision "A TR Trade Reference generated by the HKTR for post-trade action correlation, if applicable, when the designated trade cannot be correlated by using the UTI."]
+    // TH Comment Sprint 13/2025: There are no provisions for the following types since there are not description of the fields in the specification.
+    remarks1 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "202" field "Remarks 1"]
+    remarks2 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "203" field "Remarks 2"]
+    remarks3 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "204" field "Remarks 3"]
+    remarks4 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "205" field "Remarks 4"]
+    remarks5 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "206" field "Remarks 5"]
+    remarks6 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "207" field "Remarks 6"]
+    remarks7 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "208" field "Remarks 7"]
+    remarks8 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "209" field "Remarks 8"]
+    remarks9 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "210" field "Remarks 9"]
+    remarks10 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "211" field "Remarks 10"]
+    remarks11 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "212" field "Remarks 11"]
+    remarks12 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "213" field "Remarks 12"]
+    remarks13 string (0..1)
+        [regulatoryReference HKMA Trade dataElement "214" field "Remarks 13"]
+    uniqueProductIdentifierProprietary Max100AlphaNumericText (0..1)
+    // nonReportable HKMANonReportable (0..1)
+    counterparty2IdentifierFormat PartyIdentifierFormat2Enum (0..1)
+        [nonReportable]
+        [ruleReference Counterparty2IdentifierFormat]
+    counterparty2SchemeName HKTRPartyScheme (0..1)
+        [nonReportable]
+        [ruleReference Counterparty2SchemeName]
+    centralCounterpartyIdentifierFormat PartyIdentifierFormat2Enum (0..1)
+        [nonReportable]
+        [ruleReference CentralCounterpartyIdentifierFormat]
+    centralCounterpartySchemeName HKTRPartyScheme (0..1)
+        [nonReportable]
+        [ruleReference CentralCounterpartySchemeName]
+    brokerIdentifierFormat PartyIdentifierFormat2Enum (0..1)
+        [nonReportable]
+        [ruleReference BrokerIdentifierFormat]
+    brokerSchemeName HKTRPartyScheme (0..1)
+        [nonReportable]
+        [ruleReference BrokerSchemeName]
+    referenceEntityFormat ReferenceEntityFormatEnum (0..1)
+        [nonReportable]
+        [ruleReference ReferenceEntityFormat]
+    clearingMemberIdentifierFormat PartyIdentifierFormat2Enum (0..1)
+        [nonReportable]
+        [ruleReference ClearingMemberIdentifierFormat]
+    clearingMemberSchemeName HKTRPartyScheme (0..1)
+        [nonReportable]
+        [ruleReference ClearingMemberSchemeName]
+    priorUTIProprietarySchemeName UTIProprietarySchemeNameEnum (0..1)
+        [nonReportable]
+        [ruleReference PriorUTIProprietarySchemeName]
+    uniqueTransactionIdentifierProprietarySchemeName UTIProprietarySchemeNameEnum (0..1)
+        [nonReportable]
+        [ruleReference UniqueTransactionIdentifierProprietarySchemeName]
+
+// strikePriceNotation PriceNotationEnum (0..1) ?
+    condition DOC0001: <"Expiration date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "2" validationRule "Expiration Date"
+    provision "The [Expiration date] is expected to fall on or after the [Execution timestamp]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then expirationDate >= executionTimestamp -> date
+
+    condition DOC0002: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+    provision "The [Early termination date] is expected to fall on or after the [Execution timestamp], and earlier than the [Expiration date]."]
+        if [ActionTypeEnum -> CORR, ActionTypeEnum -> TERM, ActionTypeEnum -> REVI] any = actionType
+        then earlyTerminationDate >= executionTimestamp -> date and earlyTerminationDate < expirationDate
+
+    condition DOC0003: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+    provision "The [Early termination date] must not be a future timestamp."]
+        if [ActionTypeEnum -> CORR, ActionTypeEnum -> TERM, ActionTypeEnum -> REVI] any = actionType
+        then earlyTerminationDate <= Now -> date
+
+    condition DOC0004: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+    provision "The [Early termination date] is applicable only if 'CORR' action is applied to a Terminated trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0005: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+    provision "If 'REVI' action is applied to a Terminated or Expired trade, the [Early termination date] must be left blank."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0006: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+    provision "If 'REVI' action is applied to a Errored trade and the final status is not Terminated, the [Early termination date] must be left blank."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0007: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+     provision "The [Early termination date] must be before the [Expiration date]."]
+        if [ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then earlyTerminationDate < expirationDate
+
+    // TH: Sprint 2025-05. This validation rule could be implemented. To be asked in the peer review for further discussion.
+    condition DOC0008: <"Early termination date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "3" validationRule "Expiration Date"
+    provision "The [Early termination date] must be before the [Expiration date] of original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0009: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] is expected to fall on or after the [Execution timestamp]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then reportingTimestamp >= executionTimestamp
+
+    // TH: Sprint 2025-05. This validation rule could be implemented. To be asked in the peer review for further discussion.
+    condition DOC0010: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] is expected to fall on or after the [Execution timestamp] of original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0011: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] must not be a future timestamp."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> TERM, ActionTypeEnum -> EROR, ActionTypeEnum -> REVI, ActionTypeEnum -> PRTO] any = actionType
+        then reportingTimestamp <= Now
+
+    condition DOC0012: <"Execution timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "5" validationRule "Execution timestamp"
+    provision "Participant is allowed to submit the trade action only when the reporting obligation of the asset class is active and the [Execution timestamp] is not later than the end date of reporting obligation."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. Pending clarification with HTKR."]
+        True
+
+    condition DOC0013: <"Execution timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "5" validationRule "Execution timestamp"
+    provision "The [Execution timestamp] must not be a future timestamp."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> EROR, ActionTypeEnum -> REVI] any = actionType
+        then executionTimestamp <= Now
+
+    condition DOC0014: <"Execution timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "5" validationRule "Execution timestamp"
+    provision "The [Execution timestamp] must be the same as original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0015: <"Counterparty 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "6" validationRule "Counterparty 1"
+    provision "The [Counterparty 1] must not be equal to the [Counterparty 2]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then counterparty1 <> counterparty2
+
+    condition DOC0016: <"Counterparty 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "6" validationRule "Counterparty 1"
+    provision "The [Counterparty 1] and [Counterparty 2] must be the same as original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0017: <"Direction 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "10" validationRule "Direction 1"
+    provision "Either [Direction 1] or both [Direction 2 - Leg 1] and [Direction 2 - Leg 2] must be populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and leg1 -> direction2 is absent
+                and leg2 -> direction2 is absent
+        then direction1 exists
+        else if ((leg1 -> direction2 exists) or (leg2 -> direction2 exists))
+        then direction1 is absent
+
+    condition DOC0018: <"Direction 2 - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "11" validationRule "Direction 2 - Leg 1"
+    provision "The [Direction 2 - Leg 1] must contain a different value than the [Direction 2 - Leg 2]"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and direction1 is absent
+        then leg1 -> direction2 exists and leg1 -> direction2 <> leg2 -> direction2
+        else if direction1 exists
+        then leg1 -> direction2 is absent
+
+    condition DOC0019: <"Central counterparty">
+        [docReference HKMA HKMA_Specs table "1" dataElement "14" validationRule "Central counterparty"
+    provision "The [Central counterparty] is required if the [Cleared] is populated with 'Y'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and direction1 is absent
+        then if cleared = Y then centralCounterparty exists
+
+    condition DOC0020: <"Clearing member">
+        [docReference HKMA HKMA_Specs table "1" dataElement "15" validationRule "Clearing member"
+    provision "The [Clearing member] is required if the [Cleared] is populated with 'Y'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and direction1 is absent
+        then if cleared = Y then clearingMember exists
+
+    condition DOC0021: <"Final contractual settlement date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "18" validationRule "Final contractual settlement date"
+    provision "The [Final contractual settlement date] is expected to fall on or after the [Expiration date]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then finalContractualSettlementDate >= expirationDate
+
+    condition DOC0026: <"Fixed rate payment frequency period - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "26" validationRule "Fixed rate payment frequency period - Leg 1"
+    provision "The [Fixed rate payment frequency period - Leg 1] is required if the [Fixed rate payment frequency period multiplier - Leg 1] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier exists
+            then leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod exists
+
+    condition DOC0027: <"Floating rate payment frequency period - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "27" validationRule "Floating rate payment frequency period - Leg 1"
+    provision "The [Floating rate payment frequency period - Leg 1] is required if the [Floating rate payment frequency period multiplier - Leg 1] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier exists
+            then leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod exists
+
+    condition DOC0028: <"Fixed rate payment frequency period - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "28" validationRule "Fixed rate payment frequency period - Leg 2"
+    provision "The [Fixed rate payment frequency period - Leg 2] is required if the [Fixed rate payment frequency period multiplier - Leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier exists
+            then leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriod exists
+
+    condition DOC0029: <"Floating rate payment frequency period - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "29" validationRule "Floating rate payment frequency period - Leg 2"
+    provision "The [Floating rate payment frequency period - Leg 2] is required if the [Floating rate payment frequency period multiplier - Leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier exists
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod exists
+
+    condition DOC0030: <"Fixed rate payment frequency period multiplier - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "30" validationRule "Fixed rate payment frequency period multiplier - Leg 1"
+    provision "The [Fixed rate payment frequency period multiplier - Leg 1] is required if the [Fixed rate payment frequency period - Leg 1] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod
+            then leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier exists
+
+    condition DOC0031: <"Fixed rate payment frequency period multiplier - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "30" validationRule "Fixed rate payment frequency period multiplier - Leg 1"
+    provision "The value of the [Fixed rate payment frequency period multiplier - Leg 1] must be equal to 1 if the [Fixed rate payment frequency period - Leg 1] is populated with EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod exists
+                    and leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier = 1
+
+    condition DOC0032: <"Floating rate payment frequency period multiplier - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "31" validationRule "Floating rate payment frequency period multiplier - Leg 1"
+    provision "The [Floating rate payment frequency period multiplier - Leg 1] is required if the [Floating rate payment frequency period - Leg 1] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod
+            then leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier exists
+
+    condition DOC0033: <"Floating rate payment frequency period multiplier - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "31" validationRule "Floating rate payment frequency period multiplier - Leg 1"
+    provision "The value of the [Floating rate payment frequency period multiplier - Leg 1] must be equal to 1 if the [Floating rate payment frequency period - Leg 1] is populated with EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod exists
+                    and leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier = 1
+
+    condition DOC0034: <"Fixed rate payment frequency period multiplier - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "32" validationRule "Fixed rate payment frequency period multiplier - Leg 2"
+    provision "The [Fixed rate payment frequency period multiplier - Leg 2] is required if the [Fixed rate payment frequency period - Leg 2] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriod
+            then leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier exists
+
+    condition DOC0035: <"Fixed rate payment frequency period multiplier - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "32" validationRule "Fixed rate payment frequency period multiplier - Leg 1"
+    provision "The value of the [Fixed rate payment frequency period multiplier - Leg 2] must be equal to 1 if the [Fixed rate payment frequency period - Leg 2] is populated with EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriod exists
+                    and leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier = 1
+
+    condition DOC0036: <"Floating rate payment frequency period multiplier - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "33" validationRule "Floating rate payment frequency period multiplier - Leg 2"
+    provision "The [Floating rate payment frequency period multiplier - Leg 2] is required if the [Floating rate payment frequency period - Leg 2] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier exists
+
+    condition DOC0037: <"Floating rate payment frequency period multiplier - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "33" validationRule "Floating rate payment frequency period multiplier - Leg 2"
+    provision "The value of the [Floating rate payment frequency period multiplier - Leg 2] must be equal to 1 if the [Floating rate payment frequency period - Leg 2] is populated with EXPI'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod exists
+                    and leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier = 1
+
+    condition DOC0045: <"[Price schedule - Effective date]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "60" validationRule "[Price schedule - Effective date]*"
+    provision "The number of occurrences populated in the [Price schedule - Effective date] must be equal to the number of occurrences populated in the [Price schedule - Price]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if priceSchedule -> effectiveDate exists
+            then (priceSchedule -> effectiveDate count
+                        = priceSchedule -> price -> decimal count)
+                    or (priceSchedule -> effectiveDate count
+                        = priceSchedule -> price -> monetary count)
+
+    condition DOC0046: <"[Price schedule - Effective date]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "61" validationRule "[Price schedule - End date]*"
+    provision "If the Price schedule - End date is populated, its number of occurrences must be equal to the number of occurrences populated in the Price schedule - Price."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if priceSchedule -> endDate exists
+            then (priceSchedule -> endDate count = priceSchedule -> price -> decimal count)
+                    or (priceSchedule -> endDate count
+                        = priceSchedule -> price -> monetary count)
+
+    condition DOC0053: <"[Strike price schedule - Effective date]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "74" validationRule "[Strike price schedule - Effective date]*"
+     provision "The number of occurrences populated in the [Strike price schedule - Effective date] must be equal to the number of occurrences populated in the [Strike price schedule - Strike price]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if strikePriceSchedule -> effectiveDate exists
+            then (strikePriceSchedule -> effectiveDate count
+                        = strikePriceSchedule -> price -> decimal count)
+                    or (strikePriceSchedule -> effectiveDate count
+                        = strikePriceSchedule -> price -> monetary count)
+
+    condition DOC0054: <"[Strike price schedule - Effective date]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "75" validationRule "[Strike price schedule - Effective date]*"
+    provision "If the [Strike price schedule - End date] is populated, its number of occurrences must be equal to the number of occurrences populated in the [Strike price schedule - Strike price]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if strikePriceSchedule -> endDate exists
+            then (strikePriceSchedule -> endDate count
+                        = strikePriceSchedule -> price -> decimal count)
+                    or (strikePriceSchedule -> endDate count
+                        = strikePriceSchedule -> price -> monetary count)
+
+    condition DOC0062: <"Exchange rate basis">
+        [docReference HKMA HKMA_Specs table "1" dataElement "82" validationRule "Exchange rate basis"
+    provision "The base currency must not be equal to quoted currency under the [Exchange rate basis]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if exchangeRateBasis exists
+            then SubString(exchangeRateBasis, 1, 3) <> SubString(exchangeRateBasis, 5, 7)
+
+    condition DOC0063: <"Notional amount - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "84" validationRule "Notional amount - Leg 2"
+    provision "The [Notional amount - Leg 2] is required if the [Direction 2 - Leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> direction2 exists
+            then leg2 -> notionalAmount exists
+
+    condition DOC0064: <"Quantity unit of measure - Leg 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "92" validationRule "Quantity unit of measure - Leg 1"
+    provision "The [Quantity unit of measure - Leg 1] is required if the [Total notional quantity - Leg 1] is populated with values that are not equal to 9999999999999999999999999."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> totalNotionalQuantity exists
+                    and leg1 -> totalNotionalQuantity <> 9999999999999999999999999
+            then leg1 -> quantityUnitOfMeasure exists
+
+    condition DOC0065: <"Quantity unit of measure - Leg 2">
+        [docReference HKMA HKMA_Specs table "1" dataElement "93" validationRule "Quantity unit of measure - Leg 2"
+    provision "The [Quantity unit of measure - Leg 2] is required if the [Total notional quantity - Leg 2] is populated with values that are not equal to 9999999999999999999999999."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> totalNotionalQuantity exists
+                    and leg2 -> totalNotionalQuantity <> 9999999999999999999999999
+            then leg2 -> quantityUnitOfMeasure exists
+
+    condition DOC0066: <"[Notional amount schedule - Effective date - Leg 1]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "94" validationRule "[Notional amount schedule - Effective date - Leg 1]*"
+    provision "The number of occurrences populated in the [Notional amount schedule - Effective date - Leg 1] must be equal to the number of occurrences populated in the [Notional amount schedule - Notional amount - Leg 1]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> notionalAmountSchedule -> effectiveDate exists
+            then leg1 -> notionalAmountSchedule -> effectiveDate count
+                    = leg1 -> notionalAmountSchedule -> value count
+
+    condition DOC0067: <"[Notional amount schedule - Effective date - Leg 2]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "95" validationRule "[Notional amount schedule - Effective date - Leg 2]*"
+    provision "The number of occurrences populated in the [Notional amount schedule - Effective date - Leg 2] must be equal to the number of occurrences populated in the [Notional amount schedule - Notional amount - Leg 2]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> notionalAmountSchedule -> effectiveDate exists
+            then leg2 -> notionalAmountSchedule -> effectiveDate count
+                    = leg2 -> notionalAmountSchedule -> value count
+
+    condition DOC0068: <"[Notional amount schedule - End date - Leg 1]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "96" validationRule "[Notional amount schedule - End date - Leg 1]*"
+    provision "If the [Notional amount schedule - End date - Leg 1] is populated, its number of occurrences must be equal to the number of occurrences populated in the [Notional amount schedule - Notional amount - Leg 1]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> notionalAmountSchedule -> endDate exists
+            then leg1 -> notionalAmountSchedule -> endDate count
+                    = leg1 -> notionalAmountSchedule -> value count
+
+    condition DOC0069: <"[Notional amount schedule - End date - Leg 2]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "97" validationRule "[Notional amount schedule - End date - Leg 2]*"
+    provision "If the [Notional amount schedule - End date - Leg 2] is populated, its number of occurrences must be equal to the number of occurrences populated in the [Notional amount schedule - Notional amount - Leg 2]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> notionalAmountSchedule -> endDate exists
+            then leg2 -> notionalAmountSchedule -> endDate count
+                    = leg2 -> notionalAmountSchedule -> value count
+
+    condition DOC0074: <"[Notional quantity schedule - Effective date - Leg 1]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "102" validationRule "[Notional quantity schedule - Effective date - Leg 1]*"
+    provision "The number of occurrences populated in the Notional quantity schedule - Effective date - Leg 1 must be equal to the number of occurrences populated in the Notional quantity schedule - Notional quantity - Leg 1."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> notionalQuantitySchedule -> effectiveDate exists
+            then leg1 -> notionalQuantitySchedule -> effectiveDate count
+                    = leg1 -> notionalQuantitySchedule -> value count
+
+    condition DOC0075: <"[Notional quantity schedule - Effective date - Leg 2]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "103" validationRule "[Notional quantity schedule - Effective date - Leg 2]*"
+    provision "The number of occurrences populated in the Notional quantity schedule - Effective date - Leg 2 must be equal to the number of occurrences populated in the Notional quantity schedule - Notional quantity - Leg 2."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> notionalQuantitySchedule -> effectiveDate exists
+            then leg2 -> notionalQuantitySchedule -> effectiveDate count
+                    = leg2 -> notionalQuantitySchedule -> value count
+
+    condition DOC0076: <"[Notional quantity schedule - End date - Leg 1]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "104" validationRule "[Notional quantity schedule - End date - Leg 1]*"
+    provision "If the Notional quantity schedule - End date - Leg 1 is populated, its number of occurrences must be equal to the number of occurrences populated in the Notional quantity schedule - Notional quantity - Leg 1."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> notionalQuantitySchedule -> endDate exists
+            then leg1 -> notionalQuantitySchedule -> endDate count
+                    = leg1 -> notionalQuantitySchedule -> value count
+
+    condition DOC0077: <"[Notional quantity schedule - End date - Leg 2]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "105" validationRule "[Notional quantity schedule - End date - Leg 2]*"
+    provision "If the Notional quantity schedule - End date - Leg 2 is populated, its number of occurrences must be equal to the number of occurrences populated in the Notional quantity schedule - Notional quantity - Leg 2."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> notionalQuantitySchedule -> endDate exists
+            then leg2 -> notionalQuantitySchedule -> endDate count
+                    = leg2 -> notionalQuantitySchedule -> value count
+
+    condition DOC0080: <"Other payment amount">
+        [docReference HKMA HKMA_Specs table "1" dataElement "110" validationRule "Other payment amount"
+    provision "The [Other payment amount] is required if the [Other payment type] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then if otherPayment -> paymentType exists
+            then otherPayment -> amount exists
+
+    condition DOC0081: <"Other payment amount">
+        [docReference HKMA HKMA_Specs table "1" dataElement "110" validationRule "Other payment amount"
+    provision "The number of occurrences populated in the Other payment amount must be equal to the number of occurrences populated in the Other payment type."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if otherPayment -> amount exists
+            then otherPayment -> amount count = otherPayment -> paymentType count
+
+    condition DOC0082: <"Other payment currency">
+        [docReference HKMA HKMA_Specs table "1" dataElement "112" validationRule "Other payment currency"
+    provision "The [Other payment currency] is required if the [Other payment type] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then if otherPayment -> amount exists
+            then otherPayment -> currency exists
+
+    condition DOC0083: <"Other payment currency">
+        [docReference HKMA HKMA_Specs table "1" dataElement "112" validationRule "Other payment currency"
+    provision "The number of occurrences populated in the [Other payment currency] must be equal to the number of occurrences populated in the [Other payment type]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if otherPayment -> currency exists
+            then otherPayment -> currency count = otherPayment -> paymentType count
+
+    condition DOC0084: <"Other payment date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "113" validationRule "Other payment date"
+    provision "The [Other payment date] is required if the [Other payment type] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then if otherPayment -> paymentType exists
+            then otherPayment -> date exists
+
+    condition DOC0085: <"Other payment date">
+        [docReference HKMA HKMA_Specs table "1" dataElement "113" validationRule "Other payment date"
+    provision "The number of occurrences populated in the [Other payment date] must be equal to the number of occurrences populated in the [Other payment type]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if otherPayment -> date exists
+            then otherPayment -> date count = otherPayment -> paymentType count
+
+    condition DOC0086: <"Other payment payer">
+        [docReference HKMA HKMA_Specs table "1" dataElement "114" validationRule "Other payment payer"
+    provision "The [Other payment payer] is required if the [Other payment type] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then if otherPayment -> paymentType exists
+            then otherPayment -> payer exists
+
+    condition DOC0087: <"Other payment payer">
+        [docReference HKMA HKMA_Specs table "1" dataElement "114" validationRule "Other payment payer"
+    provision "The number of occurrences populated in the [Other payment payer] must be equal to the number of occurrences populated in the [Other payment type]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if otherPayment -> payer exists
+            then otherPayment -> payer count = otherPayment -> paymentType count
+
+    condition DOC0088: <"Other payment receiver">
+        [docReference HKMA HKMA_Specs table "1" dataElement "115" validationRule "Other payment receiver"
+    provision "The [Other payment receiver] is required if the [Other payment type] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then if otherPayment -> paymentType exists
+            then otherPayment -> receiver exists
+
+    condition DOC0089: <"Other payment receiver">
+        [docReference HKMA HKMA_Specs table "1" dataElement "115" validationRule "Other payment receiver"
+    provision "The number of occurrences populated in the [Other payment receiver] must be equal to the number of occurrences populated in the [Other payment type]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if otherPayment -> receiver exists
+            then otherPayment -> receiver count = otherPayment -> paymentType count
+
+    condition DOC0092: <"Prior UTI (for one-to-one and one-to-many relations between transactions)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "123" validationRule "Prior UTI (for one-to-one and one-to-many relations between transactions)"
+    provision "The code reported in the [Prior UTI (for one-to-one and one-to-many relations between transactions)] must be different from the codes reported in the [Unique Transaction Identifier (UTI)]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if priorUTI exists
+            then priorUTI <> uniqueTransactionIdentifier
+
+    condition DOC0093: <"Underlier ID (OTHER) source">
+        [docReference HKMA HKMA_Specs table "1" dataElement "130" validationRule "Underlier ID (OTHER) source"
+    provision "The [Underlier ID (OTHER) source] is required if the [Underlier ID (OTHER)] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if underlyingIdOther exists
+            then underlyingIdOtherSource exists
+
+    condition DOC0094: <"Action type">
+        [docReference HKMA HKMA_Specs table "1" dataElement "134" validationRule "Action type"
+    provision "The [Action type] and [Event type] must be a valid combination."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR, ActionTypeEnum -> MARU, ActionTypeEnum -> VALU] any = actionType
+        then if actionType = ActionTypeEnum -> NEWT
+            then [EventTypeEnum -> TRAD, EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> CLRG, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> PTNG, EventTypeEnum -> CORP, EventTypeEnum -> INCP] any = eventType
+            else if actionType = ActionTypeEnum -> MODI
+            then [EventTypeEnum -> TRAD, EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> ETRM, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CREV, EventTypeEnum -> CORP, EventTypeEnum -> INCP, EventTypeEnum -> UPDT] any = eventType
+            else if actionType = ActionTypeEnum -> TERM
+            then [EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> ETRM, EventTypeEnum -> CLRG, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CREV, EventTypeEnum -> CORP, EventTypeEnum -> INCP] any = eventType
+            else if actionType = ActionTypeEnum -> PRTO
+            then eventType = EventTypeEnum -> PTNG
+
+    condition DOC0095: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "Participant is allowed to submit the trade action only when the reporting obligation of the asset class is active and the [Event timestamp] is not later than the end date of reporting obligation."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. Pending clarification with HTKR."]
+        True
+
+    condition DOC0138: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "Participant is only allowed to submit the trade action when the reporting obligation of the asset class is active and the submission is not later than the end date of the reporting obligation."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. Pending clarification with HTKR."]
+        True
+
+    condition DOC0096: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "The [Event timestamp] must not be a future timestamp."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> TERM, ActionTypeEnum -> REVI] any = actionType
+        then eventTimestamp <= Now
+
+    condition DOC0097: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "The [Event timestamp] of the post trade action must be equal to or later than the last action timestamp."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0098: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "The [Event timestamp] must be before or equal to the [Expiration date]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI] any = actionType
+        then eventTimestamp -> date <= expirationDate
+
+    condition DOC0099: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "The [Event timestamp] must be before or equal to the [Early termination date]."]
+        if ActionTypeEnum -> TERM = actionType
+        then eventTimestamp -> date <= earlyTerminationDate
+
+    condition DOC0100: <"Event timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "136" validationRule "Event timestamp"
+    provision "The [Event timestamp] must be equal to or after the [Execution timestamp]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then eventTimestamp >= executionTimestamp
+
+    condition DOC0101: <"Unique Transaction Identifier (UTI)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "138" validationRule "Unique Transaction Identifier (UTI)"
+    provision "The value of [Unique Transaction Identifier] specified in either <UnqTxIdr> or <Prtry> must be unique (except the status of the trade is Errored/Transferred out/Terminated) for the [Entity responsible for reporting]."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    // TH: Sprint 2025-05. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0137: <"Unique Transaction Identifier (UTI)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "138" validationRule "Unique Transaction Identifier (UTI)"
+    provision "The [Unique Transaction Identifier] does not match with the one derived from the trade reference indicated in the [c] field."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-05. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0114: <"[Submitter Identifier]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "153" validationRule "[Submitter Identifier]*"
+    provision "The [Submitter identifier] in the message does not match with the [Submitting party (From) ] in the Business Application Header"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-05. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0115: <"Entity responsible for reporting">
+        [docReference HKMA HKMA_Specs table "1" dataElement "154" validationRule "Entity responsible for reporting"
+    provision "The [Entity responsible for reporting] of a action must be the same as other trade actions in the same request file."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-05. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0136: <"Entity responsible for reporting">
+        [docReference HKMA HKMA_Specs table "1" dataElement "154" validationRule "Entity responsible for reporting"
+    provision "The [Entity responsible for reporting] must be an active TR participant with reporting service."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    condition DOC0117: <"Asset class">
+        [docReference HKMA HKMA_Specs table "1" dataElement "158" validationRule "Asset class"
+    provision "The [Asset class] must be same as the original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0118: <"Clearing timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "162" validationRule "Clearing timestamp"
+    provision "The [Clearing timestamp] must be left blank if the [Cleared] is populated with 'N'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and cleared = N
+        then clearingTimestamp is absent
+
+    condition DOC0119: <"Floating rate reference period - Leg 1  time period">
+        [docReference HKMA HKMA_Specs table "1" dataElement "167" validationRule "Floating rate reference period - Leg 1  time period"
+    provision "The [Floating rate reference period - Leg 1  time period] is required if the [Floating rate reference period - Leg 1  multiplier] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> periodicPayment -> floatingRateReferencePeriodMultiplier exists
+            then leg1 -> periodicPayment -> floatingRateReferencePeriod exists
+
+    condition DOC0120: <"Floating rate reference period - Leg 1  multiplier">
+        [docReference HKMA HKMA_Specs table "1" dataElement "168" validationRule "Floating rate reference period - Leg 1  multiplier"
+    provision "The [Floating rate reference period - Leg 1  multiplier] is required if the [Floating rate reference period - Leg 1  time period] is populated with 'YEAR', 'MNTH', 'WEEK' or 'DAIL'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL] any = leg1 -> periodicPayment -> floatingRateReferencePeriod
+            then leg1 -> periodicPayment -> floatingRateReferencePeriodMultiplier exists
+
+    condition DOC0121: <"Floating rate reference period - Leg 2  time period">
+        [docReference HKMA HKMA_Specs table "1" dataElement "172" validationRule "Floating rate reference period - Leg 2  time period"
+    provision "The [Floating rate reference period - Leg 2  time period] is required if the [Floating rate reference period - Leg 2  multiplier] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> periodicPayment -> floatingRateReferencePeriodMultiplier exists
+            then leg2 -> periodicPayment -> floatingRateReferencePeriod exists
+
+    condition DOC0122: <"Floating rate reference period - Leg 2  multiplier">
+        [docReference HKMA HKMA_Specs table "1" dataElement "173" validationRule "Floating rate reference period - Leg 2  multiplier"
+    provision "The [Floating rate reference period - Leg 2  multiplier] is required if the [Floating rate reference period - Leg 2  time period] is populated with 'YEAR', 'MNTH', 'WEEK' or 'DAIL'."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL] any = leg2 -> periodicPayment -> floatingRateReferencePeriod
+            then leg2 -> periodicPayment -> floatingRateReferencePeriodMultiplier exists
+
+    // TH: Sprint 2025-13. This validation rule appears in the Supplementary Reporting Instructions For Reporting Over-The-Counter (OTC) Derivative Transactions under the Hong Kong OTC Derivative Regulatory Regime to take effect from 29 September 2025 (version 2.0).
+    condition SRI0001: <"Underlying asset trading platform identifier">
+        [docReference HKMA HKMA_Specs table "1" dataElement "131" validationRule "Underlying asset trading platform identifier"
+    provision "The data field Underlying asset trading platform identifier is applicable only when TICKER or other platform-specific market identifiers are populated in Underlier ID (Other) source. If the underlying asset is traded on more than one platform, reporting entities should populate the platform to which the market identifier relates, e.g. the exchange on which the TICKER number of the security is traded."]
+        if underlyingIdOtherSource exists
+        then underlyingAssetTradingPlatformIdentifier exists
+
+type NotionalQuantityScheduleLeg1Report:
+    effectiveDate date (1..1)
+    endDate date (0..1)
+    quantity ShortFraction5DecimalNumber (1..1)
+
+type NotionalQuantityScheduleLeg2Report:
+    effectiveDate date (1..1)
+    endDate date (0..1)
+    quantity ShortFraction5DecimalNumber (1..1)

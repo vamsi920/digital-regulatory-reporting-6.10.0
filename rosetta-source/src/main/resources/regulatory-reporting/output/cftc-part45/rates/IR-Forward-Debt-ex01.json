@@ -1,0 +1,76 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "DUMMY0000000000LEI02",
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "PHYS"
+  },
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2023-11-15",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2023-11-20T00:35:09Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-11-15T01:45:41Z",
+  "expirationDate" : "2029-11-15",
+  "finalContractualSettlementDate" : "2029-11-15",
+  "leg1" : {
+    "notionalAmount" : 8600000,
+    "notionalCurrency" : "JPY",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "JPY",
+          "ReturnorPayoutTrigger" : "Forward price of underlying instrument",
+          "Underlying" : {
+            "UnderlierID" : "JP1700161P53",
+            "UnderlierIDSource" : "ISIN"
+          }
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Debt"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI01",
+  "uniqueTransactionIdentifier" : "IRFORWARDDEBTEXXML02"
+}

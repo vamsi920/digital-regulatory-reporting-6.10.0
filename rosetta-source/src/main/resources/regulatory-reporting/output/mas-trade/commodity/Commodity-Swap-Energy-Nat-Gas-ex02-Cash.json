@@ -1,0 +1,69 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2014-01-01",
+  "eventTimestamp" : "2020-11-16T00:00:00Z",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2014-12-31",
+  "finalContractualSettlementDate" : "2014-12-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1074560,
+    "notionalCurrency" : "CAD",
+    "notionalQuantity" : 800,
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "totalNotionalQuantity" : 292000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1074560,
+    "notionalCurrency" : "CAD",
+    "notionalQuantity" : 800,
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "settlementCurrency" : "CAD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "CAD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 292000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "NATURAL GAS-AECO C/NIT (US$/MMBTU)-CANADIAN GAS REPORTER",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "price" : {
+    "monetary" : 3.68
+  },
+  "priceCurrency" : "CAD",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingSpecifiedPerson" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPENERG02"
+}

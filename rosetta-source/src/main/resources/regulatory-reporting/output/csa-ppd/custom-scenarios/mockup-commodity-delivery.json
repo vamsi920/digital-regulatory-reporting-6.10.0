@@ -1,0 +1,81 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "549300KFSLY4U7N3LL12",
+  "counterparty2" : "549300AJRHKBLY9GM262",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "deliveryLocation" : "0000000000000000",
+    "messageID" : "00122941455512345BR7771234567892024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "549300KFSLY4U7N3LL12",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2006-07-01",
+  "eventTimestamp" : "2023-07-19T14:44:58Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-07-19T14:44:58Z",
+  "expirationDate" : "2006-07-31",
+  "leg1" : {
+    "notionalAmount" : 487862.5,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2500,
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "MBTU",
+    "totalNotionalQuantity" : 77500
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "NATURAL GAS-HENRY HUB-NYMEX",
+    "notionalAmount" : 487862.5,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2500,
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "MBTU",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 77500
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "NATURAL GAS-HENRY HUB-NYMEX",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "price" : {
+    "monetary" : 6.295
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "MBTU",
+  "reportSubmittingEntityID" : "549300KFSLY4U7N3LL12",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPCOMMODITYDEL01"
+}

@@ -1,0 +1,145 @@
+namespace drr.enrichment.common.event
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.math.*
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.event.workflow.*
+import cdm.product.common.settlement.*
+
+import drr.regulation.common.*
+
+func Create_AlphaTerminationWorkflowStepFromBetaAndGamma: <"Generates a WorkflowStep with a ProposedEvent representing the alpha termination based on the beta and gamma business events, and the trade ID (UTI) of the alpha.">
+    inputs:
+        betaReportableEvent ReportableEvent (1..1)
+        alphaUTI TradeIdentifier (1..1)
+        ccpPartyReference Party (1..1)
+        betaCounterparty Counterparty (1..1)
+        gammaCounterparty Counterparty (1..1)
+    output:
+        proposedAlphaTerm WorkflowStep (1..1)
+
+    alias betaCurrency: <"Extracts the currency of the beta TradeState.">
+        TradeForEvent(betaReportableEvent) -> tradableProduct -> tradeLot -> priceQuantity -> quantity -> unit -> currency
+            distinct
+            only-element
+
+    alias clearingCounterpartyRole: <"Extracts the counterparty role (Party1 or Party2) of the CCP to the beta trade.">
+        TradeForEvent(betaReportableEvent) -> tradableProduct -> counterparty
+            filter item -> partyReference = ccpPartyReference
+            then item -> role only-element
+
+    alias partyChangeInstruction: <"Builds the instructions to replace the CCP by the counterparty to the gamma trade and references the corresponding UTI of the alpha termination.">
+        PartyChangeInstruction {
+            counterparty: Counterparty {
+                role: clearingCounterpartyRole,
+                partyReference: gammaCounterparty -> partyReference
+            },
+            tradeId: alphaUTI,
+            ...
+        }
+
+    set proposedAlphaTerm -> proposedEvent -> instruction -> before: <"Applies the party change by replacing the CCP in the beta trade by the counterparty to the gamma trade. Adds the UTI of the alpha termination to the trade.">
+        Create_PartyChange(
+                partyChangeInstruction -> counterparty,
+                empty,
+                empty,
+                partyChangeInstruction -> tradeId,
+                TradeStateForEvent(betaReportableEvent)
+            )
+
+    set proposedAlphaTerm -> proposedEvent -> instruction -> primitiveInstruction -> quantityChange: <"Attaches the quantity change instruction describing a termination to exit the alpha trade.">
+        QuantityChangeInstruction {
+            change: PriceQuantity {
+                quantity: NonNegativeQuantitySchedule {
+                    value: 0,
+                    unit: UnitType {
+                        currency: betaCurrency,
+                        ...
+                    },
+                    ...
+                },
+                ...
+            },
+            direction: QuantityChangeDirectionEnum -> Replace,
+            lotIdentifier: empty
+        }
+
+    set proposedAlphaTerm -> nextEvent -> intent: <"Sets the intent of the next event as Clearing.">
+        EventIntentEnum -> Clearing
+
+    set proposedAlphaTerm -> proposedEvent -> intent: <"Sets the intent of the current event as Clearing.">
+        EventIntentEnum -> Clearing
+
+    add proposedAlphaTerm -> timestamp: <"Sets the execution timestamp to the earliest execution timestamp found in the Beta WorkflowStep.">
+        betaReportableEvent -> originatingWorkflowStep -> timestamp
+            filter
+                item -> qualification = EventTimestampQualificationEnum -> executionDateTime
+            then min [ item -> dateTime -> date ] // timestamp comparison not supported
+    add proposedAlphaTerm -> timestamp: <"Inherits the other timestamps different to the execution timestamp associated to the clearing event from the WorkflowStep of the Beta.">
+        betaReportableEvent -> originatingWorkflowStep -> timestamp
+            filter
+                item -> qualification <> EventTimestampQualificationEnum -> executionDateTime
+
+    add proposedAlphaTerm -> eventIdentifier: <"Inherits the event identifier associated to the clearing event from the WorkflowStep of the Beta.">
+        betaReportableEvent -> originatingWorkflowStep -> eventIdentifier
+
+    set proposedAlphaTerm -> action: <"Set the Action of the WorkflowStep as New.">
+        ActionEnum -> New
+
+func Create_AlphaTerminationReportableEventFromBetaAndGamma: <"Generates the reportableEvent representing the alpha termination based on the beta and gamma reportable events with a business event, including additional details such as the trade ID (UTI) of the alpha and the execution venue.">
+    inputs:
+        betaReportableEvent ReportableEvent (1..1)
+        gammaReportableEvent ReportableEvent (1..1)
+        alphaUTI TradeIdentifier (1..1)
+        alphaExecutionVenue ExecutionVenueTypeEnum (1..1)
+    output:
+        alphaReportableEvent ReportableEvent (1..1)
+
+    alias ccpFromTrade: <"Finds the CCP party reference from the roles defined in the Trade.">
+        TradeForEvent(gammaReportableEvent) -> partyRole
+            filter item -> role = PartyRoleEnum -> ClearingOrganization
+            then only-element
+            then item -> partyReference
+
+    alias ccpFromReportableInformation: <"Finds the CCP party reference from the roles defined in the ReportableInformation.">
+        gammaReportableEvent -> reportableInformation -> partyInformation -> relatedParty
+            filter item -> role = PartyRoleEnum -> ClearingOrganization
+            then only-element
+            then item -> partyReference
+
+    alias ccpPartyReference: <"Stores the CCP party reference.">
+        if ccpFromTrade exists
+        then ccpFromTrade
+        else if ccpFromReportableInformation exists
+        then ccpFromReportableInformation
+
+    alias betaCounterparty: <"Finds the counterparty to the beta trade that is not the CCP.">
+        TradeForEvent(betaReportableEvent) -> tradableProduct -> counterparty
+            filter (item -> partyReference <> ccpPartyReference)
+            then only-element
+
+    alias gammaCounterparty: <"Finds the counterparty to the gamma trade that is not the CCP.">
+        TradeForEvent(gammaReportableEvent) -> tradableProduct -> counterparty
+            filter (item -> partyReference <> ccpPartyReference)
+            then only-element
+
+    set alphaReportableEvent -> reportableInformation: <"Inherits the reportable information from the beta.">
+        betaReportableEvent -> reportableInformation
+
+    add alphaReportableEvent -> reportableInformation -> partyInformation: <"Adds the party information of the counterparty to the gamma trade.">
+        gammaReportableEvent -> reportableInformation -> partyInformation
+            filter item -> partyReference = gammaCounterparty -> partyReference
+
+    set alphaReportableEvent -> reportableInformation -> executionVenueType: <"Sets the execution venue type as specified in the input.">
+        alphaExecutionVenue
+
+    set alphaReportableEvent -> originatingWorkflowStep: <"Generates the workflowStep.">
+        Create_AlphaTerminationWorkflowStepFromBetaAndGamma(
+                betaReportableEvent,
+                alphaUTI,
+                ccpPartyReference,
+                betaCounterparty,
+                gammaCounterparty
+            )

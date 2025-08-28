@@ -1,0 +1,49 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "brokerID" : "549300OL8KL0WCQ34V31",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "SWPT",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "BYER",
+  "effectiveDate" : "2018-04-01",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "SEF123",
+  "eventTimestamp" : "2018-04-01T14:15:36Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-04-01T14:15:36Z",
+  "expirationDate" : "2019-04-01",
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 13000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 13000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "maturityDateOfTheUnderlying" : "2024-04-03",
+  "optionPremiumAmount" : 100000,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2018-04-01",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 0.05
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "MOCKUPNATURALPERSO01"
+}

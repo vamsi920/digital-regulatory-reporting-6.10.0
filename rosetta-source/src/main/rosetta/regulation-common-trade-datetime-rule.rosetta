@@ -1,0 +1,76 @@
+namespace drr.regulation.common.trade.datetime
+version "${project.version}"
+
+import cdm.base.datetime.*
+import cdm.event.workflow.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.version3.* as cde
+
+reporting rule ClearingTimestamp from TransactionReportInstruction: <"Clearing Timestamp">
+    extract originatingWorkflowStep -> timestamp
+    then filter qualification = EventTimestampQualificationEnum -> clearingDateTime
+    then only-element
+    then extract dateTime
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"Expiration Date">
+    extract GetExpirationDate
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective Date">
+    extract
+        if Qualify_InterestRate_Fra(ProductForEvent -> contractualProduct -> economicTerms)
+        then (if TradeForEvent exists
+            then TradeForEvent -> tradeDate
+            else if PositionForEvent exists
+            then PositionForEvent -> openDateTime -> date)
+        else cde.datetime.EffectiveDate
+
+reporting rule MaturityDateOfTheUnderlier from TransactionReportInstruction: <"Maturity date of the underlier">
+    extract ProductForEvent
+    then extract
+        if IsIRSwaption or IsCreditSwaption or IsCommoditySwaption
+        then cde.datetime.ExpirationDate(UnderlierForProduct)
+
+reporting rule FixingDateLeg1 from TransactionReportInstruction: <"Fixing date-Leg 1">
+    extract ProductForEvent
+    then extract
+        // IR
+        if InterestRateLeg1 -> settlementTerms exists
+        then InterestRateLeg1 -> settlementTerms
+        // Option
+        else if contractualProduct -> economicTerms -> payout -> optionPayout exists
+        then contractualProduct -> economicTerms -> payout -> optionPayout only-element -> settlementTerms
+        // Forward
+        else if contractualProduct -> economicTerms -> payout -> forwardPayout count = 1
+        then contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> settlementTerms
+        // FX Swap
+        else if contractualProduct -> economicTerms -> payout -> forwardPayout count = 2
+        then FXFarLeg -> settlementTerms
+    then extract
+        cashSettlementTerms only-element -> valuationDate -> fxFixingDate -> fxFixingDate -> adjustableDate -> unadjustedDate
+    then ToDateTime
+
+reporting rule FixingDateLeg2 from TransactionReportInstruction: <"Fixing date-Leg 2">
+    extract ProductForEvent
+    then extract InterestRateLeg2 -> settlementTerms
+    then extract
+        cashSettlementTerms only-element -> valuationDate -> fxFixingDate -> fxFixingDate -> adjustableDate -> unadjustedDate
+    then ToDateTime
+
+reporting rule ConfirmationTimestamp from TransactionReportInstruction: <"Confirmation Timestamp">
+    extract
+        if IsCleared(originatingWorkflowStep) = False
+        then originatingWorkflowStep -> timestamp
+    then filter qualification = confirmationDateTime
+    then distinct only-element
+    then extract dateTime
+
+reporting rule ClearingReceiptTimestamp from TransactionReportInstruction: <"Clearing Receipt Timestamp">
+    extract
+        if ((IsCleared(originatingWorkflowStep) or (IntendedToClear(originatingWorkflowStep) and IsActionTypeTERM))
+                and cde.event.EventType = CLRG)
+        then originatingWorkflowStep -> timestamp
+    then filter qualification = EventTimestampQualificationEnum -> clearingReceiptDateTime
+    then only-element
+    then extract dateTime

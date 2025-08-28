@@ -1,0 +1,90 @@
+namespace drr.standards.iosco.cde.version2
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.*
+import drr.standards.iosco.cde.version2.*
+
+func Leg1:
+    inputs:
+        transaction TransactionReportInstruction (1..1)
+        spreadNotation price.PriceNotationEnum (0..1)
+        defaultValue number (0..1)
+    output:
+        leg LegV2 (0..1)
+
+    set leg:
+        transaction
+            extract
+                LegV2 {
+                    periodicPayment: payment.PeriodicPayment(
+                            InterestRateLeg1(
+                                    ProductOrUnderlierProduct(ProductForEvent(item))
+                                )
+                        ),
+                    fixedRate: extract ProductForEvent
+                    then extract ProductOrUnderlierProduct
+                    then price.InterestRateFixedRate(InterestRateLeg1),
+                    notionalAmount: quantity.NotionalAmountLeg1(transaction, defaultValue),
+                    notionalCurrency: quantity.NotionalCurrencyLeg1,
+                    totalNotionalQuantity: quantity.TotalNotionalQuantityLeg1(
+                            transaction,
+                            defaultValue
+                        ),
+                    notionalAmountSchedule: quantity.NotionalAmountScheduleLeg1,
+                    notionalQuantitySchedule: quantity.NotionalQuantityScheduleLeg1,
+                    settlementCurrency: extract ProductForEvent
+                    then extract SettlementTermsLeg1
+                    then extract execution.SettlementCurrency,
+                    spread: extract
+                        price.PriceFormatFromNotation(
+                                price.SpreadLeg1 -> value,
+                                spreadNotation
+                            ),
+                    spreadNotation: spreadNotation,
+                    spreadCurrency: price.SpreadLeg1Currency,
+                    quantityUnitOfMeasure: quantity.QuantityUnitOfMeasureLeg1,
+                    direction2: party.Direction2Leg1
+                }
+
+func Leg2:
+    inputs:
+        transaction TransactionReportInstruction (1..1)
+        spreadNotation price.PriceNotationEnum (0..1)
+        defaultValue number (0..1)
+    output:
+        leg LegV2 (0..1)
+
+    set leg:
+        transaction
+            extract
+                LegV2 {
+                    periodicPayment: payment.PeriodicPayment(
+                            InterestRateLeg2(
+                                    ProductOrUnderlierProduct(ProductForEvent(item))
+                                )
+                        ),
+                    fixedRate: extract ProductForEvent
+                    then extract ProductOrUnderlierProduct
+                    then price.InterestRateFixedRate(InterestRateLeg2),
+                    notionalAmount: quantity.NotionalAmountLeg2(transaction, defaultValue),
+                    notionalCurrency: quantity.NotionalCurrencyLeg2,
+                    totalNotionalQuantity: quantity.TotalNotionalQuantityLeg2(
+                            transaction,
+                            defaultValue
+                        ),
+                    notionalAmountSchedule: quantity.NotionalAmountScheduleLeg2,
+                    notionalQuantitySchedule: quantity.NotionalQuantityScheduleLeg2,
+                    settlementCurrency: extract ProductForEvent
+                    then extract SettlementTermsLeg2
+                    then extract execution.SettlementCurrency,
+                    spread: extract
+                        price.PriceFormatFromNotation(
+                                price.SpreadLeg2 -> value,
+                                spreadNotation
+                            ),
+                    spreadNotation: spreadNotation,
+                    spreadCurrency: extract price.SpreadLeg2Currency,
+                    quantityUnitOfMeasure: quantity.QuantityUnitOfMeasureLeg2,
+                    direction2: party.Direction2Leg2
+                }

@@ -1,0 +1,77 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "beneficiary1" : "213800WWTABZ1GOJHH37",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWPT",
+  "corporateSectorOfTheCounterparty1" : [ "INUN" ],
+  "corporateSectorOfTheCounterparty2" : [ "CSDS" ],
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "direction1" : "BYER",
+  "effectiveDate" : "2021-12-06",
+  "entityResponsibleForReporting" : "213800WWTABZ1GOJHH37",
+  "eventTimestamp" : "2021-12-06T17:09:17Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:17Z",
+  "expirationDate" : "2022-07-13",
+  "finalContractualSettlementDate" : "2032-01-13",
+  "firstExerciseDate" : "2022-07-13",
+  "intragroup" : false,
+  "leg1" : {
+    "fixedRate" : 0.03,
+    "notionalAmount" : 100000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A001",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 100000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3
+    },
+    "spread" : {
+      "basis" : 0
+    },
+    "spreadNotation" : "Basis"
+  },
+  "maturityDateOfTheUnderlying" : "2032-01-13",
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 1244096.653,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2021-01-13",
+  "optionStyle" : "BERM",
+  "optionType" : "CALL",
+  "platformIdentifier" : "XXXX",
+  "putAmount" : 100000000,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "IROPTIONSWAPTIONEX01",
+  "strikePrice" : {
+    "decimal" : 0.03
+  },
+  "strikePriceNotation" : "Decimal",
+  "technicalRecordId" : "HKMA-213800WWTABZ1GOJHH37-213800IV9PCAC364HN60-IROPTIONSWAPTIONEX02-2021-12-06T17:09:17Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IROPTIONSWAPTIONEX02"
+}

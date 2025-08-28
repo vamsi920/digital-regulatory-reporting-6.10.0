@@ -1,0 +1,6 @@
+namespace drr.regulation.hkma
+version "${project.version}"
+
+body Authority HKMA <"The Hong Kong Monetary Authority (HKMA) is Hong Kongs central banking institution.">
+
+corpus Specifications "Appendix_B_List_of_Supported_Data_Elements_and_Related_Validations_ISO20022 (v1.0)" HKMA_Specs <"This worksheet provides details of all the fields that can be submitted for HKTR reporting in Business Message (auth.108 and auth.030). This includes the data type, valid values and business rules associated with each field.">

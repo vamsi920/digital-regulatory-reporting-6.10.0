@@ -1,0 +1,76 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "callAmount" : 20827500,
+  "callCurrency" : "CNY",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-07-06",
+  "eventTimestamp" : "2020-11-10T20:15:45Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 6.9425,
+  "exchangeRateBasis" : "USD/CNY",
+  "executionTimestamp" : "2020-07-06T03:58:14Z",
+  "expirationDate" : "2020-09-29",
+  "firstExerciseDate" : "2020-09-29",
+  "leg1" : {
+    "notionalAmount" : 20827500,
+    "notionalCurrency" : "CNY"
+  },
+  "leg2" : {
+    "notionalAmount" : 3000000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CNY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 40723.8,
+  "optionPremiumCurrency" : "CNY",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 3000000,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 6.9425
+  },
+  "strikePriceCurrency" : "USD/CNY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

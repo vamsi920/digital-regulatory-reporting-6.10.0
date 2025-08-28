@@ -1,0 +1,49 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "callAmount" : 2325581.4,
+  "callCurrency" : "USD",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "direction1" : "BYER",
+  "effectiveDate" : "2019-01-07",
+  "entityResponsibleForReporting" : "213800WWTABZ1GOJHH37",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 107.5,
+  "exchangeRateBasis" : "USD/JPY",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2019-04-26",
+  "finalContractualSettlementDate" : "2019-04-26",
+  "firstExerciseDate" : "2019-04-26",
+  "leg1" : {
+    "notionalAmount" : 250000001,
+    "notionalCurrency" : "JPY"
+  },
+  "leg2" : {
+    "notionalAmount" : 2325581.4,
+    "notionalCurrency" : "USD"
+  },
+  "optionPremiumAmount" : 57000,
+  "optionPremiumCurrency" : "USD",
+  "optionStyle" : "EURO",
+  "optionType" : "OTHR",
+  "putAmount" : 250000001,
+  "putCurrency" : "JPY",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 107.5
+  },
+  "strikePriceCurrency" : "USD/JPY",
+  "strikePriceNotation" : "Decimal",
+  "technicalRecordId" : "029764123555123459991234569BR777123456789",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

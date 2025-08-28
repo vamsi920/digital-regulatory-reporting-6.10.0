@@ -1,0 +1,579 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] drr                                                                [pom]
+[INFO] rosetta-source                                                     [jar]
+[INFO] distribution                                                       [pom]
+[INFO] examples                                                           [jar]
+[INFO] tests                                                              [jar]
+Downloading from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/3.7.1/maven-assembly-plugin-3.7.1.pom
+Progress (1): 1.4/15 kBProgress (1): 2.8/15 kBProgress (1): 4.1/15 kBProgress (1): 5.5/15 kBProgress (1): 6.9/15 kBProgress (1): 8.3/15 kBProgress (1): 9.7/15 kBProgress (1): 11/15 kB Progress (1): 12/15 kBProgress (1): 14/15 kBProgress (1): 15/15 kBProgress (1): 15 kB                      Downloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/3.7.1/maven-assembly-plugin-3.7.1.pom (15 kB at 66 kB/s)
+[INFO] 
+[INFO] --------------------------< com.regnosys:drr >--------------------------
+[INFO] Building drr 0.0.0.master-SNAPSHOT                                 [1/5]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ drr ---
+[INFO] com.regnosys:drr:pom:0.0.0.master-SNAPSHOT
+[INFO] 
+[INFO] ------------------< com.regnosys.drr:rosetta-source >-------------------
+[INFO] Building rosetta-source 0.0.0.master-SNAPSHOT                      [2/5]
+[INFO]   from rosetta-source/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.6.1:tree (default-cli) @ rosetta-source ---
+[INFO] com.regnosys.drr:rosetta-source:jar:0.0.0.master-SNAPSHOT
+[INFO] +- com.regnosys.rosetta:com.regnosys.rosetta:jar:9.64.0:compile
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta.lib:jar:9.64.0:compile
+[INFO] |  |  +- org.eclipse.xtend:org.eclipse.xtend.lib:jar:2.38.0:compile
+[INFO] |  |  |  \- org.eclipse.xtend:org.eclipse.xtend.lib.macro:jar:2.38.0:compile
+[INFO] |  |  +- com.google.inject:guice:jar:6.0.0:compile
+[INFO] |  |  |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  |  |  +- jakarta.inject:jakarta.inject-api:jar:2.0.1:compile
+[INFO] |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  +- org.apache.commons:commons-lang3:jar:3.14.0:compile
+[INFO] |  |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.17.1:compile
+[INFO] |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.17.1:compile
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.ecore:jar:2.36.0:compile
+[INFO] |  |  \- org.eclipse.emf:org.eclipse.emf.common:jar:2.30.0:compile
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext:jar:2.38.0:compile
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext.util:jar:2.38.0:compile
+[INFO] |  |  +- org.eclipse.platform:org.eclipse.equinox.common:jar:3.19.0:compile
+[INFO] |  |  +- org.eclipse.platform:org.eclipse.osgi:jar:3.19.0:compile
+[INFO] |  |  +- org.eclipse.emf:org.eclipse.emf.ecore.xmi:jar:2.37.0:compile
+[INFO] |  |  \- org.antlr:antlr-runtime:jar:3.2:compile
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:jar:1.7.0:compile
+[INFO] |  |  \- org.eclipse.xtext:org.eclipse.xtext.xbase.lib:jar:2.40.0:compile
+[INFO] |  +- org.apache.commons:commons-text:jar:1.12.0:compile
+[INFO] |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.17.1:compile
+[INFO] |  |  +- org.yaml:snakeyaml:jar:2.2:compile
+[INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.17.1:compile
+[INFO] |  +- org.eclipse.lsp4j:org.eclipse.lsp4j:jar:0.24.0:compile
+[INFO] |  |  \- org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:jar:0.24.0:compile
+[INFO] |  |     \- com.google.code.gson:gson:jar:2.13.1:compile
+[INFO] |  \- org.slf4j:log4j-over-slf4j:jar:2.0.13:compile
+[INFO] |     \- org.slf4j:slf4j-api:jar:2.0.13:compile
+[INFO] +- org.finos.cdm:cdm-java:jar:5.26.2:compile
+[INFO] |  +- com.regnosys:rosetta-common:jar:11.77.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.17.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.17.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.17.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.17.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-guava:jar:2.17.1:compile
+[INFO] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-joda:jar:2.17.1:compile
+[INFO] |  |  |  \- joda-time:joda-time:jar:2.10.14:compile
+[INFO] |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-xml:jar:2.17.1:compile
+[INFO] |  |  |  +- org.codehaus.woodstox:stax2-api:jar:4.2.2:compile
+[INFO] |  |  |  \- com.fasterxml.woodstox:woodstox-core:jar:6.6.2:compile
+[INFO] |  |  \- commons-io:commons-io:jar:2.11.0:compile
+[INFO] |  +- com.opengamma.strata:strata-basics:jar:1.7.0:compile
+[INFO] |  |  \- com.opengamma.strata:strata-collect:jar:1.7.0:compile
+[INFO] |  |     +- org.joda:joda-beans:jar:2.1:compile
+[INFO] |  |     \- org.joda:joda-convert:jar:2.0:compile
+[INFO] |  \- org.jsoup:jsoup:jar:1.15.3:compile
+[INFO] +- org.iso20022:rosetta-source:jar:1.29.2:compile
+[INFO] +- com.google.guava:guava:jar:33.3.1-jre:compile
+[INFO] |  +- com.google.guava:failureaccess:jar:1.0.2:compile
+[INFO] |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[INFO] |  +- com.google.code.findbugs:jsr305:jar:3.0.1:compile
+[INFO] |  +- org.checkerframework:checker-qual:jar:3.43.0:compile
+[INFO] |  +- com.google.errorprone:error_prone_annotations:jar:2.18.0:compile
+[INFO] |  \- com.google.j2objc:j2objc-annotations:jar:3.0.0:compile
+[INFO] +- com.regnosys:rosetta-testing:jar:11.77.1:test
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta.tests:jar:9.64.0:test
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext.testing:jar:2.38.0:test
+[INFO] |  |  |  \- org.eclipse.xtext:org.eclipse.xtext.ide:jar:2.38.0:test
+[INFO] |  |  |     \- org.eclipse.emf:org.eclipse.emf.ecore.change:jar:2.16.0:test
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext.xbase.testing:jar:2.38.0:test
+[INFO] |  |  |  +- org.eclipse.xtext:org.eclipse.xtext.xbase:jar:2.38.0:test
+[INFO] |  |  |  |  \- org.eclipse.xtext:org.eclipse.xtext.common.types:jar:2.38.0:test
+[INFO] |  |  |  |     +- org.ow2.asm:asm:jar:9.5:test
+[INFO] |  |  |  |     \- io.github.classgraph:classgraph:jar:4.8.179:test
+[INFO] |  |  |  +- org.eclipse.platform:org.eclipse.core.runtime:jar:3.31.0:test
+[INFO] |  |  |  |  +- org.eclipse.platform:org.eclipse.core.jobs:jar:3.15.200:test
+[INFO] |  |  |  |  +- org.eclipse.platform:org.eclipse.equinox.registry:jar:3.12.0:test
+[INFO] |  |  |  |  +- org.eclipse.platform:org.eclipse.equinox.preferences:jar:3.11.0:test
+[INFO] |  |  |  |  +- org.eclipse.platform:org.eclipse.core.contenttype:jar:3.9.300:test
+[INFO] |  |  |  |  \- org.eclipse.platform:org.eclipse.equinox.app:jar:1.7.0:test
+[INFO] |  |  |  +- org.eclipse.jdt:ecj:jar:3.37.0:test
+[INFO] |  |  |  \- org.eclipse.jdt:org.eclipse.jdt.core:jar:3.37.0:test
+[INFO] |  |  |     +- org.eclipse.platform:org.eclipse.core.resources:jar:3.20.100:test
+[INFO] |  |  |     |  \- org.eclipse.platform:org.eclipse.core.expressions:jar:3.9.300:test
+[INFO] |  |  |     +- org.eclipse.platform:org.eclipse.core.filesystem:jar:1.10.300:test
+[INFO] |  |  |     \- org.eclipse.platform:org.eclipse.text:jar:3.14.0:test
+[INFO] |  |  |        \- org.eclipse.platform:org.eclipse.core.commands:jar:3.12.0:test
+[INFO] |  |  \- org.mdkt.compiler:InMemoryJavaCompiler:jar:1.3.0:test
+[INFO] |  +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |  +- org.junit.jupiter:junit-jupiter:jar:5.9.1:test
+[INFO] |  |  +- org.junit.jupiter:junit-jupiter-api:jar:5.10.2:test
+[INFO] |  |  |  +- org.opentest4j:opentest4j:jar:1.3.0:test
+[INFO] |  |  |  +- org.junit.platform:junit-platform-commons:jar:1.10.2:test
+[INFO] |  |  |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[INFO] |  |  +- org.junit.jupiter:junit-jupiter-params:jar:5.9.1:test
+[INFO] |  |  \- org.junit.jupiter:junit-jupiter-engine:jar:5.10.2:test
+[INFO] |  |     \- org.junit.platform:junit-platform-engine:jar:1.10.2:test
+[INFO] |  +- org.mockito:mockito-core:jar:5.1.1:test
+[INFO] |  |  +- net.bytebuddy:byte-buddy:jar:1.17.5:test
+[INFO] |  |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.22:test
+[INFO] |  |  \- org.objenesis:objenesis:jar:3.3:test
+[INFO] |  +- org.mockito:mockito-junit-jupiter:jar:5.1.1:test
+[INFO] |  +- co.unruly:java-8-matchers:jar:1.6:test
+[INFO] |  |  \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] |  +- org.hamcrest:hamcrest:jar:2.2:test
+[INFO] |  +- org.jetbrains.kotlin:kotlin-test-junit:jar:1.9.24:test
+[INFO] |  |  +- org.jetbrains.kotlin:kotlin-test:jar:1.9.24:test
+[INFO] |  |  |  \- org.jetbrains.kotlin:kotlin-stdlib:jar:1.9.24:test
+[INFO] |  |  |     \- org.jetbrains:annotations:jar:13.0:test
+[INFO] |  |  \- junit:junit:jar:4.13.2:test
+[INFO] |  +- ch.qos.logback:logback-classic:jar:1.5.6:test
+[INFO] |  \- ch.qos.logback:logback-core:jar:1.5.6:test
+[INFO] +- org.glassfish.jaxb:jaxb-runtime:jar:2.3.1:compile
+[INFO] |  +- org.glassfish.jaxb:txw2:jar:2.3.1:compile
+[INFO] |  +- com.sun.istack:istack-commons-runtime:jar:3.0.7:compile
+[INFO] |  +- org.jvnet.staxex:stax-ex:jar:1.8:compile
+[INFO] |  +- com.sun.xml.fastinfoset:FastInfoset:jar:1.2.15:compile
+[INFO] |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] \- javax.activation:activation:jar:1.1.1:compile
+[INFO] 
+[INFO] -------------------< com.regnosys.drr:distribution >--------------------
+[INFO] Building distribution 0.0.0.master-SNAPSHOT                        [3/5]
+[INFO]   from distribution/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+Downloading from isda-maven-snapshot: artifactregistry://europe-west1-maven.pkg.dev/production-208613/isda-maven-snapshot/com/regnosys/drr/rosetta-source/0.0.0.master-SNAPSHOT/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+Progress (1): 1.0 kB                    Downloaded from isda-maven-snapshot: artifactregistry://europe-west1-maven.pkg.dev/production-208613/isda-maven-snapshot/com/regnosys/drr/rosetta-source/0.0.0.master-SNAPSHOT/maven-metadata.xml (1.0 kB at 518 B/s)
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ distribution ---
+[INFO] com.regnosys.drr:distribution:pom:0.0.0.master-SNAPSHOT
+[INFO] +- com.regnosys.drr:rosetta-source:jar:0.0.0.master-SNAPSHOT:compile
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta:jar:9.64.0:compile
+[INFO] |  |  +- com.regnosys.rosetta:com.regnosys.rosetta.lib:jar:9.64.0:compile
+[INFO] |  |  |  +- org.eclipse.xtend:org.eclipse.xtend.lib:jar:2.38.0:compile
+[INFO] |  |  |  |  \- org.eclipse.xtend:org.eclipse.xtend.lib.macro:jar:2.38.0:compile
+[INFO] |  |  |  +- com.google.inject:guice:jar:6.0.0:compile
+[INFO] |  |  |  |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  |  |  |  +- jakarta.inject:jakarta.inject-api:jar:2.0.1:compile
+[INFO] |  |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  |  +- org.apache.commons:commons-lang3:jar:3.14.0:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.17.1:compile
+[INFO] |  |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.17.1:compile
+[INFO] |  |  +- org.eclipse.emf:org.eclipse.emf.ecore:jar:2.36.0:compile
+[INFO] |  |  |  \- org.eclipse.emf:org.eclipse.emf.common:jar:2.30.0:compile
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext:jar:2.38.0:compile
+[INFO] |  |  |  +- org.eclipse.xtext:org.eclipse.xtext.util:jar:2.38.0:compile
+[INFO] |  |  |  +- org.eclipse.platform:org.eclipse.equinox.common:jar:3.19.0:compile
+[INFO] |  |  |  +- org.eclipse.platform:org.eclipse.osgi:jar:3.19.0:compile
+[INFO] |  |  |  +- org.eclipse.emf:org.eclipse.emf.ecore.xmi:jar:2.37.0:compile
+[INFO] |  |  |  \- org.antlr:antlr-runtime:jar:3.2:compile
+[INFO] |  |  +- org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:jar:1.7.0:compile
+[INFO] |  |  |  \- org.eclipse.xtext:org.eclipse.xtext.xbase.lib:jar:2.40.0:compile
+[INFO] |  |  +- org.apache.commons:commons-text:jar:1.12.0:compile
+[INFO] |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.17.1:compile
+[INFO] |  |  |  +- org.yaml:snakeyaml:jar:2.2:compile
+[INFO] |  |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.17.1:compile
+[INFO] |  |  +- org.eclipse.lsp4j:org.eclipse.lsp4j:jar:0.24.0:compile
+[INFO] |  |  |  \- org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:jar:0.24.0:compile
+[INFO] |  |  |     \- com.google.code.gson:gson:jar:2.13.1:compile
+[INFO] |  |  \- org.slf4j:log4j-over-slf4j:jar:2.0.13:compile
+[INFO] |  |     \- org.slf4j:slf4j-api:jar:2.0.13:compile
+[INFO] |  +- org.finos.cdm:cdm-java:jar:5.26.2:compile
+[INFO] |  |  +- com.regnosys:rosetta-common:jar:11.77.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-guava:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-joda:jar:2.17.1:compile
+[INFO] |  |  |  |  \- joda-time:joda-time:jar:2.10.14:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-xml:jar:2.17.1:compile
+[INFO] |  |  |  |  +- org.codehaus.woodstox:stax2-api:jar:4.2.2:compile
+[INFO] |  |  |  |  \- com.fasterxml.woodstox:woodstox-core:jar:6.6.2:compile
+[INFO] |  |  |  \- commons-io:commons-io:jar:2.11.0:compile
+[INFO] |  |  +- com.opengamma.strata:strata-basics:jar:1.7.0:compile
+[INFO] |  |  |  \- com.opengamma.strata:strata-collect:jar:1.7.0:compile
+[INFO] |  |  |     +- org.joda:joda-beans:jar:2.1:compile
+[INFO] |  |  |     \- org.joda:joda-convert:jar:2.0:compile
+[INFO] |  |  \- org.jsoup:jsoup:jar:1.15.3:compile
+[INFO] |  +- org.iso20022:rosetta-source:jar:1.29.2:compile
+[INFO] |  +- org.glassfish.jaxb:jaxb-runtime:jar:2.3.1:compile
+[INFO] |  |  +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |  |  +- org.glassfish.jaxb:txw2:jar:2.3.1:compile
+[INFO] |  |  +- com.sun.istack:istack-commons-runtime:jar:3.0.7:compile
+[INFO] |  |  +- org.jvnet.staxex:stax-ex:jar:1.8:compile
+[INFO] |  |  +- com.sun.xml.fastinfoset:FastInfoset:jar:1.2.15:compile
+[INFO] |  |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] |  \- javax.activation:activation:jar:1.1.1:compile
+[INFO] \- com.google.guava:guava:jar:33.3.1-jre:compile
+[INFO]    +- com.google.guava:failureaccess:jar:1.0.2:compile
+[INFO]    +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[INFO]    +- com.google.code.findbugs:jsr305:jar:3.0.1:compile (optional)
+[INFO]    +- org.checkerframework:checker-qual:jar:3.43.0:compile
+[INFO]    +- com.google.errorprone:error_prone_annotations:jar:2.18.0:compile
+[INFO]    \- com.google.j2objc:j2objc-annotations:jar:3.0.0:compile
+[INFO] 
+[INFO] ---------------------< com.regnosys.drr:examples >----------------------
+[INFO] Building examples 0.0.0.master-SNAPSHOT                            [4/5]
+[INFO]   from examples/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ examples ---
+[INFO] com.regnosys.drr:examples:jar:0.0.0.master-SNAPSHOT
+[INFO] +- com.regnosys.drr:rosetta-source:jar:0.0.0.master-SNAPSHOT:compile
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta:jar:9.64.0:compile
+[INFO] |  |  +- com.regnosys.rosetta:com.regnosys.rosetta.lib:jar:9.64.0:compile
+[INFO] |  |  |  +- org.eclipse.xtend:org.eclipse.xtend.lib:jar:2.38.0:compile
+[INFO] |  |  |  |  \- org.eclipse.xtend:org.eclipse.xtend.lib.macro:jar:2.38.0:compile
+[INFO] |  |  |  +- com.google.inject:guice:jar:6.0.0:compile
+[INFO] |  |  |  |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  |  |  |  +- jakarta.inject:jakarta.inject-api:jar:2.0.1:compile
+[INFO] |  |  |  |  \- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  |  |  +- org.apache.commons:commons-lang3:jar:3.14.0:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.17.1:compile
+[INFO] |  |  |  \- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.17.1:compile
+[INFO] |  |  +- org.eclipse.emf:org.eclipse.emf.ecore:jar:2.36.0:compile
+[INFO] |  |  |  \- org.eclipse.emf:org.eclipse.emf.common:jar:2.30.0:compile
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext:jar:2.38.0:compile
+[INFO] |  |  |  +- org.eclipse.xtext:org.eclipse.xtext.util:jar:2.38.0:compile
+[INFO] |  |  |  +- org.eclipse.platform:org.eclipse.equinox.common:jar:3.19.0:compile
+[INFO] |  |  |  +- org.eclipse.platform:org.eclipse.osgi:jar:3.19.0:compile
+[INFO] |  |  |  +- org.eclipse.emf:org.eclipse.emf.ecore.xmi:jar:2.37.0:compile
+[INFO] |  |  |  \- org.antlr:antlr-runtime:jar:3.2:compile
+[INFO] |  |  +- org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:jar:1.7.0:compile
+[INFO] |  |  |  \- org.eclipse.xtext:org.eclipse.xtext.xbase.lib:jar:2.40.0:compile
+[INFO] |  |  +- org.apache.commons:commons-text:jar:1.12.0:compile
+[INFO] |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.17.1:compile
+[INFO] |  |  |  +- org.yaml:snakeyaml:jar:2.2:compile
+[INFO] |  |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.17.1:compile
+[INFO] |  |  +- org.eclipse.lsp4j:org.eclipse.lsp4j:jar:0.24.0:compile
+[INFO] |  |  |  \- org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:jar:0.24.0:compile
+[INFO] |  |  |     \- com.google.code.gson:gson:jar:2.13.1:compile
+[INFO] |  |  \- org.slf4j:log4j-over-slf4j:jar:2.0.13:compile
+[INFO] |  +- org.finos.cdm:cdm-java:jar:5.26.2:compile
+[INFO] |  |  +- com.regnosys:rosetta-common:jar:11.77.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-guava:jar:2.17.1:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-joda:jar:2.17.1:compile
+[INFO] |  |  |  |  \- joda-time:joda-time:jar:2.10.14:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-xml:jar:2.17.1:compile
+[INFO] |  |  |  |  +- org.codehaus.woodstox:stax2-api:jar:4.2.2:compile
+[INFO] |  |  |  |  \- com.fasterxml.woodstox:woodstox-core:jar:6.6.2:compile
+[INFO] |  |  |  \- commons-io:commons-io:jar:2.11.0:compile
+[INFO] |  |  +- com.opengamma.strata:strata-basics:jar:1.7.0:compile
+[INFO] |  |  |  \- com.opengamma.strata:strata-collect:jar:1.7.0:compile
+[INFO] |  |  |     +- org.joda:joda-beans:jar:2.1:compile
+[INFO] |  |  |     \- org.joda:joda-convert:jar:2.0:compile
+[INFO] |  |  \- org.jsoup:jsoup:jar:1.15.3:compile
+[INFO] |  +- org.iso20022:rosetta-source:jar:1.29.2:compile
+[INFO] |  +- com.google.guava:guava:jar:33.3.1-jre:compile
+[INFO] |  |  +- com.google.guava:failureaccess:jar:1.0.2:compile
+[INFO] |  |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[INFO] |  |  +- com.google.code.findbugs:jsr305:jar:3.0.1:compile (optional)
+[INFO] |  |  +- org.checkerframework:checker-qual:jar:3.43.0:compile
+[INFO] |  |  +- com.google.errorprone:error_prone_annotations:jar:2.18.0:compile
+[INFO] |  |  \- com.google.j2objc:j2objc-annotations:jar:3.0.0:compile
+[INFO] |  +- org.glassfish.jaxb:jaxb-runtime:jar:2.3.1:compile
+[INFO] |  |  +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |  |  +- org.glassfish.jaxb:txw2:jar:2.3.1:compile
+[INFO] |  |  +- com.sun.istack:istack-commons-runtime:jar:3.0.7:compile
+[INFO] |  |  +- org.jvnet.staxex:stax-ex:jar:1.8:compile
+[INFO] |  |  +- com.sun.xml.fastinfoset:FastInfoset:jar:1.2.15:compile
+[INFO] |  |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] |  \- javax.activation:activation:jar:1.1.1:compile
+[INFO] +- org.junit.jupiter:junit-jupiter:jar:5.9.1:compile
+[INFO] |  +- org.junit.jupiter:junit-jupiter-api:jar:5.10.2:compile
+[INFO] |  |  +- org.opentest4j:opentest4j:jar:1.3.0:compile
+[INFO] |  |  +- org.junit.platform:junit-platform-commons:jar:1.10.2:compile
+[INFO] |  |  \- org.apiguardian:apiguardian-api:jar:1.1.2:compile
+[INFO] |  +- org.junit.jupiter:junit-jupiter-params:jar:5.9.1:compile
+[INFO] |  \- org.junit.jupiter:junit-jupiter-engine:jar:5.10.2:runtime
+[INFO] |     \- org.junit.platform:junit-platform-engine:jar:1.10.2:runtime
+[INFO] +- org.mockito:mockito-core:jar:5.1.1:compile
+[INFO] |  +- net.bytebuddy:byte-buddy:jar:1.17.5:test
+[INFO] |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.22:compile
+[INFO] |  \- org.objenesis:objenesis:jar:3.3:runtime
+[INFO] +- ch.qos.logback:logback-classic:jar:1.4.12:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:2.0.7:compile
+[INFO] \- ch.qos.logback:logback-core:jar:1.4.12:compile
+[INFO] 
+[INFO] -----------------------< com.regnosys.drr:tests >-----------------------
+[INFO] Building tests 0.0.0.master-SNAPSHOT                               [5/5]
+[INFO]   from tests/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/xtext/org.eclipse.xtext.xbase.lib/maven-metadata.xml
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/xtext/org.eclipse.xtext.xbase.lib/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase.lib/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase.lib/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/com/google/code/gson/gson/maven-metadata.xml
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/com/google/code/gson/gson/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata com.google.code.gson:gson/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata com.google.code.gson:gson/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/xtext/org.eclipse.xtext/maven-metadata.xml
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/xtext/org.eclipse.xtext/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/xtext/org.eclipse.xtext.util/maven-metadata.xml
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/xtext/org.eclipse.xtext.util/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.util/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.util/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/xtext/org.eclipse.xtext.xbase/maven-metadata.xml
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/xtext/org.eclipse.xtext.xbase/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/xtext/org.eclipse.xtext.common.types/maven-metadata.xml
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/xtext/org.eclipse.xtext.common.types/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.common.types/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.common.types/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/emf/org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/emf/org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+Downloading from artifact-registry-regnosys-snapshots: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot/org/eclipse/emf/org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml
+Downloading from artifact-registry-regnosys: artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven/org/eclipse/emf/org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[INFO] Initializing Credentials...
+[INFO] Application Default Credentials unavailable.
+[INFO] Failed to retrieve credentials from gcloud: Cannot run program "gcloud": error=2, No such file or directory
+[INFO] ArtifactRegistry: No credentials could be found.
+[WARNING] Could not transfer metadata org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] Could not transfer metadata org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ tests ---
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.xbase.lib/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase.lib/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.xbase.lib/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase.lib/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] com.google.code.gson:gson/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata com.google.code.gson:gson/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] com.google.code.gson:gson/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata com.google.code.gson:gson/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.util/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.util/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.util/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.util/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.xbase/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.xbase/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.xbase/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.common.types/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.common.types/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext.common.types/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext.common.types/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[WARNING] org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml failed to transfer from artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot during a previous attempt. This failure was cached in the local repository and resolution will not be reattempted until the update interval of artifact-registry-regnosys-snapshots has elapsed or updates are forced. Original error: Could not transfer metadata org.eclipse.xtext:org.eclipse.xtext/maven-metadata.xml from/to artifact-registry-regnosys-snapshots (artifactregistry://europe-west1-maven.pkg.dev/production-208613/regnosys-maven-snapshot): Permission denied on remote repository (or it may not exist). The request had no credentials because none were available from the environment. Ensure that either 1) You are logged into gcloud or 2) Application default credentials are setup (see https://developers.google.com/accounts/docs/application-default-credentials for more information).
+[INFO] com.regnosys.drr:tests:jar:0.0.0.master-SNAPSHOT
+[INFO] +- com.regnosys.drr:rosetta-source:jar:0.0.0.master-SNAPSHOT:compile
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta:jar:9.64.0:compile
+[INFO] |  +- org.iso20022:rosetta-source:jar:1.29.2:compile
+[INFO] |  +- org.glassfish.jaxb:jaxb-runtime:jar:2.3.1:compile
+[INFO] |  |  +- org.glassfish.jaxb:txw2:jar:2.3.1:compile
+[INFO] |  |  +- com.sun.istack:istack-commons-runtime:jar:3.0.7:compile
+[INFO] |  |  +- org.jvnet.staxex:stax-ex:jar:1.8:compile
+[INFO] |  |  +- com.sun.xml.fastinfoset:FastInfoset:jar:1.2.15:compile
+[INFO] |  |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] |  \- javax.activation:activation:jar:1.1.1:compile
+[INFO] +- com.regnosys:rosetta-common:jar:11.77.1:compile
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta.lib:jar:9.64.0:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.core:jackson-core:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.module:jackson-module-blackbird:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.datatype:jackson-datatype-guava:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.datatype:jackson-datatype-joda:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.17.1:compile
+[INFO] |  +- com.fasterxml.jackson.dataformat:jackson-dataformat-xml:jar:2.17.1:compile
+[INFO] |  +- com.google.inject:guice:jar:6.0.0:compile
+[INFO] |  +- commons-io:commons-io:jar:2.11.0:compile
+[INFO] |  \- org.slf4j:slf4j-api:jar:2.0.13:compile
+[INFO] +- com.regnosys:ingest-test-framework:jar:11.77.1:test
+[INFO] |  +- org.eclipse.xtend:org.eclipse.xtend.lib:jar:2.38.0:compile
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext.xbase.lib:jar:2.38.0:compile
+[INFO] |  +- org.eclipse.xtend:org.eclipse.xtend.lib.macro:jar:2.38.0:compile
+[INFO] |  +- org.apache.commons:commons-lang3:jar:3.14.0:compile
+[INFO] |  +- org.slf4j:log4j-over-slf4j:jar:2.0.13:compile
+[INFO] |  +- joda-time:joda-time:jar:2.10.14:compile
+[INFO] |  +- org.yaml:snakeyaml:jar:2.2:compile
+[INFO] |  +- org.codehaus.woodstox:stax2-api:jar:4.2.2:compile
+[INFO] |  +- com.fasterxml.woodstox:woodstox-core:jar:6.6.2:compile
+[INFO] |  +- com.google.guava:failureaccess:jar:1.0.2:compile
+[INFO] |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[INFO] |  +- com.google.code.findbugs:jsr305:jar:3.0.1:compile (optional)
+[INFO] |  +- org.checkerframework:checker-qual:jar:3.43.0:compile
+[INFO] |  +- com.google.errorprone:error_prone_annotations:jar:2.18.0:compile
+[INFO] |  +- com.google.j2objc:j2objc-annotations:jar:3.0.0:compile
+[INFO] |  +- javax.inject:javax.inject:jar:1:compile
+[INFO] |  +- jakarta.inject:jakarta.inject-api:jar:2.0.1:compile
+[INFO] |  +- aopalliance:aopalliance:jar:1.0:compile
+[INFO] |  +- org.jsoup:jsoup:jar:1.15.3:compile
+[INFO] |  +- org.eclipse.jdt:org.eclipse.jdt.core:jar:3.37.0:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.resources:jar:3.20.100:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.expressions:jar:3.9.300:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.runtime:jar:3.31.0:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.jobs:jar:3.15.200:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.equinox.registry:jar:3.12.0:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.equinox.preferences:jar:3.11.0:test
+[INFO] |  +- org.osgi:osgi.annotation:jar:8.0.1:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.contenttype:jar:3.9.300:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.equinox.app:jar:1.7.0:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.filesystem:jar:1.10.300:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.text:jar:3.14.0:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.commands:jar:3.12.0:test
+[INFO] |  +- org.eclipse.jdt:ecj:jar:3.37.0:test
+[INFO] |  +- io.dropwizard.metrics:metrics-core:jar:4.0.2:test
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext:jar:2.38.0:compile
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext.util:jar:2.38.0:compile
+[INFO] |  +- org.eclipse.platform:org.eclipse.equinox.common:jar:3.19.0:compile
+[INFO] |  +- org.eclipse.platform:org.eclipse.osgi:jar:3.19.0:compile
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.ecore.xmi:jar:2.37.0:compile
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.ecore:jar:2.36.0:compile
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.common:jar:2.30.0:compile
+[INFO] |  +- org.antlr:antlr-runtime:jar:3.2:compile
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:jar:1.7.0:compile
+[INFO] |  +- org.eclipse.lsp4j:org.eclipse.lsp4j:jar:0.24.0:compile
+[INFO] |  +- org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:jar:0.24.0:compile
+[INFO] |  +- com.google.code.gson:gson:jar:2.13.1:compile
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext.xbase:jar:2.38.0:test
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext.common.types:jar:2.38.0:test
+[INFO] |  +- org.ow2.asm:asm:jar:9.5:test
+[INFO] |  +- io.github.classgraph:classgraph:jar:4.8.179:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.ecore.xcore:jar:1.32.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext:jar:1.8.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.codegen.ecore:jar:2.37.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.mwe2.launch:jar:2.21.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.mwe2.runtime:jar:2.21.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.mwe2.language:jar:2.21.0:test
+[INFO] |  +- org.eclipse.xtext:org.eclipse.xtext.xtext.generator:jar:2.38.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.codegen:jar:2.23.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.mwe.utils:jar:1.15.0:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.mwe.core:jar:1.15.0:test
+[INFO] |  +- commons-logging:commons-logging:jar:1.3.4:test
+[INFO] |  +- org.eclipse.emf:org.eclipse.emf.mwe2.lib:jar:2.21.0:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.core.variables:jar:3.6.300:test
+[INFO] |  +- org.eclipse.jdt:org.eclipse.jdt.debug:jar:3.21.300:test
+[INFO] |  +- org.eclipse.platform:org.eclipse.debug.core:jar:3.21.300:test
+[INFO] |  +- org.eclipse.jdt:org.eclipse.jdt.launching:jar:3.21.100:test
+[INFO] |  +- org.eclipse.jdt:org.eclipse.jdt.launching.macosx:jar:3.6.200:test
+[INFO] |  +- ch.qos.logback:logback-classic:jar:1.5.6:test
+[INFO] |  +- ch.qos.logback:logback-core:jar:1.5.6:test
+[INFO] |  +- commons-cli:commons-cli:jar:1.4:test
+[INFO] |  +- org.apache.commons:commons-text:jar:1.12.0:compile
+[INFO] |  +- org.apache.xmlbeans:xmlbeans:jar:3.0.2:test
+[INFO] |  +- org.junit.jupiter:junit-jupiter:jar:5.9.1:test
+[INFO] |  +- org.opentest4j:opentest4j:jar:1.3.0:compile
+[INFO] |  +- org.apiguardian:apiguardian-api:jar:1.1.2:compile
+[INFO] |  +- org.junit.jupiter:junit-jupiter-params:jar:5.9.1:test
+[INFO] |  +- org.junit.platform:junit-platform-engine:jar:1.10.2:compile
+[INFO] |  \- org.hamcrest:hamcrest:jar:2.2:test
+[INFO] +- com.regnosys:rosetta-testing:jar:11.77.1:test
+[INFO] |  +- com.regnosys.rosetta:com.regnosys.rosetta.tests:jar:9.64.0:test
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext.testing:jar:2.38.0:test
+[INFO] |  |  |  \- org.eclipse.xtext:org.eclipse.xtext.ide:jar:2.38.0:test
+[INFO] |  |  |     \- org.eclipse.emf:org.eclipse.emf.ecore.change:jar:2.16.0:test
+[INFO] |  |  +- org.eclipse.xtext:org.eclipse.xtext.xbase.testing:jar:2.38.0:test
+[INFO] |  |  \- org.mdkt.compiler:InMemoryJavaCompiler:jar:1.3.0:test
+[INFO] |  +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |  +- org.mockito:mockito-core:jar:5.1.1:test
+[INFO] |  |  +- net.bytebuddy:byte-buddy:jar:1.17.5:test
+[INFO] |  |  +- net.bytebuddy:byte-buddy-agent:jar:1.12.22:test
+[INFO] |  |  \- org.objenesis:objenesis:jar:3.3:test
+[INFO] |  +- org.mockito:mockito-junit-jupiter:jar:5.1.1:test
+[INFO] |  \- co.unruly:java-8-matchers:jar:1.6:test
+[INFO] |     \- org.hamcrest:hamcrest-core:jar:1.3:test
+[INFO] +- org.finos.cdm:cdm-java:jar:5.26.2:compile
+[INFO] |  \- com.opengamma.strata:strata-basics:jar:1.7.0:compile
+[INFO] |     \- com.opengamma.strata:strata-collect:jar:1.7.0:compile
+[INFO] |        +- org.joda:joda-beans:jar:2.1:compile
+[INFO] |        \- org.joda:joda-convert:jar:2.0:compile
+[INFO] +- com.google.guava:guava:jar:33.3.1-jre:compile
+[INFO] +- org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.9.24:compile
+[INFO] |  +- org.jetbrains.kotlin:kotlin-stdlib:jar:1.9.24:compile
+[INFO] |  |  \- org.jetbrains:annotations:jar:13.0:compile
+[INFO] |  \- org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.9.24:compile
+[INFO] +- org.jetbrains.kotlin:kotlin-test-junit:jar:1.9.24:test
+[INFO] |  +- org.jetbrains.kotlin:kotlin-test:jar:1.9.24:test
+[INFO] |  \- junit:junit:jar:4.13.2:test
+[INFO] +- org.apache.commons:commons-csv:jar:1.10.0:compile
+[INFO] +- org.junit.jupiter:junit-jupiter-api:jar:5.9.1:compile
+[INFO] +- org.junit.jupiter:junit-jupiter-engine:jar:5.9.1:compile
+[INFO] \- org.junit.platform:junit-platform-commons:jar:1.9.1:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for drr 0.0.0.master-SNAPSHOT:
+[INFO] 
+[INFO] drr ................................................ SUCCESS [  0.387 s]
+[INFO] rosetta-source ..................................... SUCCESS [  0.734 s]
+[INFO] distribution ....................................... SUCCESS [  2.032 s]
+[INFO] examples ........................................... SUCCESS [  0.037 s]
+[INFO] tests .............................................. SUCCESS [  4.402 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.476 s
+[INFO] Finished at: 2025-08-28T14:25:32-04:00
+[INFO] ------------------------------------------------------------------------

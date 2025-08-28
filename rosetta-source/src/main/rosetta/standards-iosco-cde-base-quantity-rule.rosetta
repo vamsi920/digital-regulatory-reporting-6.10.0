@@ -1,0 +1,76 @@
+namespace drr.standards.iosco.cde.base.quantity
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.math.*
+import cdm.product.asset.*
+import cdm.product.common.settlement.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+
+reporting rule FXNotionalCurrency from Cashflow: <"FX Notional Currency">
+    if priceQuantity -> quantitySchedule exists
+    then priceQuantity -> quantitySchedule -> unit -> currency
+    else if priceQuantity -> quantityReference exists
+    then priceQuantity -> quantityReference -> quantitySchedule -> unit -> currency
+
+reporting rule InterestRateNotionalCurrency from InterestRatePayout: <"Interest Rate Notional Currency">
+    if priceQuantity -> quantitySchedule exists
+    then priceQuantity -> quantitySchedule -> unit -> currency
+    else if priceQuantity -> quantityReference exists
+    then priceQuantity -> quantityReference -> quantitySchedule -> unit -> currency
+
+reporting rule CommodityOptionNotional from OptionPayout: <"Commodity Option Notional">
+    if exerciseTerms -> strike -> strikePrice -> value exists
+    then if priceQuantity -> quantitySchedule -> value exists
+        then exerciseTerms -> strike -> strikePrice -> value * priceQuantity -> quantitySchedule -> value
+        else if priceQuantity -> quantitySchedule -> datedValue exists
+        then exerciseTerms -> strike -> strikePrice -> value * priceQuantity -> quantitySchedule -> datedValue -> value sum
+
+reporting rule EquityTotalNotionalQuantity from TradableProduct: <"Equity Total Notional Quantity">
+    extract
+        if IsEquityOption(product)
+                and EconomicTermsForProduct(product) -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(product) -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule
+        else if IsEquityForward(product)
+                and EconomicTermsForProduct(product) -> payout -> forwardPayout only-element -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(product) -> payout -> forwardPayout only-element -> priceQuantity -> quantitySchedule
+        else if EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> priceQuantity -> quantitySchedule
+        else if tradeLot -> priceQuantity -> quantity -> unit -> financialUnit exists
+        then (tradeLot only-element -> priceQuantity -> quantity
+            then filter unit -> financialUnit exists
+            then only-element)
+    then extract
+        if multiplier exists
+        then value * multiplier -> value
+        else value
+
+reporting rule CommodityTotalNotionalQuantity from CommodityPayout: <"Commodity Total Notional Quantity">
+    if priceQuantity -> quantitySchedule -> value exists
+    then priceQuantity -> quantitySchedule -> value
+    else if priceQuantity -> quantitySchedule -> datedValue exists
+    then priceQuantity -> quantitySchedule -> datedValue -> value sum
+
+reporting rule FixedPriceTotalNotionalQuantity from FixedPricePayout: <"Fixed Price Total Notional Quantity">
+    if priceQuantity -> quantitySchedule -> value exists
+    then priceQuantity -> quantitySchedule -> value
+    else if priceQuantity -> quantitySchedule -> datedValue exists
+    then priceQuantity -> quantitySchedule -> datedValue -> value sum
+
+reporting rule OptionTotalNotionalQuantity from OptionPayout: <"Option Total Notional Quantity">
+    if priceQuantity -> quantitySchedule -> value exists
+    then priceQuantity -> quantitySchedule -> value
+    else if priceQuantity -> quantitySchedule -> datedValue exists
+    then priceQuantity -> quantitySchedule -> datedValue -> value sum
+
+reporting rule QuantityUnitOfMeasure from NonNegativeQuantitySchedule: <"Quantity unit of measure">
+    extract if multiplier exists then multiplier -> unit else unit
+    then extract
+        if capacityUnit exists
+        then CapacityUnitToISO20022UnitOfMeasure(capacityUnit)
+        else if weatherUnit exists
+        then WeatherUnitToISO20022UnitOfMeasure(weatherUnit)
+        else if financialUnit exists
+        then FinancialUnitToISO20022UnitOfMeasure(financialUnit)

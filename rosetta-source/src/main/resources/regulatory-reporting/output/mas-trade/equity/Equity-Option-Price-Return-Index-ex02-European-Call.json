@@ -1,0 +1,62 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2021-12-06",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2019-03-25",
+  "finalContractualSettlementDate" : "2019-03-25",
+  "firstExerciseDate" : "2019-03-25",
+  "leg1" : {
+    "notionalAmount" : 1314440000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 1000000,
+    "quantityUnitOfMeasure" : "IPNT",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 1000000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "SettlementCurrency" : "USD"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 1313334498.47,
+  "optionPremiumCurrency" : "USD",
+  "optionStyle" : "EURO",
+  "optionType" : "CALL",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingSpecifiedPerson" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 1314.44
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "underlyingIdentification" : "IE0031442068",
+  "underlyingIdentificationType" : "I",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER02"
+}

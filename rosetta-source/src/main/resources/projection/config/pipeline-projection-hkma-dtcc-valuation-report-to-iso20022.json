@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-hkma-dtcc-valuation-report-to-iso20022",
+  "name" : "Hkma Dtcc Valuation Report To Iso20022",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.iso20022.hkma.rewrite.valuation.dtcc.functions.Project_HKMADtccValuationReportToIso20022",
+    "inputType" : "drr.regulation.hkma.rewrite.valuation.HKMAValuationReport",
+    "outputType" : "iso20022.auth030.hkma.dtcc.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-hkma-valuation",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/auth030-hkma-dtcc-rosetta-xml-config.json"
+  }
+}

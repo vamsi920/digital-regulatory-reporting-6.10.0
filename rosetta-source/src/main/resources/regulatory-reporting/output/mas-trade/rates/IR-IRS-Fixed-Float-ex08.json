@@ -1,0 +1,68 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "549300VBWWV6BYQOWM67",
+  "counterparty2" : "529900DTJ5A7S5UCBB52",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "1994-12-14",
+  "eventTimestamp" : "1994-12-12T09:57:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "1994-12-12T00:00:00Z",
+  "expirationDate" : "1999-12-14",
+  "finalContractualSettlementDate" : "1999-12-14",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "fixedRate" : 0.06,
+    "notionalAmount" : 50000000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A011",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 50000000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "EUR",
+          "NotionalSchedule" : "Constant",
+          "ReferenceRateTermUnit" : "YEAR",
+          "ReferenceRateTermValue" : 1,
+          "UnderlierID" : "EUR-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Fixed_Float"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "reportSubmittingEntityID" : "549300VBWWV6BYQOWM67",
+  "reportingSpecifiedPerson" : "549300VBWWV6BYQOWM67",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRIRSFIXEDFLOATEXX03X17X16E15T14A13O12L11F10D9E8X7I6"
+}

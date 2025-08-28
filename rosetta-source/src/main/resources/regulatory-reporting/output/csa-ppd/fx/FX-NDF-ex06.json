@@ -1,0 +1,64 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "549300ZK53CNGEEI6A29",
+  "counterparty2" : "R0MUWSFPU8MPRO8K5P83",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "D97J9JW7primary20210203KRFUSDDTCCEU02024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "549300ZK53CNGEEI6A29",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXNDFEXXMLXXXXXXXX01",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2020-12-03",
+  "eventTimestamp" : "2020-12-03T15:55:15Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1101.040808,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionTimestamp" : "2020-12-03T15:54:52Z",
+  "expirationDate" : "2021-02-03",
+  "leg1" : {
+    "fixingDate" : "2021-02-01T00:00:00Z",
+    "notionalAmount" : 1101040808,
+    "notionalCurrency" : "KRW",
+    "settlementCurrency" : "KRW"
+  },
+  "leg2" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "KRW",
+          "UnderlierID" : "KRW",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "reportSubmittingEntityID" : "549300ZK53CNGEEI6A29",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02"
+}

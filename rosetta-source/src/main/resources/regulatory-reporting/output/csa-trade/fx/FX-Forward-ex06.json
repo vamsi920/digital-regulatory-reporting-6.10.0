@@ -1,0 +1,75 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "012263392555123459991234569BR7771234567892024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "213800WWTABZ1GOJHH37",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2021-12-06",
+  "eventTimestamp" : "2021-12-06T17:09:11Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 113.3062,
+  "exchangeRateBasis" : "JPY/USD",
+  "executionTimestamp" : "2021-12-06T17:09:11Z",
+  "expirationDate" : "2018-11-30",
+  "finalContractualSettlementDate" : "2018-11-30",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 19614000000,
+    "notionalCurrency" : "JPY",
+    "payerIdentifier" : "213800WWTABZ1GOJHH37",
+    "receiverIdentifier" : "213800IV9PCAC364HN60",
+    "underlierIDOther" : "JPY",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "leg2" : {
+    "notionalAmount" : 173106149.53,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "213800IV9PCAC364HN60",
+    "receiverIdentifier" : "213800WWTABZ1GOJHH37",
+    "underlierIDOther" : "USD",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXFORWARDEXXMLXXXX03"
+}

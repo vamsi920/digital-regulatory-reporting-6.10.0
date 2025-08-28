@@ -1,0 +1,877 @@
+namespace drr.regulation.mas.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.* as staticdata
+import cdm.event.workflow.*
+import cdm.observable.asset.*
+import cdm.product.* as product
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.mas.*
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.upi.* as upi
+import drr.standards.iosco.uti.* as uti
+
+corpus Dissemination Trade
+
+report MAS Trade in T+1
+  	from TransactionReportInstruction
+  	when ReportableProduct
+  	with type MASTransactionReport
+    with source MASRules
+
+rule source MASRules
+{
+    MASTransactionReport:
+        - reportingTimestamp
+        + reportingTimestamp
+            [ruleReference ReportingTimestamp]
+        - counterparty1
+        + counterparty1
+             [ruleReference Counterparty1]
+        - counterparty2
+        + counterparty2
+            [ruleReference Counterparty2]
+        - counterparty2IdentifierType
+        + counterparty2IdentifierType
+            [ruleReference Counterparty2IdentifierType]
+        - counterparty2Name
+        + counterparty2Name
+            [ruleReference Counterparty2NameDTCC]
+        - centralCounterparty
+        + centralCounterparty
+            [ruleReference CentralCounterparty]
+        - executionAgentCounterparty1
+        + executionAgentCounterparty1
+            [ruleReference ExecutionAgentCounterparty1DTCC]
+        - executionAgentCounterparty2
+        + executionAgentCounterparty2
+            [ruleReference ExecutionAgentCounterparty2DTCC]
+        - reportSubmittingEntityID
+        + reportSubmittingEntityID
+            [ruleReference DataSubmitter]
+        + uniqueTransactionIdentifier
+            [ruleReference UniqueTransactionIdentifier]
+        + uniqueTransactionIdentifierProprietary
+            [ruleReference UniqueTransactionIdentifierProprietary]
+        + priorUTI
+            [ruleReference PriorUTI]
+        + priorUTIProprietary
+            [ruleReference PriorUTIProprietary]
+        - cleared
+        + cleared
+            [ruleReference Cleared]
+        - assetClass
+        + assetClass
+            [ruleReference AssetClass]
+        - contractType
+        + contractType
+            [ruleReference ContractType]
+        - uniqueProductIdentifier
+        + uniqueProductIdentifier
+            [ruleReference UniqueProductIdentifier]
+        - clearingMember
+        + clearingMember
+            [ruleReference ClearingMember]
+        - packageIdentifier
+        + packageIdentifier
+            [ruleReference PackageIdentifier]
+        - platformIdentifier
+        + platformIdentifier
+            [ruleReference PlatformIdentifier]
+        - direction1
+        + direction1
+            [ruleReference Direction]
+        - exchangeRate
+        + exchangeRate
+            [ruleReference ExchangeRate]
+        - exchangeRateBasis
+        + exchangeRateBasis
+            [ruleReference ExchangeRateBasis]
+        - optionPremiumAmount
+        + optionPremiumAmount
+            [ruleReference OptionPremiumAmount]
+        - optionPremiumCurrency
+        + optionPremiumCurrency
+            [ruleReference OptionPremiumCurrency]
+        - priceUnitOfMeasure
+        + priceUnitOfMeasure
+            [ruleReference PriceUnitOfMeasure]
+        - callAmount
+        + callAmount
+            [ruleReference CallAmount]
+        - callCurrency
+        + callCurrency
+            [ruleReference CallCurrency]
+        - putAmount
+        + putAmount
+            [ruleReference PutAmount]
+        - putCurrency
+        + putCurrency
+            [ruleReference PutCurrency]
+        - effectiveDate
+        + effectiveDate
+            [ruleReference EffectiveDate]
+        - expirationDate
+        + expirationDate
+            [ruleReference ExpirationDate]
+        - executionTimestamp
+        + executionTimestamp
+            [ruleReference ExecutionTimestamp]
+        - clearingTimestamp
+        + clearingTimestamp
+            [ruleReference ClearingTimestamp]
+        - eventType
+        + eventType
+            [ruleReference EventType]
+        - actionType
+        + actionType 
+            [ruleReference ActionType]
+        - confirmed
+        + confirmed
+            [ruleReference Confirmed]
+        - collateralPortfolioIndicator
+        + collateralPortfolioIndicator
+            [ruleReference CollateralPortfolioIndicator]
+        - nameOfTheUnderlyingIndex
+        + nameOfTheUnderlyingIndex
+            [ruleReference NameOfTheUnderlyingIndexDTCC]
+        - firstExerciseDate
+        + firstExerciseDate
+            [ruleReference FirstExerciseDate]
+        - optionType
+        + optionType
+            [ruleReference OptionType]
+        - optionStyle
+        + optionStyle
+            [ruleReference OptionStyle]
+        - deliveryType
+        + deliveryType
+            [ruleReference DeliveryType]
+        - finalContractualSettlementDate
+        + finalContractualSettlementDate 
+            [ruleReference FinalContractualSettlementDate]
+        - eventIdentifier
+        - beneficiary1
+        - beneficiary1IdentifierTypeIndicator
+        - optionPremiumPaymentDate
+        - cdSIndexAttachmentPoint
+        - cdSIndexDetachmentPoint
+        - maturityDateOfTheUnderlying
+        - earlyTerminationDate
+        - priceSchedule
+        + priceSchedule
+            [ruleReference ContractPriceSchedule]
+        - strikePriceSchedule
+        + strikePriceSchedule
+            [ruleReference StrikePriceSchedule]
+        - basketConstituents
+        + basketConstituents
+            [ruleReference BasketConstituents]
+        - otherPayment
+        + otherPayment
+            [ruleReference OtherPayment]
+        + leg1 
+            [ruleReference Leg1Report]
+        + leg2 
+            [ruleReference Leg2Report]
+        - strikePrice
+        + strikePrice
+            [ruleReference StrikePrice]
+        - strikePriceNotation
+        + strikePriceNotation
+            [ruleReference StrikePriceNotation]
+        - strikePriceCurrency
+        + strikePriceCurrency
+            [ruleReference StrikePriceCurrencyCurrencyPair]
+        - price
+        + price
+            [ruleReference Price]
+        - priceNotation
+        + priceNotation
+            [ruleReference PriceNotation]
+        - priceCurrency
+        + priceCurrency
+            [ruleReference PriceCurrency]
+        - barrier
+        - packageTransactionPrice
+        - packageTransactionPriceNotation
+        - packageTransactionPriceCurrency
+        - packageTransactionSpread
+        - packageTransactionSpreadNotation
+        - packageTransactionSpreadCurrency
+        - bookingLocation
+        + bookingLocation
+            [ruleReference BookingLocation]
+        - traderLocation
+        + traderLocation
+            [ruleReference TraderLocation]
+        - embeddedOptionType
+        - countryOfTheCounterparty2
+        - series
+        - seniority
+        - indexFactor
+        - tradingCapacity
+        + tradingCapacity
+            [ruleReference TradingCapacityOfSpecifiedPerson]
+        + technicalRecordId
+            [ruleReference TechnicalRecordId]
+        + underlyingIdentification
+            [ruleReference Underlying]
+        + underlyingIdentificationType
+            [ruleReference UnderlyingIdentificationTypeDTCC]
+}
+
+//eligibility rules
+eligibility rule ReportableProduct from TransactionReportInstruction:
+    [regulatoryReference MAS Trade
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+//reporting rules
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1">
+    [regulatoryReference MAS Trade dataElement "1" field "Counterparty 1"
+        provision "Identifier of Counterparty 1."]
+    extract cde.party.Counterparty1
+        as "1 Counterparty 1"
+
+reporting rule Counterparty2 from TransactionReportInstruction: <"Counterparty 2">
+    [regulatoryReference MAS Trade dataElement "2" field "Counterparty 2"
+        provision "Identifier of Counterparty 2"]
+    extract common.party.Counterparty2
+        as "2 Counterparty 2"
+
+reporting rule Counterparty2IdentifierType from TransactionReportInstruction: <"Counterparty 2 Identifier Type">
+    [regulatoryReference MAS Trade dataElement "3" field "Counterparty 2 Identifier Type"
+        provision "Indicator of whether LEI (including pre-LEI) was used to identify Counterparty 2."]
+    extract cde.party.Counterparty2IdentifierTypeIndicator
+        as "3 Counterparty 2 Identifier Type"
+
+reporting rule TradingCapacityOfSpecifiedPerson from TransactionReportInstruction: <"Trading Capacity Of Specified Person">
+    [regulatoryReference MAS Trade dataElement "4" field "TradingCapacityOfSpecifiedPerson"
+        provision "To denote trading capacity of specified person. "]
+    filter IsAllowableActionForMAS
+    then extract common.execution.Extract_TradingCapacity(item, MAS)
+        as "4 Trading Capacity Of Specified Person"
+
+reporting rule Direction from TransactionReportInstruction: <"Direction">
+    [regulatoryReference MAS Trade dataElement "5" field "Direction"
+        provision "Indicator of whether Counterparty 1 is the buyer or the seller in the contract, where applicable."]
+    /*
+     * 4 alphabetic characters:
+     * 	BYER = buyer
+     * 	SLLR = seller
+     */
+    filter IsAllowableActionForMAS
+    then extract common.party.Direction1
+        as "5 Direction"
+
+reporting rule ReportingSpecifiedPerson from TransactionReportInstruction: <"Reporting specified person">
+    [regulatoryReference MAS Trade dataElement "8" field "Reporting specified person"
+        provision "Identifier of the specified person with the reporting obligation in respect of the contract."]
+    extract ExtractPartyResponsibleForReportingIdentifier(reportingSide)
+        as "8 Reporting specified person"
+
+reporting rule DataSubmitter from TransactionReportInstruction: <"Data submitter">
+    [regulatoryReference MAS Trade dataElement "9" field "Data submitter"
+        provision "Identifier of the entity submitting information on the contract, which is reported to a licensed trade repository or licensed foreign trade repository."]
+    extract common.party.ReportSubmittingEntity
+        as "9 Data submitter"
+
+reporting rule UniqueTransactionIdentifier from TransactionReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference MAS Trade dataElement "10" field "Unique Transaction Identifier (UTI)"
+        provision "Unique identifier to denote the contract."]
+    uti.GetUniqueTransactionIdentifier(item, MAS)
+        then filter IsMax32UpperCaseAlphanumericText = True
+        as "10 Unique Transaction Identifier (UTI)"
+
+reporting rule UniqueTransactionIdentifierProprietary from TransactionReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference MAS Trade dataElement "10" field "Unique Transaction Identifier (UTI)"
+        provision "Unique identifier to denote the contract."]
+    uti.GetUniqueTransactionIdentifier(item, MAS)
+        then filter IsMax32UpperCaseAlphanumericText = False
+        as "10 Unique Transaction Identifier (Proprietary)"
+
+reporting rule UniqueProductIdentifier from TransactionReportInstruction: <"Unique product identifier (UPI)">
+    [regulatoryReference MAS Trade dataElement "11" field "Unique product identifier (UPI)"
+        provision "An identifier to denote the product type."]
+    filter
+        IsAllowableActionForMAS or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO
+    then extract upi.UniqueProductIdentifier
+        as "11 Unique product identifier (UPI)"
+
+reporting rule PriorUTI from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference MAS Trade dataElement "12" field "Prior UTI"
+        provision "To denote the previous UTI that immediately precedes the UTI that relates to this contract, where applicable."]
+    filter IsAllowableActionForMAS
+    then common.link.GetPriorTransactionIdentifier(item, MAS)
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "12 Prior UTI"
+
+reporting rule PriorUTIProprietary from TransactionReportInstruction: <"Prior UTI (Proprietary)">
+    [regulatoryReference MAS Trade dataElement "12" field "Prior UTI"
+        provision "To denote the previous UTI that immediately precedes the UTI that relates to this contract, where applicable."]
+    filter IsAllowableActionForMAS
+    then common.link.GetPriorTransactionIdentifier(item, MAS)
+    then filter IsMax32UpperCaseAlphanumericText = False
+        as "12 Prior UTI (Proprietary)"
+
+reporting rule ContractType from TransactionReportInstruction: <"Contract Type">
+    [regulatoryReference MAS Trade dataElement "13" field "Contract type"
+        provision "To denote the contract type of the derivatives contract."]
+    filter
+        IsAllowableActionForMAS or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO
+    then extract common.contract.ContractType
+        as "13 Contract Type"
+
+reporting rule AssetClass from TransactionReportInstruction: <"Asset Class">
+    [regulatoryReference MAS Trade dataElement "14" field "Asset class"
+        provision "To denote the asset class of the derivatives contract."]
+    filter
+        IsAllowableActionForMAS or IsActionTypeEROR or IsActionTypePRTO or IsActionTypeTERM
+    then common.contract.AssetClass
+        as "14 Asset Class"
+
+reporting rule Underlying from TransactionReportInstruction: <"Underlying">
+    [regulatoryReference MAS Trade dataElement "14" field "Underlying"
+        provision "An identifier for the underlying thing to the contract, where applicable."]
+    filter IsAllowableActionForMAS
+    then extract ProductForEvent
+    then extract
+        (if IsCreditSwaption or IsIRSwaption
+        then UnderlierForProduct
+        else item)
+    then extract
+        if (GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source any = staticdata.asset.common.ProductIdTypeEnum -> ISIN)
+        then GetUnderlierProductIdentifier first -> identifier
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId exists
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId first
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId exists
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId first
+        else if IsFRA
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first
+        else if product.qualification.Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then ([EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first, EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> inflationRate -> rateOption -> indexReferenceInformation -> indexId first] only-element)
+        as "15 Underlying"
+
+reporting rule UnderlyingIdentificationTypeDTCC from TransactionReportInstruction: <"Underlying Identification Type (DTCC)">
+    [regulatoryReference MAS Trade dataElement "15" field "Underlying Identification Type (DTCC)"
+        provision "An identifier for the underlying thing to the contract, where applicable."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230426"
+        provision "Regarding test samples of Equity baskets with a single index or a single security with an ISIN, the view of Credit Suisse's representative is that those samples are valid because they illustrate an acceptable boundary condition."]
+    filter IsAllowableActionForMAS
+    then extract
+        if GetUnderlyingIdentificationType exists
+        then GetUnderlyingIdentificationType
+        else if (GetUnderlierProductIdentifier(ProductForEvent) exists
+                and GetUnderlierProductIdentifier(ProductForEvent) -> source all <> staticdata.asset.common.ProductIdTypeEnum -> ISIN)
+        then O
+        as "15.2 Underlying Identification Type (DTCC)"
+
+reporting rule UnderlyingIdOtherDTCC from TransactionReportInstruction: <"Underlying ID (Other) (DTCC)">
+    filter IsAllowableActionForMAS
+    then extract ProductForEvent
+    then filter
+        product.qualification.Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct) = False
+    then extract
+        if IsCommodity
+        then (ExtractCommodityClassification(
+                EconomicTermsForProduct,
+                staticdata.asset.common.TaxonomySourceEnum -> MAS,
+                1
+            )
+            then (if ["GROS", "DIRY", "LSTK", "FRST", "SOFT", "OILP", "NGAS", "COAL", "ELEC", "INRG", "PRME", "NPRM", "WTHR", "EMIS", "FRGT"] any = item
+                then item
+                else if item exists
+                then "OTHER"))
+        else if (GetUnderlierProductIdentifier exists and GetUnderlierProductIdentifier -> source all <> staticdata.asset.common.ProductIdTypeEnum -> ISIN)
+        then GetUnderlierProductIdentifier first -> identifier
+
+reporting rule UnderlyingIdOtherSourceDTCC from TransactionReportInstruction: <"Underlying ID (Other) Source (DTCC)">
+    filter IsAllowableActionForMAS
+    then extract ProductForEvent
+    then filter
+        product.qualification.Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct) = False
+    then extract
+        if IsCommodity
+        then (ExtractCommodityClassification(
+                EconomicTermsForProduct,
+                staticdata.asset.common.TaxonomySourceEnum -> MAS,
+                1
+            )
+            then (if ["GROS", "DIRY", "LSTK", "FRST", "SOFT", "OILP", "NGAS", "COAL", "ELEC", "INRG", "PRME", "NPRM", "WTHR", "EMIS", "FRGT"] any = item
+                then item to-enum staticdata.asset.common.ProductIdTypeEnum
+                else if item exists
+                then Other))
+        else if GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source all <> staticdata.asset.common.ProductIdTypeEnum -> ISIN
+        then GetUnderlierProductIdentifier first -> source
+
+reporting rule NameOfTheUnderlyingIndexDTCC from TransactionReportInstruction: <"Name of the underlying index (DTCC)">
+    [regulatoryReference MAS Trade dataElement "15" field "Name of the underlying index (DTCC)"
+        provision "An identifier for the underlying thing to the contract, where applicable."]
+    filter IsAllowableActionForMAS
+    then common.underlier.NameOfTheUnderlyingIndex
+        as "15.5 Name of the underlying index (DTCC)"
+
+reporting rule Leg1Report from TransactionReportInstruction: <"Leg 1 Report">
+    filter IsAllowableActionForMAS
+    then if item exists
+        then common.LegEnrichment(
+                    cde.Leg1(item, SpreadNotationOfLeg1, 9999999999999999999999999),
+                    cde.quantity.NotionalAmountScheduleLeg1,
+                    cde.quantity.NotionalQuantityScheduleLeg1,
+                    common.quantity.NotionalQuantityLeg1,
+                    common.payment.FloatingRateResetFrequencyPeriodLeg1,
+                    common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg1,
+                    empty,
+                    common.quantity.QuantityFrequencyLeg1(item) -> period,
+                    common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier,
+                    empty,
+                    common.underlier.FloatingRateIdentifierLeg1,
+                    empty,
+                    empty,
+                    common.underlier.NameOfTheFloatingRateOfLeg1
+                )
+
+reporting rule Leg2Report from TransactionReportInstruction: <"Leg 2 Report">
+    filter IsAllowableActionForMAS
+    then if item exists
+        then common.LegEnrichment(
+                    cde.Leg2(item, SpreadNotationOfLeg2, 9999999999999999999999999),
+                    cde.quantity.NotionalAmountScheduleLeg2,
+                    cde.quantity.NotionalQuantityScheduleLeg2,
+                    common.quantity.NotionalQuantityLeg2,
+                    common.payment.FloatingRateResetFrequencyPeriodLeg2,
+                    common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg2,
+                    empty,
+                    common.quantity.QuantityFrequencyLeg2(item) -> period,
+                    common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier,
+                    empty,
+                    common.underlier.FloatingRateIdentifierLeg2,
+                    empty,
+                    empty,
+                    common.underlier.NameOfTheFloatingRateOfLeg2
+                )
+
+/* ---------------------------------------------------------------------------------------------------------------- */
+reporting rule SpreadNotationOfLeg1 from TransactionReportInstruction: <"Spread Notation of Leg 1">
+    [regulatoryReference MAS Trade dataElement "20" field "Spread Notation of Leg 1"
+        provision "Manner in which Spread of leg 1 is expressed, where applicable."]
+    common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg1NotationEnum, False)
+
+/* ---------------------------------------------------------------------------------------------------------------- */
+reporting rule SpreadNotationOfLeg2 from TransactionReportInstruction: <"Spread notation of leg 2">
+    [regulatoryReference MAS Trade dataElement "26" field "Spread notation of leg 2"
+        provision "Manner in which 'Spread of leg 2' is expressed, where applicable."]
+    common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg2NotationEnum, False)
+
+/* ---------------------------------------------------------------------------------------------------------------- */
+reporting rule OptionType from TransactionReportInstruction: <"Option Type">
+    [regulatoryReference MAS Trade dataElement "28" field "Option type"
+        provision "To denote the type of option, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter (GetContractType = OPTN or GetContractType = SWPT)
+    then extract common.contract.OptionType
+        as "28 Option type"
+
+reporting rule OptionStyle from TransactionReportInstruction: <"Option Style">
+    [regulatoryReference MAS Trade dataElement "29" field "Option Style"
+        provision "To indicate whether the option can be exercised on a fixed date or any time during the life of the contract, where applicable.
+        Field value: 
+        AMER = American
+        EURO = European 
+        BERM = Bermudan
+        ASIA = Asian."]
+    filter IsAllowableActionForMAS
+    then filter (GetContractType = OPTN or GetContractType = SWPT)
+    then extract common.contract.OptionStyle
+        as "29 Option Style"
+
+reporting rule FirstExerciseDate from TransactionReportInstruction: <"First Exercise Date">
+    [regulatoryReference MAS Trade dataElement "30" field "First Exercise Date"
+        provision "First unadjusted date during the exercise period in which an option can be exercised, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter (GetContractType = OPTN or GetContractType = SWPT)
+    then cde.price.FirstExerciseDate
+        as "30 First exercise date"
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective Date">
+    [regulatoryReference MAS Trade dataElement "31" field "Effective Date"
+        provision "Unadjusted date at which obligations under the contract come into effect."]
+    filter IsAllowableActionForMAS
+    then extract common.datetime.EffectiveDate
+        as "31 Effective Date"
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"Expiration Date">
+    [regulatoryReference MAS Trade dataElement "32" field "Expiration Date"
+        provision "Unadjusted date at which obligations under the contract stop being effective."]
+    filter IsAllowableActionForMAS
+    then extract common.datetime.ExpirationDate
+        as "32 Expiration Date"
+
+reporting rule SwapLinkID from TransactionReportInstruction: <"Swap link ID">
+    [regulatoryReference MAS Trade dataElement "33" field "Swap link ID"
+        provision "The identifier that links both legs of a foreign exchange swap, where applicable."]
+    filter
+        IsAllowableActionForMAS and product.qualification.Qualify_ForeignExchange_Spot_Forward(
+                ProductForEvent -> contractualProduct -> economicTerms
+            )
+    then extract cde.link.PackageIdentifier
+        as "33 Swap link ID"
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package identifier">
+    [regulatoryReference MAS Trade dataElement "34" field "Package identifier"
+        provision "The identifier (determined by the reporting counterparty) in order to connect two or more derivatives contracts in the same package (other than a foreign exchange swap), where applicable."]
+    filter IsAllowableActionForMAS
+    then extract cde.link.PackageIdentifier
+        as "34 Package identifier"
+
+reporting rule DeliveryType from TransactionReportInstruction:
+    [regulatoryReference MAS Trade dataElement "35" field "Delivery type"
+        provision "To indicate whether the contract is settled physically or in cash."]
+    filter IsAllowableActionForMAS
+    then extract common.contract.DeliveryType
+        as "35 Delivery Type"
+
+// ToDo Note also we don't have Bond Forward, Equity Forward examples yet.
+// ToDo - Credit Options are inconsistent & use settlementType - awaiting clarification on harmonisation potential before coding (and in any case, no DRR examples yet!)
+// ToDo Commodities also likely to have other nuances?
+//TODO: Add Equity Swap Samples to test this part of the code
+reporting rule FinalContractualSettlementDate from TransactionReportInstruction: <"Final Contractual Settlement Date">
+    [regulatoryReference MAS Trade dataElement "38" field "Final contractual settlement date"
+        provision "Unadjusted date as per the contract, by which all transfer of cash or assets should take place and the counterparties should no longer have any outstanding obligations to each other under that contract."]
+    filter IsAllowableActionForMAS
+    then extract
+        if product.qualification.Qualify_InterestRate_Fra(
+                    TradeForEvent -> tradableProduct -> product -> contractualProduct -> economicTerms
+                )
+        then InterestRateLeg2(ProductForTrade(TradeForEvent)) -> paymentDate -> unadjustedDate
+        else cde.execution.FinalContractualSettlementDate
+        as "38 Final Contractual Settlement Date"
+
+reporting rule Cleared from TransactionReportInstruction: <"Cleared">
+    [regulatoryReference MAS Trade dataElement "39" field "Cleared"
+        provision "Indicator of whether the contract has been cleared, or is intended to be cleared, by a central counterparty."]
+    filter IsAllowableActionForMAS
+    then cde.execution.Cleared
+        as "39 Cleared"
+
+reporting rule CentralCounterparty from TransactionReportInstruction: <"Central Counterparty">
+    [regulatoryReference MAS Trade dataElement "40" field "Central counterparty"
+        provision "Identifier of the central counterparty that cleared the contract, where applicable."]
+    filter IsAllowableActionForMAS
+    then cde.execution.CentralCounterparty
+        as "40 Central Counterparty"
+
+reporting rule ClearingMember from TransactionReportInstruction: <"Clearing member">
+    [regulatoryReference MAS Trade dataElement "41" field "Clearing member"
+        provision "Identifier of the clearing member through which a contract was cleared at a central counterparty, where applicable."]
+    filter IsAllowableActionForMAS
+    then extract cde.execution.ClearingMember
+        as "41 Clearing member"
+
+reporting rule ClearingTimestamp from TransactionReportInstruction: <"Clearing Timestamp">
+    [regulatoryReference MAS Trade dataElement "42" field "Clearing Timestamp"
+        provision "The date when the clearing of the contract took place, where applicable."]
+    filter IsAllowableActionForMAS
+    then extract originatingWorkflowStep -> timestamp
+    then filter qualification = EventTimestampQualificationEnum -> clearingDateTime
+    then only-element
+    then extract dateTime
+        as "42 Clearing Timestamp"
+
+reporting rule PlatformIdentifier from TransactionReportInstruction: <"Platform Identifier">
+    [regulatoryReference MAS Trade dataElement "43" field "Platform Identifier"
+        provision "Identifier of the trading facility on which the contract was executed."]
+    filter IsAllowableActionForMAS
+    then common.execution.PlatformIdentifier
+        as "43 Platform Identifier"
+
+reporting rule BookingLocation from TransactionReportInstruction: <"Booking location">
+    [regulatoryReference MAS Trade dataElement "45" field "Booking Location"
+        provision "Where the contract is booked in Singapore, to use country code for Singapore SG. Where the contract is not booked in Singapore, to denote the country where the contract was booked."]
+    filter IsAllowableActionForMAS
+    then extract common.execution.BookingLocation
+        as "45 Booking location"
+
+reporting rule TraderLocation from TransactionReportInstruction: <"Trader location">
+    [regulatoryReference MAS Trade dataElement "46" field "Trader location"
+        provision "Where the contract is traded in Singapore, to use country code for Singapore SG. Where the contract is not traded in Singapore, to denote the country where the trader which executed the contract is located."]
+    filter IsAllowableActionForMAS
+    then extract common.execution.TraderLocation
+        as "46 Trader location"
+
+reporting rule Confirmed from TransactionReportInstruction: <"Confirmed">
+    [regulatoryReference MAS Trade dataElement "47" field "Confirmed"
+        provision "To indicate whether the legally binding terms of a contract were documented and agreed upon (confirmed) or not (unconfirmed)."]
+    filter IsAllowableActionForMAS
+    then common.execution.Confirmed
+        as "47 Confirmed"
+
+reporting rule ConfirmationTimestamp from TransactionReportInstruction: <"Confirmation Timestamp">
+    filter IsAllowableActionForMAS
+    then common.datetime.ConfirmationTimestamp
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution Timestamp">
+    [regulatoryReference MAS Trade dataElement "49" field "Execution Timestamp"
+        provision "Date and time a contract was originally executed, resulting in the generation of a new UTI."]
+    filter IsAllowableActionForMAS or IsActionTypeTERM
+    then cde.datetime.ExecutionTimestamp
+        as "49 Execution Timestamp"
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference MAS Trade dataElement "50" field "Reporting timestamp"
+        provision "Date and time when the contract was reported to the trade repository."]
+    cde.datetime.ReportingTimestamp
+        as "50 Reporting Timestamp"
+
+reporting rule BasketConstituents from TransactionReportInstruction:
+    filter IsAllowableActionForMAS
+    then extract cde.basket.BasketConstituents
+
+reporting rule ValuationAmount from TransactionReportInstruction: <"Valuation amount">
+    filter IsActionTypeVALU
+    then cde.valuation.ValuationAmount
+
+reporting rule ValuationCurrency from TransactionReportInstruction: <"Valuation currency">
+    filter IsActionTypeVALU
+    then cde.valuation.ValuationCurrency
+
+reporting rule ValuationMethod from TransactionReportInstruction: <"Valuation method">
+    filter IsActionTypeVALU
+    then extract cde.valuation.ValuationMethod(GetValuation)
+
+reporting rule ValuationTimestamp from TransactionReportInstruction: <"Valuation Timestamp">
+    filter IsActionTypeVALU
+    then cde.datetime.ValuationTimestamp
+
+reporting rule CollateralPortfolioIndicator from TransactionReportInstruction: <"Collateral Portfolio Indicator">
+    [regulatoryReference MAS Trade dataElement "57" field "Collateral Portfolio Indicator"
+        provision "Indicator of whether the collateralisation was performed on a portfolio basis."]
+    filter IsAllowableActionForMAS
+    then extract cde.collateral.CollateralPortfolioIndicator
+        as "57 Collateral Portfolio Indicator"
+
+reporting rule InitialMarginCollateralPortfolioCodeDTCC from TransactionReportInstruction: <"Initial margin collateral portfolio code (DTCC)">
+    filter IsAllowableActionForMAS
+    then extract common.collateral.InitialMarginCollateralPortfolioCode
+
+reporting rule VariationMarginCollateralPortfolioCodeDTCC from TransactionReportInstruction: <"Variation margin collateral portfolio code (DTCC)">
+    filter IsAllowableActionForMAS
+    then extract common.collateral.VariationMarginCollateralPortfolioCode
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call Amount">
+    [regulatoryReference MAS Trade dataElement "90" field "Call Amount"
+        provision "Monetary amount that the option gives Counterparty 1 the right to buy, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.ExtractCallAmount(item, 9999999999999999999999999)
+        as "90 Call amount"
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call Currency">
+    [regulatoryReference MAS Trade dataElement "91" field "Call Currency"
+        provision "Currency in which Call amount is denominated, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.CallCurrency
+        as "91 Call currency"
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put Amount">
+    [regulatoryReference MAS Trade dataElement "92" field "Put Amount"
+        provision "Monetary amount that the option gives Counterparty 1 the right to sell, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.ExtractPutAmount(item, 9999999999999999999999999)
+        as "92 Put Amount"
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put Currency">
+    [regulatoryReference MAS Trade dataElement "93" field "Put Currency"
+        provision "Currency in which 'Put amount' is denominated, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.PutCurrency
+        as "93 Put currency"
+
+reporting rule Price from TransactionReportInstruction: <"Price">
+    [regulatoryReference MAS Trade dataElement "94" field "Price"
+        provision "Price specified in the contract, where applicable."]
+    filter IsAllowableActionForMAS
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                if common.price.IsDefaultPrice
+                then 99999999999
+                else cde.price.PriceNoFormat,
+                PriceNotation
+            )
+
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price Currency">
+    [regulatoryReference MAS Trade dataElement "95" field "Price currency"
+        provision "Currency in which Price is denominated, where applicable."]
+    filter IsAllowableActionForMAS
+    then extract
+        if cde.price.PriceNotation = Percentage or common.price.IsDefaultPrice
+        then empty
+        else cde.price.PriceCurrency
+        as "95 Price currency"
+
+reporting rule PriceNotation from TransactionReportInstruction: <"Price Notation Enum">
+    [regulatoryReference MAS Trade dataElement "96" field "Price Notation"
+        provision "Manner in which 'Price' is expressed, where applicable."]
+    filter IsAllowableActionForMAS
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PriceNotation,
+                common.price.IsDefaultPrice
+            )
+        as "96 Price notation"
+
+reporting rule PriceUnitOfMeasure from TransactionReportInstruction: <"Price Unit Of Measure">
+    [regulatoryReference MAS Trade dataElement "97" field "Price Unit Of Measure"
+        provision "Unit of measure in which 'Price' is expressed, where applicable."]
+    filter IsAllowableActionForMAS
+    then if (product.qualification.Qualify_AssetClass_InterestRate(
+                        EconomicTermsForProduct(ProductForEvent)
+                    )
+                    and cde.price.PriceNoFormat exists)
+                or (cdebase.price.Contract_Price_Monetary -> priceType any = PriceTypeEnum -> CashPrice
+                    and (cdebase.price.Contract_Price_Monetary -> priceExpression any = PriceExpressionEnum -> PercentageOfNotional
+                        or cdebase.price.Contract_Price_Monetary -> priceExpression any = PriceExpressionEnum -> AbsoluteTerms))
+        then "ACCY"
+        else cde.price.PriceUnitOfMeasure
+        as "97 Price unit of measure"
+
+reporting rule ContractPriceSchedule from TransactionReportInstruction: <"Contract Price Schedule">
+    [regulatoryReference MAS Trade dataElement "98-100" field "Contract Price Schedule"
+        provision "Fields 98-100 are repeatable."]
+    filter IsAllowableActionForMAS
+    then extract cde.price.GetReportablePricePeriod(item, PriceNotation)
+
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike Price">
+    [regulatoryReference MAS Trade dataElement "101" field "Strike Price"
+        provision "The strike price of the option, where applicable."]
+    filter IsAllowableActionForMAS
+    then cdebase.price.PriceFormatFromNotation(
+                cde.price.StrikePriceNoFormat,
+                StrikePriceNotation
+            )
+
+reporting rule StrikePriceCurrencyCurrencyPair from TransactionReportInstruction: <"Strike price currency/currency pair">
+    [regulatoryReference MAS Trade dataElement "102" field "Strike price currency/currency pair"
+        provision "The currency or currency pair in which Strike price of the option is denominated or expressed, where applicable."]
+    filter IsAllowableActionForMAS
+    then cde.price.StrikePriceCurrency
+        as "102 Strike price currency/currency pair"
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike price notation">
+    [regulatoryReference MAS Trade dataElement "103" field "Strike Price Notation"
+        provision "Manner in which 'Strike price' is expressed, where applicable."]
+    filter IsAllowableActionForMAS
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.StrikePriceNotationEnum,
+                cde.price.StrikePriceNotationEnum = Monetary
+                    and (IsVarianceSwap(ProductForEvent) or IsVolatilitySwap(ProductForEvent))
+            )
+        as "103 Strike Price Notation"
+
+//Repeatable fields modelling
+reporting rule StrikePriceSchedule from TransactionReportInstruction: <"Strike Price Schedule">
+    [regulatoryReference MAS Trade dataElement "104-106" field "Strike Price Schedule"
+        provision "Fields 104-106 are repeatable."]
+    filter IsAllowableActionForMAS
+    then extract cde.price.GetReportableStrikePricePeriod(item, StrikePriceNotation)
+
+//End of repeatable fields
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option premium amount">
+    [regulatoryReference MAS Trade dataElement "107" field "Option premium amount"
+        provision "Monetary amount paid by the option buyer, where applicable."]
+    filter IsAllowableActionForMAS
+    then filter GetContractType = OPTN or GetContractType = SWPT
+    then common.price.OptionPremiumAmount
+        as "107 Option Premium Amount"
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction: <"Option premium currency">
+    [regulatoryReference MAS Trade dataElement "108" field "Option premium currency"
+        provision "Currency in which Option premium amount is denominated, where applicable"]
+    filter IsAllowableActionForMAS
+    then filter GetContractType = OPTN or GetContractType = SWPT
+    then common.price.OptionPremiumCurrency
+        as "108 Option Premium Currency"
+
+reporting rule ExchangeRate from TransactionReportInstruction: <"Exchange Rate">
+    [regulatoryReference MAS Trade dataElement "109" field "Exchange Rate"
+        provision "Exchange rate between the two different currencies specified in the contract."]
+    filter IsAllowableActionForMAS
+    then cde.price.ExchangeRate
+        as "109 Exchange rate"
+
+reporting rule ExchangeRateBasis from TransactionReportInstruction: <"Exchange Rate Basis">
+    [regulatoryReference MAS Trade dataElement "110" field "Exchange Rate Basis"
+        provision "Currency pair and order in which Exchange rate and Forward exchange rate, where applicable, is denominated."]
+    filter IsAllowableActionForMAS
+    then cde.price.ExchangeRateBasis
+        as "110 Exchange Rate Basis"
+
+// Repeatable Field modelling
+/* Other Payment Report */
+reporting rule OtherPayment from TransactionReportInstruction:
+    filter IsAllowableActionForMAS or IsActionTypeTERM
+    then extract cde.payment.OtherPayment
+
+// End of Repeatable Field modelling
+reporting rule ActionType from TransactionReportInstruction: <"Action type">
+    [regulatoryReference MAS Trade dataElement "133" field "Action type"
+        provision "Type of action taken on the contract."]
+    extract cde.event.ActionType
+        as "133 Action type"
+
+reporting rule EventType from TransactionReportInstruction: <"Event Type">
+    [regulatoryReference MAS Trade dataElement "134" field "Event Type"
+        provision "Explanation or reason for the action being taken on the contract, where applicable."]
+    // TH Jan 2024 - pending documentation/rationale reference
+    cde.event.EventType
+        as "134 Event Type"
+
+reporting rule TechnicalRecordId from TransactionReportInstruction: <"Technical Record Id (ISO)">
+    extract common.link.TechnicalRecordId(item -> reportableInformation, MAS)
+
+reporting rule ExecutionAgentCounterparty1DTCC from TransactionReportInstruction: <"Execution agent of Counterparty 1 (DTCC)">
+    [regulatoryReference MAS Trade dataElement "[Not in regulation]" field "Execution agent of Counterparty 1"
+        provision "LEI of the entity that entered into the Reportable Transaction as agent for the Reporting Entity without becoming a counterparty themselves."]
+    filter
+        IsAllowableActionForMAS or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO
+    then extract common.party.ExecutionAgentCounterparty1
+        as "[Not in regulation] Execution agent of Counterparty 1 (DTCC)"
+
+reporting rule ExecutionAgentCounterparty2DTCC from TransactionReportInstruction: <"Execution agent of Counterparty 2 (DTCC)">
+    [regulatoryReference MAS Trade dataElement "[Not in regulation]" field "Execution agent of Counterparty 2"
+        provision "The Execution agent of the Counterparty 2."]
+    filter
+        IsAllowableActionForMAS or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO
+    then common.party.ExecutionAgentCounterparty2
+        as "[Not in regulation] Execution agent of Counterparty 2 (DTCC)"
+
+reporting rule Counterparty2NameDTCC from TransactionReportInstruction: <"Counterparty 2 name (DTCC)">
+    [regulatoryReference MAS Trade dataElement "[Not in regulation]" field "Counterparty 2 name"
+        provision "Legal name of the Counterparty 2 to the contract."]
+    filter
+        IsAllowableActionForMAS or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO
+    then extract common.party.Counterparty2Name
+        as "[Not in regulation] Counterparty 2 name (DTCC)"
+
+func IsAllowableActionForMAS:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        isAllowableAction boolean (1..1)
+
+    set isAllowableAction:
+        IsActionTypeNEWT(reportableEvent)
+            or IsActionTypeMODI(reportableEvent)
+            or IsActionTypePositionMODI(reportableEvent)
+            or IsActionTypeCORR(reportableEvent)
+            or IsActionTypeREVI(reportableEvent)
+            or IsActionTypePOSC(reportableEvent)

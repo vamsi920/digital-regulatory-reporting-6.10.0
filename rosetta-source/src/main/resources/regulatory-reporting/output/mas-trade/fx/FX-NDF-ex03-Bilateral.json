@@ -1,0 +1,54 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "cleared" : "I",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "FORW",
+  "counterparty1" : "FOR8UP27PHTHYVLBNG30",
+  "counterparty2" : "W22LROWP2IHZNBB6K528",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2020-12-01",
+  "eventTimestamp" : "2020-12-01T10:04:06Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 36.29,
+  "exchangeRateBasis" : "USD/RUB",
+  "executionTimestamp" : "2020-12-01T10:04:06Z",
+  "expirationDate" : "2021-01-25",
+  "finalContractualSettlementDate" : "2021-01-25",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 36290,
+    "notionalCurrency" : "RUB",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "RUB",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "reportSubmittingEntityID" : "FOR8UP27PHTHYVLBNG30",
+  "reportingSpecifiedPerson" : "FOR8UP27PHTHYVLBNG30",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

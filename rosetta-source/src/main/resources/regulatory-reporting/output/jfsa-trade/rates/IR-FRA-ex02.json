@@ -1,0 +1,47 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "NCNF",
+  "contractType" : "FRAS",
+  "counterparty1" : "DUMMYLEI012345678902",
+  "counterparty2" : "DUMMYLEI012345678907",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2021-06-01",
+  "entityResponsibleForReporting" : "DUMMYLEI012345678902",
+  "eventIdentifier" : "DTDApproved2380788303EMIRRiskNewNewInterest",
+  "eventTimestamp" : "2021-03-17T11:46:31Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-17T06:54:51Z",
+  "expirationDate" : "2021-09-01",
+  "finalContractualSettlementDate" : "2021-09-01",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 0.07,
+    "notionalAmount" : 44000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 44000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004"
+    }
+  },
+  "platformIdentifier" : "XXXX",
+  "reportSubmittingEntityID" : "DUMMYLEI012345678902",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "DTDApproved2380788303EMIRRiskNewNewInterest",
+  "underlyingIdentificationType" : "X",
+  "underlyingIndexIndicator" : "LIBO",
+  "uniqueTransactionIdentifier" : "IRFRAEXXMLXXXXXXXX03"
+}

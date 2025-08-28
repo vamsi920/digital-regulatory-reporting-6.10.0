@@ -1,0 +1,84 @@
+namespace drr.standards.iosco.uti
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+func UniqueTransactionIdentifier_Validation: <"UniqueTransactionIdentifier.">
+    inputs:
+        uniqueTransactionIdentifier Max52AlphaNumericText (0..1)
+        uniqueTransactionIdentifierProprietary UTIProprietaryIDFormat (0..1)
+        priorUTI Max52AlphaNumericText (0..1)
+        priorUTIProprietary UTIProprietaryIDFormat (0..1)
+        actionType ActionTypeEnum (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then (uniqueTransactionIdentifier <> priorUTI
+                and uniqueTransactionIdentifierProprietary <> priorUTIProprietary)
+                and if ActionTypeEnum -> NEWT = actionType
+                            and uniqueTransactionIdentifierProprietary exists
+                    then uniqueTransactionIdentifier is absent
+
+func GetUniqueTransactionIdentifier:
+// TH 28/03/25 Update: Supervisory Body input unbounded to accept multiple supervisory bodies as for CSA
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        supervisoryBody SupervisoryBodyEnum (1..*)
+    output:
+        uti string (1..1)
+
+    set uti:
+        if GetRegimeSpecificIdentifiers(
+                reportableEvent -> reportableInformation,
+                supervisoryBody,
+                UniqueTransactionIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableEvent -> reportableInformation,
+                    supervisoryBody,
+                    UniqueTransactionIdentifier
+                )
+        else if TradeForEvent(reportableEvent) exists
+        then (TradeForEvent(reportableEvent) -> tradeIdentifier
+            filter identifierType = UniqueTransactionIdentifier
+            then assignedIdentifier -> identifier)
+        else if PositionForEvent(reportableEvent) exists
+        then (PositionForEvent(reportableEvent) -> positionIdentifier
+            filter identifierType = UniqueTransactionIdentifier
+            then assignedIdentifier -> identifier)
+            then distinct
+            then only-element
+
+func GetUniqueSwapIdentifier:
+// TH 25/04/25: A generalized function merging GetUniqueTransactionIdentifier and GetUniqueSwapIdentifier needs to be considered
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        supervisoryBody SupervisoryBodyEnum (1..*)
+    output:
+        uti string (1..1)
+
+    set uti:
+        if GetRegimeSpecificIdentifiers(
+                reportableEvent -> reportableInformation,
+                supervisoryBody,
+                UniqueSwapIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableEvent -> reportableInformation,
+                    supervisoryBody,
+                    UniqueSwapIdentifier
+                )
+        else if TradeForEvent(reportableEvent) exists
+        then (TradeForEvent(reportableEvent) -> tradeIdentifier
+            filter identifierType = UniqueSwapIdentifier
+            then assignedIdentifier -> identifier)
+        else if PositionForEvent(reportableEvent) exists
+        then (PositionForEvent(reportableEvent) -> positionIdentifier
+            filter identifierType = UniqueSwapIdentifier
+            then assignedIdentifier -> identifier)
+            then distinct
+            then only-element

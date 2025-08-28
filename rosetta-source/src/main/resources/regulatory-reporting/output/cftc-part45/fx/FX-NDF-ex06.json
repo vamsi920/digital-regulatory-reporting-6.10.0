@@ -1,0 +1,82 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300ZK53CNGEEI6A29",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "R0MUWSFPU8MPRO8K5P83",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2020-12-03",
+  "eventIdentifier" : "D97J9JW7primary20210203KRFUSDDTCCEU0",
+  "eventTimestamp" : "2020-12-03T15:55:15Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1101.040808,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionTimestamp" : "2020-12-03T15:54:52Z",
+  "expirationDate" : "2021-02-03",
+  "finalContractualSettlementDate" : "2021-02-03",
+  "leg1" : {
+    "fixingDate" : "2021-02-01T00:00:00Z",
+    "notionalAmount" : 1101040808,
+    "notionalCurrency" : "KRW",
+    "payerIdentifier" : "R0MUWSFPU8MPRO8K5P83",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "549300ZK53CNGEEI6A29",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "KRW"
+  },
+  "leg2" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "549300ZK53CNGEEI6A29",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "R0MUWSFPU8MPRO8K5P83",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "KRW",
+          "UnderlierID" : "KRW",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300ZK53CNGEEI6A29",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02"
+}

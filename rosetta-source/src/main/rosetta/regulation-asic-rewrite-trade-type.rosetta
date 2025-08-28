@@ -1,0 +1,1869 @@
+namespace drr.regulation.asic.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.asic.*
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.common.trade.execution.*
+import drr.regulation.common.trade.payment.*
+import drr.regulation.common.trade.quantity.*
+import drr.standards.iosco.cde.base.* as cde
+import drr.standards.iosco.upi.*
+import drr.standards.iosco.uti.* as uti
+import drr.standards.iso.*
+
+type ASICTransactionReport extends common.CommonTransactionReport:
+    [rootType]
+    override leg1 common.CommonLeg (0..1)
+    //Periodic Payment
+        [label for periodicPayment -> fixedRateDayCountConvention "1.66 Day count convention - Leg 1"]
+        [regulatoryReference for periodicPayment -> fixedRateDayCountConvention ASIC Trade table "1" dataElement "66" field "Day count convention - Leg 1"
+            provision "If applicable, an indicator of the day count for calculation of periodic payments of Leg 1 under the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> fixedRateDayCountConvention ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+
+        [label for periodicPayment -> floatingRateDayCountConvention "1.66 Day count convention - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRateDayCountConvention ASIC Trade table "1" dataElement "66" field "Day count convention - Leg 1"
+            provision "If applicable, an indicator of the day count for calculation of periodic payments of Leg 1 under the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRateDayCountConvention ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriod "1.68 Payment frequency period - Leg 1"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriod ASIC Trade table "1" dataElement "68" field "Payment frequency period - Leg 1"
+            provision "If applicable, the time unit associated with the frequency of payment(s) of Leg 1 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriod ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriod "1.68 Payment frequency period - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriod ASIC Trade table "1" dataElement "68" field "Payment frequency period - Leg 1"
+            provision "If applicable, the time unit associated with the frequency of payment(s) of Leg 1 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriod ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier "1.70 Payment frequency period multiplier - Leg 1"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier ASIC Trade table "1" dataElement "70" field "Payment frequency period multiplier - Leg 1"
+            provision "The number of time units (as expressed by the Payment frequency
+            period Leg 1 (item 68 above)) that determines the frequency of payments of Leg 1 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier "1.70 Payment frequency period multiplier - Leg 1"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier ASIC Trade table "1" dataElement "70" field "Payment frequency period multiplier - Leg 1"
+            provision "The number of time units (as expressed by the Payment frequency
+            period Leg 1 (item 68 above)) that determines the frequency of payments of Leg 1 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+        
+    //Leg
+        [label for notionalAmount "1.26 Notional amount - Leg 1"]
+        [regulatoryReference for notionalAmount ASIC Trade table "1" dataElement "26" field "Notional amount - Leg 1"
+            provision "The notional amount taken from the trade confirmation of the Reportable Transaction.
+            The notional amount, or payout where a single fixed payment is made based on certain conditions being met during the term of the OTC Derivative the subject of the Reportable Transaction, taken from, or determined in accordance with, the trade confirmation of the Reportable Transaction.
+        If no notional amount is specified in the trade confirmation of the Reportable Transaction, or determinable in accordance with, the amount calculated by multiplying the amount reported as Total notional quantityLeg 1 (item 28 below) by:
+        if the Reportable Transaction is an option, the value reported for Strike price (item 59 below);
+        if the Reportable Transaction is not an option, the value reported for Price (item 47 below); or
+        if Strike price (item 59 below) and Price (item 47 below) are not applicable to the Reportable Transaction, the market price for the underlier at the time of the transaction."]
+        
+        [label for notionalAmountSchedule -> value "1.42 Notional amount schedule amount - Leg 1"]
+        [regulatoryReference for notionalAmountSchedule -> value ASIC Trade table "1" dataElement "42" field "Notional amount schedule amount - Leg 1"
+            provision "Each notional amount which becomes effective on the associated Notional amount schedule effective dateLeg 1.
+        This data element is only required for OTC Derivatives where Notional amount Leg 1 is not a constant value over the entire term of the OTC Derivative."]
+        
+        [label for notionalAmountSchedule -> effectiveDate "1.40 Notional amount schedule effective date - Leg 1"]
+        [regulatoryReference for notionalAmountSchedule -> effectiveDate ASIC Trade table "1" dataElement "40" field "Notional amount schedule effective date - Leg 1"
+            provision "If applicable, each unadjusted date on which the associated Notional amount schedule amountLeg 1 becomes effective.
+        This data element is only required for OTC Derivatives where Notional amount Leg 1 is not a constant value over the entire term of the OTC Derivative."]
+        
+        [label for notionalAmountSchedule -> endDate "1.41 Notional amount schedule end date - Leg 1"]
+        [regulatoryReference for notionalAmountSchedule -> endDate ASIC Trade table "1" dataElement "41" field "Notional amount schedule end date - Leg 1"
+            provision "If applicable, each unadjusted end date on which the associated Notional amount schedule amountLeg 1 ceases to be effective.
+        This data element is only required for OTC Derivatives where Notional amount Leg 1 is not a constant value over the entire term of the OTC Derivative and a notional amount schedule is specified in the terms of the OTC Derivative.
+        An end date is not required to be reported if it is the same date as the effective date of the next period of the schedule."]
+        
+        [label for totalNotionalQuantity "1.28 Total notional quantity - Leg 1"]
+        [regulatoryReference for totalNotionalQuantity ASIC Trade table "1" dataElement "28" field "Total notional quantity - Leg 1"
+            provision "If applicable, the aggregate notional quantity of the underlier attributed by the Reporting Entity to Leg 1 for the entire term of the OTC Derivative the subject of the Reportable Transaction."]
+        
+        [label for notionalQuantity "1.30 Notional quantity - Leg 1"]
+        [regulatoryReference ASIC Trade table "1" dataElement "30" field "Notional quantity - Leg 1"
+            provision "If applicable:
+                     the amount of the constant notional quantity of the underlier attributed by the Reporting Entity to Leg 1 for each period of the OTC Derivative the subject of the Reportable Transaction; or
+                    where the notional quantity of Leg 1 is not constant in each period of the OTC Derivative the subject of the Reportable Transaction, the notional quantity of the current period of the OTC Derivative the subject of the Reportable Transaction."]
+        
+        [label for fixedRate "1.50 Fixed rate - Leg 1"]
+        [regulatoryReference for fixedRate ASIC Trade table "1" dataElement "50" field "Fixed rate - Leg 1"
+            provision "If applicable, the value of the per annum rate of the fixed rate of Leg 1."]
+        [regulatoryReference for fixedRate ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+        
+        [label for notionalCurrency "1.34 Notional currency - Leg 1"]
+        [regulatoryReference for notionalCurrency ASIC Trade table "1" dataElement "34" field "Notional currency - Leg 1"
+            provision "The currency code for the currency in which the Notional amountLeg 1 (item 26 above) is denominated."]
+        
+        [label for settlementCurrency "1.72 Settlement currency - Leg 1"]
+        [regulatoryReference for settlementCurrency ASIC Trade table "1" dataElement "72" field "Settlement currency - Leg 1"
+            provision "Other than for OTC Derivatives that are physically settled, the currency code of the currency for the cash settlement of Leg 1 of the OTC Derivative the subject of the Reportable Transaction."]
+        
+        [label for spreadNotation "1.52 Spread notation - Leg 1"]
+        [regulatoryReference for spreadNotation ASIC Trade table "1" dataElement "52" field "Spread notation - Leg 1"
+            provision "An indicator of the type of units in which SpreadLeg 1 (item 53 below) is reported."]
+        
+        [label for spread -> monetary "1.53 Spread - Leg 1"]
+        [label for spread -> decimal "1.53 Spread - Leg 1"]
+        [label for spread -> basis "1.53 Spread - Leg 1"]
+        [regulatoryReference for spread ASIC Trade table "1" dataElement "53" field "Spread - Leg 1"
+            provision "If applicable, the value of the spread that is added to the reference rate or reference price of the underlier of Leg 1."]
+        
+        [label for spreadCurrency "1.56 Spread currency - Leg 1"]
+        [regulatoryReference for spreadCurrency ASIC Trade table "1" dataElement "56" field "Spread currency - Leg 1"
+            provision "The currency code for the currency in which Spread - Leg 1 (item 53 above) is determined."]
+
+        [label for quantityUnitOfMeasure "1.36 Quantity unit of measure - Leg 1"]
+        [regulatoryReference for quantityUnitOfMeasure ASIC Trade table "1" dataElement "36" field "Quantity unit of measure - Leg 1"
+            provision "The unit of measure in which  the Total notional quantityLeg 1 (item 28 above) is expressed."]
+
+        [label for direction2 "1.15 Direction 2 - Leg 1"]
+        [regulatoryReference for direction2 ASIC Trade table "1" dataElement "15" field "Direction 2 - Leg 1"
+            provision "An indicator of whether the Reporting Entity is the payer or the receiver of leg 1 at the time the Reportable Transaction is entered into.
+        This data element is required for Reportable Transactions where an allowable value is not reported for Direction 1 (item 14 above).
+        This data element is not applicable to Reportable Transactions for which an allowable value for Direction 1 (item 14 above) is required to be reported."]
+
+        [label for nextFloatingReferenceResetDate "2.11 Next floating reference reset date - Leg 1"]
+        [regulatoryReference for nextFloatingReferenceResetDate ASIC Trade table "2" dataElement "11" field "Next floating reference reset date - Leg 1"
+            provision "If applicable and other than for floating reference rates that reset on a daily frequency, the unadjusted nearest date in the future on which the interest rate reference rate of Leg 1 will be reset."]
+        [regulatoryReference for nextFloatingReferenceResetDate ISDA TechnicalExecutionGroup date "20240418"
+            provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+    override leg2 common.CommonLeg (0..1)
+    //Periodic Payment
+        [label for periodicPayment -> fixedRateDayCountConvention "1.67 Day count convention - Leg 2"]
+        [regulatoryReference for periodicPayment -> fixedRateDayCountConvention ASIC Trade table "1" dataElement "67" field "Day count convention - Leg 2"
+            provision "If applicable, an indicator of the day count for calculation of periodic payments of Leg 2 under the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> fixedRateDayCountConvention ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+
+        [label for periodicPayment -> floatingRateDayCountConvention "1.67 Day count convention - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateDayCountConvention ASIC Trade table "1" dataElement "67" field "Day count convention - Leg 2"
+            provision "If applicable, an indicator of the day count for calculation of periodic payments of Leg 2 under the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRateDayCountConvention ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriod "1.69 Payment frequency period - Leg 2"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriod ASIC Trade table "1" dataElement "69" field "Payment frequency period - Leg 2"
+            provision "If applicable, the time unit associated with the frequency of payment(s) of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriod ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriod "1.69 Payment frequency period - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriod ASIC Trade table "1" dataElement "69" field "Payment frequency period - Leg 2"
+            provision "If applicable, the time unit associated with the frequency of payment(s) of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriod ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier "1.71 Payment frequency period multiplier - Leg 2"]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier ASIC Trade table "1" dataElement "71" field "Payment frequency period multiplier - Leg 2"
+            provision "The number of time units (as expressed by the Payment frequency periodLeg 2 (item 69 above)) that determines the frequency of payments of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+
+        [label for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier "1.71 Payment frequency period multiplier - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier ASIC Trade table "1" dataElement "71" field "Payment frequency period multiplier - Leg 2"
+            provision "The number of time units (as expressed by the Payment frequency periodLeg 2 (item 69 above)) that determines the frequency of payments of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> floatingRateIndicator "1.86 Indicator of the floating rate  Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateIndicator ASIC Trade table "1" dataElement "86" field "Indicator of the floating rate  Leg 2"
+            provision "Other than for OTC Derivatives that are interest rate derivatives and if applicable, the indicator of the interest rate reference rate used to determine the interest payment amounts at predetermined intervals."]
+        [regulatoryReference for periodicPayment -> floatingRateIndicator ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+        
+        [label for periodicPayment -> floatingRateReferencePeriod "1.87 Floating rate reference period - Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriod ASIC Trade table "1" dataElement "87" field "Floating rate reference period - Leg 2"
+            provision "Where an allowable value is reported for Identifier of the floating rateLeg 2 (item 86 above), the time unit associated with the term of item 86 that is the interest rate reference rate of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriod ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."] 
+        
+        [label for periodicPayment -> floatingRateReferencePeriodMultiplier "1.88 Floating rate reference period muliplier- Leg 2"]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriodMultiplier ASIC Trade table "1" dataElement "88" field "Floating rate reference period muliplier- Leg 2"
+            provision "Where an allowable value is reported for Indicator of the floating rateLeg 2 (item 86 above), the number of time units (in the units reported for item 87 above) that determines the term of item 86 that is the interest rate reference rate of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+        [regulatoryReference for periodicPayment -> floatingRateReferencePeriodMultiplier ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+    
+    //Leg
+        [label for notionalAmount "1.27 Notional amount - Leg 2"]
+        [regulatoryReference for notionalAmount ASIC Trade table "1" dataElement "27" field "Notional amount - Leg 2"
+            provision "If applicable, the notional amount taken from the trade confirmation of the Reportable Transaction and attributed by the Reporting Entity to Leg 2."]
+        
+        [label for notionalAmountSchedule -> value "1.45 Notional amount schedule amount - Leg 2"]
+        [regulatoryReference for notionalAmountSchedule -> value ASIC Trade table "1" dataElement "45" field "Notional amount schedule amount - Leg 2"
+            provision "Each notional amount which becomes effective on the associated Notional amount schedule effective dateLeg 1.
+        This data element is only required for OTC Derivatives where Notional amount Leg 1 is not a constant value over the entire term of the OTC Derivative."]
+        
+        [label for notionalAmountSchedule -> effectiveDate "1.43 Notional amount schedule effective date - Leg 2"]
+        [regulatoryReference for notionalAmountSchedule -> effectiveDate ASIC Trade table "1" dataElement "43" field "Notional amount schedule effective date - Leg 2"
+            provision "If applicable, each unadjusted date on which the associated Notional amount schedule amountLeg 1 becomes effective.
+            This data element is only required for OTC Derivatives where Notional amount Leg 1 is not a constant value over the entire term of the OTC Derivative."]
+        
+        [label for notionalAmountSchedule -> endDate "1.44 Notional amount schedule end date - Leg 2"]
+        [regulatoryReference for notionalAmountSchedule -> endDate ASIC Trade table "1" dataElement "44" field "Notional amount schedule end date - Leg 2"
+            provision "If applicable, each unadjusted end date on which the associated Notional amount schedule amountLeg 1 ceases to be effective.
+        This data element is only required for OTC Derivatives where Notional amount Leg 1 is not a constant value over the entire term of the OTC Derivative and a notional amount schedule is specified in the terms of the OTC Derivative.
+        An end date is not required to be reported if it is the same date as the effective date of the next period of the schedule."]
+        
+        [label for totalNotionalQuantity "1.29 Total notional quantity - Leg 2"]
+        [regulatoryReference for totalNotionalQuantity ASIC Trade table "1" dataElement "29" field "Total notional quantity - Leg 2"
+            provision "If applicable, the aggregate notional quantity of the underlier attributed by the Reporting Entity to Leg 2 for the entire term of the OTC Derivative the subject of the Reportable Transaction."]
+        
+        [label for notionalQuantity "1.31 Notional quantity - Leg 2"]
+        [regulatoryReference ASIC Trade table "1" dataElement "31" field "Notional quantity - Leg 2"
+            provision "If applicable:
+                        the amount of the constant notional quantity of the underlier attributed by the Reporting Entity to Leg 2 for each period of the OTC Derivative the subject of the Reportable Transaction; or
+                        where the notional quantity of Leg 2 is not constant in each period of the OTC Derivative the subject of the Reportable Transaction, the notional quantity of the current period of the OTC Derivative the subject of the Reportable Transaction."]
+        
+        [label for fixedRate "1.51 Fixed rate - Leg 2"]
+        [regulatoryReference for fixedRate ASIC Trade table "1" dataElement "51" field "Fixed rate - Leg 2"
+            provision "If applicable, the value of the per annum rate of the fixed rate of Leg 2, reported as a decimal."]
+        [regulatoryReference for fixedRate ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+        
+        [label for notionalCurrency "1.35 Notional currency - Leg 2"]
+        [regulatoryReference for notionalCurrency ASIC Trade table "1" dataElement "35" field "Notional currency - Leg 2"
+            provision "The currency code for the currency in which the Notional amountLeg 2 (item 27 above) is denominated."]
+       
+        [label for settlementCurrency "1.73 Settlement currency - Leg 2"]
+        [regulatoryReference for settlementCurrency ASIC Trade table "1" dataElement "73" field "Settlement currency - Leg 2"
+            provision "Other than for OTC Derivatives that are physically settled, the currency code of the currency for the cash settlement of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+
+        [label for spreadNotation "1.54 Spread notation - Leg 2"]
+        [regulatoryReference for spreadNotation ASIC Trade table "1" dataElement "54" field "Spread notation - Leg 2"
+            provision "An indicator of the type of units in which SpreadLeg 2 (item 55 below) is reported."]
+        
+        [label for spread -> monetary "1.55 Spread - Leg 2"]
+        [label for spread -> decimal "1.55 Spread - Leg 2"]
+        [label for spread -> basis "1.55 Spread - Leg 2"]
+        [regulatoryReference for spread ASIC Trade table "1" dataElement "55" field "Spread - Leg 2"
+            provision "If applicable, the value of the spread that is added to the reference rate or reference price of the underlier of Leg 2."]
+        
+        [label for spreadCurrency "1.57 Spread currency - Leg 2"]
+        [regulatoryReference for spreadCurrency ASIC Trade table "1" dataElement "57" field "Spread currency - Leg 2"
+            provision "The currency code for the currency in which Spread - Leg 2 (item 55 above) is determined."]
+
+        [label for quantityUnitOfMeasure "1.37 Quantity unit of measure - Leg 2"]
+        [regulatoryReference for quantityUnitOfMeasure ASIC Trade table "1" dataElement "37" field "Quantity unit of measure - Leg 2"
+            provision "The unit of measure in which  the Total notional quantityLeg 2 (item 29 above) is expressed."]
+
+        [label for direction2 "1.16 Direction 2 - Leg 2"]
+        [regulatoryReference for direction2 ASIC Trade table "1" dataElement "16" field "Direction 2 - Leg 2"
+            provision "An indicator of whether the Reporting Entity is the payer or the receiver of leg 2 at the time the Reportable Transaction is entered into.
+        This data element is required for Reportable Transactions for which an allowable value is reported for Direction 2 Leg 1 (item 15 above)."]
+
+        [label for nextFloatingReferenceResetDate "2.12 Next floating reference reset date - Leg 2"]
+        [regulatoryReference for nextFloatingReferenceResetDate ASIC Trade table "2" dataElement "12" field "Next floating reference reset date - Leg 2"
+            provision "If applicable and other than for floating reference rates that reset on a daily frequency, the unadjusted nearest date in the future on which the interest rate reference rate of Leg 2 will be reset."]
+        [regulatoryReference for nextFloatingReferenceResetDate ISDA TechnicalExecutionGroup date "20240418"
+            provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+    override underlyingIdOther Max350AlphaNumericTextAllSplChars (0..1)
+            [label "1.83a Underlying ID (Other) (DTCC)"]
+        [regulatoryReference ASIC Trade table "1" dataElement "83" field "Underlier ID (Other)"
+            provision "An identifier for the underlying thing to the contract, where applicable."]
+        [ruleReference UnderlyingIdOther]
+    override underlyingIdOtherSource ProductIdTypeEnum (0..1)
+        [label "1.84a Underlying ID (Other) Source (DTCC)"]
+        [regulatoryReference ASIC Trade table "1" dataElement "84" field "Underlier ID (Other) source"
+            provision "The identifier of the publisher of the rate, price or measure of the underlier reported as Underlier ID (Other) (item 83 above)."]
+        [ruleReference UnderlyingIdOtherSource]
+    override strikePrice cde.price.PriceFormat (0..1)
+        [label for decimal "1.59 Strike price"]
+        [label for monetary "1.59 Strike price"]
+    override price cde.price.PriceFormat (0..1)
+        [label for decimal "1.47 Price"]
+        [label for monetary "1.47 Price"]
+    override packageTransactionPrice cde.price.PriceFormat (0..1)
+        [label for decimal "1.94 Package transaction price"]
+        [label for monetary "1.94 Package transaction price"]
+    override packageTransactionSpread cde.price.PriceFormat (0..1)
+        [label for decimal "1.97 Package transaction spread"]
+        [label for monetary "1.97 Package transaction spread"]
+    override barrier common.price.SingleOrUpperAndLowerBarrier (0..1)
+        [label for _single -> price -> monetary "1.59a Single barrier price"]
+        [label for _single -> price -> decimal "1.59a Single barrier price"]
+        [label for upper -> price -> monetary "1.59b Upper barrier price"]
+        [label for upper -> price -> decimal "1.59b Upper barrier price"]
+        [label for lower -> price -> monetary "1.59a Lower barrier price"]
+        [label for lower -> price -> decimal "1.59a Lower barrier price"]
+        [label for _single -> notation "1.58a Single barrier price notation"]
+        [label for upper -> notation "1.58b Upper barrier price notation"]
+        [label for lower -> notation "1.58a Lower barrier price notation"]
+        [label for _single -> currency "[Not in regulation] Single barrier price currency"]
+        [label for upper -> currency "[Not in regulation] Upper barrier price currency"]
+        [label for lower -> currency "[Not in regulation] Lower barrier price currency"]
+    override basketConstituents cde.basket.BasketConstituentsReport (0..*)
+        [label for identifier "1.81/82-$ 1.81 Basket constituent identifiers"]
+        [regulatoryReference for identifier ASIC Trade table "1" dataElement "81" field "Basket constituent identifiers"
+            provision "Where an allowable value is reported for Custom basket code (item 80 above), the identifiers of the underliers that are the constituents of the custom basket."]
+        [label for source "1.81/82-$ 1.82 Basket constituent identifier source"]
+        [regulatoryReference for source ASIC Trade table "1" dataElement "82" field "Basket constituent identifier source"
+            provision "The identifier(s) of the sources of the underliers identifiers that are reported as Basket constituent identifiers (item 81 above)."]
+    override otherPayment cde.payment.OtherPayment (0..*)
+        [label for paymentType "1.75 Other payment type"]
+        [regulatoryReference for paymentType ASIC Trade table "1" dataElement "75" field "Other payment type"
+            provision "An indicator of whether the type of payment(s) reported as Other payment amount (item 74 above) is:
+            an upfront payment that is not a payment of an option premium, notional amount or standard fees, taxes or commissions; or
+            a payment made upon a partial or full termination of an OTC Derivative that is not a payment of an option premium, notional amount or standard fees, taxes or commissions"]
+        [label for amount "1.74 Other payment amount"]
+        [regulatoryReference for amount ASIC Trade table "1" dataElement "74" field "Other payment amount"
+            provision "If applicable, the amounts of payment(s) paid or payable under the OTC Derivative the subject of the Reportable Transaction of the type reported as Other payment type (item 75 below)."]
+        [label for currency "1.76 Other payment currency"]
+        [regulatoryReference for currency ASIC Trade table "1" dataElement "76" field "Other payment currency"
+            provision "The currency code(s) in which the Other payment amount (item 74 above) is denominated."]
+        [label for date "1.77 Other payment date"]
+        [regulatoryReference for date ASIC Trade table "1" dataElement "77" field "Other payment date"
+            provision "The unadjusted date(s) on which the Other payment amount (item 74 above) is paid."]
+        [label for payer "1.78 Other payment payer"]
+        // This rule is implemented within repeating rule OtherPayment.  This rule has been maintained so the regulatoryReference and "as" name can be specified.  DSL change request to allow easier modelling https://github.com/finos/rune-dsl/issues/852
+        [regulatoryReference for payer ASIC Trade table "1" dataElement "78" field "Other payment payer"
+            provision "The identifier of the payer of the Other payment amount (item 74 above), using:
+            in the case of an entity who has an LEI, the LEI; or
+            in the case of any other person, a Designated Business Identifier or Client Code."]
+        [label for payerFormat "1.78 Other payment payer format (non-reportable)"]
+        // This rule is implemented within repeating rule OtherPayment.  This rule has been maintained so the regulatoryReference and "as" name can be specified.  DSL change request to allow easier modelling https://github.com/finos/rune-dsl/issues/852
+        [label for receiver "1.79 Other payment receiver"]
+        [regulatoryReference for receiver ASIC Trade table "1" dataElement "79" field "Other payment receiver"
+            provision "The identifier of the receiver of the Other payment amount (item 74 above), using:
+            in the case of an entity who has an LEI, the LEI; or
+            in the case of any other person, a Designated Business Identifier or Client Code."]
+        [label for receiverFormat "1.79 Other payment receiver format (non-reportable)"]
+    override technicalRecordId string (1..1)
+        [ruleReference TechnicalRecordId]
+    override brokerID LEIIdentifier (0..1)
+        [label "1.12 Broker"]
+        [regulatoryReference ASIC Trade table "1" dataElement "12" field "Broker"
+            provision "If a broker acted as intermediary for the Reporting Entity in relation to the Reportable Transaction, without becoming a counterparty to the OTC Derivative the subject of the Reportable Transaction, the LEI of the broker"]
+        [ruleReference Broker]
+    override valuationAmount ShortFraction5DecimalNumber (0..1)
+        [label "2.7 Valuation amount"]
+        [regulatoryReference ASIC Trade table "2" dataElement "7" field "Valuation amount"
+            provision "The unadjusted value of the OTC Derivative the subject of the Reportable Transaction, calculated as the amount that would be paid to terminate the OTC Derivative in an orderly market on the valuation date.
+                A value greater than zero is reported if the amount would be paid by Counterparty 2 to Counterparty 1.
+                A value less than zero is reported if the amount would be paid by Counterparty 1 to Counterparty 2.
+                A value of zero is reported if no amount would be paid by either Counterparty 1 or Counterparty 2."]
+        [ruleReference ValuationAmount]
+    override valuationCurrency ISOCurrencyCodeEnum (0..1)
+        [label "2.8 Valuation currency"]
+        [regulatoryReference ASIC Trade table "2" dataElement "8" field "Valuation currency"
+            provision "The currency code for the currency in which the Valuation amount (item 7 above) is denominated."]
+        [ruleReference ValuationCurrency]
+    override valuationMethod ValuationType1Code (0..1)
+        [label "2.9 Valuation method"]
+        [regulatoryReference ASIC Trade table "2" dataElement "9" field "Valuation method"
+            provision "An Indicator of the source and method used to determine the amount reported as Valuation amount (item 7 above). "]
+        [ruleReference ValuationMethod]
+    override valuationTimestamp /*ISO*/ zonedDateTime (0..1)
+        [label "2.6 Valuation Timestamp"]
+        [regulatoryReference ASIC Trade table "2" dataElement "6" field "Valuation timestamp"
+            provision "The date, or date and time, that the amount reported as Valuation amount (item 7 below) was determined."]
+        [ruleReference ValuationTimestamp]
+    override delta ShortFraction5DecimalNumber (0..1)
+        [label "2.10 Delta"]
+        [regulatoryReference ASIC Trade table "2" dataElement "10" field "Delta"
+            provision "For OTC Derivatives that are options, the ratio of the change in the price of the OTC Derivative to the change in the price of the underlier that is the underlier applicable to the ne1t time that the option may be exercised."]
+        [ruleReference Delta]
+    override secondaryTransactionIdentifier Max72AlphaNumericText (0..1)
+        [label "1.1a Secondary transaction identifier"]
+        [regulatoryReference ASIC Trade table "1" dataElement "1a" field "Secondary transaction identifier"
+            provision "A secondary transaction identifier that may be, but is not required to be, reported at this item."]
+    override entityResponsibleForReporting LEIIdentifier (0..1) 
+        [label "1.5 Reporting entity"]
+        [regulatoryReference ASIC Trade table "1" dataElement "5" field "Reporting entity"
+            provision "The current LEI of the Reporting Entity"]
+    override eventTimestamp zonedDateTime (1..1)
+    override contractType CommonContractType (1..1)
+    override assetClass CommonAssetClass (1..1)
+    override counterparty2IdentifierType boolean (1..1)
+    override clearingAccountOrigin ClearingAccountOriginEnum (0..1)
+        [ruleReference empty]
+    override originalSwapUTI Max52AlphaNumericText (0..1)
+        [ruleReference empty]
+    override originalSwapSDRIdentifier LEIIdentifier (0..1)
+        [ruleReference empty]
+    override clearingReceiptTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override buyerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override sellerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override priorUSI Max42AlphaNumericText (0..1)
+        [ruleReference empty]
+    override initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference CollateralPortfolioCodeInitialMargin]
+    override variationMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference CollateralPortfolioCodeVariationMargin]
+    override subsequentPositionUTI UTIIdentifierLegacy (0..1)
+        [ruleReference empty]
+    override masterAgreementType common.contract.MasterAgreementEnum (0..1)
+        [ruleReference empty]
+    override masterAgreementVersion int (0..1)
+        [ruleReference empty]
+    override nonStandardizedTermIndicator boolean (0..1)
+        [ruleReference empty]
+    override level ReportLevelEnum (0..1)
+        [ruleReference empty]
+    override amendmentIndicator boolean (0..1)
+        [ruleReference empty]
+    override packageIndicator boolean (0..1)
+        [ruleReference empty]
+    override countryOfTheCounterparty2 ISOCountryCodeEnum (0..1)
+        [ruleReference empty]
+    override cryptoAssetUnderlyingIndicator boolean (0..1)
+        [ruleReference empty]
+    override confirmationTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override seriesVersion Max5Int (0..1)
+        [ruleReference empty]
+    override swapLinkID Max35AlphaNumericText (0..1)
+        [ruleReference empty]
+    override settlementLocation ISOCountryCodeEnum (0..1)
+        [ruleReference empty]
+    override intragroup boolean (0..1)
+        [ruleReference empty]
+    override counterparty2IdentifierSource Counterparty2IdentifierEnum (0..1)
+        [ruleReference empty]
+    override clearingTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override customBasketIndicator boolean (0..1)
+        [ruleReference empty]
+    basketStructurerID LEIIdentifier (0..1)
+        [ruleReference BasketStructurer]
+    newDerivativeTradeRepository LEIIdentifier (0..1)
+        [ruleReference NewDerivativeTradeRepository]
+    smallScaleBuySideEntityIndicator string (0..1)
+        [ruleReference SmallScaleBuySideEntityIndicator]
+
+//Validation Rules
+    condition DTCC_ASIC_BR_1001_01: <"Unique transaction identifier">
+        [docReference ASIC DTCC_Specs table "1" dataElement "1" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Unique transaction identifier] must NOT = [Prior UTI]
+        Reject if [Action Type] = 'NEWT' and Proprietary ID tag is populated."]
+        uti.UniqueTransactionIdentifier_Validation(
+                uniqueTransactionIdentifier,
+                uniqueTransactionIdentifierProprietary,
+                priorUTI,
+                priorUTIProprietary,
+                actionType
+            )
+
+    condition DTCC_ASIC_BR_1006_01: <"Counterparty 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "6" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, ERROR, MARU, VALU then [Counterparty 1] must NOT = [Counterparty 2] if [Counterparty 2 identifier type] is = LEI"]
+        common.party.Counterparty_Validation(
+                actionType,
+                counterparty2IdentifierType,
+                counterparty1,
+                counterparty2
+            )
+
+    condition DTCC_ASIC_BR_1007_01: <"Counterparty 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "7" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, ERROR, MARU, VALU then [Counterparty 1] must NOT = [Counterparty 2] if [Counterparty 2 identifier type] is = LEI."]
+        common.party.Counterparty_Validation(
+                actionType,
+                counterparty2IdentifierType,
+                counterparty1,
+                counterparty2
+            )
+
+    condition DTCC_ASIC_BR_1007a_01: <"Counterparty 2 name">
+        [docReference ASIC DTCC_Specs table "1" dataElement "7a" validationRule "Transaction"
+        provision "when [Action Type] =  NEWT, MODI, CORR, REV, TERM, PRTO, EROR then Required if [Counterparty 2 identifier type indicator] = False and [Counterparty 2] does NOT = ANON"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR] any = actionType
+        then if counterparty2IdentifierType = False and counterparty2 <> "ANON"
+            then counterparty2Name exists
+
+    condition DTCC_ASIC_BR_1009_01: <"Country of Counterparty 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "9" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Counterparty 2 identifier type indicator] = FALSE Reject If [Counterparty 2 identifier type indicator] = TRUE"]
+        common.party.CountryOfCounterparty2_Validation(
+                actionType,
+                counterparty2IdentifierType,
+                countryOfTheCounterparty2
+            )
+
+    condition DTCC_ASIC_BR_1010_01: <"Beneficiary 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "10" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Beneficiary 1] must NOT = [Counterparty 1].
+            [Beneficiary 1] must NOT = [Reporting Entity]."]
+        common.party.Beneficiary1_Validation(
+                actionType,
+                beneficiary1,
+                counterparty1,
+                entityResponsibleForReporting
+            )
+
+    condition DTCC_ASIC_BR_1011_01: <"Beneficiary 1 identifier type indicator">
+        [docReference ASIC DTCC_Specs table "1" dataElement "11" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Beneficiary 1] is populated."]
+        common.party.Beneficiary1IdentifierTypeIndicator_Validation(
+                actionType,
+                beneficiary1,
+                beneficiary1IdentifierTypeIndicator
+            )
+
+    condition DTCC_ASIC_BR_1012_01: <"Broker">
+        [docReference ASIC DTCC_Specs table "1" dataElement "12" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Broker] must NOT = [Counterparty 1] or [Counterparty 2]"]
+        common.party.Broker_Validation(actionType, brokerID, counterparty1, counterparty2)
+
+    condition DTCC_ASIC_BR_1013_01: <"Execution agent of Counterparty 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "13" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, VALU then [Execution agent of Counterparty 1] must NOT = [Counterparty 1] or [Counterparty 2] or [Reporting Entity]. Reject if [Execution agent of Counterparty 1] = NOAP and Execution agent of Counterparty 2] is <blank>"]
+        common.party.ExecutionAgentOfCounterparty1_Validation(
+                actionType,
+                counterparty1,
+                counterparty2,
+                executionAgentCounterparty1,
+                executionAgentCounterparty2,
+                entityResponsibleForReporting
+            )
+
+    condition DTCC_ASIC_BR_1013a_01: <"Execution agent of Counterparty 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "[Not in Regulation]" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, EROR, VALU then Required if [Execution agent of Counterparty 1] = NOAP."]
+        common.party.ExecutionAgentOfCounterparty2_Validation(
+                actionType,
+                executionAgentCounterparty1,
+                executionAgentCounterparty2
+            )
+
+    condition DTCC_ASIC_BR_1014_01: <"Direction 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "14" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Direction 2 of leg 1] and [Direction 2 of leg 2] are both <blank>. Reject if [Direction 2 of leg 1] or [Direction 2 of leg 2] are populated"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then common.party.Direction1_Validation(
+                    direction1,
+                    leg1 -> direction2,
+                    leg2 -> direction2
+                )
+
+    condition DTCC_ASIC_BR_1015_01: <"Direction 2 - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "15" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Direction 1] is <blank>. Reject if [Direction 1] is populated. [Direction 2 - Leg 1] must NOT = [Direction 2 of leg 2]"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then common.party.Direction2Leg1_Validation(
+                    direction1,
+                    leg1 -> direction2,
+                    leg2 -> direction2
+                )
+
+    condition DTCC_ASIC_BR_1016_01: <"Direction 2 - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "16" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Direction 2 - Leg 1] is populated.
+            Reject if [Direction 1] and [Direction 2 of leg 1] are both <blank>.
+            [Direction 2 - Leg 1] must NOT = [Direction 2 of leg 2]."]
+        common.party.Direction2Leg2_Validation(
+                actionType,
+                direction1,
+                leg1 -> direction2,
+                leg2 -> direction2
+            )
+
+    condition DTCC_ASIC_BR_1018_01: <"Expiration date">
+        [docReference ASIC DTCC_Specs table "1" dataElement "18" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Expiration date] should be equal to or later than the value in [Effective date].
+            [Expiration date] should be equal to or later than the DATE value in [Execution timestamp]."]
+        common.datetime.ExpirationDate_Validation(
+                actionType,
+                effectiveDate,
+                executionTimestamp,
+                expirationDate
+            )
+
+    condition DTCC_ASIC_BR_1019_01: <"Execution timestamp">
+        [docReference ASIC DTCC_Specs table "1" dataElement "19" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then If [Action type] = NEWT and [Cleared] = Y, then [Execution timestamp] must equal to value in [Clearing timestamp]"]
+        common.datetime.ExecutionTimestamp_Validation(
+                actionType,
+                cleared,
+                clearingTimestamp,
+                executionTimestamp
+            )
+
+    condition DTCC_ASIC_BR_1020_01a: <"Event timestamp">
+        [docReference ASIC DTCC_Specs table "1" dataElement "20" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then
+               If [Action Type] = NEWT, MODI, CORR, the date value of the [Event timestamp] must be equal to or later than the date value in [Execution timestamp].
+        If [Action Type] = NEWT, CORR & MODI, the date value of the [Event timestamp] must be equal to or before the date value of the [Reporting timestamp].
+        If [Action Type] = REVI, the [Event timestamp] must be equal to or before the [Reporting timestamp].
+        If [Action Type] = NEWT, CORR, MODI, the date value in the [Event timestamp] should be equaltoorbefore the[Expiration date]
+        If [Action Type] = MODI, CORR, REVI, [Event timestamp] should not be before  the [Initial Event timestamp] of the NEWT Message.
+        If [Action Type] = MODI or CORR, and is submitted after [Action Type] = TERM in the base trade, the [Event Timestamp] of MODI or CORR should be equal to or before the [Event timestamp] of the base trades TERM."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+        provision "The logic regarding the [Initial event timestamp] and the [Action Type] = TERM is not modelled. The condition cannot be executed in a stateless environment."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR] any = actionType
+        then eventTimestamp >= executionTimestamp and eventTimestamp <= reportingTimestamp
+        else if [ActionTypeEnum -> REVI] any = actionType
+        then eventTimestamp <= reportingTimestamp
+        else if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR] any = actionType
+        then eventTimestamp -> date <= expirationDate
+
+    condition DTCC_ASIC_BR_1020_01b: <"Event timestamp">
+        [docReference ASIC DTCC_Specs table "1" dataElement "20" validationRule "Transaction"
+        provision "when [Action Type] = TERM, PRTO, EROR then
+        [Event timestamp] must be equal to or later than the value in [Execution timestamp]
+        [Event timestamp] must be equal to or before the [Reporting timestamp].
+        The date value in the [Event timestamp] should be equal to or before the [Expiration date]
+        [Event timestamp] should not be before the [Initial Event timestamp] of the NEWT Message."]
+        if [ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR] any = actionType
+        then if ActionTypeEnum -> TERM = actionType
+            then (eventTimestamp -> date >= executionTimestamp -> date and eventTimestamp -> date <= reportingTimestamp -> date)
+            else if [ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR] any = actionType
+            then eventTimestamp -> date <= reportingTimestamp -> date
+
+    condition DTCC_ASIC_BR_1020_02: <"Event timestamp">
+        [docReference ASIC DTCC_Specs table "1" dataElement "20" validationRule "Transaction"
+        provision "when [Action Type] = TERM, PRTO, EROR then
+        [Event timestamp] must be equal to or later than the value in [Execution timestamp]
+        [Event timestamp] must be equal to or before the [Reporting timestamp].
+        The date value in the [Event timestamp] should be equal to or before the [Expiration date]
+        [Event timestamp] should not be before the [Initial Event timestamp] of the NEWT Message."]
+        if [ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR] any = actionType
+        then eventTimestamp -> date >= executionTimestamp -> date
+
+    condition DTCC_ASIC_BR_1021_01: <"Clearing timestamp">
+        [docReference ASIC DTCC_Specs table "1" dataElement "21" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Cleared] = Y.
+            If [Action type] = NEWT and [Cleared] = Y, then [Execution timestamp] must equal to value in [Clearing timestamp].
+            Reject If [Cleared] = 'N' or 'I'"]
+        common.datetime.ClearingTimestamp_Validation(
+                actionType,
+                cleared,
+                clearingTimestamp,
+                executionTimestamp
+            )
+
+    condition DTCC_ASIC_BR_1023_01: <"Central counterparty">
+        [docReference ASIC DTCC_Specs table "1" dataElement "23" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Cleared] = Y.
+            Reject if [Cleared] = 'N.
+            [Central counterparty] must NOT = [Clearing member]"]
+        CentralCounterparty_Validation(
+                actionType,
+                cleared,
+                centralCounterparty,
+                clearingMember
+            )
+
+    condition DTCC_ASIC_BR_1024_01: <"Clearing member">
+        [docReference ASIC DTCC_Specs table "1" dataElement "24" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Cleared] = Y.
+            Reject if [Cleared] = 'N'.
+            [Central counterparty] must NOT = [Clearing member]"]
+        ClearingMember_Validation(actionType, cleared, centralCounterparty, clearingMember)
+
+    condition DTCC_ASIC_BR_1025_01: <"Platform identifier">
+        [docReference ASIC DTCC_Specs table "1" dataElement "25" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Cleared] = 'N' or 'I'"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if (cleared = N or cleared = I)
+            then platformIdentifier exists
+
+    condition DTCC_ASIC_BR_1026_01: <"Notional amount - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "26" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI,
+            If [Asset Class] = CRDT, EQUI, INTR, reject if Negative.
+            Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then leg1 -> notionalAmount exists
+                or leg1 -> notionalAmount = 9999999999999999999999999
+                    and if [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> INTR] any = assetClass and leg1 -> notionalAmount < 0
+                        then False
+
+    condition DTCC_ASIC_BR_1026_02: <"Notional amount - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "26" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI,
+            If [Asset Class] = CRDT, EQUI, INTR, reject if Negative.
+            Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+                and [CommonContractType -> CFDS, CommonContractType -> FORW, CommonContractType -> SWPT, CommonContractType -> OTHR, CommonContractType -> SWAP] any = contractType
+        then leg1 -> notionalAmount exists
+                or leg1 -> notionalAmount = 9999999999999999999999999
+                    and if [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> INTR] any = assetClass and leg1 -> notionalAmount < 0
+                        then False
+
+    condition DTCC_ASIC_BR_1026_03: <"Notional amount - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "26" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then If [UPI.Intrument type] = Option and [UPI. Asset class] = Foreign_Exchange and [UPI.Product] does NOT = Digital_Option, [Notional amount - Leg 1] MUST = [Call amount] or [Put Amount].
+            If [Asset Class] = CRDT, EQUI, CURR, INTR, reject if Negative.
+            Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+                and contractType = CommonContractType -> OPTN
+        then if nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Option
+                    and nonReportable -> postUpiData -> Header -> AssetClass = AnnaDsbAssetClassEnum -> Foreign_Exchange
+                    and nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Digital_Option
+            then leg1 -> notionalAmount = callAmount
+                    or leg1 -> notionalAmount = putAmount
+                    or leg1 -> notionalAmount = 9999999999999999999999999
+                        and (if [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> CURR, CommonAssetClass -> INTR] any = assetClass and leg1 -> notionalAmount < 0
+                            then False)
+
+    condition DTCC_ASIC_BR_1027_01: <"Notional amount - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "27" validationRule "Transaction"
+    provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Direction 2 - Leg 2] is populated.
+        If [Asset Class] = CRDT, EQUI, CURR, INTR, reject if Negative.
+        Note: '9999999999999999999999999' is accepted when the value is not available at the time of reporting."]
+        NotionalAmountLeg2_01_Validation(
+                actionType,
+                assetClass,
+                leg2 -> direction2,
+                leg2 -> notionalAmount
+            )
+
+    condition DTCC_ASIC_BR_1027_02: <"Notional amount of leg 2 Condition">
+        [docReference ASIC DTCC_Specs table "1" dataElement "27" validationRule "Transaction"
+    provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Direction 2 - Leg 2] is populated.  
+    Note: '9999999999999999999999999' is accepted when the value is not available at the time of reporting."]
+        NotionalAmountLeg2_02_Validation(
+                actionType,
+                assetClass,
+                leg2 -> direction2,
+                leg2 -> notionalAmount,
+                contractType
+            )
+
+    condition DTCC_ASIC_BR_1027_03: <"Notional amount - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "27" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Direction 2 - Leg 2] is populated and [Total notional quantity - Leg 2] is NOT populated. 
+            If [Asset Class] = CRDT, EQUI, CURR, INTR, reject if Negative.
+            Note: '9999999999999999999999999' is accepted when the value is not available at the time of reporting. "]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> COMM and contractType = CommonContractType -> SWAP)
+        then (if leg2 -> direction2 exists and leg2 -> totalNotionalQuantity is absent
+            then leg2 -> notionalAmount exists
+                    or leg2 -> notionalAmount = 9999999999999999999999999
+            else if [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> CURR, CommonAssetClass -> INTR] any = assetClass and leg2 -> notionalAmount < 0
+            then False)
+
+    condition DTCC_ASIC_BR_1028_01: <"Total notional quantity of the contract or leg 1 Condition">
+        [docReference ASIC DTCC_Specs table "1" dataElement "28" validationRule "Transaction"
+            provision "When [Action Type] = NEWT, MODI, CORR, REVI then Reject if Negative. Note: '9999999999999999999999999' is accepted when the value is not available at the time of reporting."]
+        TotalNotionalQuantityLeg1_Validation(
+                actionType,
+                assetClass,
+                leg1 -> notionalQuantity,
+                leg1 -> totalNotionalQuantity
+            )
+
+    condition DTCC_ASIC_BR_1029_01: <"Total notional quantity - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "29" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if Negative
+        [Notional quantity - Leg 2] must NOT be greater then the [Total notional quantity - Leg 2]
+        Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        TotalNotionalQuantityLeg2_Validation(
+                actionType,
+                assetClass,
+                leg2 -> notionalQuantity,
+                leg2 -> totalNotionalQuantity
+            )
+
+    condition DTCC_ASIC_BR_1030_01: <"Notional quantity - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "30" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Notional quantity - Leg 1] must NOT be greater then the [Total notional quantity - Leg 1]
+            Reject if Negative"]
+        NotionalQuantityLeg1_Validation(
+                actionType,
+                assetClass,
+                leg1 -> notionalQuantity,
+                leg1 -> totalNotionalQuantity
+            )
+
+    condition DTCC_ASIC_BR_1030_02: <"Notional quantity - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "30" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Notional quantity - Leg 1] must NOT be greater then the [Total notional quantity - Leg 1]
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and CommonAssetClass -> EQUI = assetClass
+        then if leg1 -> notionalQuantity <= leg1 -> totalNotionalQuantity
+            then True
+            else if leg1 -> notionalQuantity < 0
+            then False
+
+    condition DTCC_ASIC_BR_1031_01: <"Notional quantity - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "31" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Total notional quantity - Leg 2] is populated
+        [Notional quantity - Leg 2] must NOT be greater then the [Total notional quantity - Leg 2]
+        Reject if Negative"]
+        NotionalQuantityLeg2_Validation(
+                actionType,
+                assetClass,
+                leg2 -> notionalQuantity,
+                leg2 -> totalNotionalQuantity
+            )
+
+    condition DTCC_ASIC_BR_1031_02: <"Notional quantity - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "31" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Notional quantity - Leg 2] must NOT be greater then the [Total notional quantity - Leg 2]
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and CommonAssetClass -> EQUI = assetClass
+        then if leg2 -> notionalQuantity <= leg2 -> totalNotionalQuantity
+            then True
+            else if leg2 -> notionalQuantity < 0
+            then False
+
+    condition DTCC_ASIC_BR_1032_01: <"Call amount">
+        [docReference ASIC DTCC_Specs table "1" dataElement "32" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if UPI.[Instrument type] = Option and [Put amount] is not populated and if [UPI.Product] does NOT = Digital_Option.
+            Reject if Negative or Zero."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> CURR and contractType = CommonContractType -> OPTN)
+        then if (nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Option
+                    and putAmount is absent
+                    and nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Digital_Option)
+            then (callAmount exists and callAmount > 0)
+
+    condition DTCC_ASIC_BR_1033_01: <"Put amount">
+        [docReference ASIC DTCC_Specs table "1" dataElement "33" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if UPI.[Instrument type] = Option and [Call amount] is not populated and if [UPI.Product] does NOT = Digital_Option. 
+            Reject if Negative or Zero."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> CURR and contractType = CommonContractType -> OPTN)
+        then if (nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Option
+                    and callAmount is absent
+                    and nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Digital_Option)
+            then (putAmount exists and putAmount > 0)
+
+    condition DTCC_ASIC_BR_1034_01: <"Notional currency - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "34" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Notional Amount - leg 1] is populated.
+            Reject if [Notional currency - Leg 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD,  XPT, 'XTS'."]
+        NotionalCurrrencyLeg1_01_Validation(
+                actionType,
+                assetClass,
+                leg1 -> notionalAmount,
+                leg1 -> notionalCurrency
+            )
+
+    condition DTCC_ASIC_BR_1034_02: <"Notional currency - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "34" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Notional Amount - leg 1] is populated. 
+            Reject if [Notional currency - Leg 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD,  XPT, 'XTS'."]
+        NotionalCurrrencyLeg1_02_Validation(
+                actionType,
+                assetClass,
+                leg1 -> notionalAmount,
+                leg1 -> notionalCurrency,
+                contractType
+            )
+
+    condition DTCC_ASIC_BR_1034_03: <"Notional currency - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "34" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Notional Amount - leg 1] is populated.
+        If [UPI.Instrument type]= Option and [UPI. Asset class] = Foreign_Exchange and [UPI.Product] does NOT = Digital_Option, [Notional Currency - Leg 1] MUST = [Call currency] or [Put currency].
+        Reject if [Notional currency - Leg 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and leg1 -> notionalAmount exists
+        then (leg1 -> notionalCurrency exists
+                and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] all <> leg1 -> notionalCurrency
+                and (if nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Option
+                            and nonReportable -> postUpiData -> Header -> AssetClass = AnnaDsbAssetClassEnum -> Foreign_Exchange
+                            and nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Digital_Option
+                    then [callCurrency, putCurrency] any = leg1 -> notionalCurrency))
+
+    condition DTCC_ASIC_BR_1035_01: <"Notional currency - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "35" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Notional Amount - leg 2] is populated.
+            Reject if [Notional currency - Leg 2] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD,  XPT, 'XTS'."]
+        NotionalCurrencyLeg2_Validation(
+                actionType,
+                assetClass,
+                leg2 -> notionalAmount,
+                leg2 -> notionalCurrency
+            )
+
+    condition DTCC_ASIC_BR_1036_01: <"Quantity unit of measure - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "36" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Total notional quantity of leg 1] is populated AND value does NOT = 9999999999999999999999999."]
+        if [CommonAssetClass -> COMM, CommonAssetClass -> EQUI] any = assetClass
+                and leg1 -> totalNotionalQuantity <> 9999999999999999999999999
+        then QuantityUnitOfMeasureLeg_Validation(
+                    actionType,
+                    leg1 -> totalNotionalQuantity,
+                    leg1 -> quantityUnitOfMeasure
+                )
+
+    condition DTCC_ASIC_BR_1037_01: <"Quantity unit of measure - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "37" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Total notional quantity of leg 2] is populated AND value does NOT = 9999999999999999999999999."]
+        if [CommonAssetClass -> COMM, CommonAssetClass -> EQUI] any = assetClass
+                and leg2 -> totalNotionalQuantity <> 9999999999999999999999999
+        then QuantityUnitOfMeasureLeg_Validation(
+                    actionType,
+                    leg2 -> totalNotionalQuantity,
+                    leg2 -> quantityUnitOfMeasure
+                )
+
+    condition DTCC_ASIC_BR_1038_01: <"Call currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "38" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Call amount] is populated.
+        Reject if [Call currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        if contractType = CommonContractType -> OPTN
+        then CallCurrency_Validationn(actionType, assetClass, callAmount, callCurrency)
+                and ([ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] all <> callCurrency)
+
+    condition DTCC_ASIC_BR_1039_01: <"Put currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "39" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Put amount] is populated.
+        Reject if [Put currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        if contractType = CommonContractType -> OPTN
+        then PutCurrency_Validationn(actionType, assetClass, putAmount, putCurrency)
+                and ([ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] all <> putCurrency)
+
+    condition DTCC_ASIC_BR_1040_01: <"Notional amount schedule effective date - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "40" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then
+            Required if [Notional amount schedule amount - Leg 1] is populated.
+            Reject if for Notional schedules Leg 1, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 1, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            Reject if the Effective dates submitted are not in sequential order.
+            Reject if the Effective dates submitted are not greater then the End Dates of the previous payment schedule."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> notionalAmountSchedule -> value exists
+            then (leg1 -> notionalAmountSchedule -> effectiveDate exists
+                    and leg1 -> notionalAmountSchedule -> value count
+                        = leg1 -> notionalAmountSchedule -> effectiveDate count)
+
+    condition DTCC_ASIC_BR_1041_01: <"Notional amount schedule end date - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "41" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if for Notional schedules Leg 1, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 1, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            Reject if the End dates submitted are not in sequential order."]
+        // endDate not applicable for back-to-back schedules
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> CURR, CommonAssetClass -> INTR] any = assetClass
+        then if leg1 -> notionalAmountSchedule -> value exists
+            then (if leg1 -> notionalAmountSchedule -> value count
+                        = leg1 -> notionalAmountSchedule -> effectiveDate count
+                then leg1 -> notionalAmountSchedule exists
+                else if leg1 -> notionalAmountSchedule exists
+                        and leg1 -> notionalAmountSchedule -> value count
+                            <> leg1 -> notionalAmountSchedule -> effectiveDate count
+                then True)
+
+    condition DTCC_ASIC_BR_1042_01: <"Notional amount schedule amount - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "42" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if for Notional schedules Leg 1, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 1, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            If [Asset Class] = CRDT, EQUI, CURR, INTR, reject if Negative.
+            Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> CURR, CommonAssetClass -> COMM] any = assetClass
+        then if leg1 -> notionalAmountSchedule -> value exists
+            then leg1 -> notionalAmountSchedule -> value any >= 0 and leg1 -> notionalAmountSchedule -> value count
+                    = leg1 -> notionalAmountSchedule -> effectiveDate count
+
+    condition DTCC_ASIC_BR_1042_02: <"Notional amount schedule amount - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "42" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Instrument type] = SWAP and [UPI.Asset Class] = Rates and [UPI.Notional Schedule] does NOT = Constant.
+            Reject if for Notional schedules Leg 1, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 1, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            If [Asset Class] = CRDT, EQUI, CURR, INTR, reject if Negative.
+            Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and CommonAssetClass -> INTR = assetClass
+        then (if nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Swap
+                    and nonReportable -> postUpiData -> Attributes -> NotionalSchedule = AnnaDsbNotionalScheduleEnum -> Constant
+                    and nonReportable -> postUpiData -> Header -> AssetClass = AnnaDsbAssetClassEnum -> Rates
+            then ((leg1 -> notionalAmountSchedule -> value exists and leg1 -> notionalAmountSchedule -> value any > 0)
+                    or leg1 -> notionalAmountSchedule -> value any = 9999999999999999999999999)
+            else (if leg1 -> notionalAmountSchedule -> value count
+                    <> leg1 -> notionalAmountSchedule -> effectiveDate count
+            then False))
+
+    condition DTCC_ASIC_BR_1043_01: <"Notional amount schedule effective date - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "43" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then
+            Required if [Notional amount schedule amount - Leg 2] is populated.
+            Reject if for Notional schedules Leg 2, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 2, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            Reject if the Effective dates submitted are not in sequential order.
+            Reject if the Effective dates submitted are not greater then the End Dates of the previous payment schedule."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> notionalAmountSchedule -> value count
+                        = leg2 -> notionalAmountSchedule -> effectiveDate count
+                    and leg2 -> notionalAmountSchedule -> value exists
+            then leg2 -> notionalAmountSchedule -> effectiveDate exists
+
+    condition DTCC_ASIC_BR_1044_01: <"Notional amount schedule end date - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "44" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if for Notional schedules Leg 2, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 2, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            Reject if the End dates submitted are not in sequential order."]
+        True
+
+    condition DTCC_ASIC_BR_1045_01: <"Notional amount schedule amount - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "45" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if for Notional schedules Leg 2, the number of Notional Amounts and Effective date values does not match.
+            Reject if for Notional schedules Leg 2, if the End Date is provided AND the number of Notional Amounts and Effective date and End date values does not match.
+            If [Asset Class] = CRDT, EQUI, CURR, INTR, reject if Negative.
+            Note: 9999999999999999999999999 is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> CURR, CommonAssetClass -> INTR] any = assetClass
+            then leg2 -> notionalAmountSchedule -> value is absent
+
+    condition DTCC_ASIC_BR_1046_01: <"Price notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "46" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Price] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if price exists
+                    and (price -> monetary <> 999999999999999999 and price -> decimal <> 99999999999)
+            then priceNotation exists
+
+    condition DTCC_ASIC_BR_1047_01: <"Price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "47" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Note: 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (([CommonAssetClass -> INTR, CommonAssetClass -> CRDT] any = assetClass
+                        and contractType = CommonContractType -> CFDS)
+                    or (CommonAssetClass -> CURR = assetClass and [CommonContractType -> CFDS, CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType))
+        then if ((priceNotation = Monetary and price -> monetary = 999999999999999999)
+                    or (priceNotation = Decimal and price -> decimal = 99999999999))
+            then True
+
+    condition DTCC_ASIC_BR_1047_02: <"Price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "47" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate - Leg 1], [Fixed rate - Leg 2], [Spread - Leg 1], [Spread - Leg 2], [Strike price], [Option premium amount] are all <blank>.
+            Note: 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and ((CommonAssetClass -> INTR = assetClass and [CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType)
+                    or [CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                        and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType)
+        then if leg1 -> fixedRate is absent
+                    and leg2 -> fixedRate is absent
+                    and leg1 -> spread is absent
+                    and leg2 -> spread is absent
+                    and strikePrice is absent
+                    and optionPremiumAmount is absent
+            then price exists
+
+    condition DTCC_ASIC_BR_1047_03: <"Price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "47" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate - Leg 1], [Fixed rate - Leg 2], [Spread - Leg 1], [Spread - Leg 2], [Strike price], [Option premium amount] are all <blank>, AND [Other payment type] is NOT = 'UFRO' as 1 of the multiple values.
+            Note: 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (CommonAssetClass -> CRDT = assetClass and [CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType)
+        then if leg1 -> fixedRate is absent
+                    and leg2 -> fixedRate is absent
+                    and leg1 -> spread is absent
+                    and leg2 -> spread is absent
+                    and strikePrice is absent
+                    and optionPremiumAmount is absent
+                    and otherPayment -> paymentType any <> UFRO
+            then price exists
+
+    condition DTCC_ASIC_BR_1047_04: <"Price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "47" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Note: '999999999999999999' (for Monetary values) or '99999999999' (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                        and [CommonContractType -> CFDS, CommonContractType -> FORW] any = contractType
+                    or (price -> monetary = 999999999999999999 or price -> decimal = 9999999999999)
+            then price exists
+
+    condition DTCC_ASIC_BR_1047_05: <"Price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "47" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Spread - Leg 1] AND [Spread - Leg 2] are populated.
+        Note: '999999999999999999' (for Monetary values) or '99999999999' (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                and CommonContractType -> SWAP = contractType
+        then if leg1 -> spread exists and leg2 -> spread exists
+                    or (price -> monetary = 999999999999999999 or price -> decimal = 9999999999999)
+            then price exists
+
+    condition DTCC_ASIC_BR_1047_06: <"Price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "47" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate - Leg 1], [Fixed rate - Leg 2], [Spread - Leg 1], [Spread - Leg 2], [Strike price], [Option premium amount] are all <blank>.
+            Note: 999999999999999999 (for Monetary values) or 9999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and ([CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                    and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType)
+        then if leg1 -> fixedRate is absent
+                    and leg2 -> fixedRate is absent
+                    and leg1 -> spread is absent
+                    and leg1 -> spread is absent
+                    and strikePrice is absent
+                    and optionPremiumAmount is absent
+            then price exists
+
+    condition DTCC_ASIC_BR_1048_01: <"Price currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "48" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Price notation] = 1
+            Reject if [Price notation] = '3'
+            Reject if [Price currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if priceNotation = Monetary
+                    and price -> monetary <> 999999999999999999
+                    and priceCurrency exists
+            then [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] any <> priceCurrency
+            else if priceNotation = Decimal
+            then priceCurrency is absent
+
+    condition DTCC_ASIC_BR_1049_01: <"Price unit of measure">
+        [docReference ASIC DTCC_Specs table "1" dataElement "49" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Price] is populated and NOT equal to 999999999999999999 or 99999999999"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if price exists
+                    and (price -> monetary <> 999999999999999999 and price -> decimal <> 99999999999)
+            then priceUnitOfMeasure exists
+
+    condition DTCC_ASIC_BR_1050_02: <"Fixed rate - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "50" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Intrument type] = Swap and [UPI. Asset class] = Interest_Rate and [UPI.Product] = Fixed_Fixed or Cross_Currency_Fixed_Fixed."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Swap
+                    and nonReportable -> postUpiData -> Header -> AssetClass = AnnaDsbAssetClassEnum -> Rates
+                    and (nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Fixed_Fixed or nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Cross_Currency_Fixed_Fixed)
+            then leg1 -> fixedRate exists
+
+    condition DTCC_ASIC_BR_1050_04: <"Fixed rate - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "50" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Intrument type] = Forward and [UPI. Asset class] = Interest_Rate and [UPI.Product] =  FRA_Index."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Forward
+                    and nonReportable -> postUpiData -> Header -> AssetClass = AnnaDsbAssetClassEnum -> Rates
+                    and nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> FRA_Index
+            then leg1 -> fixedRate exists
+
+    condition DTCC_ASIC_BR_1051_02: <"Fixed rate - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "51" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Intrument type] = Swap and [UPI. Asset class] = Interest_Rate and [UPI.Product] = Fixed_Fixed or Cross_Currency_Fixed_Fixed."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Swap
+                    and nonReportable -> postUpiData -> Header -> AssetClass = AnnaDsbAssetClassEnum -> Rates
+                    and (nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Fixed_Fixed or nonReportable -> postUpiData -> Header -> UseCase <> AnnaDsbUseCaseEnum -> Cross_Currency_Fixed_Fixed)
+            then leg2 -> fixedRate exists
+
+    condition DTCC_ASIC_BR_1052_01: <"Spread notation - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "52" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Spread - Leg 1] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg1 -> spread exists
+            then leg1 -> spreadNotation exists
+
+    condition DTCC_ASIC_BR_1053_01: <"Spread - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "53" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate of leg 1] AND [Fixed rate of leg 2] AND [Spread - Leg 2] = <blank>.
+            Reject if [Fixed rate of leg 1] is NOT <blank>."]
+        common.price.SpreadLeg1_01_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                leg1 -> fixedRate,
+                leg2 -> fixedRate,
+                leg1 -> spread,
+                leg2 -> spread
+            )
+
+    condition DTCC_ASIC_BR_1053_03: <"Spread - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "53" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Price] AND [Spread - Leg 2] = <blank>."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> COMM and [CommonContractType -> CFDS, CommonContractType -> SWAP, CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> OTHR] any = contractType)
+        then if price is absent and leg2 -> spread is absent
+            then leg1 -> spread exists
+
+    condition DTCC_ASIC_BR_1054_01: <"Spread notation - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "54" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Spread - Leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> spread exists
+            then leg2 -> spreadNotation exists
+
+    condition DTCC_ASIC_BR_1055_01: <"Spread - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "55" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate of leg 1] AND [Fixed rate of leg 2] AND [Spread - Leg 1] is <blank>.
+            Reject if [Fixed rate of leg 2] is NOT <blank>."]
+        common.price.SpreadLeg2_01_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                leg1 -> fixedRate,
+                leg2 -> fixedRate,
+                leg1 -> spread,
+                leg2 -> spread
+            )
+
+    condition DTCC_ASIC_BR_1055_03: <"Spread - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "55" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Price] AND [Spread - Leg 1] = <blank>."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and (assetClass = CommonAssetClass -> COMM and [CommonContractType -> SWAP, CommonContractType -> FRAS, CommonContractType -> FORW, CommonContractType -> CFDS, CommonContractType -> OTHR] any = contractType)
+        then if price is absent and leg1 -> spread is absent
+            then leg2 -> spread exists
+
+    condition DTCC_ASIC_BR_1056_01: <"Spread currency - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "56" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Spread notation - Leg 1] = '1'.
+            Reject if [Spread notation - Leg 1] = '3' or '4'
+            Reject if [Spread currency - Leg 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        common.price.SpreadCurrencyLeg1_Validation(actionType, leg1)
+
+    condition DTCC_ASIC_BR_1057_01: <"Spread currency - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "57" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Spread notation - Leg 2] = '1'.
+            Reject if [Spread notation - Leg 2] = '3' or '4'
+            Reject if [Spread currency - Leg 2] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT,XTS, XXX"]
+        common.price.SpreadCurrencyLeg2_Validation(actionType, leg2)
+
+    condition DTCC_ASIC_BR_1058_01: <"Strike price notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "58" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Strike price] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT, CommonContractType -> SWAP] any = contractType
+        then if (strikePrice exists) then strikePriceNotation exists
+
+    condition DTCC_ASIC_BR_1058a_01: <"Single barrier price notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "58a" validationRule "Transaction" 
+        provision "Required if [Single barrier price] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> CURR, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if barrier -> _single -> price -> monetary exists
+                    or barrier -> _single -> price -> decimal exists
+            then barrier -> _single -> notation exists
+
+    // and if assetClass = CommonAssetClass -> CURR
+    // then barrier -> _single -> price -> monetary is absent
+    condition DTCC_ASIC_BR_1058a_02: <"Lower barrier price notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "58a" validationRule "Transaction" 
+        provision "Required if [Lower barrier price] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> CURR, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if barrier -> lower -> price -> monetary exists
+                    or barrier -> lower -> price -> decimal exists
+            then barrier -> lower -> notation exists
+
+    // and if assetClass = CommonAssetClass -> CURR
+    // then barrier -> lower -> price -> monetary is absent
+    condition DTCC_ASIC_BR_1058b_01: <"Upper barrier price notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "58b" validationRule "Transaction" 
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Upper barrier price] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> CURR, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if barrier -> upper -> price -> monetary exists
+                    or barrier -> upper -> price -> decimal exists
+            then barrier -> upper -> notation exists
+
+    // and if assetClass = CommonAssetClass -> CURR
+    // then barrier -> upper -> price -> monetary is absent
+    condition DTCC_ASIC_BR_1059_01: <"Strike price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "59" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Instrument type]= Option and [UPI.valuation method or trigger] does NOT = Barrier or Digital Barrier. Note: 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+        then if (nonReportable -> postUpiData -> Header -> InstrumentType = AnnaDsbInstrumentTypeEnum -> Option
+                    and (nonReportable -> postUpiData -> Derived -> ValuationMethodorTrigger <> AnnaDsbValuationMethodorTriggerEnum -> Barrier or nonReportable -> postUpiData -> Derived -> ValuationMethodorTrigger <> AnnaDsbValuationMethodorTriggerEnum -> Digital_Barrier))
+            then strikePrice exists
+
+    condition DTCC_ASIC_BR_1059_03: <"Strike price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "59" validationRule "Transaction"
+    provision "When [Action Type] = NEWT, MODI, CORR, REVI then 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> CURR, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                and contractType = CommonContractType -> SWAP
+        then strikePrice exists
+
+    condition DTCC_ASIC_BR_1060_01: <"Strike price currency/currency pair">
+        [docReference ASIC DTCC_Specs table "1" dataElement "60" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Strike price notation] = 1 AND if [UPI.valuation method or trigger] does NOT = Barrier or Digital Barrier.
+            Reject if [Strike price currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> OPTN, CommonContractType -> SWPT] any = contractType
+        then (if strikePrice -> monetary exists
+                    and (nonReportable -> postUpiData -> Derived -> ValuationMethodorTrigger <> AnnaDsbValuationMethodorTriggerEnum -> Barrier or nonReportable -> postUpiData -> Derived -> ValuationMethodorTrigger <> AnnaDsbValuationMethodorTriggerEnum -> Digital_Barrier)
+            then strikePriceCurrency exists
+                    and if ["XAG", "XAU", "XBA", "XBB", "XBC", "XBD", "XDR", "XEU", "XFU", "XPD", "XPT", "XTS"] any = strikePriceCurrency
+                        then False)
+
+    condition DTCC_ASIC_BR_1060_02: <"Strike price currency/currency pair">
+        [docReference ASIC DTCC_Specs table "1" dataElement "60" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Strike price currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        common.price.StrikePriceCurrencyPair02_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                strikePriceCurrency
+            )
+
+    condition DTCC_ASIC_BR_1060_03: <"Strike price currency/currency pair - Currency 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "60" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Strike Price - Currency 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT,XTS."]
+        common.price.StrikePriceCurrencyPair03_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                strikePriceCurrency
+            )
+
+    condition DTCC_ASIC_BR_1060_04: <"Strike price currency/currency pair - Currency 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "60" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Strike Price - Currency 2] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        common.price.StrikePriceCurrencyPair04_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                strikePriceCurrency
+            )
+
+    condition DTCC_ASIC_BR_1061_01: <"Option premium amount">
+        [docReference ASIC DTCC_Specs table "1" dataElement "61" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if Negative"]
+        common.price.OptionPremiumAmount_Validation(
+                actionType,
+                contractType,
+                optionPremiumAmount
+            )
+
+    condition DTCC_ASIC_BR_1062_01: <"Option premium currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "62" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Option premium currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        common.price.OptionPremiumCurrency_Validation(
+                actionType,
+                optionPremiumAmount,
+                contractType,
+                optionPremiumCurrency
+            )
+
+    condition DTCC_ASIC_BR_1063_01: <"Option premium payment date">
+        [docReference ASIC DTCC_Specs table "1" dataElement "63" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Option premium amount] is greater than Zero."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if optionPremiumAmount > 0
+            then optionPremiumPaymentDate exists
+
+    condition DTCC_ASIC_BR_1064_01: <"Exchange rate">
+        [docReference ASIC DTCC_Specs table "1" dataElement "64" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if Negative or Zero."]
+        // ExchangeRate_Validation(actionType, assetClass, exchangeRate, contractType)
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonContractType -> CFDS, CommonContractType -> FORW, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+                and assetClass = CommonAssetClass -> CURR
+        then exchangeRate exists and exchangeRate > 0
+
+    condition DTCC_ASIC_BR_1065_01: <"Exchange rate basis">
+        [docReference ASIC DTCC_Specs table "1" dataElement "65" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Exchange Rate Basis Currency 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, 'XTS'."]
+        // [Exchange Rate Basis Currency 1]: SubString(exchangeRateBasis, 1, 3)
+        common.price.ExchangeRateBasisCurrency1_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                exchangeRateBasis
+            )
+
+    condition DTCC_ASIC_BR_1065_02: <"Exchange rate basis">
+        [docReference ASIC DTCC_Specs table "1" dataElement "65" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Exchange Rate Basis Currency 2] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, 'XTS'."]
+        // [Exchange Rate Basis Currency 2]: SubString(exchangeRateBasis, 5, 3)
+        common.price.ExchangeRateBasisCurrency2_Validation(
+                actionType,
+                assetClass,
+                contractType,
+                exchangeRateBasis
+            )
+
+    condition DTCC_ASIC_BR_1066_01: <"Fixed rate or coupon day count convention leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "66" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI and assetClass = ['INTR', 'CRDT' , 'EQUI', 'COMM'] then 'Fixed rate or coupon day count convention leg 1' is Required if [Fixed rate of leg 1] is populated."]
+        DayCountConvLeg1Fixed_Validation(
+                actionType,
+                assetClass,
+                leg1 -> fixedRate,
+                leg1 -> periodicPayment
+            )
+
+    condition DTCC_ASIC_BR_1066_02: <"Floating rate day count convention of leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "66" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate of leg 1] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then True
+
+    condition DTCC_ASIC_BR_1067_01: <"Fixed rate or coupon day count convention leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "67" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI and assetClass = ['INTR', 'CRDT' , 'EQUI', 'COMM'] then Required if [Fixed rate of leg 2] is populated."]
+        DayCountConvLeg2Fixed_Validation(
+                actionType,
+                assetClass,
+                leg2 -> fixedRate,
+                leg2 -> periodicPayment
+            )
+
+    condition DTCC_ASIC_BR_1067_02: <"Floating rate day count convention of leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "67" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate of leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and CommonAssetClass -> INTR = assetClass
+        then True
+
+    condition DTCC_ASIC_BR_1067_03: <"Floating rate day count convention of leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "67" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Indicator of the floating rate - Leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if leg2 -> periodicPayment -> floatingRateIndicator exists
+            then leg2 -> periodicPayment -> floatingRateDayCountConvention exists
+
+    condition DTCC_ASIC_BR_1068_01: <"Fixed rate or coupon payment frequency period leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "68" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI and assetClass = ['INTR', 'CRDT' , 'EQUI', 'COMM'] then Required if [Fixed rate of leg 1] is populated."]
+        PaymentFrequencyPeriodLeg1Fixed_Validation(
+                actionType,
+                leg1 -> fixedRate,
+                assetClass,
+                contractType,
+                leg1 -> periodicPayment
+            )
+
+    condition DTCC_ASIC_BR_1069_01: <"Payment frequency period - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "69" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate of leg 2] is populated."]
+        PaymentFrequencyPeriodLeg2Fixed_Validation(
+                actionType,
+                leg2 -> fixedRate,
+                assetClass,
+                contractType,
+                leg2 -> periodicPayment
+            )
+
+    condition DTCC_ASIC_BR_1069_03: <"Floating Rate Payment frequency period - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "69" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then 'Floating Rate Payment frequency period - Leg 2' is Required if [Indicator of the floating rate - Leg 2] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if leg2 -> periodicPayment -> floatingRateIndicator exists
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod exists
+
+    condition DTCC_ASIC_BR_1070_01: <"Fixed rate or coupon payment frequency period multiplier leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "70" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate or coupon payment frequency period leg 1] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'.
+            Reject if [Fixed rate or coupon payment frequency period leg 1] is <blank> or populated with 'ADHO'.
+            If [Fixed rate or coupon payment frequency period leg 1] = EXPI, the value in this field must = 1.
+            [Fixed rate or coupon payment frequency period multiplier leg 1] MUST be  0 and < 1,000.
+            Reject if Negative"]
+        // no access to Fixed rate or coupon payment frequency period leg 1, is field 68? and  Floating Rate Payment frequency period - Leg 1 as well?
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM, CommonAssetClass -> INTR] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod
+            then leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier exists
+                    and (leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier < 1000 and leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier > 0)
+            else if leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier = 1
+            else if leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod is absent
+                    or leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> ADHO
+            then leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier is absent
+
+    condition DTCC_ASIC_BR_1070_02: <"Floating rate payment frequency period multiplier of leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "70" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Floating Rate Payment frequency period - Leg 1] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'.
+            Reject if [Floating Rate Payment frequency period - Leg 1] is <blank> or populated with 'ADHO'.
+            If [Floating Rate Payment frequency period - Leg 1] = EXPI, the value in this field must = 1.
+            [Floating rate payment frequency period multiplier of leg 1] MUST be  0 and < 1,000.
+            Reject if Negative"]
+        // no access to Floating Rate Payment frequency period - Leg 1
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM, CommonAssetClass -> INTR] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod
+            then leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier exists
+                    and (leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier < 1000 and leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier > 0)
+            else if leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier = 1
+            else if leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod is absent
+                    or leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> ADHO
+            then leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier is absent
+
+    condition DTCC_ASIC_BR_1071_01: <"Fixed rate payment frequency period multiplier leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "71" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Fixed rate or coupon payment frequency period leg 2] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'.
+            Reject if [Fixed rate or coupon payment frequency period leg 2] is <blank> or populated with 'ADHO'.
+            If [Fixed rate or coupon payment frequency period leg 2] = EXPI, the value in this field must = 1.
+            [Fixed rate or coupon payment frequency period multiplier leg 2] MUST be  0 and < 1,000.
+            Reject if Negative"]
+        // no access to Floating Rate Payment frequency period - Leg 1
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM, CommonAssetClass -> INTR] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod exists
+                    and (leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier < 1000 and leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier > 0)
+            else if leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier = 1
+            else if leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod is absent
+                    or leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> ADHO
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier is absent
+
+    condition DTCC_ASIC_BR_1071_02: <"Floating rate payment frequency period multiplier of leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "71" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Floating Rate Payment frequency period - Leg 2] is populated with 'YEAR', 'MNTH', 'WEEK', 'DAIL' or 'EXPI'.
+            Reject if [Floating Rate Payment frequency period - Leg 2] is <blank> or populated with 'ADHO'.
+            If [Floating Rate Payment frequency period - Leg 2] = EXPI, the value in this field must = 1.
+            [Floating rate payment frequency period multiplier of leg 2] MUST be  0 and < 1,000.
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM, CommonAssetClass -> INTR] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL, FrequencyPeriodEnum -> EXPI] any = leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier exists
+                    and (leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier < 1000 and leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier > 0)
+            else if leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> EXPI
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier = 1
+            else if leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod is absent
+                    or leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod = FrequencyPeriodEnum -> ADHO
+            then leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier is absent
+
+    condition DTCC_ASIC_BR_1072_01: <"Settlement currency - Leg 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "72" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Settlement currency - Leg 1] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX"]
+        SettlementCurrency_Validation(actionType, leg1 -> settlementCurrency)
+
+    condition DTCC_ASIC_BR_1073_01: <"Settlement currency - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "73" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Reject if [Settlement currency - Leg 2] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        SettlementCurrency_Validation(actionType, leg2 -> settlementCurrency)
+
+    condition DTCC_ASIC_BR_1074_01: <"Other payment amount">
+        [docReference ASIC DTCC_Specs table "1" dataElement "74" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM then Required if [Other payment type] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match.
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType and otherPayment -> amount all > 0
+        then OtherPaymentAmount_Validation(otherPayment)
+
+    condition DTCC_ASIC_BR_1075_01_A: <"Other payment type">
+        [docReference ASIC DTCC_Specs table "1" dataElement "75" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Other payment amount] or [Other payment currency] or [Other payment date] or [Other payment payer] or [Other payment receiver] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match."]
+        OtherPaymentType_01A_Validation(actionType, assetClass, otherPayment)
+
+    condition DTCC_ASIC_BR_1075_01_B: <"Other payment type Condition">
+        [docReference ASIC DTCC_Specs dataElement "75" field "Other payment type"
+        provision "When [Action Type] = TERM then Required if [Other payment amount] or [Other payment currency] or [Other payment payer] or [Other payment receiver] is populated.
+        Reject if value is NOT = UWIN if populated.
+        Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match."]
+        OtherPaymentType_01B_Validation(actionType, assetClass, otherPayment)
+
+    condition DTCC_ASIC_BR_1075_02_A: <"Other payment type">
+        [docReference ASIC DTCC_Specs table "1" dataElement "75" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Other payment amount] or [Other payment currency] or [Other payment date] or [Other payment payer] or [Other payment receiver] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match.
+            If [Action Type] = 'NEWT',AND [Fixed rate of leg 1] and [Fixed rate of leg 2] and [Spread of leg 1] and [Spread of leg 2]are ALL <blank>, then [Other payment type] MUST equal = UFRO."]
+        OtherPaymentType_02A_Validation(
+                actionType,
+                assetClass,
+                otherPayment,
+                leg1 -> fixedRate,
+                leg2 -> fixedRate,
+                leg1 -> spread,
+                leg2 -> spread
+            )
+
+    condition DTCC_ASIC_BR_1075_02_B: <"Other payment type">
+        [docReference ASIC DTCC_Specs table "1" dataElement "75" validationRule "Transaction"
+        provision "when [Action Type] = TERM then Required if [Other payment amount] or [Other payment currency] or [Other payment date] or [Other payment payer] or [Other payment receiver] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match.
+            Reject if value is NOT = UWIN if populated."]
+        if actionType = ActionTypeEnum -> TERM and otherPayment -> paymentType exists
+        then otherPayment -> paymentType any = UWIN
+
+    condition DTCC_ASIC_BR_1076_01: <"Other payment currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "76" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM then Required if [Other payment amount] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match.
+            Reject if [Other payment currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then common.payment.OtherPaymentCurrency_Validation(otherPayment)
+                and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any <> otherPayment -> currency
+
+    condition DTCC_ASIC_BR_1077_01: <"Other payment date">
+        [docReference ASIC DTCC_Specs table "1" dataElement "77" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM then Required if [Other payment amount] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then OtherPaymentDate_Validation(otherPayment)
+
+    condition DTCC_ASIC_BR_1078_01: <"Other payment payer">
+        [docReference ASIC DTCC_Specs table "1" dataElement "78" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM then Required if [Other payment amount] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match.
+            [Other payment payer] must NOT = [Other payment receiver]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then OtherPaymentPayer_Validation(otherPayment)
+                and otherPayment -> payer <> otherPayment -> receiver
+
+    condition DTCC_ASIC_BR_1079_01: <"Other payment receiver">
+        [docReference ASIC DTCC_Specs table "1" dataElement "79" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM then Required if [Other payment amount] is populated.
+            Reject if for Other Payment fields, the number of Other payment amount, Other payment type, Other payment currency, Other payment date, Other payment payer and Other payment receiver does not match.
+            [Other payment payer] must NOT = [Other payment receiver]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then OtherPaymentReceiver_Validation(otherPayment)
+                and otherPayment -> payer <> otherPayment -> receiver
+
+    condition DTCC_ASIC_BR_1080_01: <"Custom basket code - identifier">
+        [docReference ASIC DTCC_Specs table "1" dataElement "80" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Custom basket code LEI] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if underlyingIdentificationType = B and basketStructurerID exists
+            then customBasketCode exists
+
+    condition DTCC_ASIC_BR_1080_02: <"Custom basket code - LEI ">
+        [docReference ASIC DTCC_Specs table "1" dataElement "80" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Custom basket code Identifier] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if underlyingIdentificationType = B and customBasketCode exists
+            then basketStructurerID exists
+
+    condition DTCC_ASIC_BR_1081_01: <"Identifier of the basket's constituents">
+        [docReference ASIC DTCC_Specs table "1" dataElement "81" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Custom basket code Identifier] and [Custom basket code LEI] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if customBasketCode exists
+            then basketConstituents -> identifier exists
+
+    condition DTCC_ASIC_BR_1082_01: <"Basket constituent identifier source">
+        [docReference ASIC DTCC_Specs table "1" dataElement "82" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if non ISIN values are reported in [Identifier of the basket's constituents]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then basketConstituents
+            extract
+                (if item -> source <> ProductIdTypeEnum -> ISIN then item -> source exists)
+            then all = True
+
+    condition DTCC_ASIC_BR_1084_01: <"Underlying identification type">
+        [docReference ASIC DTCC_Specs table "1" dataElement "84" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Underlying] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if underlyingIdentification exists
+            then underlyingIdentificationType exists
+
+    condition DTCC_ASIC_BR_1084_02: <"Underlier ID (Other) source">
+        [docReference ASIC DTCC_Specs table "1" dataElement "84" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Underlier ID (Other)] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if underlyingIdOther exists
+            then underlyingIdOtherSource exists
+
+    condition DTCC_ASIC_BR_1085_01: <"Maturity date of the underlier">
+        [docReference ASIC DTCC_Specs table "1" dataElement "85" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then [Maturity date of the underlier] MUST be later than the [Expiration date]."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> CRDT, CommonAssetClass -> COMM, CommonAssetClass -> INTR] any = assetClass
+                and contractType = CommonContractType -> SWPT
+        then maturityDateOfTheUnderlying exists and maturityDateOfTheUnderlying > expirationDate
+
+    condition DTCC_ASIC_BR_1087_01: <"Floating rate reference period - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "87" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Indicator of the floating rate - Leg 2] is populated." ]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if leg2 -> periodicPayment -> floatingRateIndicator exists
+            then leg2 -> periodicPayment -> floatingRateReferencePeriod exists
+
+    condition DTCC_ASIC_BR_1088_01: <"Floating rate reference period muliplier - Leg 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "88" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Floating rate reference period - Leg 2] is populated with 'YEAR', 'MNTH', 'WEEK', or 'DAIL'.
+            [Floating rate reference period multiplier - Leg 2] MUST be  0 and < 1,000.
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if [FrequencyPeriodEnum -> YEAR, FrequencyPeriodEnum -> MNTH, FrequencyPeriodEnum -> WEEK, FrequencyPeriodEnum -> DAIL] any = leg2 -> periodicPayment -> floatingRateReferencePeriod
+            then leg2 -> periodicPayment -> floatingRateReferencePeriodMultiplier exists
+
+    condition DTCC_ASIC_BR_1089_01: <"CDS index attachment point">
+        [docReference ASIC DTCC_Specs table "1" dataElement "89" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Underlying Asset Type] = Index Tranche.
+            [CDS index detachment point] MUST be greater than the value in [CDS index attachment point].
+            [CDS index attachment point] MUST be equal to and more than 0 and less or equal to 1.
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if cdSIndexAttachmentPoint exists
+            then cdSIndexDetachmentPoint > cdSIndexAttachmentPoint and (cdSIndexDetachmentPoint >= 0 and cdSIndexDetachmentPoint <= 1)
+
+    condition DTCC_ASIC_BR_1090_01: <"CDS index detachment point">
+        [docReference ASIC DTCC_Specs table "1" dataElement "90" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [CDS index attachment point] is populated.
+            [CDS index detachment point] MUST be greater than the value in [CDS index attachment point].
+            [CDS index detachment point] MUST be equal to and more than 0 and less or equal to 1.
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if cdSIndexAttachmentPoint exists
+            then cdSIndexDetachmentPoint > cdSIndexAttachmentPoint and (cdSIndexDetachmentPoint >= 0 and cdSIndexDetachmentPoint <= 1)
+
+    condition DTCC_ASIC_BR_1091_01: <"Index factor">
+        [docReference ASIC DTCC_Specs table "1" dataElement "91" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [UPI.Underlying Asset Type] = Index or Index Tranche or CDS on Index.
+            [Index factor] MUST be equal to and more than 0 and less or equal to 1.
+            Reject if Negative"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CRDT
+        then indexFactor >= 0 and indexFactor <= 1
+
+    condition DTCC_ASIC_BR_1093_01: <"Package transaction price notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "93" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Package transaction price] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if packageTransactionPrice exists
+            then packageTransactionPriceNotation exists
+
+    condition DTCC_ASIC_BR_1094_01: <"Package transaction price">
+        [docReference ASIC DTCC_Specs table "1" dataElement "94" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Package identifier] is populated and [Package transaction spread] is <blank>.
+            Note: 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if packageIdentifier exists and packageTransactionSpread is absent
+            then packageTransactionPrice exists
+
+    condition DTCC_ASIC_BR_1095_01: <"Package transaction price currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "95" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Package transaction price notation] = 1.
+            Reject if [Package transaction price notation] = '3'.
+            Reject if [Package transaction price currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if packageTransactionPriceNotation = Monetary
+            then packageTransactionPriceCurrency exists
+                    and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS] any <> packageTransactionPriceCurrency
+            else if packageTransactionPriceNotation = Decimal
+            then packageTransactionPriceCurrency is absent
+
+    condition DTCC_ASIC_BR_1096_01: <"Package transaction spread notation">
+        [docReference ASIC DTCC_Specs table "1" dataElement "96" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Package transaction spread] is populated."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if packageTransactionSpread exists
+            then packageTransactionSpreadNotation exists
+
+    condition DTCC_ASIC_BR_1097_01: <"Package transaction spread">
+        [docReference ASIC DTCC_Specs table "1" dataElement "97" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Package identifier] is populated and [Package transaction price] is <blank>.
+            Note: 999999999999999999 (for Monetary values) or 99999999999 (for Decimal) is accepted when the value is not available at the time of reporting."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if packageIdentifier exists and packageTransactionPrice is absent
+            then packageTransactionSpread exists
+
+    condition DTCC_ASIC_BR_1098_01: <"Package transaction spread currency">
+        [docReference ASIC DTCC_Specs table "1" dataElement "98" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if [Package transaction spread notation] = '1'.
+            Reject if [Package transaction spread notation] = '3' or '4'.
+            Reject if [Package transaction spread currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if packageTransactionSpreadNotation = Monetary
+            then packageTransactionSpreadCurrency exists
+                    and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any <> packageTransactionSpreadCurrency
+            else if packageTransactionSpreadNotation = Decimal
+                    or packageTransactionSpreadNotation = Basis
+            then packageTransactionSpreadCurrency is absent
+
+    condition DTCC_ASIC_BR_1099_01: <"Prior UTI">
+        [docReference ASIC DTCC_Specs table "1" dataElement "99" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI then Required if: [Action type] = NEWT AND [Event type] = ALOC.
+            Required if: [Action type] = NEWT or 'MODI' AND [Event type] = INCP'.
+            Reject if: [Action type] = NEWT AND [Event type] = TRAD' or 'PTNG'.
+            [Prior UTI] must NOT Equal [UTI]"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then if ((actionType = ActionTypeEnum -> NEWT and eventType = EventTypeEnum -> ALOC) or ((actionType = ActionTypeEnum -> NEWT or actionType = ActionTypeEnum -> MODI) and eventType = EventTypeEnum -> INCP))
+            then priorUTI exists and priorUTI <> uniqueTransactionIdentifier
+            else if (actionType = ActionTypeEnum -> NEWT and (eventType = EventTypeEnum -> TRAD or eventType = EventTypeEnum -> PTNG))
+            then priorUTI is absent
+
+    condition DTCC_ASIC_BR_1100_01: <"Event identifier">
+        [docReference ASIC DTCC_Specs table "1" dataElement "100" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, then Required if [Event Type] = 'COMP' or ''CREV'"]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM] any = actionType
+        then if eventType = EventTypeEnum -> COMP or eventType = EventTypeEnum -> CREV
+            then eventIdentifier exists
+
+    condition DTCC_ASIC_BR_1101_01: <"Action type">
+        [docReference ASIC DTCC_Specs table "1" dataElement "101" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, ERROR, MARU, VALU then See Action type & Event type tab for allowable combinations."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR, ActionTypeEnum -> MARU, ActionTypeEnum -> VALU] any = actionType
+        then if actionType = ActionTypeEnum -> NEWT
+            then [EventTypeEnum -> TRAD, EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> CLRG, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> PTNG, EventTypeEnum -> CORP, EventTypeEnum -> INCP] any = eventType
+            else if actionType = ActionTypeEnum -> MODI
+            then [EventTypeEnum -> TRAD, EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> ETRM, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CREV, EventTypeEnum -> CORP, EventTypeEnum -> INCP, EventTypeEnum -> UPDT] any = eventType
+            else if actionType = ActionTypeEnum -> TERM
+            then [EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> ETRM, EventTypeEnum -> CLRG, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CREV, EventTypeEnum -> CORP, EventTypeEnum -> INCP] any = eventType
+            else if actionType = ActionTypeEnum -> PRTO
+            then eventType = EventTypeEnum -> PTNG
+
+    condition DTCC_ASIC_BR_1102_01: <"Event type">
+        [docReference ASIC DTCC_Specs table "1" dataElement "102" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, ERROR then Required for specific [Action Type]. See Action type & Event type tab."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI, ActionTypeEnum -> TERM, ActionTypeEnum -> PRTO, ActionTypeEnum -> EROR, ActionTypeEnum -> MARU, ActionTypeEnum -> VALU] any = actionType
+        then if actionType = ActionTypeEnum -> NEWT
+            then [EventTypeEnum -> TRAD, EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> CLRG, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> PTNG, EventTypeEnum -> CORP, EventTypeEnum -> INCP] any = eventType
+            else if actionType = ActionTypeEnum -> MODI
+            then [EventTypeEnum -> TRAD, EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> ETRM, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CREV, EventTypeEnum -> CORP, EventTypeEnum -> INCP, EventTypeEnum -> UPDT] any = eventType
+            else if actionType = ActionTypeEnum -> TERM
+            then [EventTypeEnum -> NOVA, EventTypeEnum -> COMP, EventTypeEnum -> ETRM, EventTypeEnum -> CLRG, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CREV, EventTypeEnum -> CORP, EventTypeEnum -> INCP] any = eventType
+            else if actionType = ActionTypeEnum -> PRTO
+            then eventType = EventTypeEnum -> PTNG
+
+    // The logic regarding the [Message Received timestamp] is not included as this data is known post submission.
+    condition DTCC_ASIC_BR_2008_01: <"Valuation currency">
+        [docReference ASIC DTCC_Specs table "2" dataElement "8" validationRule "Valuation"
+        provision "when [Action Type] = VALU then Reject if [Valuation currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        if actionType = ActionTypeEnum -> VALU
+        then if [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any <> valuationCurrency
+            then valuationCurrency exists
+
+    condition DTCC_ASIC_BR_2010_01: <"Delta">
+        [docReference ASIC DTCC_Specs table "2" dataElement "10" validationRule "Valuation"
+        provision "when [Action Type] = VALU then Required if [Small-scale Buy-side Entity indicator] is NOT equal to 'SSBS'.
+            Reject if [Contract type] is NOT = OPTN & SWPT
+            Check the related base trade for applicable contracts types."]
+        if actionType = ActionTypeEnum -> VALU
+        then if smallScaleBuySideEntityIndicator <> "SSBS"
+            then delta exists
+            else if [CommonContractType -> OPTN, CommonContractType -> SWPT] any <> contractType
+            then delta is absent
+
+    condition DTCC_ASIC_BR_3010_01: <"Collateral portfolio code (initial margin)">
+        [docReference ASIC DTCC_Specs table "3" dataElement "10" field "Collateral portfolio code (initial margin)"
+          provision "When [Action Type] = NEWT, MODI, CORR, REVI then Required if [Collateral portfolio code (variation margin)] = 'NOAP'. Reject if the value [NOAP]  is submitted in '/Prtfl/Cd'. Note: If the [Collateral portfolio code (initial margin)] is not applicable to your trade, clients could submit the value [NOAP] to represent 'No Applicable' in '/NoPrtfl' XML."]
+        // [NOAP] value for '/Prtfl/Cd' = 'False' value for [Collateral portfolio indicator]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and variationMarginCollateralPortfolioCode = "NOAP"
+        then (initialMarginCollateralPortfolioCode exists or initialMarginCollateralPortfolioCode = "NOAP")
+                and (if collateralPortfolioIndicator = False then initialMarginCollateralPortfolioCode is absent or initialMarginCollateralPortfolioCode = "NOAP")
+
+    condition DTCC_ASIC_BR_3011_01: <"Collateral portfolio code (variation margin)">
+        [docReference ASIC DTCC_Specs table "3" dataElement "11" field "Collateral portfolio code (variation margin)"
+          provision "When [Action Type] = NEWT, MODI, CORR, REVI then
+          Reject if the value [NOAP]  is submitted in '/Prtfl/Cd'.
+          Note: If the [Collateral portfolio code (variation margin)] is not applicable to your trade, clients should submit the value [NOAP] to represent 'No Applicable' in '/NoPrtfl' XML."]
+        // [NOAP] value for '/Prtfl/Cd' = 'False' value for [Collateral portfolio indicator]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then (if collateralPortfolioIndicator = False
+            then variationMarginCollateralPortfolioCode is absent
+                    or variationMarginCollateralPortfolioCode = "NOAP"
+            else variationMarginCollateralPortfolioCode exists)
+
+    condition Uti:
+    [docReference ASIC Trade dataElement "1" validationRule "UTI"
+    provision "UTI is required (Global UTI or Proprietary format)"]
+        required choice uniqueTransactionIdentifier, uniqueTransactionIdentifierProprietary
+
+    condition PriorUti:
+    [docReference ASIC Trade dataElement "99" validationRule "Prior UTI"
+    provision "Required if: [Action type] = 'NEWT' AND [Event type] = 'NOVA' or 'CLRG' or 'EXER' or 'ALOC' or 'CLAL'"]
+        if actionType = ActionTypeEnum -> NEWT
+                and [EventTypeEnum -> NOVA, EventTypeEnum -> EXER, EventTypeEnum -> ALOC, EventTypeEnum -> CLRG, EventTypeEnum -> CLAL] any = eventType
+        then required choice priorUTI, priorUTIProprietary

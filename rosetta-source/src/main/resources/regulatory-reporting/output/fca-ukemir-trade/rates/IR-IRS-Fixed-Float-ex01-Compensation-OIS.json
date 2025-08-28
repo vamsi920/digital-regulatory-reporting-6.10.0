@@ -1,0 +1,72 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "UCIT" ],
+  "counterparty1" : "XGJWNIWHTPOW4QHTR381",
+  "counterparty2" : "F226TOH6YD6XJB17KS62",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2021-08-11",
+  "entityResponsibleForReporting" : "XGJWNIWHTPOW4QHTR381",
+  "eventDate" : "2021-08-11",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-08-11T03:00:00Z",
+  "expirationDate" : "2021-08-13",
+  "finalContractualSettlementDate" : "2021-08-13",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 1,
+    "notionalAmount" : 1,
+    "notionalCurrency" : "JPY",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1,
+    "notionalCurrency" : "JPY",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "TONA",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "OTHR",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "otherPayment" : [ {
+    "amount" : 337.3,
+    "currency" : "JPY",
+    "date" : "2021-08-13",
+    "payer" : "F226TOH6YD6XJB17KS62",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "XGJWNIWHTPOW4QHTR381",
+    "receiverFormat" : "Lei"
+  } ],
+  "productClassification" : "SRHXXX",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "XGJWNIWHTPOW4QHTR381",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRIRSFIXEDFLOATEXC01",
+  "venueOfExecution" : "XXXX"
+}

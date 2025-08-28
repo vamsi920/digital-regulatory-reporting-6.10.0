@@ -1,0 +1,95 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "23e74eb5a4504cabbd7e1d2311d23ccf2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-01-01",
+  "eventIdentifier" : "23e74eb5a4504cabbd7e1d2311d23ccf",
+  "eventTimestamp" : "2021-12-04T04:53:05.0165801Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-02T22:58:56Z",
+  "expirationDate" : "2022-03-31",
+  "finalContractualSettlementDate" : "2022-03-31",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 1335000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 1000,
+    "payerIdentifier" : "DUMMY0000000000LEI01",
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "GBTN",
+    "receiverIdentifier" : "DUMMY0000000000LEI02",
+    "totalNotionalQuantity" : 1000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "InterEnergy - NYMEX",
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 4005000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 1000,
+    "payerIdentifier" : "DUMMY0000000000LEI02",
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "GBTN",
+    "receiverIdentifier" : "DUMMY0000000000LEI01",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 3000,
+    "underlierIDOther" : "InterEnergy - NYMEX",
+    "underlierIDOtherSource" : "ISDACRP"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "InterEnergy - NYMEX",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 1335
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "GBTN",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPENERG01"
+}

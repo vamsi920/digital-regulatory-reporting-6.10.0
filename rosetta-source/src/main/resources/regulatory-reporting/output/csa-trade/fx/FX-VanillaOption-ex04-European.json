@@ -1,0 +1,90 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "W22LROWP2IHZNBB6K528",
+  "callAmount" : 20827500,
+  "callCurrency" : "CNY",
+  "cleared" : "N",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "envuatuatExt1b45f8f29f8024fcf882f22f0287de1bc2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "ForeignExchange",
+    "secondaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "W22LROWP2IHZNBB6K528",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXVANILLAOPTIONEXE01",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-07-06",
+  "eventIdentifier" : "envuatuatExt1b45f8f29f8024fcf882f22f0287de1bc",
+  "eventTimestamp" : "2020-11-10T20:15:45Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 6.9425,
+  "exchangeRateBasis" : "USD/CNY",
+  "executionTimestamp" : "2020-07-06T03:58:14Z",
+  "expirationDate" : "2020-09-29",
+  "finalContractualSettlementDate" : "2020-10-09",
+  "firstExerciseDate" : "2020-09-29",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 20827500,
+    "notionalCurrency" : "CNY",
+    "underlierIDOther" : "CNY",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "leg2" : {
+    "notionalAmount" : 3000000,
+    "notionalCurrency" : "USD",
+    "underlierIDOther" : "USD",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CNY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 40723.8,
+  "optionPremiumCurrency" : "CNY",
+  "optionPremiumPaymentDate" : "2020-07-08",
+  "packageIndicator" : false,
+  "putAmount" : 3000000,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "MXKQVM4U1OHBQWFPG196",
+  "strikePrice" : {
+    "monetary" : 6.9425
+  },
+  "strikePriceCurrency" : "USD/CNY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

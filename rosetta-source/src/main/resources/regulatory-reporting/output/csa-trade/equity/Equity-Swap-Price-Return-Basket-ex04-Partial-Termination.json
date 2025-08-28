@@ -1,0 +1,143 @@
+{
+  "actionType" : "NEWT",
+  "basketConstituents" : [ {
+    "identifier" : "AAPL.O",
+    "numberOfUnits" : 0.1651591019,
+    "source" : "RIC"
+  }, {
+    "identifier" : "ACN.N",
+    "numberOfUnits" : 0.0118720724,
+    "source" : "RIC"
+  }, {
+    "identifier" : "CRTO.O",
+    "numberOfUnits" : 0.0343240187,
+    "source" : "RIC"
+  }, {
+    "identifier" : "DISH.O",
+    "numberOfUnits" : 0.0126796963,
+    "source" : "RIC"
+  }, {
+    "identifier" : "LLY.N",
+    "numberOfUnits" : 0.0439751252,
+    "source" : "RIC"
+  }, {
+    "identifier" : "LOW.N",
+    "numberOfUnits" : 0.0550799548,
+    "source" : "RIC"
+  }, {
+    "identifier" : "MAR.O",
+    "numberOfUnits" : 0.0133257955,
+    "source" : "RIC"
+  }, {
+    "identifier" : "MDT.N",
+    "numberOfUnits" : 0.1030931998,
+    "source" : "RIC"
+  }, {
+    "identifier" : "PYPL.O",
+    "numberOfUnits" : 0.0541108060,
+    "source" : "RIC"
+  }, {
+    "identifier" : "RDSb.N",
+    "numberOfUnits" : 0.1971410111,
+    "source" : "RIC"
+  }, {
+    "identifier" : "RDY.N",
+    "numberOfUnits" : 0.0090857697,
+    "source" : "RIC"
+  }, {
+    "identifier" : "SNY.O",
+    "numberOfUnits" : 0.0739379745,
+    "source" : "RIC"
+  }, {
+    "identifier" : "TNL.N",
+    "numberOfUnits" : 0.0128412211,
+    "source" : "RIC"
+  }, {
+    "identifier" : "TSLA.O",
+    "numberOfUnits" : 0.0196252625,
+    "source" : "RIC"
+  }, {
+    "identifier" : "UL.N",
+    "numberOfUnits" : 0.0191003069,
+    "source" : "RIC"
+  }, {
+    "identifier" : "WNS.N",
+    "numberOfUnits" : 0.0129219835,
+    "source" : "RIC"
+  }, {
+    "identifier" : "YPF.N",
+    "numberOfUnits" : 0.1617267000,
+    "source" : "RIC"
+  } ],
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : true,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "a32cc2777d754d638ed3bd5bea28c41e2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "DUMMY0000000000LEI01",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetIDType" : "Basket"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-01-20",
+  "eventIdentifier" : "a32cc2777d754d638ed3bd5bea28c41e",
+  "eventTimestamp" : "2022-01-27T19:54:20.5602082Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-01-18T21:01:48Z",
+  "expirationDate" : "2022-03-22",
+  "finalContractualSettlementDate" : "2022-03-22",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 293686332,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "DUMMY0000000000LEI02",
+    "totalNotionalQuantity" : 99999999999999999999.99999
+  },
+  "leg2" : {
+    "notionalAmount" : 1,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "DUMMY0000000000LEI01",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO"
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "UnderlierID" : "USD-Federal Funds-Reference Dealers"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "EQUITYSWAPPRICERET01"
+}

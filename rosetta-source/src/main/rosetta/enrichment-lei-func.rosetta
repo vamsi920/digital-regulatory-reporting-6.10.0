@@ -1,0 +1,80 @@
+namespace drr.enrichment.lei
+version "${project.version}"
+
+import cdm.base.datetime.*
+
+func API_GetLeiData: <"Function that calls the GLEIF API to look up data for the provided LEI.">
+    [codeImplementation]
+    // external_api GET https://api.gleif.org/api/v1/lei-records/:lei
+    inputs:
+        lei string (0..1)
+    output:
+        leiData LeiData (0..1)
+
+func GetOrFetchLeiData: <"Return pre-enriched LEI data if present, otherwise attempt to fetch LEI data from API.">
+    inputs:
+        preEnriched LeiData (0..*) <"Pre-enriched LEI data.">
+        lei string (0..1) <"LEI to be fetched from API.">
+    output:
+        leiData LeiData (0..1)
+
+    alias preEnrichedDataForLei: <"Pre-enriched data for given LEI.">
+        preEnriched
+            filter item -> lei = lei
+            then only-element
+
+    alias isEnabled:
+        // if no LEI is provided, cannot get or fetch LEI data
+        lei exists
+            and ( // if pre-enrich data is provided for given LEI, then use the enabled flag from that data
+            (preEnrichedDataForLei exists and preEnrichedDataForLei -> leiValidation default True)
+                    // if pre-enrich data is not provided for given LEI, then check if blank LEI data is provided with enabled flag
+                or (preEnrichedDataForLei is absent
+                    and (preEnriched
+                        filter item -> lei is absent
+                        then extract item -> leiValidation
+                        then distinct only-element default True
+                        )))
+
+    set leiData:
+        if isEnabled = False
+        then empty
+        else if preEnrichedDataForLei exists
+        then preEnrichedDataForLei
+        else API_GetLeiData(lei)
+
+func LeiRegistrationStatusIsValid:
+    inputs:
+        leiData LeiData (0..*)
+        partyLei string (0..1)
+        eventDate date (0..1)
+        reportingDate date (0..1)
+    output:
+        valid boolean (0..1)
+
+    set valid:
+        if GetOrFetchLeiData(leiData, partyLei) exists and DateDifference(
+                    AddBusinessDays(eventDate, 1, empty),
+                    reportingDate
+                ) <= 0
+        then [LeiRegistrationStatusEnum -> Issued, LeiRegistrationStatusEnum -> Lapsed, LeiRegistrationStatusEnum -> PendingTransfer, LeiRegistrationStatusEnum -> PendingArchival] any = GetOrFetchLeiData(
+                    leiData,
+                    partyLei
+                ) -> registrationStatus
+
+func LeiRegistrationStatusIsValidForStatus:
+    inputs:
+        leiData LeiData (0..*)
+        partyLei string (0..1)
+        eventDate date (0..1)
+        reportingDate date (0..1)
+        statuses LeiRegistrationStatusEnum (0..*)
+    output:
+        valid boolean (0..1)
+
+    set valid:
+        if GetOrFetchLeiData(leiData, partyLei) exists and DateDifference(
+                    AddBusinessDays(eventDate, 1, empty),
+                    reportingDate
+                ) <= 0
+        then statuses any = GetOrFetchLeiData(leiData, partyLei) -> registrationStatus

@@ -1,0 +1,37 @@
+namespace drr.regulation.common.trade.payment
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.payment.*
+
+reporting rule FloatingRateResetFrequencyLeg1 from TransactionReportInstruction: <"Floating rate reset frequency period - Leg 1">
+    extract ProductForEvent
+    // then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then extract resetDates -> resetFrequency
+
+reporting rule FloatingRateResetFrequencyPeriodLeg1 from TransactionReportInstruction: <"Floating rate reset frequency period - Leg 1">
+    FloatingRateResetFrequencyLeg1 then extract MapCDEFrequencyPeriod(item -> period)
+
+reporting rule FloatingRateResetFrequencyPeriodMultiplierLeg1 from TransactionReportInstruction: <"Floating rate reset frequency period muliplier- Leg 1">
+    FloatingRateResetFrequencyLeg1 then extract periodMultiplier
+
+reporting rule FloatingRateResetFrequencyLeg2 from TransactionReportInstruction: <"Floating rate reset frequency period - Leg 1">
+    extract ProductForEvent
+    // then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then filter
+        rateSpecification -> floatingRate exists
+            or rateSpecification -> inflationRate exists
+    then extract resetDates -> resetFrequency
+
+reporting rule FloatingRateResetFrequencyPeriodLeg2 from TransactionReportInstruction: <"Floating rate reset frequency period - Leg 2">
+    FloatingRateResetFrequencyLeg2 then extract MapCDEFrequencyPeriod(item -> period)
+
+reporting rule FloatingRateResetFrequencyPeriodMultiplierLeg2 from TransactionReportInstruction: <"Floating rate reset frequency period muliplier- Leg 2">
+    FloatingRateResetFrequencyLeg2 then extract periodMultiplier

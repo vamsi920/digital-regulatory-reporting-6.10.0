@@ -1,0 +1,75 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "OYRKAKYXVBMJ",
+    "numberOfUnits" : 129000.0,
+    "source" : "ISIN",
+    "unitOfMeasure" : "SHAS"
+  }, {
+    "identifier" : "KNT1LZKJZWIJ",
+    "numberOfUnits" : 20000.0,
+    "source" : "ISIN",
+    "unitOfMeasure" : "SHAS"
+  }, {
+    "identifier" : "SONJN5I2WMNQ",
+    "numberOfUnits" : 3000.0,
+    "source" : "ISIN",
+    "unitOfMeasure" : "SHAS"
+  } ],
+  "bookingLocation" : "US",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "1DVPMCJ8SGH3GAK69P9Y",
+  "counterparty2" : "DR9JRPCXUUB4N3QGQNB2",
+  "counterparty2IdentifierFormat" : "Lei",
+  "cryptoAssetUnderlyingIndicator" : false,
+  "customBasketCode" : ".JPCDUSL1",
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2023-01-07",
+  "entityResponsibleForReporting" : "1DVPMCJ8SGH3GAK69P9Y",
+  "eventTimestamp" : "2023-01-07T20:16:40Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-01-07T19:49:58Z",
+  "expirationDate" : "2026-03-04",
+  "finalContractualSettlementDate" : "2026-03-04",
+  "intragroup" : false,
+  "leg1" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "leg2" : {
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "SOFR",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateReferencePeriod" : "DAIL",
+      "floatingRateReferencePeriodMultiplier" : 1
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 75
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "price" : {
+    "monetary" : 83.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "SHAS",
+  "reportSubmittingEntityID" : "HHVW89ZPB1JW973C7BWB",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "HKMA-1DVPMCJ8SGH3GAK69P9Y-DR9JRPCXUUB4N3QGQNB2-2023-01-07T20:16:40Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueProductIdentifier" : "9LC8BUEP0YNB"
+}

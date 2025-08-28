@@ -1,0 +1,84 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "DUMMYLEI123456789002",
+  "cleared" : "N",
+  "counterparty1" : "DUMMYLEI123456789001",
+  "counterparty2" : "DUMMYLEI123456789002",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "DTDUnapproved11370814201DFCFTCRiskNewNewCre2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "DUMMYLEI123456789001",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "1370814201P1P1YU87UJ",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "USS17U16X151",
+      "underlyingAssetIDType" : "Index"
+    } ],
+    "underlyingAssetName" : {
+      "underlyingAssetName" : [ "CDX.NA.HY.18" ]
+    },
+    "usiID" : "DTD1370814201",
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-02-11",
+  "eventIdentifier" : "DTDUnapproved11370814201DFCFTCRiskNewNewCre",
+  "eventTimestamp" : "2022-02-11T07:32:32Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-11T07:32:14Z",
+  "expirationDate" : "2023-07-20",
+  "finalContractualSettlementDate" : "2023-07-20",
+  "indexFactor" : 0.02,
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.05,
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "Underlying" : {
+            "UnderlierIDSource" : "CRIDX",
+            "UnderlyingCreditIndexSeries" : 2,
+            "UnderlyingCreditIndexVersion" : 3,
+            "UnderlyingInstrumentIndexTermUnit" : "YEAR"
+          },
+          "UnderlyingIssuerType" : "Corporate"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Index"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI123456789001",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMYLEI123456789001",
+  "uniqueTransactionIdentifier" : "CREDITINDEXCDXEXUS03S17U16X15E14X13D12C11X10E9D8N7I6"
+}

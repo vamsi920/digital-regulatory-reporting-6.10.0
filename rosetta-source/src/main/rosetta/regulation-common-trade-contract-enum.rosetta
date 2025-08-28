@@ -1,0 +1,18 @@
+namespace drr.regulation.common.trade.contract
+version "${project.version}"
+
+enum MasterAgreementEnum:
+    ISDA <"ISDA Master Agreement">
+    CDEA <"ISDA-FIA Cleared Derivatives Execution Agreement">
+    EUMA <"European Master Agreement and the Derivatives Annex (Banking Federation of the European Union)">
+    FMAT <"Master Agreement Relating to transactions on Forward Financial Instruments (Federation Bancaire Francaise)">
+    DERV <"German Master Agreement for Financial derivatives and Addendum for Options on Stock Exchange Indices or Securities">
+    CMOP <"Contrato Marco de Operaciones Financieras">
+    CHMA <"Swiss Master Agreement for OTC Derivatives Instruments">
+    EFMA <"EFET General Agreement Concerning the Delivery and Acceptance of Electricity or EFET General Agreement Concerning The Delivery And Acceptance of Natural Gas">
+    GMRA <"ICMA Global Master Agreement for REPO Trades">
+    GMSL <"ISLA Global Master Agreement for Securities Lending">
+    BIAG <"A Bespoke (custom) Master Agreement, including one-off agreements for transactions">
+    IDMA <"ISDA/IIFM Tahawwut (Hedging) Master Agreement (TMA)">
+    OTHR <"Other">
+    FPCA

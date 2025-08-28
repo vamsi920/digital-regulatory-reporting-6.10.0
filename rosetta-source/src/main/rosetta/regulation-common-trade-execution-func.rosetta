@@ -1,0 +1,92 @@
+namespace drr.regulation.common.trade.execution
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+func CentralCounterparty_Validation: <"Central Counterparty">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        cleared ClearedEnum (1..1)
+        centralCounterparty LEIIdentifier (0..1)
+        clearingMember LEIIdentifier (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and cleared = Y
+        then centralCounterparty exists and centralCounterparty <> clearingMember
+        else if cleared = N
+        then centralCounterparty is absent
+
+func ClearingMember_Validation: <"Clearing Member">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        cleared ClearedEnum (1..1)
+        centralCounterparty LEIIdentifier (0..1)
+        clearingMember LEIIdentifier (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and cleared = Y
+        then clearingMember exists and centralCounterparty <> clearingMember
+        else if cleared = N
+        then clearingMember is absent
+
+func SettlementCurrency_Validation: <"Settlement currency of the contract or leg 1 Condition. DTCC_ASIC_BR_1072_01 & DTCC_MAS_BR_0036_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        settlementCurrencyLeg1 ISOCurrencyCodeEnum (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] any = settlementCurrencyLeg1
+        then False
+
+func ClearingObligation:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (0..1)
+        rgmName RegimeNameEnum (0..1)
+        sprvsryBody SupervisoryBodyEnum (0..1)
+    output:
+        result ClearingObligationEnum (0..1)
+    set result:
+        if IsRegulatedMarketOrThirdCountryEquivalentMarket(
+                    transactionReportInstruction -> reportableInformation,
+                    rgmName
+                ) = False // Not executed in a regulated market or 3rd country equivalent Market
+        then (transactionReportInstruction -> reportableInformation -> partyInformation -> regimeInformation
+            then filter supervisoryBody = sprvsryBody and regimeName = rgmName
+            then last
+            then extract
+                if (mandatorilyClearable = MandatorilyClearableEnum -> ProductAndCptyMandatory)
+                then TRUE
+                else if (mandatorilyClearable = MandatorilyClearableEnum -> ProductMandatoryButNotCpty)
+                then FLSE
+                else if (mandatorilyClearable = MandatorilyClearableEnum -> ProductNotMandatory)
+                then UKWN)
+
+func Extract_TradingCapacity: <"Trading Capacity Of Specified Person">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (0..1)
+        sprvsryBody SupervisoryBodyEnum (0..1)
+    output:
+        result TradingCapacity7Code (0..1)
+
+    set result:
+        transactionReportInstruction -> reportableInformation -> partyInformation
+            then filter
+                partyReference = transactionReportInstruction -> reportingSide -> reportingParty
+            then extract regimeInformation
+            then flatten
+            then filter supervisoryBody = sprvsryBody
+            then only-element
+            then extract
+                if tradingCapacity = Agent
+                then AGEN
+                else if tradingCapacity = Principal
+                then PRIN

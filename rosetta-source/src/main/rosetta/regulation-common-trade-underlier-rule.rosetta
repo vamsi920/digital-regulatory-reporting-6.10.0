@@ -1,0 +1,117 @@
+namespace drr.regulation.common.trade.underlier
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+
+reporting rule FloatingRateIndicatorLeg1 from TransactionReportInstruction: <"Indicator Of The Floating Rate Leg 1">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract RateOption
+    then extract GetIndexIndicatorFromFloatingRate(item -> floatingRateIndex to-string)
+
+reporting rule FloatingRateIndicatorLeg2 from TransactionReportInstruction: <"Indicator Of The Floating Rate Leg 2">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract RateOption
+    then extract GetIndexIndicatorFromFloatingRate(item -> floatingRateIndex to-string)
+
+reporting rule FloatingRateIdentifierLeg1 from TransactionReportInstruction: <"Indicator Of The Floating Rate Leg 1">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract RateOption
+    then extract item -> indexReferenceInformation -> indexId only-element
+
+reporting rule FloatingRateIdentifierLeg2 from TransactionReportInstruction: <"Indicator Of The Floating Rate Leg 2">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract RateOption
+    then extract item -> indexReferenceInformation -> indexId only-element
+
+reporting rule FloatingRateReferencePeriodLeg1 from TransactionReportInstruction: <"Floating rate reference period - Leg 1">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract RateOption -> indexTenor -> period
+    then extract FloatingReferencePeriod
+
+reporting rule FloatingRateReferencePeriodMultiplierLeg1 from TransactionReportInstruction: <"Floating rate reference period muliplier- Leg 1">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract RateOption -> indexTenor -> periodMultiplier
+    then FormatToMax3Number
+
+reporting rule FloatingRateReferencePeriodLeg2 from TransactionReportInstruction: <"Floating rate reference period - Leg 2">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract RateOption -> indexTenor -> period
+    then extract FloatingReferencePeriod
+
+reporting rule FloatingRateReferencePeriodMultiplierLeg2 from TransactionReportInstruction: <"Floating rate reference period muliplier- Leg 2">
+    extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract RateOption -> indexTenor -> periodMultiplier
+    then FormatToMax3Number
+
+reporting rule NameOfTheFloatingRateOfLeg1 from TransactionReportInstruction: <"Name of the Floating Rate of Leg 1">
+    ProductForEvent
+        then filter IsFRA = False
+        then extract ProductOrUnderlierProduct
+        then extract InterestRateLeg1
+        then extract RateOption -> indexReferenceInformation -> indexName
+
+reporting rule NameOfTheFloatingRateOfLeg2 from TransactionReportInstruction: <"Name of the Floating Rate of Leg 2">
+    ProductForEvent
+        then filter IsFRA = False
+        then extract ProductOrUnderlierProduct
+        then extract InterestRateLeg2
+        then extract RateOption -> indexReferenceInformation -> indexName
+
+reporting rule NameOfTheUnderlyingIndex from TransactionReportInstruction: <"Name of the underlying index">
+    extract
+        (if IsCreditSwaption(ProductForEvent) or IsIRSwaption(ProductForEvent)
+        then UnderlierForProduct(ProductForEvent)
+        else ProductForEvent)
+    then extract
+        (if contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if UnderlierForProduct -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then UnderlierForProduct -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if UnderlierForProduct -> index exists
+                and UnderlierForProduct -> index -> productIdentifier -> source any = ProductIdTypeEnum -> Name
+        then (UnderlierForProduct -> index -> productIdentifier
+            then filter source = ProductIdTypeEnum -> Name
+            then extract identifier)
+        else if contractualProduct -> economicTerms -> payout -> performancePayout -> underlier -> index exists
+        then (contractualProduct -> economicTerms -> payout -> performancePayout -> underlier -> index -> productIdentifier
+            then filter source = ProductIdTypeEnum -> Name
+            then extract identifier)
+        else if contractualProduct -> economicTerms -> payout -> commodityPayout -> underlier -> index exists
+        then (contractualProduct -> economicTerms -> payout -> commodityPayout -> underlier -> index -> productIdentifier
+            then filter source = ProductIdTypeEnum -> Name
+            then extract identifier)
+        else if IsFRA
+        then contractualProduct -> economicTerms -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName
+            first
+            to-string
+        else if Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then ([EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName first, EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> inflationRate -> rateOption -> indexReferenceInformation -> indexName first] only-element)
+            to-string)
+    then distinct only-element

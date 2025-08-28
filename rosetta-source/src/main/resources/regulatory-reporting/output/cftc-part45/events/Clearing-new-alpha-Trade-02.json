@@ -1,0 +1,84 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "5493001RKR55V4X61F71",
+  "cftcGuidebook" : {
+    "assetClass" : "Credit",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : true,
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2009-03-26",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2011-02-12T12:21:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-12T12:20:47Z",
+  "expirationDate" : "2014-06-20",
+  "finalContractualSettlementDate" : "2014-06-20",
+  "jurisdiction" : "MIXX",
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 5000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DebtSeniority" : "SNDB",
+          "DeliveryType" : "OPTL"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : true,
+  "otherPayment" : [ {
+    "amount" : 1000,
+    "currency" : "USD",
+    "date" : "2009-03-28",
+    "payer" : "5493001RKR55V4X61F71",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "549300O5MFEP1XJ40B46",
+    "receiverFormat" : "Lei"
+  } ],
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "549300O5MFEP1XJ40B46"
+}

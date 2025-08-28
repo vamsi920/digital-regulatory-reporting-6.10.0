@@ -1,0 +1,15 @@
+namespace drr.regulation.asic.rewrite.trade
+version "${project.version}"
+
+import drr.regulation.common.trade.* as trade
+import drr.standards.iso.*
+
+func ASICLegEnrichment:
+    inputs:
+        legEnrichment trade.CommonLeg (1..1)
+        nextFloatingReferenceResetDate ISODate (0..1)
+    output:
+        asicEnrichedLeg trade.CommonLeg (1..1)
+
+    set asicEnrichedLeg: legEnrichment
+    set asicEnrichedLeg -> nextFloatingReferenceResetDate: nextFloatingReferenceResetDate

@@ -1,0 +1,24 @@
+namespace drr.standards.iosco.cde.version2.party
+version "${project.version}"
+
+import cdm.base.staticdata.party.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iosco.cde.version2.* as cdeV2
+import drr.standards.iso.*
+
+func Direction2: <"2.13 Direction. Reporting counterparties should use either:
+    - the element Direction 1 or Buyer identifier and Seller identifier to identify the direction of the transaction for the reporting counterparty as Buyer or Seller (model 1); or
+    - the element Direction 2 or Payer identifier and Receiver identifier to identify the payer and the receiver of each leg (model 2).
+    Reporting counterparties should NOT use both approaches, but adopt the appropriate one for the type of instrument concerned.">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "13" dataElement "1"
+        provision "Indicator of whether the reporting counterparty is the payer or the receiver of the leg as determined at the time of the transaction."]
+    inputs:
+        event TransactionReportInstruction (1..1)
+        payerReceiver PayerReceiver (1..1)
+    output:
+        direction Direction2Enum (1..1)
+
+    set direction: cdeV1.party.Direction2(event, payerReceiver)

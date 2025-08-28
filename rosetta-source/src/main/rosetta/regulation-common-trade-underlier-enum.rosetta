@@ -1,0 +1,8 @@
+namespace drr.regulation.common.trade.underlier
+version "${project.version}"
+
+enum UnderlyingIdentificationTypeEnum:
+    I <"ISIN">
+    B <"Basket">
+    X <"Index">
+    O <"Other">

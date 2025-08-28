@@ -1,0 +1,67 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "DUMMYLEI123456789002",
+  "cleared" : "N",
+  "counterparty1" : "DUMMYLEI123456789002",
+  "counterparty2" : "DUMMYLEI123456789001",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "maturityDateOfTheUnderlying" : "2024-12-20",
+    "messageID" : "DTDUnapproved11370799001DFCFTCRiskNewNewCre2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "DUMMYLEI123456789002",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "US0089ABC985",
+      "underlyingAssetIDType" : "ISIN"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-02-27",
+  "eventIdentifier" : "DTDUnapproved11370799001DFCFTCRiskNewNewCre",
+  "eventTimestamp" : "2022-02-11T07:48:32Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-11T07:48:14Z",
+  "expirationDate" : "2020-03-18",
+  "finalContractualSettlementDate" : "2024-12-20",
+  "firstExerciseDate" : "2020-03-18",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 500000000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "underlierIDOther" : "Credit:Swaptions:iTraxx:iTraxxEuropeSwaption",
+    "underlierIDOtherSource" : "Other"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Option"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2020-02-27",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI123456789002",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMYLEI123456789001",
+  "strikePrice" : {
+    "decimal" : 0.01
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "CREDITSWAPTIONITRA02"
+}

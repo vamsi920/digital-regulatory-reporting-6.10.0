@@ -1,0 +1,56 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "ENR1n.DE",
+    "numberOfUnits" : 0.3333333333,
+    "source" : "RIC"
+  }, {
+    "identifier" : "SIEGn.DE",
+    "numberOfUnits" : 0.6666666667,
+    "source" : "RIC"
+  } ],
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "direction1" : "BYER",
+  "effectiveDate" : "2020-09-17",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "2067a2d6dc8d47dca1d0cc9a716c8992",
+  "eventTimestamp" : "2020-09-30T09:18:49.3348088Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-09-17T16:25:19Z",
+  "expirationDate" : "2020-10-16",
+  "finalContractualSettlementDate" : "2020-10-16",
+  "firstExerciseDate" : "2020-09-17",
+  "intragroup" : false,
+  "leg1" : {
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 48011.94,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2020-09-21",
+  "optionStyle" : "AMER",
+  "optionType" : "CALL",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 128
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "technicalRecordId" : "HKMA-DUMMY0000000000LEI01-DUMMY0000000000LEI02-EQUITYOPTIONPRICER01-2020-09-30T09:18:49.334808800Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01"
+}

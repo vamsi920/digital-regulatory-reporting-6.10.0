@@ -1,0 +1,48 @@
+namespace drr.regulation.hkma.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.staticdata.identifier.*
+import cdm.event.common.*
+
+import drr.regulation.common.*
+
+// TH Comment Sprint 13/2025: These functions collectively extract the HKMA transaction identifier scheme name (USI or TID) when the Unique Transaction Identifier is proprietary. The process involves three main steps:
+// 1. Extract_UTIProprietary: When the identifier is proprietary, extract the Unique Transaction Identifier from the valuation details.
+// 2. Extract_HKMATradeIdentifier: Retrieves the trade identifier value as a string from the tradeIdentifier object by selecting the first assigned identifier.
+// 3. Extract_HKMATransactionSchemeName: Determines the HKMA transaction scheme name ("UTI-USI" or "UTI-TID") based on the identifier type.    
+func Extract_UTIPropietary: <"Extracts the UTI from the trade details of a reportable valuation.">
+    inputs:
+        reportableValuation ReportableValuation (1..1)
+    output:
+        tradeIdentifier TradeIdentifier (1..1)
+
+    set tradeIdentifier:
+        reportableValuation
+            then extract
+                if valuationDetails exists
+                then valuationDetails -> tradeInformation -> uniqueTradeIdentifier
+            then filter
+                identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+                    or identifierType is absent
+
+func Extract_HKMATradeIdentifier: <"Extracts the trade identifier string extracted from the assigned identifier.">
+    inputs:
+        tradeIdentifier TradeIdentifier (1..1)
+    output:
+        hkmaTradeIdentifiers string (1..1)
+
+    set hkmaTradeIdentifiers: tradeIdentifier -> assignedIdentifier first -> identifier
+
+func Extract_HKMATransactionSchemeName: <"Extracts the HKMA transaction identifier scheme (USI or TID) based on the identifier type">
+    inputs:
+        tradeIdentifier TradeIdentifier (1..1)
+    output:
+        schmeNm UTIProprietarySchemeNameEnum (1..1)
+
+    set schmeNm:
+        tradeIdentifier
+            then extract
+                if identifierType = TradeIdentifierTypeEnum -> UniqueSwapIdentifier
+                then UTIProprietarySchemeNameEnum -> UTI_USI
+                else if identifierType is absent
+                then UTIProprietarySchemeNameEnum -> UTI_TID

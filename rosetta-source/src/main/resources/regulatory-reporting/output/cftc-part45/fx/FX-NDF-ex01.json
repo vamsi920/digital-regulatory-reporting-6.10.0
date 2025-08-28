@@ -1,0 +1,83 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "254900QEE322YIK4P067",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2019-01-31",
+  "eventIdentifier" : "SI17764828466sz33wbbkr6u3664g4adt",
+  "eventTimestamp" : "2019-01-31T08:56:02Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1111.11,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionAgentCounterparty1" : "NOAP",
+  "executionAgentCounterparty2" : "2549007904V5LEBO0B08",
+  "executionTimestamp" : "2019-01-31T08:56:02Z",
+  "expirationDate" : "2019-03-20",
+  "finalContractualSettlementDate" : "2019-03-20",
+  "leg1" : {
+    "fixingDate" : "2019-03-18T00:00:00Z",
+    "notionalAmount" : 3763000000,
+    "notionalCurrency" : "KRW",
+    "payerIdentifier" : "GGDZP1UYGU9STUHRDP48",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "254900QEE322YIK4P067",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 38999950.3,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "254900QEE322YIK4P067",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "GGDZP1UYGU9STUHRDP48",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "KRW",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "GGDZP1UYGU9STUHRDP48",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02"
+}

@@ -1,0 +1,37 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "FORW",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "direction1" : "BYER",
+  "effectiveDate" : "2023-11-15",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2023-11-15T01:48:51Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-11-15T01:45:41Z",
+  "expirationDate" : "2029-11-15",
+  "finalContractualSettlementDate" : "2029-11-15",
+  "leg1" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "JPY"
+  },
+  "platformIdentifier" : "XOFF",
+  "price" : {
+    "decimal" : 0.526600701
+  },
+  "priceNotation" : "Decimal",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "BANKX0001",
+  "underlyingIdentification" : "JP1700161P53",
+  "underlyingIdentificationType" : "I",
+  "uniqueTransactionIdentifier" : "IRFORWARDDEBTEXXML02"
+}

@@ -1,0 +1,83 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "Equity",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "I",
+  "counterparty1" : "5493001RKR55V4X61F71",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "549300O5MFEP1XJ40B46",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2008-06-02",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2011-02-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2008-06-04",
+  "finalContractualSettlementDate" : "2009-06-04",
+  "leg1" : {
+    "notionalAmount" : 300000,
+    "notionalCurrency" : "SGD",
+    "payerIdentifier" : "549300O5MFEP1XJ40B46",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "5493001RKR55V4X61F71",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "SGD"
+  },
+  "leg2" : {
+    "notionalAmount" : 300000,
+    "notionalCurrency" : "SGD",
+    "payerIdentifier" : "5493001RKR55V4X61F71",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO",
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "549300O5MFEP1XJ40B46",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "SGD"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "SettlementCurrency" : "SGD",
+          "UnderlierID" : "SGD-SIBOR-Reuters"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei",
+    "underlyingAssetType" : "Index"
+  },
+  "packageIndicator" : false,
+  "platformIdentifier" : "XNAS",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "5493001RKR55V4X61F71",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPPOSTPRICEDXM01"
+}

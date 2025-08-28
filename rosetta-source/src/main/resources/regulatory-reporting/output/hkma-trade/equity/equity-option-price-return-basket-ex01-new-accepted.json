@@ -1,0 +1,45 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "ENR1n.DE",
+    "numberOfUnits" : 0.3333333333,
+    "source" : "RIC"
+  }, {
+    "identifier" : "SIEGn.DE",
+    "numberOfUnits" : 0.6666666667,
+    "source" : "RIC"
+  } ],
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "cryptoAssetUnderlyingIndicator" : false,
+  "effectiveDate" : "2020-09-17",
+  "eventIdentifier" : "6fc2c8a831dd480e9c1df82d02cb396a",
+  "eventTimestamp" : "2020-10-05T15:20:38.7635176Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-09-17T16:25:19Z",
+  "expirationDate" : "2020-10-16",
+  "finalContractualSettlementDate" : "2020-10-16",
+  "firstExerciseDate" : "2020-09-17",
+  "intragroup" : false,
+  "leg1" : {
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 48011.94,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2020-09-21",
+  "optionStyle" : "AMER",
+  "optionType" : "CALL",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 128
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "technicalRecordId" : "HKMA-EQUITYOPTIONPRICER01-2020-10-05T15:20:38.763517600Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01"
+}

@@ -1,0 +1,8 @@
+namespace drr.standards.iosco.cde.base.quantity
+version "${project.version}"
+import drr.standards.iso.*
+
+type NotionalPeriod:
+    value ShortFraction5DecimalNumber (1..1)
+    effectiveDate date (1..1)
+    endDate date (0..1)

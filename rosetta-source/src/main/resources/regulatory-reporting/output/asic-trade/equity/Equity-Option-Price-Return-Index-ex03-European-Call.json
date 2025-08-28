@@ -1,0 +1,57 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "OPTN",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "BYER",
+  "effectiveDate" : "2021-12-06",
+  "entityResponsibleForReporting" : "213800WWTABZ1GOJHH37",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2020-09-11",
+  "leg1" : {
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "notionalQuantity" : 10000,
+    "quantityUnitOfMeasure" : "IPNT",
+    "settlementCurrency" : "JPY",
+    "totalNotionalQuantity" : 10000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "SettlementCurrency" : "JPY"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 1813007.27,
+  "optionPremiumCurrency" : "JPY",
+  "optionPremiumPaymentDate" : "2019-09-12",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "EQUITYOPTIONPRICER01",
+  "strikePrice" : {
+    "monetary" : 3000
+  },
+  "strikePriceCurrency" : "JPY",
+  "strikePriceNotation" : "Monetary",
+  "underlyingIdentification" : "IE0031442068",
+  "underlyingIdentificationType" : "I",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER02"
+}

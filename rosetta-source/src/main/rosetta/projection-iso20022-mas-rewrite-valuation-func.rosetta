@@ -1,0 +1,304 @@
+namespace drr.projection.iso20022.mas.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.math.*
+
+import drr.regulation.mas.rewrite.valuation.*
+import drr.standards.iso.* as iso
+
+import iso20022.auth030.mas.*
+
+func Project_MASValuationReportToIso20022:
+    [projection XML]
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        iso20022Report Document (1..1)
+
+    set iso20022Report -> derivsTradRpt -> rptHdr: Create_ValuationReportHeader
+
+    set iso20022Report -> derivsTradRpt -> tradData -> rpt:
+        Create_ValuationReport32Choice__1(drrReport)
+
+func Create_ValuationReportHeader:
+    output:
+        rptHdr TradeReportHeader4__1 (1..1)
+
+    set rptHdr:
+        TradeReportHeader4__1 {
+            nbRcrds: 1
+        }
+
+func Create_ValuationReport32Choice__1:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        rpt TradeReport33Choice__1 (1..1)
+
+    alias actionType: drrReport -> actionType
+
+    set rpt:
+        TradeReport33Choice__1 {
+            new: empty,
+            mod: empty,
+            crrctn: empty,
+            termntn: empty,
+            valtnUpd: if actionType = iso.ActionTypeEnum -> VALU to-string
+                then TradeData43__5 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__3(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__5(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            err: empty,
+            rvv: empty,
+            ...
+        }
+
+func Create_CounterpartySpecificData36__3:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__3 (1..1)
+
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__3 {
+            ctrPty: Create_TradeCounterpartyReport20__3(drrReport),
+            rptgTmStmp: drrReport -> reportingTimestamp,
+            valtn: ContractValuationData8__1 {
+                ctrctVal: AmountAndDirection109__1 {
+                    amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                        value: Abs(drrReport -> valuationAmount),
+                        ccy: drrReport -> valuationCurrency to-string
+                    },
+                    sgn: if drrReport -> valuationAmount < 0
+                        then False
+                },
+                tmStmp: drrReport -> valuationTimestamp,
+                tp: drrReport -> valuationMethod to-enum ValuationType1Code
+        },}
+
+// TradeCounterpartyReport20
+func Create_TradeCounterpartyReport20__2:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__2 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__2 {
+            rptgCtrPty: Counterparty45__2 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1)
+            },
+            othrCtrPty: Counterparty46__1 {
+                idTp: Create_PartyIdentification248Choice__2(drrReport)
+            },
+            submitgAgt: GetSubmitgAgt(drrReport),
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            exctnAgt: OrganisationIdentification15Choice__3 {
+                lei: drrReport -> executionAgentOfTheCounterparty1,
+                ...
+        }}
+
+func Create_TradeCounterpartyReport20__3:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__3 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__3 {
+            rptgCtrPty: Counterparty45__2 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1)
+            },
+            othrCtrPty: Counterparty46__2 {
+                idTp: Create_PartyIdentification248Choice__3(drrReport)
+            },
+            submitgAgt: GetSubmitgAgt(drrReport),
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            exctnAgt: OrganisationIdentification15Choice__3 {
+                lei: drrReport -> executionAgentOfTheCounterparty1,
+                ...
+        }}
+
+func GetSubmitgAgt:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        submitgAgt OrganisationIdentification15Choice__1 (1..1)
+
+    set submitgAgt: Create_OrganisationIdentification15Choice__1(drrReport -> dataSubmitter)
+
+func GetNttyRspnsblForRpt:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        nttyRspnsblForRpt OrganisationIdentification15Choice__1 (1..1)
+
+    set nttyRspnsblForRpt:
+        Create_OrganisationIdentification15Choice__1(drrReport -> reportingSpecifiedPerson)
+
+// PartyIdentification248Choice
+func Create_PartyIdentification248Choice__1:
+    inputs:
+        lei string (1..1)
+    output:
+        id PartyIdentification248Choice__1 (1..1)
+
+    set id:
+        PartyIdentification248Choice__1 {
+            lgl: LegalPersonIdentification1__1 {
+                id: Create_OrganisationIdentification15Choice__1(lei)
+        }}
+
+func Create_PartyIdentification248Choice__2:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        id PartyIdentification248Choice__2 (1..1)
+
+    set id:
+        PartyIdentification248Choice__2 {
+            lgl: if drrReport -> counterparty2IdentifierType = True
+                then LegalPersonIdentification1__2 {
+                    id: Create_OrganisationIdentification15Choice__2(
+                            drrReport -> counterparty2
+                        )
+                },
+            ntrl: if drrReport -> counterparty2IdentifierType = False
+                then NaturalPersonIdentification3__1 {
+                    id: NaturalPersonIdentification2__1 {
+                        id: GenericIdentification175__1 {
+                            id: drrReport -> counterparty2
+                        },
+                        ...
+        }}}
+
+func Create_PartyIdentification248Choice__3:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        id PartyIdentification248Choice__3 (1..1)
+
+    set id:
+        PartyIdentification248Choice__3 {
+            lgl: if drrReport -> counterparty2IdentifierType = True
+                then LegalPersonIdentification1__3 {
+                    id: Create_OrganisationIdentification15Choice__3(
+                            drrReport -> counterparty2
+                        )
+                },
+            ntrl: if drrReport -> counterparty2IdentifierType = False
+                then NaturalPersonIdentification3__2 {
+                    id: NaturalPersonIdentification2__2 {
+                        id: GenericIdentification175__1 {
+                            id: drrReport -> counterparty2
+        }}}}
+
+// OrganisationIdentification15Choice
+func Create_OrganisationIdentification15Choice__1:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__1 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__1 {
+            lei: lei
+        }
+
+func Create_OrganisationIdentification15Choice__2:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__2 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__2 {
+            lei: lei,
+            ...
+        }
+
+func Create_OrganisationIdentification15Choice__3:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__3 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__3 {
+            lei: lei,
+            ...
+        }
+
+// CommonTradeDataReport69
+func Create_CommonTradeDataReport71__5:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__5 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__5 {
+            txData: Create_TradeTransaction50__5(drrReport)
+        }
+
+// TradeTransaction49
+func Create_TradeTransaction50__5:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        txData TradeTransaction50__5 (1..1)
+
+    set txData:
+        TradeTransaction50__5 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+        }}}
+
+// TradeTransaction49 helper funcs
+func GetTxId:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        uti UTIIdentifier (1..1)
+
+    set uti: drrReport -> uniqueTransactionIdentifier
+
+// DerivativeEvent6
+func GetDerivEvt2:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        derivEvt DerivativeEvent6__2 (1..1)
+
+    set derivEvt:
+        DerivativeEvent6__2 {
+            tmStmp: GetDerivEvtTmStmp(drrReport),
+            ...
+        }
+
+func GetDerivEvtTmStmp:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        tmStmp DateAndDateTime2Choice__1 (1..1)
+
+    set tmStmp:
+        DateAndDateTime2Choice__1 {
+            dtTm: empty // drrReport -> eventTimestamp 
+        }
+
+func Create_TechnicalAttributes5__1:
+    inputs:
+        drrReport MASValuationReport (1..1)
+    output:
+        techAttrbts TechnicalAttributes5__1 (1..1)
+
+    set techAttrbts:
+        TechnicalAttributes5__1 {
+            techRcrdId: drrReport -> technicalRecordId + "_" + drrReport -> reportingTimestamp to-string,
+            ...
+        }

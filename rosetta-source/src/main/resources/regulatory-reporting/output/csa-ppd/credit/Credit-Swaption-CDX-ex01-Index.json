@@ -1,0 +1,59 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "549300CWK6F65W566G32",
+  "counterparty2" : "549300V2LQD6SX1WIG70",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "maturityDateOfTheUnderlying" : "2025-12-20",
+    "messageID" : "D93BC6C9BAF65828E0538CB0CC0A04502024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "549300CWK6F65W566G32",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "CREDITSWAPTIONCDXE01",
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "USE17X16D151",
+      "underlyingAssetIDType" : "Index"
+    } ],
+    "underlyingAssetName" : {
+      "underlyingAssetName" : [ "CDX.EM.24" ]
+    },
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-03-08",
+  "eventTimestamp" : "2022-03-08T13:46:04Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-08T13:43:55Z",
+  "expirationDate" : "2022-03-25",
+  "firstExerciseDate" : "2022-03-25",
+  "indexFactor" : 0.01,
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 23434,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "549300CWK6F65W566G32",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "decimal" : 0.01
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "CREDITSWAPTIONCDXE04"
+}

@@ -1,0 +1,42 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2022-12-01",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI02",
+  "eventIdentifier" : "1abae8849e514dbfb3c662bf7aab221f",
+  "eventTimestamp" : "2021-11-19T17:52:40.7294089Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-11-19T17:49:49Z",
+  "expirationDate" : "2022-12-31",
+  "finalContractualSettlementDate" : "2022-12-31",
+  "firstExerciseDate" : "2022-12-31",
+  "leg1" : {
+    "notionalAmount" : 163742.4,
+    "notionalCurrency" : "USD",
+    "quantityUnitOfMeasure" : "TONE",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 65.76
+  },
+  "optionPremiumAmount" : 0,
+  "optionStyle" : "EURO",
+  "optionType" : "PUTO",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 2490
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "technicalRecordId" : "1abae8849e514dbfb3c662bf7aab221f",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONMET01"
+}

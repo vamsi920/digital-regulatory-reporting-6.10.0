@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-hkma-valuation",
+  "name" : "HKMA / Valuation",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.hkma.rewrite.valuation.reports.HKMAValuationReportFunction",
+    "inputType" : "drr.regulation.common.ValuationReportInstruction",
+    "outputType" : "drr.regulation.hkma.rewrite.valuation.HKMAValuationReport"
+  }
+}

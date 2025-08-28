@@ -1,0 +1,64 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMYLEI123456789001",
+  "counterparty2" : "DUMMYLEI123456789002",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "DTDApproved2407119003DFCFTCRiskNewNewEquity2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "DUMMYLEI123456789001",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "EQUITYSWAPPARAMETE01",
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : ".SPX",
+      "underlyingAssetIDType" : "RIC"
+    }, {
+      "underlyingAssetID" : "IE0031442068",
+      "underlyingAssetIDType" : "ISIN"
+    } ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-02-07",
+  "eventTimestamp" : "2022-02-07T10:42:17Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-07T10:36:37Z",
+  "leg1" : {
+    "notionalAmount" : 1000,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 99999999999999999999.99999
+  },
+  "leg2" : {
+    "settlementCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "SettlementCurrency" : "USD"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI123456789001",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "EQUITYSWAPPARAMETE02"
+}

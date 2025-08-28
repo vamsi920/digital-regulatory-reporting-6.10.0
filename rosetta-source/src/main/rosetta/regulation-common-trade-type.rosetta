@@ -1,0 +1,253 @@
+namespace drr.regulation.common.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.enrichment.common.*
+import drr.enrichment.upi.*
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.upi.* as upi
+import drr.standards.iso.*
+
+type CommonTransactionReport extends cde.CriticalDataElement: <"Common Transaction Report represents common attributes">
+    override expirationDate ISODate (0..1)
+        [ruleReference datetime.ExpirationDate]
+    override leg1 CommonLeg (0..1)
+    override leg2 CommonLeg (0..1)
+    counterparty2Name Max150Text (0..1)
+        [ruleReference party.Counterparty2Name]
+    executionAgentCounterparty1 string (0..1)
+        [ruleReference party.ExecutionAgentCounterparty1]
+    executionAgentCounterparty2 LEIIdentifier (0..1)
+        [ruleReference party.ExecutionAgentCounterparty2]
+    reportSubmittingEntityID LEIIdentifier (1..1)
+        [ruleReference party.ReportSubmittingEntity]
+    uniqueTransactionIdentifier Max52AlphaNumericText (0..1)
+    uniqueTransactionIdentifierProprietary UTIProprietaryIDFormat (0..1)
+    priorUTIProprietary UTIProprietaryIDFormat (0..1)
+    uniqueProductIdentifier string (0..1)
+        [ruleReference upi.UniqueProductIdentifier]
+    contractType CommonContractType (0..1)
+        [ruleReference contract.ContractType]
+    assetClass CommonAssetClass (0..1)
+        [ruleReference contract.AssetClass]
+    clearingTimestamp zonedDateTime (0..1)
+        [ruleReference datetime.ClearingTimestamp ]
+    platformIdentifier Max4Text (0..1)
+        [ruleReference execution.PlatformIdentifier]
+    direction1 Direction1Enum (0..1)
+        [ruleReference party.Direction1]
+    barrier price.SingleOrUpperAndLowerBarrier (0..1)
+        [ruleReference price.SingleOrUpperAndLowerBarrier]
+    nameOfTheUnderlyingIndex Max50AlphaNumericTextWithSplChars (0..1)
+        [ruleReference underlier.NameOfTheUnderlyingIndex]
+    maturityDateOfTheUnderlying date (0..1)
+        [ruleReference datetime.MaturityDateOfTheUnderlier]
+    optionType OptionTypeCode (0..1)
+        [ruleReference contract.OptionType]
+    optionStyle OptionStyleEnum (0..1)
+        [ruleReference contract.OptionStyle]
+    deliveryType DeliveryTypeEnum (0..1)
+        [ruleReference contract.DeliveryType]
+    countryOfTheCounterparty2 ISOCountryCodeEnum (0..1)
+        [ruleReference party.CountryOfCounterparty2]
+    bookingLocation ISOCountryCodeEnum (0..1)
+        [ruleReference execution.BookingLocation]
+    traderLocation ISOCountryCodeEnum (0..1)
+        [ruleReference execution.TraderLocation]
+    tradingCapacity TradingCapacity7Code (0..1)
+    embeddedOptionType EmbeddedOptionTypeEnum (0..1)
+        [ruleReference contract.EmbeddedOptionType]
+    seniority SeniorityEnum (0..1)
+        [ruleReference index.Seniority]
+    series Max5Int (0..1)
+        [ruleReference index.Series]
+    indexFactor ShortFraction10DecimalNumber (0..1)
+         [ruleReference index.IndexFactor]
+    technicalRecordId string (0..1)
+    clearingAccountOrigin ClearingAccountOriginEnum (0..1)
+        [ruleReference execution.ClearingAccountOrigin]
+    originalSwapUTI Max52AlphaNumericText (0..1)
+        [ruleReference link.OriginalSwapUTI]
+    originalSwapSDRIdentifier LEIIdentifier (0..1)
+        [ruleReference link.OriginalSwapSDRIdentifier]
+    clearingReceiptTimestamp zonedDateTime (0..1)
+        [ruleReference datetime.ClearingReceiptTimestamp]
+    priorUSI Max42AlphaNumericText (0..1)
+        [ruleReference link.PriorUSI]
+    newSDRIdentifier LEIIdentifier (0..1)
+    initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference collateral.InitialMarginCollateralPortfolioCode]
+    variationMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference collateral.VariationMarginCollateralPortfolioCode]
+    subsequentPositionUTI UTIIdentifierLegacy (0..1)
+        [ruleReference link.SubsequentPositionUTI]
+    masterAgreementType contract.MasterAgreementEnum (0..1)
+        [ruleReference contract.MasterAgreementType]
+    masterAgreementVersion int (0..1)
+        [ruleReference contract.MasterAgreementVersion]
+    nonStandardizedTermIndicator boolean (0..1)
+        [ruleReference contract.NonStandardizedTermIndicator]
+    amendmentIndicator boolean (0..1)
+        [ruleReference event.AmendmentIndicator]
+    packageIndicator boolean (0..1)
+        [ruleReference link.PackageIndicator]
+    brokerID LEIIdentifier (0..1)
+        [ruleReference party.BrokerID]
+    confirmationTimestamp zonedDateTime (0..1)
+        [ruleReference datetime.ConfirmationTimestamp]
+    seriesVersion Max5Int (0..1)
+        [ruleReference index.Version]
+    secondaryTransactionIdentifier Max72AlphaNumericText (0..1)
+        [ruleReference link.SecondaryTransactionIdentifier]
+    natureOfCounterparty1 party.NatureOfCounterpartyEnum (0..1)
+    natureOfCounterparty2 party.NatureOfCounterpartyEnum (0..1)
+    swapLinkID Max35AlphaNumericText (0..1)
+        [ruleReference link.SwapLinkID]
+    clearingExceptionsAndExemptionsCounterparty1 ClearingExceptionsAndExemptionsEnum (0..*)
+    clearingExceptionsAndExemptionsCounterparty2 ClearingExceptionsAndExemptionsEnum (0..*)
+    baseProduct string (0..1)
+    subProduct string (0..1)
+    furtherSubProduct string (0..1)
+    intragroup boolean (0..1)
+        [ruleReference party.Intragroup]
+    entityResponsibleForReporting LEIIdentifier (0..1)
+        [ruleReference party.EntityResponsibleForReporting]
+    referenceEntity string (0..1)
+    counterparty2IdentifierSource Counterparty2IdentifierEnum (0..1)
+        [ruleReference party.Counterparty2IdentifierSource]
+    customBasketIndicator boolean (0..1)
+        [ruleReference basket.CustomBasketIndicator]
+    underlyingIdentification ISINOct2015Identifier (0..1)
+    underlyingIdentificationType underlier.UnderlyingIdentificationTypeEnum (0..1)
+    corporateSectorOfTheCounterparty1 Max4Text (0..*)
+    corporateSectorOfTheCounterparty2 Max4Text (0..*)
+    nonReportable NonReportable (0..1)
+        [label for enrichment "Enrichment Data"]
+        [ruleReference for enrichment EnrichmentData]
+
+        [label for preUpiData "Upi Pre-Enrichment Data"]
+        [ruleReference for preUpiData UpiPreEnrichmentData]
+
+        [label for postUpiData "Upi Post-Enrichment Data"]
+        [ruleReference for postUpiData UpiPostEnrichmentData]
+
+type CommonLeg extends cde.Leg:
+    override periodicPayment payment.CommonPeriodicPayment (0..1)
+    notionalQuantity ShortFraction5DecimalNumber (0..1)
+    fixingDate zonedDateTime (0..1)
+    quantityFrequency FrequencyPeriodEnum (0..1)
+    quantityFrequencyMultiplier Max3Number (0..1)
+    payerIdentifier Min20Max72AlphaNumericText (0..1)
+    receiverIdentifier Min20Max72AlphaNumericText (0..1)
+    settlementLocation ISOCountryCodeEnum (0..1)
+    nextFloatingReferenceResetDate ISODate (0..1)
+
+type NonReportable:
+    enrichment EnrichmentData (0..1) <"Populated by pre-enrichment process">
+        [nonReportable]
+    preUpiData AnnaDsbUpiRequestAndType (0..1)
+        [nonReportable]
+    postUpiData upi.AnnaDsbUpiRecord (0..1)
+        [nonReportable]
+    notionalSchedule upi.AnnaDsbNotionalScheduleEnum (0..1)
+        [nonReportable]
+    underlyingAssetType string (0..1)
+        [nonReportable]
+    instrumentType upi.AnnaDsbInstrumentTypeEnum (0..1)
+        [nonReportable]
+
+type EMIRTransactionReport extends CommonTransactionReport:
+    override clearingAccountOrigin ClearingAccountOriginEnum (0..1)
+        [ruleReference empty]
+    override originalSwapUTI Max52AlphaNumericText (0..1)
+        [ruleReference empty]
+    override originalSwapSDRIdentifier LEIIdentifier (0..1)
+        [ruleReference empty]
+    override clearingReceiptTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override buyerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override sellerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override priorUSI Max42AlphaNumericText (0..1)
+        [ruleReference empty]
+    override initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference empty]
+    override variationMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference empty]
+    override nonStandardizedTermIndicator boolean (0..1)
+        [ruleReference empty]
+    override amendmentIndicator boolean (0..1)
+        [ruleReference empty]
+    override packageIndicator boolean (0..1)
+        [ruleReference empty]
+    override secondaryTransactionIdentifier Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override swapLinkID Max35AlphaNumericText (0..1)
+        [ruleReference empty]
+    override settlementLocation ISOCountryCodeEnum (0..1)
+        [ruleReference empty]
+    override counterparty2IdentifierSource Counterparty2IdentifierEnum (0..1)
+        [ruleReference empty]
+    override customBasketIndicator boolean (0..1)
+        [ruleReference empty]
+    override underlyingIdOther Max210Text (0..1)
+        [ruleReference empty]
+    override underlyingIdOtherSource ProductIdTypeEnum (0..1)
+        [ruleReference empty]
+    override embeddedOptionType EmbeddedOptionTypeEnum (0..1)
+        [ruleReference empty]
+    override bookingLocation ISOCountryCodeEnum (0..1)
+        [ruleReference empty]
+    override platformIdentifier Max4Text (0..1)
+        [ruleReference empty]
+    override eventTimestamp zonedDateTime (0..1)
+        [ruleReference empty]
+    override eventIdentifier Max52AlphaNumericText (0..1)
+        [ruleReference empty]
+    override beneficiary1 Min20Max72AlphaNumericText (0..1)
+        [ruleReference empty]
+    override beneficiary1IdentifierTypeIndicator boolean (0..1)
+        [ruleReference empty]
+    override callAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference empty]
+    override callCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference empty]
+    override putCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference empty]
+    override putAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference empty]
+    override priceUnitOfMeasure Max4Text (0..1)
+        [ruleReference empty]
+    override firstExerciseDate date (0..1)
+        [ruleReference empty]
+    clearingThresholdOfCounterparty1 boolean (0..1)
+    clearingThresholdOfCounterparty2 boolean (0..1)
+    reportingObligationOfTheCounterparty2 boolean (1..1)
+    directlyLinkedToCommercialActivityOrTreasuryFinancing boolean (0..1)
+    reportTrackingNumber Max52AlphaNumericText (0..1)
+    ptrrId Max52UpperAlphaNumericText (0..1)
+    isin ISINOct2015Identifier (0..1)
+    productClassification CFIOct2015Identifier (1..1)
+    indicatorOfTheUnderlyingIndex IndexEnum (0..*)
+    clearingObligation ClearingObligationEnum (0..1)
+    otherMasterAgreementType Max50AlphaNumericText (0..1)
+    ptrr boolean (0..1)
+    typeOfPTRRTechnique RiskReductionTechniqueEnum (0..1)
+    ptrrServiceProvider LEIIdentifier (0..1)
+    venueOfExecution string (0..1)
+    forwardExchangeRate Max18D13Number (0..1)
+    deliveryPoint EICIdentifier (0..*)
+    interconnectionPoint EICIdentifier (0..1)
+    loadType EnergyLoadType1Code (0..1)
+    deliveryReport ReportableDelivery (0..*)
+    tranche boolean (0..1)
+    collateralPortfolioCode Max52AlphaNumericText (0..1)
+    eventDate ISODate (1..1)
+
+typeAlias Max52UpperAlphaNumericText: <"Specifies an alphanumeric string where only the the upper-case alphabetic characters AZ and the digits 09 are allowed.">
+    string(minLength: 1, maxLength: 52, pattern: "[A-Z0-9]{1,52}")

@@ -1,0 +1,1451 @@
+namespace drr.projection.iso20022.asic.rewrite.trade
+version "${project.version}"
+
+import cdm.base.math.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.asic.rewrite.trade.*
+import drr.regulation.common.*
+import drr.regulation.common.util.*
+import drr.standards.iosco.cde.base.price.*
+import drr.standards.iso.* as iso
+
+import iso20022.auth030.asic.*
+
+func Project_ASICTradeReportToIso20022:
+    [projection XML]
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        iso20022Report Document (1..1)
+
+    set iso20022Report -> derivsTradRpt -> rptHdr: Create_TradeReportHeader
+
+    set iso20022Report -> derivsTradRpt -> tradData -> rpt:
+        Create_TradeReport33Choice__1(drrReport)
+
+func Create_TradeReportHeader:
+    output:
+        rptHdr TradeReportHeader4__1 (1..1)
+
+    set rptHdr:
+        TradeReportHeader4__1 {
+            nbRcrds: 1,
+            ...
+        }
+
+func Create_TradeReport33Choice__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        rpt TradeReport33Choice__1 (1..1)
+
+    alias actionType: drrReport -> actionType
+//    alias lvl: drrReport -> level
+    set rpt:
+        TradeReport33Choice__1 {
+            new: if actionType = NEWT
+                then TradeData43__1 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__1(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__1(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            mod: if actionType = MODI
+                then TradeData43__2 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__1(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__2(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            crrctn: if actionType = CORR
+                then TradeData43__3 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__1(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__3(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            termntn: if actionType = TERM
+                then TradeData43__4 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__2(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__4(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            valtnUpd: if actionType = VALU
+                then TradeData43__5 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__3(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__5(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            err: if actionType = EROR
+                then TradeData43__6 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__2(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__6(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            rvv: if actionType = REVI
+                then TradeData43__3 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__1(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__3(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+                },
+            portOut: if actionType = PRTO
+                then TradeData43__7 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__2(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__7(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport)
+        }}
+
+// CounterpartySpecificData36
+func Create_CounterpartySpecificData36__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__1 (1..1)
+
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__1 {
+            ctrPty: Create_TradeCounterpartyReport20__1(drrReport),
+            rptgTmStmp: drrReport -> reportingTimestamp
+        }
+
+func Create_CounterpartySpecificData36__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__2 (1..1)
+
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__2 {
+            ctrPty: Create_TradeCounterpartyReport20__2(drrReport),
+            rptgTmStmp: drrReport -> reportingTimestamp
+        }
+
+func Create_CounterpartySpecificData36__3:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__3 (1..1)
+
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__3 {
+            ctrPty: Create_TradeCounterpartyReport20__3(drrReport),
+            valtn: ContractValuationData8__1 {
+                ctrctVal: AmountAndDirection109__1 {
+                    amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                        value: Abs(drrReport -> valuationAmount),
+                        ccy: drrReport -> valuationCurrency to-string
+                    },
+                    sgn: if drrReport -> valuationAmount < 0
+                        then False
+                },
+                tmStmp: drrReport -> valuationTimestamp,
+                tp: drrReport -> valuationMethod to-enum ValuationType1Code,
+                dlta: drrReport -> delta
+            },
+            rptgTmStmp: drrReport -> reportingTimestamp,
+        }
+
+// TradeCounterpartyReport20
+func Create_TradeCounterpartyReport20__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__1 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__1 {
+            rptgCtrPty: Counterparty45__1 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1),
+                drctnOrSd: Direction4Choice {
+                    ctrPtySd: drrReport -> direction1 to-enum OptionParty1Code,
+                    drctn: Direction2 {
+                        drctnOfTheFrstLeg: drrReport -> leg1 -> direction2 to-enum OptionParty3Code,
+                        drctnOfTheScndLeg: drrReport -> leg2 -> direction2 to-enum OptionParty3Code
+            }},},
+            othrCtrPty: Counterparty46__1 {
+                idTp: Create_PartyIdentification248Choice__2(drrReport)
+            },
+            brkr: Create_OrganisationIdentification15Choice__1(drrReport -> brokerID),
+            submitgAgt: GetSubmitgAgt(drrReport),
+            clrMmb: Create_PartyIdentification248Choice__1(drrReport -> clearingMember),
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            exctnAgt: GetExctnAgt(drrReport),
+            bnfcry: Create_PartyIdentification248Choice__3(
+                    drrReport -> beneficiary1IdentifierTypeIndicator,
+                    drrReport -> beneficiary1
+                )
+        }
+
+func Create_TradeCounterpartyReport20__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__2 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__2 {
+            rptgCtrPty: Counterparty45__2 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1)
+            },
+            othrCtrPty: Counterparty46__2 {
+                idTp: Create_PartyIdentification248Choice__4(drrReport)
+            },
+            submitgAgt: GetSubmitgAgt(drrReport),
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            exctnAgt: GetExctnAgt(drrReport)
+        }
+
+func Create_TradeCounterpartyReport20__3:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__3 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__3 {
+            rptgCtrPty: Counterparty45__3 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1),
+                rptgXmptn: ReportingExemption1__1 {
+                    rsn: drrReport -> smallScaleBuySideEntityIndicator
+            }},
+            othrCtrPty: Counterparty46__3 {
+                idTp: Create_PartyIdentification248Choice__3(
+                        drrReport -> counterparty2IdentifierType,
+                        drrReport -> counterparty2
+                    )
+            },
+            submitgAgt: GetSubmitgAgt(drrReport),
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            exctnAgt: GetExctnAgt(drrReport)
+        }
+
+func GetSubmitgAgt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        submitgAgt OrganisationIdentification15Choice__1 (1..1)
+
+    set submitgAgt:
+        Create_OrganisationIdentification15Choice__1(drrReport -> reportSubmittingEntityID)
+
+func GetNttyRspnsblForRpt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        nttyRspnsblForRpt OrganisationIdentification15Choice__1 (1..1)
+
+    set nttyRspnsblForRpt:
+        Create_OrganisationIdentification15Choice__1(
+                drrReport -> entityResponsibleForReporting
+            )
+
+func GetExctnAgt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        exctnAgt OrganisationIdentification15Choice__3 (0..2)
+
+    add exctnAgt:
+        if drrReport -> executionAgentCounterparty1 exists
+        then OrganisationIdentification15Choice__3 {
+                lei: if drrReport -> executionAgentCounterparty1 <> "NOAP"
+                    then drrReport -> executionAgentCounterparty1,
+                othr: OrganisationIdentification38__2 {
+                    id: GenericIdentification175__1 {
+                        id: if drrReport -> executionAgentCounterparty1 = "NOAP"
+                            then drrReport -> executionAgentCounterparty1
+        }}}
+
+    add exctnAgt:
+        if drrReport -> executionAgentCounterparty2 exists
+        then OrganisationIdentification15Choice__3 {
+                lei: drrReport -> executionAgentCounterparty2,
+                ...
+            }
+
+// PartyIdentification248Choice
+func Create_PartyIdentification248Choice__1:
+    inputs:
+        lei string (1..1)
+    output:
+        id PartyIdentification248Choice__1 (1..1)
+
+    set id:
+        PartyIdentification248Choice__1 {
+            lgl: LegalPersonIdentification1__1 {
+                id: Create_OrganisationIdentification15Choice__1(lei)
+        }}
+
+func Create_PartyIdentification248Choice__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        id PartyIdentification248Choice__2 (1..1)
+
+    set id:
+        PartyIdentification248Choice__2 {
+            lgl: LegalPersonIdentification1__2 {
+                id: Create_OrganisationIdentification15Choice__2(drrReport),
+                ctry: drrReport -> countryOfTheCounterparty2 to-string
+            },
+            ntrl: if drrReport -> counterparty2IdentifierType = False
+                then NaturalPersonIdentification3__1 {
+                    id: NaturalPersonIdentification2__1 {
+                        id: GenericIdentification175__1 {
+                            id: drrReport -> counterparty2
+                        },
+                        nm: drrReport -> counterparty2Name
+                    },
+                    ctry: drrReport -> countryOfTheCounterparty2 to-string
+        }}
+
+func Create_PartyIdentification248Choice__3:
+    inputs:
+        leiIndicator boolean (0..1)
+        idFromReport string (0..1)
+    output:
+        id PartyIdentification248Choice__3 (1..1)
+
+    set id:
+        PartyIdentification248Choice__3 {
+            lgl: LegalPersonIdentification1__3 {
+                id: Create_OrganisationIdentification15Choice__3(leiIndicator, idFromReport)
+            },
+            ntrl: if leiIndicator = False
+                then NaturalPersonIdentification3__2 {
+                    id: NaturalPersonIdentification2__2 {
+                        id: GenericIdentification175__1 {
+                            id: idFromReport
+        }}}}
+
+func Create_PartyIdentification248Choice__4:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        id PartyIdentification248Choice__4 (1..1)
+
+    set id:
+        PartyIdentification248Choice__4 {
+            lgl: LegalPersonIdentification1__4 {
+                id: Create_OrganisationIdentification15Choice__2(drrReport)
+            },
+            ntrl: if drrReport -> counterparty2IdentifierType = False
+                then NaturalPersonIdentification3__3 {
+                    id: NaturalPersonIdentification2__1 {
+                        id: GenericIdentification175__1 {
+                            id: drrReport -> counterparty2
+                        },
+                        nm: drrReport -> counterparty2Name
+        }}}
+
+// OrganisationIdentification15Choice
+func Create_OrganisationIdentification15Choice__1:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__1 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__1 {
+            lei: lei
+        }
+
+func Create_OrganisationIdentification15Choice__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        id OrganisationIdentification15Choice__2 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__2 {
+            lei: if drrReport -> counterparty2IdentifierType = True
+                then drrReport -> counterparty2,
+            othr: if drrReport -> counterparty2IdentifierType = False
+                then OrganisationIdentification38__1 {
+                    id: GenericIdentification175__1 {
+                        id: drrReport -> counterparty2
+                    },
+                    nm: drrReport -> counterparty2Name,
+        }}
+
+func Create_OrganisationIdentification15Choice__3:
+    inputs:
+        leiIndicator boolean (1..1)
+        idFromReport string (1..1)
+    output:
+        id OrganisationIdentification15Choice__3 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__3 {
+            lei: if leiIndicator = True then idFromReport,
+            othr: if leiIndicator = False
+                then OrganisationIdentification38__2 {
+                    id: GenericIdentification175__1 {
+                        id: idFromReport
+        }}}
+
+// CommonTradeDataReport69
+func Create_CommonTradeDataReport71__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__1 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__1 {
+            ctrctData: Create_ContractType15__1(drrReport),
+            txData: Create_TradeTransaction50__1(drrReport)
+        }
+
+func Create_CommonTradeDataReport71__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__2 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__2 {
+            ctrctData: Create_ContractType15__1(drrReport),
+            txData: Create_TradeTransaction50__2(drrReport)
+        }
+
+func Create_CommonTradeDataReport71__3:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__3 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__3 {
+            ctrctData: Create_ContractType15__1(drrReport),
+            txData: Create_TradeTransaction50__3(drrReport)
+        }
+
+func Create_CommonTradeDataReport71__4:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__4 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__4 {
+            txData: Create_TradeTransaction50__4(drrReport),
+            ctrctData: Create_ContractType15__2(drrReport)
+        }
+
+func Create_CommonTradeDataReport71__5:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__5 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__5 {
+            txData: Create_TradeTransaction50__5(drrReport)
+        }
+
+func Create_CommonTradeDataReport71__6:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__6 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__6 {
+            ctrctData: Create_ContractType15__2(drrReport),
+            txData: Create_TradeTransaction50__6(drrReport)
+        }
+
+func Create_CommonTradeDataReport71__7:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__7 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__7 {
+            ctrctData: Create_ContractType15__2(drrReport),
+            txData: Create_TradeTransaction50__7(drrReport)
+        }
+
+func Create_CommonTradeDataReport69__7:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__6 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__6 {
+            ctrctData: Create_ContractType15__2(drrReport),
+            txData: Create_TradeTransaction50__6(drrReport)
+        }
+
+// ContractType14
+func Create_ContractType15__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrctData ContractType15__1 (1..1)
+
+    set ctrctData:
+        ContractType15__1 {
+            ctrctTp: drrReport -> contractType to-enum FinancialInstrumentContractType2Code,
+            asstClss: drrReport -> assetClass to-enum ProductType4Code__1,
+            pdctId: SecurityIdentification46__1 {
+                unqPdctIdr: UniqueProductIdentifier2Choice__1 {
+                    id: drrReport -> uniqueProductIdentifier
+            }},
+            undrlygInstrm: SecurityIdentification41Choice__1 {
+                isin: if drrReport -> underlyingIdentificationType = I
+                    then drrReport -> underlyingIdentification,
+                bskt: if drrReport -> underlyingIdentificationType = B
+                    then CustomBasket4__1 {
+                        strr: if drrReport -> basketStructurerID exists
+                            then drrReport -> basketStructurerID,
+                        id: if drrReport -> customBasketCode exists
+                            then drrReport -> customBasketCode,
+                        cnsttnts: drrReport -> basketConstituents
+                            extract
+                                BasketConstituents3__1 {
+                                    instrmId: InstrumentIdentification6Choice__1 {
+                                        isin: if source = ProductIdTypeEnum -> ISIN
+                                            then identifier,
+                                        othrId: if source <> ProductIdTypeEnum -> ISIN
+                                            then GenericIdentification184 {
+                                                id: identifier,
+                                                src: source to-string
+                }}}},
+                othr: if drrReport -> underlyingIdentificationType = O
+                    then GenericIdentification184 {
+                        id: drrReport -> underlyingIdOther,
+                        src: drrReport -> underlyingIdOtherSource to-string
+            }},
+            sttlmCcy: CurrencyExchange23__1 {
+                ccy: drrReport -> leg1 -> settlementCurrency to-string
+            },
+            sttlmCcyScndLeg: if drrReport -> leg2 -> settlementCurrency to-string = "Not Modelled"
+                then empty
+            else CurrencyExchange23__1 {
+                ccy: drrReport -> leg2 -> settlementCurrency to-string
+        }}
+
+func Create_ContractType15__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ctrctData ContractType15__2 (1..1)
+
+    set ctrctData:
+        ContractType15__2 {
+            ctrctTp: drrReport -> contractType to-enum FinancialInstrumentContractType2Code,
+            asstClss: drrReport -> assetClass to-enum ProductType4Code__1,
+            pdctId: SecurityIdentification46__2 {
+                unqPdctIdr: UniqueProductIdentifier2Choice__1 {
+                    id: drrReport -> uniqueProductIdentifier
+        }}}
+
+// TradeTransaction49
+func Create_TradeTransaction50__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__1 (1..1)
+
+    set txData:
+        TradeTransaction50__1 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            prrTxId: GetPrrTxId(drrReport),
+            collPrtflCd: GetCollPrtflCd(drrReport),
+            pltfmIdr: GetPltfmIdr(drrReport),
+            txPric: GetTxPric(drrReport),
+            ntnlAmt: GetNtnlAmt(drrReport),
+            ntnlQty: GetNtnlQty(drrReport),
+            exctnTmStmp: GetExctnTmStmp(drrReport),
+            fctvDt: GetFctvDt(drrReport),
+            xprtnDt: GetXprtnDt(drrReport),
+            derivEvt: GetDerivEvt1(drrReport),
+            tradClr: GetTradClr(drrReport),
+            intrstRate: GetIntrstRate(drrReport),
+            ccy: GetCcy(drrReport),
+            optn: GetOptn(drrReport),
+            cdt: GetCdt(drrReport),
+            othrPmt: GetOthrPmt(drrReport),
+            packg: GetPackg(drrReport),
+            scndryTxId: drrReport -> secondaryTransactionIdentifier
+        }
+
+func Create_TradeTransaction50__2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__2 (1..1)
+
+    set txData:
+        TradeTransaction50__2 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            prrTxId: GetPrrTxId(drrReport),
+            collPrtflCd: GetCollPrtflCd(drrReport),
+            pltfmIdr: GetPltfmIdr(drrReport),
+            txPric: GetTxPric(drrReport),
+            ntnlAmt: GetNtnlAmt(drrReport),
+            ntnlQty: GetNtnlQty(drrReport),
+            exctnTmStmp: GetExctnTmStmp(drrReport),
+            fctvDt: GetFctvDt(drrReport),
+            xprtnDt: GetXprtnDt(drrReport),
+            derivEvt: GetDerivEvt2(drrReport),
+            tradClr: GetTradClr(drrReport),
+            intrstRate: GetIntrstRate(drrReport),
+            ccy: GetCcy(drrReport),
+            optn: GetOptn(drrReport),
+            cdt: GetCdt(drrReport),
+            othrPmt: GetOthrPmt(drrReport),
+            packg: GetPackg(drrReport),
+            scndryTxId: drrReport -> secondaryTransactionIdentifier
+        }
+
+func Create_TradeTransaction50__3:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__3 (1..1)
+
+    set txData:
+        TradeTransaction50__3 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            exctnTmStmp: GetExctnTmStmp(drrReport),
+            derivEvt: GetDerivEvt3(drrReport),
+            othrPmt: GetOthrPmt(drrReport),
+            collPrtflCd: GetCollPrtflCd(drrReport),
+            ntnlAmt: GetNtnlAmt(drrReport),
+            tradClr: GetTradClr(drrReport),
+            prrTxId: GetPrrTxId(drrReport),
+            pltfmIdr: GetPltfmIdr(drrReport),
+            txPric: GetTxPric(drrReport),
+            ntnlQty: GetNtnlQty(drrReport),
+            fctvDt: GetFctvDt(drrReport),
+            xprtnDt: GetXprtnDt(drrReport),
+            intrstRate: GetIntrstRate(drrReport),
+            ccy: GetCcy(drrReport),
+            optn: GetOptn(drrReport),
+            cdt: GetCdt(drrReport),
+            packg: GetPackg(drrReport),
+            scndryTxId: drrReport -> secondaryTransactionIdentifier
+        }
+
+func Create_TradeTransaction50__4:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__4 (1..1)
+
+    set txData:
+        TradeTransaction50__4 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            exctnTmStmp: GetExctnTmStmp(drrReport),
+            derivEvt: GetDerivEvt1(drrReport),
+            scndryTxId: drrReport -> secondaryTransactionIdentifier,
+            othrPmt: GetOthrPmt(drrReport)
+        }
+
+func Create_TradeTransaction50__5:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__5 (1..1)
+
+    set txData:
+        TradeTransaction50__5 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            intrstRate: GetIntrstRate_2(drrReport)
+        }
+
+func Create_TradeTransaction50__6:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__6 (1..1)
+
+    set txData:
+        TradeTransaction50__6 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            derivEvt: GetDerivEvt4(drrReport),
+            scndryTxId: drrReport -> secondaryTransactionIdentifier
+        }
+
+func Create_TradeTransaction50__7:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txData TradeTransaction50__7 (1..1)
+
+    set txData:
+        TradeTransaction50__7 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__1 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary
+            }},
+            derivEvt: GetDerivEvt5(drrReport),
+            scndryTxId: drrReport -> secondaryTransactionIdentifier
+        }
+
+// TradeTransaction49 helper funcs
+func GetTxId:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        uti UTIIdentifier (1..1)
+
+    set uti: drrReport -> uniqueTransactionIdentifier
+
+func GetPrrTxId:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        prrTxId UniqueTransactionIdentifier3Choice__1 (1..1)
+
+    set prrTxId:
+        UniqueTransactionIdentifier3Choice__1 {
+            unqTxIdr: drrReport -> priorUTI,
+            prtry: GenericIdentification175__1 {
+                id: drrReport -> priorUTIProprietary
+        }}
+
+func GetCollPrtflCd:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        collPrtflCd CollateralPortfolioCode6Choice__1 (1..1)
+
+    set collPrtflCd:
+        CollateralPortfolioCode6Choice__1 {
+            mrgnPrtflCd: MarginPortfolio4__1 {
+                initlMrgnPrtflCd: PortfolioCode5Choice__1 {
+                    prtfl: if drrReport -> collateralPortfolioIndicator = True
+                        then PortfolioIdentification3__1 {
+                            cd: drrReport -> initialMarginCollateralPortfolioCode
+                        },
+                    noPrtfl: if drrReport -> collateralPortfolioIndicator = False
+                        then NotApplicable1Code -> NOAP
+                },
+                vartnMrgnPrtflCd: PortfolioCode5Choice__1 {
+                    prtfl: if drrReport -> collateralPortfolioIndicator = True
+                        then PortfolioIdentification3__1 {
+                            cd: drrReport -> variationMarginCollateralPortfolioCode
+                        },
+                    noPrtfl: if drrReport -> collateralPortfolioIndicator = False
+                        then NotApplicable1Code -> NOAP
+        }}}
+
+/*
+ * func GetRptTrckgNb:
+ *     inputs:
+ *         drrReport ASICTransactionReport (1..1)
+ *     output:
+ *         rptTrckgNb Max52Text (1..1)
+
+ *     set rptTrckgNb: drrReport -> reportTrackingNumber
+ */
+func GetPltfmIdr:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        pltfmIdr MICIdentifier (1..1)
+
+    set pltfmIdr: drrReport -> platformIdentifier
+
+func GetTxPric:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        txPric PriceData2__1 (1..1)
+
+    set txPric:
+        PriceData2__1 {
+            pric: drrReport
+                extract
+                    SecuritiesTransactionPrice17Choice__1 {
+                        mntryVal: if priceNotation = Monetary
+                            then AmountAndDirection106__1 {
+                                amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                    value: Abs(price -> monetary),
+                                    ccy: drrReport -> priceCurrency to-string
+                                },
+                                sgn: if price -> monetary < 0
+                                    then False
+                            },
+                        dcml: if priceNotation = Decimal
+                            then price -> decimal
+                    },
+            unitOfMeasr: UnitOfMeasure8Choice__1 {
+                cd: drrReport -> priceUnitOfMeasure
+        }}
+
+func GetNtnlAmt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ntnlAmt NotionalAmountLegs5__1 (1..1)
+
+    set ntnlAmt:
+        NotionalAmountLegs5__1 {
+            frstLeg: NotionalAmount5__1 {
+                amt: AmountAndDirection106__2 {
+                    amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                        value: Abs(drrReport -> leg1 -> notionalAmount),
+                        ccy: drrReport -> leg1 -> notionalCurrency to-string
+                    },
+                    sgn: if drrReport -> leg1 -> notionalAmount < 0
+                        then False
+                },
+                schdlPrd: drrReport -> leg1 -> notionalAmountSchedule
+                    extract
+                        Schedule11__1 {
+                            uadjstdFctvDt: effectiveDate,
+                            amt: AmountAndDirection106__2 {
+                                amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                                    value: Abs(value),
+                                    ccy: drrReport -> leg1 -> notionalCurrency to-string
+                                },
+                                sgn: if value < 0 then False
+                            },
+                            ...
+            }},
+            scndLeg: NotionalAmount6__1 {
+                amt: AmountAndDirection106__2 {
+                    amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                        value: Abs(drrReport -> leg2 -> notionalAmount),
+                        ccy: drrReport -> leg2 -> notionalCurrency to-string
+                    },
+                    sgn: if drrReport -> leg2 -> notionalAmount < 0
+                        then False
+                },
+                schdlPrd: drrReport -> leg2 -> notionalAmountSchedule
+                    extract
+                        Schedule11__1 {
+                            uadjstdFctvDt: effectiveDate,
+                            amt: AmountAndDirection106__2 {
+                                amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                                    value: Abs(value),
+                                    ccy: drrReport -> leg2 -> notionalCurrency to-string
+                                },
+                                sgn: if value < 0 then False
+                            },
+                            ...
+        }} // TODO: Notional Amount End Date
+        }
+
+func GetNtnlQty:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ntnlQty NotionalQuantityLegs5__1 (0..1)
+
+    set ntnlQty:
+        NotionalQuantityLegs5__1 {
+            frstLeg: NotionalQuantity9__1 {
+                ttlQty: drrReport -> leg1 -> totalNotionalQuantity,
+                unitOfMeasr: UnitOfMeasure8Choice__1 {
+                    cd: drrReport -> leg1 -> quantityUnitOfMeasure
+                },
+                dtls: QuantityOrTerm1Choice__1 {
+                    term: QuantityTerm1__1 {
+                        qty: drrReport -> leg1 -> notionalQuantity
+            }}},
+            scndLeg: NotionalQuantity9__1 {
+                ttlQty: drrReport -> leg2 -> totalNotionalQuantity,
+                unitOfMeasr: UnitOfMeasure8Choice__1 {
+                    cd: drrReport -> leg2 -> quantityUnitOfMeasure
+                },
+                dtls: QuantityOrTerm1Choice__1 {
+                    term: QuantityTerm1__1 {
+                        qty: drrReport -> leg2 -> notionalQuantity
+        }}} // TODO: Notional Amount End Date
+        }
+
+func GetExctnTmStmp:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        exctnTmStmp zonedDateTime (1..1)
+
+    set exctnTmStmp: drrReport -> executionTimestamp
+
+func GetFctvDt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        fctvDt ISODate (1..1)
+
+    set fctvDt: drrReport -> effectiveDate
+
+func GetXprtnDt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        xprtnDt ISODate (1..1)
+
+    set xprtnDt: drrReport -> expirationDate
+
+// DerivativeEvent6
+func GetDerivEvt1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        derivEvt DerivativeEvent6__1 (1..1)
+
+    set derivEvt:
+        DerivativeEvent6__1 {
+            tp: GetDerivEvtTp(drrReport),
+            id: GetDerivEvtId(drrReport),
+            tmStmp: GetDerivEvtTmStmp(drrReport)
+        }
+
+func GetDerivEvt2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        derivEvt DerivativeEvent6__2 (1..1)
+
+    set derivEvt:
+        DerivativeEvent6__2 {
+            id: GetDerivEvtId(drrReport),
+            tmStmp: GetDerivEvtTmStmp(drrReport),
+            tp: GetDerivEvtTp(drrReport)
+        }
+
+func GetDerivEvt3:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        derivEvt DerivativeEvent6__3 (1..1)
+
+    set derivEvt:
+        DerivativeEvent6__3 {
+            id: GetDerivEvtId(drrReport),
+            tmStmp: GetDerivEvtTmStmp(drrReport)
+        }
+
+func GetDerivEvt4:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        derivEvt DerivativeEvent6__4 (1..1)
+
+    set derivEvt:
+        DerivativeEvent6__4 {
+            tmStmp: GetDerivEvtTmStmp(drrReport)
+        }
+
+func GetDerivEvt5:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        derivEvt DerivativeEvent6__5 (1..1)
+
+    set derivEvt:
+        DerivativeEvent6__5 {
+            tp: GetDerivEvtTp(drrReport),
+            tmStmp: GetDerivEvtTmStmp(drrReport)
+        }
+
+func GetDerivEvtId:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        id EventIdentifier1Choice__1 (1..1)
+
+    set id:
+        EventIdentifier1Choice__1 {
+            evtIdr: drrReport -> eventIdentifier
+        }
+
+func GetDerivEvtTp:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        tp DerivativeEventType3Code__1 (1..1)
+
+    set tp: drrReport -> eventType to-enum DerivativeEventType3Code__1
+
+func GetDerivEvtTmStmp:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        tmStmp DateAndDateTime2Choice__1 (1..1)
+
+    set tmStmp:
+        DateAndDateTime2Choice__1 {
+            dtTm: drrReport -> eventTimestamp
+        }
+
+func GetTradClr:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        tradClr TradeClearing11__1 (1..1)
+
+    set tradClr:
+        TradeClearing11__1 {
+            clrSts: Cleared23Choice__1 {
+                clrd: if drrReport -> cleared = Y
+                    then ClearingPartyAndTime21Choice__1 {
+                        dtls: ClearingPartyAndTime22__1 {
+                            ccp: Create_OrganisationIdentification15Choice__1(
+                                    drrReport -> centralCounterparty
+                                ),
+                            clrDtTm: drrReport -> clearingTimestamp
+                }},
+                intndToClear: empty,
+                nonClrd: if drrReport -> cleared = N
+                    then ClearingExceptionOrExemption3Choice__1 {
+                        rsn: NoReasonCode -> NORE
+        }}}
+
+func GetIntrstRate:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        intrstRate InterestRateLegs14__1 (1..1)
+
+    set intrstRate:
+        InterestRateLegs14__1 {
+            frstLeg: InterestRate33Choice__1 {
+                fxd: if drrReport -> leg1 -> fixedRate exists
+                    then Create_FixedRate(
+                            drrReport -> leg1 -> fixedRate,
+                            drrReport -> leg1 -> periodicPayment -> fixedRateDayCountConvention to-enum InterestComputationMethod4Code,
+                            drrReport -> leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriod to-enum Frequency13Code__1,
+                            drrReport -> leg1 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier
+                        ),
+                fltg: if drrReport -> leg1 -> fixedRate exists = False
+                    then Create_FloatingRate(
+                            drrReport -> leg1 -> spread -> monetary,
+                            drrReport -> leg1 -> spread -> decimal,
+                            drrReport -> leg1 -> spread -> basis,
+                            drrReport -> leg1 -> spreadCurrency to-string,
+                            drrReport -> leg1 -> spreadNotation,
+                            drrReport -> leg1 -> periodicPayment -> floatingRateDayCountConvention to-enum InterestComputationMethod4Code,
+                            drrReport -> leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriod to-enum Frequency13Code__1,
+                            drrReport -> leg1 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier
+                        )
+            },
+            scndLeg: InterestRate33Choice__2 {
+                fxd: if drrReport -> leg2 -> fixedRate exists
+                    then Create_FixedRate(
+                            drrReport -> leg2 -> fixedRate,
+                            drrReport -> leg2 -> periodicPayment -> fixedRateDayCountConvention to-enum InterestComputationMethod4Code,
+                            drrReport -> leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriod to-enum Frequency13Code__1,
+                            drrReport -> leg2 -> periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier
+                        ),
+                fltg: if drrReport -> leg2 -> fixedRate exists = False
+                    then Create_FloatingRate2(
+                            drrReport -> leg2 -> periodicPayment -> floatingRateIdentifier,
+                            drrReport -> leg2 -> periodicPayment -> floatingRateReferencePeriod to-string,
+                            drrReport -> leg2 -> periodicPayment -> floatingRateReferencePeriodMultiplier,
+                            drrReport -> leg2 -> spread -> monetary,
+                            drrReport -> leg2 -> spread -> decimal,
+                            drrReport -> leg2 -> spread -> basis,
+                            drrReport -> leg2 -> spreadCurrency to-string,
+                            drrReport -> leg2 -> spreadNotation,
+                            drrReport -> leg2 -> periodicPayment -> floatingRateDayCountConvention to-enum InterestComputationMethod4Code,
+                            drrReport -> leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriod to-enum Frequency13Code__1,
+                            drrReport -> leg2 -> periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier
+                        )
+        },}
+
+func GetIntrstRate_2:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        intrstRate InterestRateLegs14__2 (1..1)
+
+    set intrstRate:
+        InterestRateLegs14__2 {
+            frstLeg: InterestRate33Choice__3 {
+                fltg: Create_FloatingRate3(
+                        drrReport -> leg1 -> nextFloatingReferenceResetDate
+                    )
+            },
+            scndLeg: InterestRate33Choice__3 {
+                fltg: Create_FloatingRate3(
+                        drrReport -> leg2 -> nextFloatingReferenceResetDate
+                    )
+        },}
+
+func Create_FixedRate:
+    inputs:
+        fixedRate iso.Max11Number (0..1)
+        fixedRateDayCountConvention InterestComputationMethod4Code (0..1)
+        fixedRatePaymentFrequencyPeriod Frequency13Code__1 (0..1)
+        fixedRatePaymentFrequencyPeriodMultiplier Max3Number (0..1)
+    output:
+        out FixedRate10__1 (1..1)
+
+    set out:
+        FixedRate10__1 {
+            rate: SecuritiesTransactionPrice14Choice__1 {
+                dcml: fixedRate
+            },
+            dayCnt: InterestComputationMethodFormat7__1 {
+                cd: fixedRateDayCountConvention
+            },
+            pmtFrqcy: InterestRateFrequency3Choice__1 {
+                term: InterestRateContractTerm4__1 {
+                    unit: fixedRatePaymentFrequencyPeriod,
+                    val: fixedRatePaymentFrequencyPeriodMultiplier
+        }}}
+
+func Create_FloatingRate:
+    inputs:
+        spreadOfLeg1Monetary BaseOne18Rate (0..1)
+        spreadOfLeg1Decimal BaseOneRate (0..1)
+        spreadOfLeg1Basis iso.BasisFormat (0..1)
+        spreadCurrencyOfLeg1 string (0..1)
+        spreadOfLeg1Notation PriceNotationEnum (0..1)
+        floatingRateDayCountConvention InterestComputationMethod4Code (0..1)
+        floatingRatePaymentFrequencyPeriod Frequency13Code__1 (0..1)
+        floatingRatePaymentFrequencyPeriodMultiplier Max3Number (0..1)
+    output:
+        out FloatingRate13__1 (1..1)
+
+    set out:
+        FloatingRate13__1 {
+            sprd: SecuritiesTransactionPrice20Choice__1 {
+                mntryVal: if spreadOfLeg1Notation = Monetary
+                    then AmountAndDirection106__1 {
+                        amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                            value: Abs(spreadOfLeg1Monetary),
+                            ccy: spreadCurrencyOfLeg1 to-string
+                        },
+                        sgn: if spreadOfLeg1Monetary < 0 then False
+                    },
+                dcml: if spreadOfLeg1Notation = Decimal
+                    then spreadOfLeg1Decimal,
+                bsisPtSprd: if spreadOfLeg1Notation = Basis
+                    then spreadOfLeg1Basis
+            },
+            dayCnt: InterestComputationMethodFormat7__1 {
+                cd: floatingRateDayCountConvention
+            },
+            pmtFrqcy: InterestRateFrequency3Choice__1 {
+                term: InterestRateContractTerm4__1 {
+                    unit: floatingRatePaymentFrequencyPeriod,
+                    val: floatingRatePaymentFrequencyPeriodMultiplier
+        }}}
+
+func Create_FloatingRate2:
+    inputs:
+        indicatorOfTheFloatingRate string (0..1)
+        floatingRateReferencePeriodTimePeriod string (0..1)
+        floatingRateReferencePeriodMultiplier Max3Number (0..1)
+        spreadOfLeg2Monetary BaseOne18Rate (0..1)
+        spreadOfLeg2Decimal BaseOneRate (0..1)
+        spreadOfLeg2Basis iso.BasisFormat (0..1)
+        spreadCurrencyOfLeg2 string (0..1)
+        spreadOfLeg2Notation PriceNotationEnum (0..1)
+        floatingRateDayCountConvention InterestComputationMethod4Code (0..1)
+        floatingRatePaymentFrequencyPeriod Frequency13Code__1 (0..1)
+        floatingRatePaymentFrequencyPeriodMultiplier Max3Number (0..1)
+    output:
+        out FloatingRate13__2 (1..1)
+
+    set out:
+        FloatingRate13__2 {
+            rate: FloatingRateIdentification8Choice__1 {
+                cd: indicatorOfTheFloatingRate
+            },
+            refPrd: InterestRateContractTerm4__2 {
+                unit: floatingRateReferencePeriodTimePeriod to-enum Frequency13Code__2,
+                val: floatingRateReferencePeriodMultiplier
+            },
+            sprd: SecuritiesTransactionPrice20Choice__1 {
+                mntryVal: if spreadOfLeg2Notation = Monetary
+                    then AmountAndDirection106__1 {
+                        amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                            value: Abs(spreadOfLeg2Monetary),
+                            ccy: spreadCurrencyOfLeg2 to-string
+                        },
+                        sgn: if spreadOfLeg2Monetary < 0 then False
+                    },
+                dcml: if spreadOfLeg2Notation = Decimal
+                    then spreadOfLeg2Decimal,
+                bsisPtSprd: if spreadOfLeg2Notation = Basis
+                    then spreadOfLeg2Basis
+            },
+            dayCnt: InterestComputationMethodFormat7__1 {
+                cd: floatingRateDayCountConvention
+            },
+            pmtFrqcy: InterestRateFrequency3Choice__1 {
+                term: InterestRateContractTerm4__1 {
+                    unit: floatingRatePaymentFrequencyPeriod to-enum Frequency13Code__1,
+                    val: floatingRatePaymentFrequencyPeriodMultiplier
+        }}}
+
+func Create_FloatingRate3:
+    inputs:
+        nextFloatingReferenceResetDateLeg ISODate (0..1)
+    output:
+        out FloatingRate13__3 (1..1)
+
+    set out:
+        FloatingRate13__3 {
+            nxtFltgRst: ResetDateAndValue1__1 {
+                dt: nextFloatingReferenceResetDateLeg
+        }}
+
+func GetCcy:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        ccy CurrencyExchange22__1 (1..1)
+
+    set ccy:
+        CurrencyExchange22__1 {
+            xchgRate: drrReport -> exchangeRate,
+            xchgRateBsis: ExchangeRateBasis1Choice__1 {
+                ccyPair: ExchangeRateBasis1 {
+                    baseCcy: if drrReport -> assetClass = CommonAssetClass -> CURR
+                        then SubString(drrReport -> exchangeRateBasis, 1, 3),
+                    qtdCcy: if drrReport -> assetClass = CommonAssetClass -> CURR
+                        then SubString(drrReport -> exchangeRateBasis, 5, 3)
+        }}}
+
+func GetOptn:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        optn OptionOrSwaption11__1 (1..1)
+
+    set optn:
+        OptionOrSwaption11__1 {
+            strkPric: drrReport
+                extract
+                    SecuritiesTransactionPrice17Choice__1 {
+                        mntryVal: if strikePriceNotation = Monetary
+                            then AmountAndDirection106__1 {
+                                amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                    value: Abs(strikePrice -> monetary),
+                                    ccy: if (drrReport -> contractType = CommonContractType -> OPTN or drrReport -> contractType = CommonContractType -> SWPT)
+                                            and (drrReport -> assetClass = CommonAssetClass -> INTR) = False
+                                        then strikePriceCurrency
+                                },
+                                sgn: if strikePrice -> monetary < 0
+                                    then False
+                            },
+                        dcml: if strikePriceNotation = Decimal
+                            then strikePrice -> decimal
+                    },
+            callAmt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: drrReport -> callAmount,
+                ccy: drrReport -> callCurrency to-string
+            },
+            putAmt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: drrReport -> putAmount,
+                ccy: drrReport -> putCurrency to-string
+            },
+            prmAmt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                value: drrReport -> optionPremiumAmount,
+                ccy: if drrReport -> optionPremiumCurrency exists
+                    then drrReport -> optionPremiumCurrency to-string
+                else if drrReport -> optionPremiumAmount = 0
+                then drrReport -> leg1 -> settlementCurrency to-string
+            },
+            prmPmtDt: drrReport -> optionPremiumPaymentDate,
+            mtrtyDtOfUndrlyg: drrReport -> maturityDateOfTheUnderlying,
+            brrrLvls: Create_OptionBarrierLevel1Choice__1(drrReport)
+        }
+
+func Create_OptionBarrierLevel1Choice__1:
+    inputs:
+        drrReport ASICTransactionReport (0..1)
+    output:
+        brrrLvls OptionBarrierLevel1Choice__1 (0..1)
+    set brrrLvls:
+        OptionBarrierLevel1Choice__1 {
+            sngl: drrReport -> barrier
+                extract
+                    SecuritiesTransactionPrice23Choice__1 {
+                        mntryVal: if _single -> notation = Monetary
+                            then AmountAndDirection106__1 {
+                                amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                    value: Abs(_single -> price -> monetary),
+                                    ccy: _single -> currency to-string
+                                },
+                                sgn: if _single -> price -> monetary < 0
+                                    then False
+                            },
+                        dcml: if _single -> notation = Decimal
+                            then _single -> price -> decimal
+                    },
+            mltpl: OptionMultipleBarrierLevels1__1 {
+                lwrLvl: drrReport -> barrier
+                    extract
+                        SecuritiesTransactionPrice23Choice__1 {
+                            mntryVal: if lower -> notation = Monetary
+                                then AmountAndDirection106__1 {
+                                    amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                        value: Abs(lower -> price -> monetary),
+                                        ccy: lower -> currency to-string
+                                    },
+                                    sgn: if lower -> price -> monetary < 0
+                                        then False
+                                },
+                            dcml: if lower -> notation = Decimal
+                                then lower -> price -> decimal
+                        },
+                upperLvl: drrReport -> barrier
+                    extract
+                        SecuritiesTransactionPrice23Choice__1 {
+                            mntryVal: if upper -> notation = Monetary
+                                then AmountAndDirection106__1 {
+                                    amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                        value: Abs(upper -> price -> monetary),
+                                        ccy: upper -> currency to-string
+                                    },
+                                    sgn: if upper -> price -> monetary < 0
+                                        then False
+                                },
+                            dcml: if upper -> notation = Decimal
+                                then upper -> price -> decimal
+        }}}
+
+func GetCdt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        cdt CreditDerivative4__1 (1..1)
+
+    set cdt:
+        CreditDerivative4__1 {
+            indxFctr: drrReport -> indexFactor,
+            trch: TrancheIndicator3Choice__1 {
+                trnchd: Tranche3 {
+                    attchmntPt: drrReport -> cdSIndexAttachmentPoint,
+                    dtchmntPt: drrReport -> cdSIndexDetachmentPoint
+        }}}
+
+func GetOthrPmt:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        othrPmt OtherPayment5__1 (0..*)
+
+    add othrPmt:
+        drrReport -> otherPayment
+            extract
+                OtherPayment5__1 {
+                    pmtTp: PaymentType5Choice__1 {
+                        tp: paymentType to-enum PaymentType4Code
+                    },
+                    pmtAmt: AmountAndDirection106__3 {
+                        amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                            value: amount,
+                            ccy: currency to-string
+                    }},
+                    pmtDt: date,
+                    pmtPyer: PartyIdentification236Choice__1 {
+                        lgl: Create_OrganisationIdentification15Choice__3(
+                                payerFormat = PartyIdentifierFormatEnum -> Lei,
+                                payer
+                            ),
+                        ntrl: NaturalPersonIdentification2__2 {
+                            id: GenericIdentification175__1 {
+                                id: if payerFormat = PartyIdentifierFormatEnum -> LeiAndPerson
+                                    then payer
+                    }}},
+                    pmtRcvr: PartyIdentification236Choice__1 {
+                        lgl: Create_OrganisationIdentification15Choice__3(
+                                receiverFormat = PartyIdentifierFormatEnum -> Lei,
+                                receiver
+                            ),
+                        ntrl: NaturalPersonIdentification2__2 {
+                            id: GenericIdentification175__1 {
+                                id: if receiverFormat = PartyIdentifierFormatEnum -> LeiAndPerson
+                                    then receiver
+        }}}}
+
+func GetPackg:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        packg Package4__1 (1..1)
+
+    set packg:
+        Package4__1 {
+            cmplxTradId: drrReport -> packageIdentifier,
+            pric: drrReport
+                extract
+                    SecuritiesTransactionPrice17Choice__1 {
+                        mntryVal: if packageTransactionPriceNotation = Monetary
+                            then AmountAndDirection106__1 {
+                                amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                    value: Abs(packageTransactionPrice -> monetary),
+                                    ccy: drrReport -> packageTransactionPriceCurrency to-string
+                                },
+                                sgn: if packageTransactionPrice -> monetary < 0
+                                    then False
+                            },
+                        dcml: if packageTransactionPriceNotation = Decimal
+                            then packageTransactionPrice -> decimal
+                    },
+            sprd: drrReport
+                extract
+                    SecuritiesTransactionPrice20Choice__1 {
+                        mntryVal: if packageTransactionSpreadNotation = Monetary
+                            then AmountAndDirection106__1 {
+                                amt: ActiveOrHistoricCurrencyAnd13DecimalAmount {
+                                    value: Abs(packageTransactionSpread -> monetary),
+                                    ccy: drrReport -> packageTransactionSpreadCurrency to-string
+                                },
+                                sgn: if packageTransactionSpread -> monetary < 0
+                                    then False
+                            },
+                        dcml: if packageTransactionSpreadNotation = Decimal
+                            then packageTransactionSpread -> decimal,
+                        bsisPtSprd: if packageTransactionSpreadNotation = Basis
+                            then packageTransactionSpread -> basis
+                    },
+            ...
+        }
+
+func Create_TechnicalAttributes5__1:
+    inputs:
+        drrReport ASICTransactionReport (1..1)
+    output:
+        techAttrbts TechnicalAttributes5__1 (1..1)
+
+    set techAttrbts:
+        TechnicalAttributes5__1 {
+            techRcrdId: drrReport -> technicalRecordId,
+            rptRctTmStmp: drrReport -> reportingTimestamp
+        }

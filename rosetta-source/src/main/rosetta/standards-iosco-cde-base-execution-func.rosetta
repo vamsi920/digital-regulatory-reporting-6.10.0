@@ -1,0 +1,216 @@
+namespace drr.standards.iosco.cde.base.execution
+version "${project.version}"
+
+import cdm.product.* as product
+
+import drr.regulation.common.*
+
+func ExtractFinalContractualSettlementDate:
+    inputs:
+        reportableInformation ReportableInformation (1..1)
+        product product.template.Product (1..1)
+    output:
+        finalContractualSettlementDate date (1..1)
+
+    set finalContractualSettlementDate:
+        if (reportableInformation -> finalContractualSettlementDate exists)
+        then reportableInformation -> finalContractualSettlementDate
+        else ( // CO using schedule
+        if (IsCommoditySwap(product) or IsCommodityFloatingPriceForward(product))
+                and EconomicTermsForProduct(product) -> payout -> commodityPayout -> schedule exists
+        then [
+            EconomicTermsForProduct(product) -> payout -> commodityPayout -> schedule -> schedulePeriod -> paymentDate max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        else if IsCommodityFixedPriceForward(product)
+                and EconomicTermsForProduct(product) -> payout -> fixedPricePayout -> schedule exists
+        then ([
+            (EconomicTermsForProduct(product) -> payout -> fixedPricePayout -> schedule -> schedulePeriod -> paymentDate max),
+            (EconomicTermsForProduct(product) -> payout -> fixedPricePayout -> schedule -> schedulePeriod -> fixingPeriod -> endDate max),
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max)
+        else if (IsCommodityOption(product) or IsCommoditySwaption(product))
+                and EconomicTermsForProduct(product) -> payout -> optionPayout -> schedule exists
+        then [
+            EconomicTermsForProduct(product) -> payout -> optionPayout -> schedule -> schedulePeriod -> paymentDate max,
+            EconomicTermsForProduct(product) -> payout -> optionPayout only-element -> schedule -> schedulePeriod -> fixingPeriod -> endDate max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        else if product.qualification.Qualify_Commodity_Swaption(
+                    EconomicTermsForProduct(product)
+                )
+                and EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> commodityPayout -> schedule exists
+        then [
+            EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> commodityPayout -> schedule -> schedulePeriod -> paymentDate max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        // CO without schedule
+        else if (IsCommoditySwap(product) or IsCommodityFloatingPriceForward(product))
+        then [
+            EconomicTermsForProduct(product) -> payout -> commodityPayout -> paymentDates first -> lastRegularPaymentDate,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        else if IsCommodityFixedPriceForward(product)
+        then [
+            EconomicTermsForProduct(product) -> payout -> fixedPricePayout only-element -> paymentDates -> lastRegularPaymentDate,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        // Swaption
+        else if EconomicTermsForProduct(UnderlierForProduct(product)) -> terminationDate exists
+        then [
+            (EconomicTermsForProduct(UnderlierForProduct(product)) -> terminationDate -> adjustableDate
+                extract AdjustableDateResolution),
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        // IRS
+        else if EconomicTermsForProduct(product) -> payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate exists
+        then [
+            EconomicTermsForProduct(product) -> payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max,
+            EconomicTermsForProduct(product) -> payout -> interestRatePayout -> paymentDates -> firstPaymentDate
+                then max,
+            EconomicTermsForProduct(product) -> payout -> interestRatePayout -> paymentDates -> lastRegularPaymentDate
+                then max,
+            (EconomicTermsForProduct(product) -> payout -> interestRatePayout -> paymentDates -> paymentDateSchedule -> finalPaymentDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max),
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        // CO Basis
+        else if IsCommoditySwapFloatFloat(product)
+        then [
+            (EconomicTermsForProduct(product) -> payout -> commodityPayout -> calculationPeriodDates -> terminationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max),
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        // option - european exercise
+        else if EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> optionStyle -> europeanExercise -> expirationDate -> adjustableDate exists
+        then ([
+            (EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> optionStyle -> europeanExercise -> expirationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max),
+            EconomicTermsForProduct(product) -> payout -> optionPayout -> settlementTerms -> settlementDate -> valueDate max,
+            EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max)
+        // option - bermuda exercise
+        else if EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> optionStyle -> bermudaExercise -> bermudaExerciseDates -> adjustableDates exists
+        then ([
+            (EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> optionStyle -> bermudaExercise -> bermudaExerciseDates -> adjustableDates
+                extract AdjustableDatesResolution
+                then flatten
+                then max),
+            EconomicTermsForProduct(product) -> payout -> optionPayout -> settlementTerms -> settlementDate -> valueDate max,
+            EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max)
+        // option - american exercise
+        else if EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> optionStyle -> americanExercise -> expirationDate -> adjustableDate exists
+        then ([
+            (EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> optionStyle -> americanExercise -> expirationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max),
+            EconomicTermsForProduct(product) -> payout -> optionPayout -> settlementTerms -> settlementDate -> valueDate max,
+            EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max)
+        // EQ Swaps
+        else if (EconomicTermsForProduct(product) -> payout -> performancePayout count = 1
+                    and EconomicTermsForProduct(product) -> payout -> interestRatePayout count = 1)
+                or IsVarianceSwap(product)
+                or IsVolatilitySwap(product)
+        then ([
+            MaxTerminationDate(
+                    EconomicTermsForProduct(product) -> payout -> performancePayout -> valuationDates -> valuationDatesFinal -> valuationDate -> adjustableDate only-element,
+                    EconomicTermsForProduct(product) -> payout -> interestRatePayout -> calculationPeriodDates -> terminationDate -> adjustableDate only-element
+                ),
+            (EconomicTermsForProduct(product) -> payout -> performancePayout -> observationTerms -> observationDates -> periodicSchedule -> endDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max),
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                ),
+            EconomicTermsForProduct(product) -> payout -> performancePayout -> paymentDates -> lastRegularPaymentDate
+                then max,
+            EconomicTermsForProduct(product) -> payout -> performancePayout -> paymentDates -> firstPaymentDate
+                then max,
+            (EconomicTermsForProduct(product) -> payout -> performancePayout -> paymentDates -> paymentDateSchedule -> finalPaymentDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max),
+            EconomicTermsForProduct(product) -> payout -> interestRatePayout -> paymentDates -> lastRegularPaymentDate
+                then max,
+            EconomicTermsForProduct(product) -> payout -> interestRatePayout -> paymentDates -> firstPaymentDate
+                then max,
+            (EconomicTermsForProduct(product) -> payout -> interestRatePayout -> paymentDates -> paymentDateSchedule -> finalPaymentDate -> adjustableDate
+                extract AdjustableDateResolution
+                then max)
+        ]
+            then max)
+        // FX
+        else if EconomicTermsForProduct(product) -> payout -> forwardPayout -> settlementTerms -> settlementDate -> valueDate exists
+        then [
+            EconomicTermsForProduct(product) -> payout -> forwardPayout -> settlementTerms -> settlementDate -> valueDate max,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        // Futures
+        else if IsProductETD(product)
+                and EconomicTermsForProduct(product) -> payout
+                    extract forwardPayout only exists
+        then [
+            EconomicTermsForProduct(product) -> payout -> forwardPayout only-element -> settlementTerms -> settlementDate -> valueDate,
+            AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                )
+        ]
+            max
+        else if EconomicTermsForProduct(product) -> terminationDate exists
+        then AdjustableDateResolution(
+                    EconomicTermsForProduct(product) -> terminationDate -> adjustableDate
+                ))

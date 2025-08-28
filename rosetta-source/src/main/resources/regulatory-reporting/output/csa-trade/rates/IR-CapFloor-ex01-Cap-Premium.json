@@ -1,0 +1,80 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "TESTCLIENTLEI0000009",
+  "cleared" : "N",
+  "counterparty1" : "TESTCLIENTLEI0000009",
+  "counterparty2" : "TESTHOUSELEI00000001",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "envuatuatExt1a94bbf8749c744c58c9ca350ae26ea0d2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "InterestRate",
+    "submittedForParty" : "TESTCLIENTLEI0000009",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "IRCAPFLOOREXCAPPRE02",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-12-23",
+  "eventIdentifier" : "envuatuatExt1a94bbf8749c744c58c9ca350ae26ea0d",
+  "eventTimestamp" : "2020-12-21T10:27:53.064Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-12-21T10:24:45Z",
+  "expirationDate" : "2023-12-21",
+  "finalContractualSettlementDate" : "2023-12-21",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 5000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "OptionType" : "CALL",
+          "UnderlierID" : "USD-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML",
+          "UnderlyingInstrumentIndexTermUnit" : "MNTH"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "CapFloor"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 100,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2020-12-23",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "TESTCLIENTLEI0000009",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "TESTHOUSELEI00000001",
+  "strikePrice" : {
+    "decimal" : 0.03
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "IRCAPFLOOREXCAPPRE01"
+}

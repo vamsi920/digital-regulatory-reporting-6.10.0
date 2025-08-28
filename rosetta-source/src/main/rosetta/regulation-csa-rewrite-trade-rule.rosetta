@@ -1,0 +1,1698 @@
+namespace drr.regulation.csa.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+import cdm.product.* as product
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.common.trade.basket.* as basket
+import drr.regulation.csa.*
+import drr.regulation.csa.rewrite.*
+import drr.regulation.csa.rewrite.dtcc.*
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.upi.* as upi
+import drr.standards.iosco.uti.* as uti
+
+corpus Dissemination Trade
+
+corpus Dissemination PPD
+
+report CSA Trade in T+1
+  	from TransactionReportInstruction
+  	when ReportableProduct
+  	with type CSATransactionReport
+    with source CSARules
+
+report CSA PPD in T+1
+    from TransactionReportInstruction
+    when ReportableProductPPD
+    with type CSATransactionReport
+    with source CSARulesPPD
+
+eligibility rule ReportableProduct from TransactionReportInstruction: <"When eligible for CSA">
+    [regulatoryReference CSA Trade
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+eligibility rule ReportableProductPPD from TransactionReportInstruction: <"When eligible for CSA PPD">
+    [regulatoryReference CSA PPD
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+rule source CSARules
+{
+    CSATransactionReport:
+        - counterparty1
+        + counterparty1
+             [ruleReference Counterparty1]
+        - counterparty2
+        + counterparty2
+            [ruleReference Counterparty2]
+        - reportSubmittingEntityID
+        + reportSubmittingEntityID
+            [ruleReference SubmitterIdentifier]
+        - effectiveDate
+        + effectiveDate
+            [ruleReference EffectiveDate]
+        - expirationDate
+        + expirationDate
+            [ruleReference ExpirationDate]
+        - executionTimestamp
+        + executionTimestamp
+            [ruleReference ExecutionTimestamp]
+        - reportingTimestamp
+        + reportingTimestamp
+            [ruleReference ReportingTimestamp]
+        + uniqueTransactionIdentifier
+            [ruleReference UniqueTransactionIdentifier]
+        + priorUTI
+            [ruleReference PriorUTI]
+        - platformIdentifier
+        + platformIdentifier
+            [ruleReference PlatformIdentifier]
+        - callAmount
+        + callAmount
+            [ruleReference CallAmount]
+        - callCurrency
+        + callCurrency
+            [ruleReference CallCurrency]
+        - putAmount
+        + putAmount
+            [ruleReference PutAmount]
+        - putCurrency
+        + putCurrency
+            [ruleReference PutCurrency]
+        - exchangeRate
+        + exchangeRate
+            [ruleReference ExchangeRate]
+        - priceUnitOfMeasure
+        + priceUnitOfMeasure
+            [ruleReference PriceUnitOfMeasure]
+        - cleared
+        + cleared
+            [ruleReference Cleared]
+        - centralCounterparty
+        + centralCounterparty
+            [ruleReference CentralCounterpartyIdentifier]
+        - eventTimestamp
+        + eventTimestamp
+            [ruleReference EventTimestamp]
+        - eventIdentifier
+        + eventIdentifier 
+            [ruleReference EventIdentifier]
+        - actionType
+        + actionType 
+            [ruleReference ActionType]
+        - eventType
+        + eventType
+            [ruleReference EventType]
+        - packageIdentifier
+        + packageIdentifier
+            [ruleReference PackageIdentifier]
+        - uniqueProductIdentifier
+        + uniqueProductIdentifier
+            [ruleReference UniqueProductIdentifier]
+        - cdSIndexAttachmentPoint
+        + cdSIndexAttachmentPoint
+            [ruleReference CDSIndexAttachmentPoint]
+        - cdSIndexDetachmentPoint
+        + cdSIndexDetachmentPoint
+            [ruleReference CDSIndexDetachmentPoint]
+        - optionPremiumAmount
+        + optionPremiumAmount
+            [ruleReference OptionPremiumAmount]
+        - optionPremiumCurrency
+        + optionPremiumCurrency
+            [ruleReference OptionPremiumCurrency]
+        - optionPremiumPaymentDate
+        + optionPremiumPaymentDate
+            [ruleReference OptionPremiumPaymentDate]
+        - otherPayment
+        + otherPayment
+            [ruleReference OtherPayment]
+        - basketConstituents
+        + basketConstituents
+            [ruleReference BasketConstituents]
+        - priceSchedule
+        + priceSchedule
+            [ruleReference ContractPriceSchedule]
+        - strikePriceSchedule
+        + strikePriceSchedule
+            [ruleReference StrikePriceSchedule]
+        + leg1 
+            [ruleReference Leg1Report]
+        + leg2 
+            [ruleReference Leg2Report]
+        - counterparty2IdentifierType
+        - beneficiary1
+        - beneficiary1IdentifierTypeIndicator
+        - confirmed
+        - clearingMember
+        - counterparty2Name
+        - executionAgentCounterparty1
+        - executionAgentCounterparty2
+        - contractType
+        - assetClass
+        - clearingTimestamp
+        - direction1
+        - earlyTerminationDate
+        - collateralPortfolioIndicator
+        - optionType
+        - optionStyle
+        - deliveryType
+        - maturityDateOfTheUnderlying
+        - nameOfTheUnderlyingIndex
+        - countryOfTheCounterparty2
+        - series
+        - indexFactor
+        + indexFactor
+            [ruleReference IndexFactor]
+        - strikePrice
+        + strikePrice
+            [ruleReference StrikePrice]
+        - strikePriceNotation
+        + strikePriceNotation
+            [ruleReference StrikePriceNotation]
+        - strikePriceCurrency
+        + strikePriceCurrency
+            [ruleReference StrikePriceCurrencyCurrencyPair]
+        - price
+        + price
+            [ruleReference Price]
+        - priceNotation
+        + priceNotation
+            [ruleReference PriceNotation]
+        - priceCurrency
+        + priceCurrency
+            [ruleReference PriceCurrency]
+        - packageTransactionPrice
+        + packageTransactionPrice
+            [ruleReference PackageTransactionPrice]
+        - packageTransactionPriceNotation
+        + packageTransactionPriceNotation
+            [ruleReference PackageTransactionPriceNotation]
+        - packageTransactionPriceCurrency
+        + packageTransactionPriceCurrency
+            [ruleReference PackageTransactionPriceCurrency]
+        - packageTransactionSpread
+        + packageTransactionSpread
+            [ruleReference PackageTransactionSpread]
+        - packageTransactionSpreadNotation
+        + packageTransactionSpreadNotation
+            [ruleReference PackageTransactionSpreadNotation]
+        - packageTransactionSpreadCurrency
+        + packageTransactionSpreadCurrency
+            [ruleReference PackageTransactionSpreadCurrency]
+        - barrier
+        - embeddedOptionType
+        + embeddedOptionType
+            [ruleReference EmbeddedOptionType]
+        - traderLocation
+        - bookingLocation
+        - seniority
+
+    DTCCAdditionalFields:
+        - messageTypePPD
+        - versionPPD
+        - leg1CommodityUnderlyerID
+        - leg2CommodityUnderlyerID
+        - leg1CommodityInstrumentID
+        - leg2CommodityInstrumentID
+        - leg1FloatingRateIndex
+        - leg2FloatingRateIndex
+}
+
+rule source CSARulesPPD
+{
+    CSATransactionReport:
+        - counterparty1
+        + counterparty1
+            [ruleReference Counterparty1]
+        - counterparty2
+        + counterparty2
+            [ruleReference Counterparty2]
+        - reportSubmittingEntityID
+        + reportSubmittingEntityID
+            [ruleReference SubmitterIdentifier]
+        - buyerIdentifier
+        - sellerIdentifier
+        - brokerID
+        - countryAndProvinceOrTerritoryOfIndividual
+        - jurisdictionOfCounterparty1
+        - jurisdictionOfCounterparty2
+        - effectiveDate
+        + effectiveDate
+            [ruleReference EffectiveDate]
+        - expirationDate
+        + expirationDate
+            [ruleReference ExpirationDate]
+        - executionTimestamp
+        + executionTimestamp
+            [ruleReference ExecutionTimestamp]
+        - reportingTimestamp
+        + reportingTimestamp
+            [ruleReference ReportingTimestamp]
+        + uniqueTransactionIdentifier
+            [ruleReference UniqueTransactionIdentifier]
+        - priorUSI
+        - interAffiliateIndicator
+        - platformIdentifier
+        + platformIdentifier
+            [ruleReference PlatformIdentifier]
+        - masterAgreementType
+        - masterAgreementVersion
+        - callAmount
+        + callAmount
+            [ruleReference CallAmount]
+        - callCurrency
+        + callCurrency
+            [ruleReference CallCurrency]
+        - putAmount
+        + putAmount
+            [ruleReference PutAmount]
+        - putCurrency
+        + putCurrency
+            [ruleReference PutCurrency]
+        - exchangeRate
+        + exchangeRate
+            [ruleReference ExchangeRate]
+        - priceUnitOfMeasure
+        + priceUnitOfMeasure
+            [ruleReference PriceUnitOfMeasure]
+        - cleared
+        + cleared
+            [ruleReference Cleared]
+        - centralCounterparty
+        - clearingAccountOrigin
+        - clearingMember
+        - clearingReceiptTimestamp
+        - variationMarginCollateralPortfolioCode
+        - initialMarginCollateralPortfolioCode
+        - eventTimestamp
+        + eventTimestamp
+            [ruleReference EventTimestamp]
+        - level
+        - eventIdentifier
+        - actionType
+        + actionType 
+            [ruleReference ActionType]
+        - eventType
+        + eventType
+            [ruleReference EventType]
+        - packageIdentifier
+        - uniqueProductIdentifier
+        + uniqueProductIdentifier
+            [ruleReference UniqueProductIdentifier]
+        - priorUTI
+        - cdSIndexAttachmentPoint
+        - cdSIndexDetachmentPoint
+        - customBasketCode
+        - finalContractualSettlementDate
+        - optionPremiumAmount
+        + optionPremiumAmount
+            [ruleReference OptionPremiumAmount]
+        - optionPremiumCurrency
+        + optionPremiumCurrency
+            [ruleReference OptionPremiumCurrency]
+        - optionPremiumPaymentDate
+        - otherPayment
+        + otherPayment
+            [ruleReference OtherPayment]
+        + leg1 
+            [ruleReference Leg1ReportPPD]
+        + leg2 
+            [ruleReference Leg2ReportPPD]
+        - basketConstituents
+        - beneficiary1
+        - beneficiary1IdentifierTypeIndicator
+        - confirmed
+        - clearingMember
+        - counterparty2Name
+        - executionAgentCounterparty1
+        - executionAgentCounterparty2
+        - contractType
+        - assetClass
+        - clearingTimestamp
+        - direction1
+        - earlyTerminationDate
+        - collateralPortfolioIndicator
+        - optionType
+        - optionStyle
+        - deliveryType
+        - maturityDateOfTheUnderlying
+        - nameOfTheUnderlyingIndex
+        - countryOfTheCounterparty2
+        - series
+        - indexFactor
+        + indexFactor
+            [ruleReference IndexFactor]
+        - strikePriceSchedule
+        - strikePrice
+        + strikePrice
+            [ruleReference StrikePrice]
+        - strikePriceNotation
+        + strikePriceNotation
+            [ruleReference StrikePriceNotation]
+        - strikePriceCurrency
+        + strikePriceCurrency
+            [ruleReference StrikePriceCurrencyCurrencyPair]
+        - price
+        + price
+            [ruleReference Price]
+        - priceNotation
+        + priceNotation
+            [ruleReference PriceNotation]
+        - priceCurrency
+        + priceCurrency
+            [ruleReference PriceCurrency]
+        - packageTransactionPrice
+        + packageTransactionPrice
+            [ruleReference PackageTransactionPrice]
+        - packageTransactionPriceNotation
+        + packageTransactionPriceNotation
+            [ruleReference PackageTransactionPriceNotation]
+        - packageTransactionPriceCurrency
+        + packageTransactionPriceCurrency
+            [ruleReference PackageTransactionPriceCurrency]
+        - packageTransactionSpread
+        + packageTransactionSpread
+            [ruleReference PackageTransactionSpread]
+        - packageTransactionSpreadNotation
+        + packageTransactionSpreadNotation
+            [ruleReference PackageTransactionSpreadNotation]
+        - packageTransactionSpreadCurrency
+        + packageTransactionSpreadCurrency
+            [ruleReference PackageTransactionSpreadCurrency]
+        - embeddedOptionType
+        + embeddedOptionType
+            [ruleReference EmbeddedOptionType]
+        - traderLocation
+        - bookingLocation
+        - seniority
+
+    DTCCAdditionalFields:
+        - clearingVenueIDType
+        - tradeParty1ClearingBrokerIDType
+        - allocationType
+        - newSDRIdentifier
+        - tradeParty2ReportingDestination
+        - secondaryAssetClass
+        - messageTypeTransaction
+        - versionTransaction
+        - executionVenueID
+        - executionVenueIDType
+        - leg1CommodityUnderlyerID
+        - leg2CommodityUnderlyerID
+        - leg1CommodityInstrumentID
+        - leg2CommodityInstrumentID
+        - leg1FloatingRateIndex
+        - leg2FloatingRateIndex
+        - productGrade
+        - leg1SettlementPeriod
+        - loadType
+        - tradeParty1BrokerIDType
+        - otherPaymentPayerIDType
+        - otherPaymentReceiverIDType
+}
+
+// CSA Definitions
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1 (reporting counterparty)">
+    [regulatoryReference CSA Trade dataElement "1" field "Counterparty 1 (reporting counterparty)"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question.
+    In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty.
+    In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty. However, if the allocation of the block trade to specific funds does not take place prior to the reporting deadline, then the fund manager executing the transaction behalf of the fund can be reported as the counterparty.
+    If a trading facility is fulfilling the reporting obligation, the identifier of Counterparty 1 identifies one of the counterparties to the transaction."]
+    [regulatoryReference CSA Trade dataElement "1" field "Counterparty 1 (reporting counterparty)" footnote "4"
+        provision "References to OTC derivative and transaction in CDE data element explanations and in the Appendices to the Technical Manual should be read to mean derivative."]
+    [regulatoryReference ISDA CanadianDataAndReporting date "20250508" field "Counterparty 1 (reporting counterparty)"
+        provision "Reporting firms on the WG call said they would be using an LEI. There is only a possible use case for crypto trades reporting by SEFs; however, DRR is not going to model this case until is demanded by firms."]
+    extract cde.party.Counterparty1
+        as "1 Counterparty 1 (reporting counterparty)"
+
+reporting rule Counterparty2 from TransactionReportInstruction: <"Counterparty 2 (non-reporting counterparty)">
+    [regulatoryReference CSA Trade dataElement "2" field "Counterparty 2"
+        provision "Identifier of the second counterparty to an OTC derivative transaction. In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty. However, if the allocation of the block trade to specific funds does not take place prior to the reporting deadline, then the fund manager executing the transaction on behalf of the fund can be reported as the counterparty."]
+    [regulatoryReference CSA Trade dataElement "2" field "Counterparty 2 (non-reporting counterparty)" footnote "5"
+        provision "Only one counterparty should be reported. In cases where multiple counterparties are legally responsible as the second counterparty (for example joint and several liability, or solidary liability in Quebec), report only one of the counterparties and use the same counterparty for all continuation data and lifecycle events."]
+    extract cde.party.Counterparty2
+        as "2 Counterparty 2 (non-reporting counterparty)"
+
+reporting rule Counterparty2IdentifierSource from TransactionReportInstruction: <"Counterparty 2 Identifier Source">
+    [regulatoryReference CSA Trade dataElement "3" field "Counterparty 2 Identifier Source"
+        provision "Source used to identify the Counterparty 2."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Counterparty 2 Identifier Source"
+        provision "Improvement on the logic was done to consider first if person exists. If not, then consider party."]
+    // TH 24/01/25: this field will probably be fully aligned with CFTC 3.3
+    extract
+        if reportingSide -> reportingCounterparty -> person exists
+                and reportingSide -> reportingCounterparty -> person -> personId -> identifierType any = PersonIdentifierTypeEnum -> PLID
+        then Counterparty2IdentifierEnum -> PLID
+        else if reportingSide -> reportingCounterparty -> partyId -> identifierType any = LEI
+        then LEID
+        else common.party.Counterparty2IdentifierSource
+        as "3 Counterparty 2 identifier source"
+
+reporting rule BuyerIdentifier from TransactionReportInstruction: <"Buyer Identifier">
+    filter IsAllowableActionForCSA
+    then extract cde.party.Direction1BuyerIdentifier
+
+reporting rule SellerIdentifier from TransactionReportInstruction: <"Seller Identifier">
+    filter IsAllowableActionForCSA
+    then extract cde.party.Direction1SellerIdentifier
+
+reporting rule PayerIdentifierLeg1 from TransactionReportInstruction: <"Payer Identifier-Leg 1">
+    extract
+        PartyLeiAndPersonByRoles(
+                cde.party.Direction2PayerPartyLeg1,
+                reportingSide -> reportingParty
+            )
+
+reporting rule PayerIdentifierLeg2 from TransactionReportInstruction: <"Payer Identifier-Leg 2">
+    extract
+        PartyLeiAndPersonByRoles(
+                cde.party.Direction2PayerPartyLeg2,
+                reportingSide -> reportingParty
+            )
+
+reporting rule ReceiverIdentifierLeg1 from TransactionReportInstruction: <"Receiver Identifier-Leg 1">
+    extract
+        PartyLeiAndPersonByRoles(
+                cde.party.Direction2ReceiverPartyLeg1,
+                reportingSide -> reportingParty
+            )
+
+reporting rule ReceiverIdentifierLeg2 from TransactionReportInstruction: <"Receiver Identifier-Leg 2">
+    extract
+        PartyLeiAndPersonByRoles(
+                cde.party.Direction2ReceiverPartyLeg2,
+                reportingSide -> reportingParty
+            )
+
+reporting rule BrokerIdentifier from TransactionReportInstruction: <"Broker identifier">
+    [regulatoryReference CSA Trade dataElement "8" field "Broker identifier"
+        provision "In the case a broker acts as intermediary for counterparty 1 without becoming a counterparty itself, the counterparty 1 shall identify this broker by legal entity identifier."]
+    [regulatoryReference CSA Trade dataElement "8" field "Broker identifier" footnote "8"
+        provision "The ESMA Data Element Name is Broker ID."]
+    filter IsAllowableActionForCSA
+    then extract common.party.BrokerID
+        as "8 Broker identifier"
+
+reporting rule CountryAndProvinceOrTerritoryOfIndividual from TransactionReportInstruction: <"Country and Province or Territory of individual (non-reporting counterparty)">
+    [regulatoryReference CSA Trade dataElement "9" field "Country and Province or Territory of individual (non-reporting counterparty)"
+        provision "If the non-reporting counterparty is an individual, the individual's country of residence and, if the individual's residence is in Canada, the province or territory."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Country and Province or Territory of individual (non-reporting counterparty)"
+        provision "Requirement to filter the person's role by Buyer or Seller, as it is done for Counterparty 2."]
+    filter IsAllowableActionForCSA
+    then extract reportingSide -> reportingCounterparty
+    then extract
+        (if ([NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller] any = item -> personRole -> role)
+                and item -> person exists
+        then filter [
+            personRole -> role extract r [ PartyIdentifierNaturalPersonRoles contains r ]
+            any = True
+        ]
+            then person -> contactInformation -> address only-element
+            then extract
+                if country = staticdata.asset.common.ISOCountryCodeEnum -> CA to-string
+                then state
+                else country)
+        as "9 Country and Province or Territory of individual (non-reporting counterparty)"
+
+reporting rule JurisdictionOfCounterparty1 from TransactionReportInstruction: <"Jurisdiction of Counterparty 1">
+    [regulatoryReference CSA Trade dataElement "10" field "Jurisdiction of Counterparty 1"
+        provision "Each jurisdiction in which Counterparty 1 is:
+        -  a local counterparty under paragraph (a) or (c) of the definition of local counterparty in the derivatives data reporting rules of any jurisdiction of Canada,
+        -  a local counterparty under paragraph (b) of the definition of local counterparty in the derivatives data reporting rules of any jurisdiction of Canada, if the non-reporting counterparty is an individualwho is a resident of the jurisdiction, and/or
+        - a local counterparty under paragraph (b) of the definition of local counterparty in Regulation 91-507 respecting Trade Repositories and Derivatives Data Reporting (Qubec) and is a qualified person under section 82 of the Derivatives Act (Qubec)."]
+    [regulatoryReference CSA Trade dataElement "10" field "Jurisdiction of Counterparty 1" footnote "9"
+        provision "A list of qualified persons is available here: https://lautorite.qc.ca/en/professionals/securities-and-derivatives/regulation-of-derivatives-markets-in-quebec"]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Jurisdiction of Counterparty 1"
+        provision "The group agreed that 'NON-CA' should be reported only if all supervisory bodies from the regime information are different from those belonging to Canada. If there is at least one supervisory body from Canada, only those from Canada will be reported."]
+    filter IsAllowableActionForCSA
+    then extract
+        common.party.ExtractRegimeInformation(item, item -> reportingSide -> reportingParty)
+    then filter
+        csaPartyInformation -> localCounterparty = True
+            and SupervisoryBodyForCSA any = item -> supervisoryBody
+    then extract item -> supervisoryBody to-string
+    then if item exists then item else "NON-CA" // Workaround due to defaulting bug. DSL issue #1064
+        as "10 Jurisdiction of Counterparty 1"
+
+reporting rule JurisdictionOfCounterparty2 from TransactionReportInstruction: <"Jurisdiction of Counterparty 2">
+    [regulatoryReference CSA Trade dataElement "11" field "Jurisdiction of Counterparty 2"
+        provision "Each jurisdiction in which Counterparty 2 is:
+        -  a local counterparty under paragraph (a) or (c) of the definition of local counterparty in the derivatives data reporting rules of any jurisdiction of Canada, and/or
+        - a local counterparty under paragraph (b) of the definition of local counterparty in Regulation 91-507 respecting Trade Repositories and Derivatives Data Reporting (Qubec) and is a qualified person under section 82 of the Derivatives Act (Qubec)."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Jurisdiction of Counterparty 2"
+        provision "The group agreed that 'NON-CA' should be reported only if all supervisory bodies from the regime information are different from those belonging to Canada. If there is at least one supervisory body from Canada, only those from Canada will be reported."]
+    filter IsAllowableActionForCSA
+    then extract
+        common.party.ExtractRegimeInformation(
+                item,
+                item -> reportingSide -> reportingCounterparty
+            )
+    then filter
+        csaPartyInformation -> localCounterparty = True
+            and SupervisoryBodyForCSA any = item -> supervisoryBody
+    then extract item -> supervisoryBody to-string
+    then if item exists then item else "NON-CA" // Workaround due to defaulting bug. DSL issue #1064
+        as "11 Jurisdiction of Counterparty 2"
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective date">
+    [regulatoryReference CSA Trade dataElement "12" field "Effective date"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction come into effect, as included in the confirmation."]
+    [regulatoryReference CSA Trade dataElement "12" field "Effective date" footnote "10"
+        provision "For commodities swaps, report the pricing start date."]
+    filter IsAllowableActionForCSA
+    then extract common.datetime.EffectiveDate
+        as "12 Effective date"
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"ExpirationDate">
+    [regulatoryReference CSA Trade dataElement "13" field "Expiration date"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction stop being effective, as included in the confirmation. Early termination does not affect this data element."]
+    [regulatoryReference CSA Trade dataElement "13" field "Expiration date" footnote "11"
+        provision "For commodities swaps, report the pricing end date."]
+    filter IsAllowableActionForCSA
+    then extract common.datetime.ExpirationDate
+        as "13 Expiration date"
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution Timestamp">
+    [regulatoryReference CSA Trade dataElement "14" field "Execution Timestamp"
+        provision "Date and time a transaction was originally executed, resulting in the generation of a new UTI. This data element remains unchanged throughout the life of the UTI."]
+    [regulatoryReference CSA Trade dataElement "14" field "Execution Timestamp" footnote "12"
+        provision "For cleared derivatives, the execution timestamp is the date and time when the clearing agency accepts the original derivative for clearing."]
+    [regulatoryReference CSA Trade dataElement "14" field "Execution Timestamp" footnote "13"
+        provision "Both the date and time portion are required to be reported."]
+    filter IsAllowableActionForCSA
+    then cde.datetime.ExecutionTimestamp
+        as "14 Execution Timestamp"
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference CSA Trade dataElement "15" field "Reporting Timestamp"
+        provision "Date and time of the submission of the report as reported to the trade repository."]
+    [regulatoryReference CSA Trade dataElement "15" field "Reporting Timestamp" footnote "14"
+        provision "Reporting timestamp (#15) is recorded and reported by the submitter."]
+    filter IsAllowableActionForCSA
+    then cde.datetime.ReportingTimestamp
+        as "15 Reporting timestamp"
+
+reporting rule UniqueTransactionIdentifier from TransactionReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference CSA Trade dataElement "16" field "Unique Transaction Identifier (UTI)"
+        provision "A unique identifier assigned at the transaction or position level which identifies them uniquely throughout their lifecycle and used for all recordkeeping and reporting."]
+    filter IsAllowableActionForCSA
+    then uti.GetUniqueTransactionIdentifier(item, SupervisoryBodyForCSA)
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "16 Unique Transaction Identifier (UTI)"
+
+reporting rule PriorUTI from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference CSA Trade dataElement "17" field "Prior UTI"
+        provision "UTI assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (e.g., in the case of a novation, when a transaction is terminated, and a new transaction is generated) or in a one-to-many relation between transactions (e.g., in clearing or if a transaction is split into several different transactions). This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (e.g., in the case of a compression)."]
+    filter
+        IsAllowableActionForCSA and (IsActionTypeTERM = False or IsActionTypeEROR = False or IsActionTypePRTO = False)
+    then common.link.GetPriorTransactionIdentifier(item, RegimeNameEnum -> CSA)
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "17 Prior UTI"
+
+reporting rule SubsequentPositionUTI from TransactionReportInstruction: <"Subsequent Position UTI">
+    filter IsAllowableActionForCSA
+    then extract common.link.SubsequentPositionUTI
+
+reporting rule PriorUSI from TransactionReportInstruction: <"Prior USI">
+    [regulatoryReference CSA Trade dataElement "19" field "Prior USI"
+        provision "Unique swap identifier (USI) assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (e.g., in the case of a novation, when a transaction is terminated, and a new transaction is generated) or in a one-to-many relation between transactions (e.g., in clearing or if a transaction is split into several different transactions), This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (e.g., in the case of a compression)."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250327" field "Prior USI"
+        provision "It is expected that all USI are the same. Thus, as an improvement of the coding instead of extracting 'last', it was decided to extract 'distinct only-element'."]
+    filter
+        IsAllowableActionForCSA and (IsActionTypeTERM = False or IsActionTypeEROR = False or IsActionTypePRTO = False)
+    then common.link.PriorUSI
+
+reporting rule InterAffiliateIndicator from TransactionReportInstruction: <"Inter-affiliate indicator">
+    [regulatoryReference CSA Trade dataElement "20" field "Inter-affiliate indicator"
+        provision "Indicate whether the derivative is between two affiliated entities."]
+    [regulatoryReference CSA EUUKNAPeerReviewGroup date "20250306" field "Inter-affiliate indicator"
+        provision "As treated in the PeerReview, we asumed party relationship should be the same for all jurisdictions. Thus, the current mapping works. Minutes: 19 February, 2025 of ISDA EU/UK/North America Digital Regulatory Reporting (DRR) Peer Review Group."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250320" field "Inter-affiliate indicator"
+        provision "Regulated market or third-country market are not considered."]
+    filter IsAllowableActionForCSA
+    then extract reportableInformation -> affiliated
+        as "20 Inter-affiliate indicator"
+
+reporting rule SubmitterIdentifier from TransactionReportInstruction: <"Submitter Identifier">
+    [regulatoryReference CSA Trade dataElement "21" field "Submitter Identifier"
+        provision "Identifier of the entity submitting the data to the swap data repository (TR), the submitter identifier will be the same as the reporting counterparty or  swap execution facility (SEF) unless they use a third-party service provider, to submit the data to SDR in which case, report the underlier of the third party service provider. "]
+    [regulatoryReference CSA Trade dataElement "21" field "Submitter Identifier" footnote "15"
+        provision "References to swap data repository or SDR in CFTC data element explanations should be read to mean designated / recognized trade repository."]
+    [regulatoryReference CSA Trade dataElement "21" field "Submitter Identifier" footnote "16"
+        provision "References to swap execution facility or SEF in CFTC data element explanations should be read to mean derivatives trading facility / facility or platform for trading derivatives."]
+    extract common.party.ReportSubmittingEntity
+        as "21 Submitter identifier"
+
+reporting rule PlatformIdentifier from TransactionReportInstruction: <"Platform Identifier">
+    [regulatoryReference CSA Trade dataElement "22" field "Platform Identifier"
+        provision "Identifier of the trading facility (e.g., exchange, multilateral trading facility, swap execution facility) on which the transaction was executed."]
+    [regulatoryReference CSA Trade dataElement "22" field "Platform Identifier" footnote "17"
+        provision "Where the Segment MIC does not exist, use the Operating MIC."]
+    filter IsAllowableActionForCSA
+    then extract
+        if IsCleared(originatingWorkflowStep) = False
+                or IntendedToClear(originatingWorkflowStep) = True
+        then common.execution.PlatformIdentifier
+        as "22 Platform Identifier"
+
+reporting rule PlatformAnonymousExecutionIndicator from TransactionReportInstruction: <"Platform anonymous execution indicator">
+    [regulatoryReference CSA Trade dataElement "23" field "Platform anonymous execution indicator"
+        provision "Indicator of whether the transaction was executed anonymously on a trading facility."]
+    filter IsAllowableActionForCSA
+    then extract reportableInformation
+    then extract
+        if ((partyInformation
+                filter SupervisoryBodyForCSA any = regimeInformation -> supervisoryBody
+                then exists
+                )
+                and (executionVenueType = SEF or executionVenueType = DCM))
+        then (if sefOrDcmAnonymousIndicator exists
+            then sefOrDcmAnonymousIndicator
+            else False)
+        as "23 Platform Anonymous Execution Indicator"
+
+reporting rule MasterAgreementType from TransactionReportInstruction: <"Master Agreement type">
+    filter IsAllowableActionForCSA
+    then extract common.contract.MasterAgreementType
+
+reporting rule MasterAgreementVersion from TransactionReportInstruction: <"Master Agreement version">
+    filter IsAllowableActionForCSA
+    then extract common.contract.MasterAgreementVersion
+        as "25 Master Agreement version"
+
+reporting rule Leg1ReportPPD from TransactionReportInstruction: <"Leg 1 Report">
+    [regulatoryReference CSA Trade
+        provision "Depending on the product being reported and the related market convention, a multi-leg or multi-stream product could be reported using a particular data element more than once. Unless the data element is listed as leg, it cannot be reported more than once. For products where the multi-leg or multi-stream concept is not applicable, report values in the designated data element for the first leg (Leg 1) for all fields that are specified as leg-based data elements. For products having two legs where one leg references a fixed value and the other leg  references a floating value, Leg 1 elements should refer to the leg that references a fixed value and Leg 2 elements should refer to the leg that references a floating value. For products having two legs where each leg references a floating value respectively, the legs should be ordered based on the alphabetical ordering of the names of the respective underliers. In cases where the names of the respective underliers are the same, but they are differentiated by a tenor, Leg 1 elements should refer to the leg referencing the underlier with the shorter tenor."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" // TH Sprint 2025-11: date must be changed after retro-review is done
+        provision "CSA leg ordering for SpreadNotationLeg1 and SpreadNotationLeg2 follows csa-specific alignment logic at the reporting rule level, and is not overriden by the corresponding common fields. Therefore, leg ordering must be implemented individually within each field's reporting rule."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied in any way to the Equity asset class, there are no products which fall into the definition. Canadian rules describe logic for determining Leg 1 and Leg 2 when the same underlier exists with different tenors. Equities do not have tenors, they are not defined by maturity profiles or benchmark curves."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied to the Credit asset class. Specifically, Total Return Swap on debt instruments such as Loans or Bonds are classified as Credit asset class."]
+    filter IsAllowableActionForCSA
+    then if IsCSALeg1Aligned
+        then CSALegEnrichment(
+                    common.LegEnrichment(
+                            cde.Leg1(item, SpreadNotationLeg1, 99999999999999999999.99999),
+                            cde.quantity.NotionalAmountScheduleLeg1,
+                            cde.quantity.NotionalQuantityScheduleLeg1,
+                            common.quantity.NotionalQuantityLeg1,
+                            common.payment.FloatingRateResetFrequencyPeriodLeg1,
+                            common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg1,
+                            common.datetime.FixingDateLeg1,
+                            common.quantity.QuantityFrequencyLeg1(item) -> period,
+                            common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty
+                        ),
+                    QuantityUnitOfMeasureLeg1, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    DTCC_Leg1CommodityUnderlyerID,
+                    DTCC_Leg1CommodityInstrumentID,
+                    DTCC_Leg1FloatingRateIndex
+                )
+        else CSALegEnrichment(
+                common.LegEnrichment(
+                        cde.Leg2(item, SpreadNotationLeg1, 99999999999999999999.99999),
+                        cde.quantity.NotionalAmountScheduleLeg2,
+                        cde.quantity.NotionalQuantityScheduleLeg2,
+                        common.quantity.NotionalQuantityLeg2,
+                        common.payment.FloatingRateResetFrequencyPeriodLeg2,
+                        common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg2,
+                        common.datetime.FixingDateLeg2,
+                        common.quantity.QuantityFrequencyLeg2(item) -> period,
+                        common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier,
+                        empty,
+                        empty,
+                        empty,
+                        empty,
+                        empty
+                    ),
+                QuantityUnitOfMeasureLeg1, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                DTCC_Leg2CommodityUnderlyerID,
+                DTCC_Leg2CommodityInstrumentID,
+                DTCC_Leg2FloatingRateIndex
+            )
+
+reporting rule Leg2ReportPPD from TransactionReportInstruction: <"Leg 2 Report">
+    [regulatoryReference CSA Trade
+        provision "Depending on the product being reported and the related market convention, a multi-leg or multi-stream product could be reported using a particular data element more than once. Unless the data element is listed as leg, it cannot be reported more than once. For products where the multi-leg or multi-stream concept is not applicable, report values in the designated data element for the first leg (Leg 1) for all fields that are specified as leg-based data elements. For products having two legs where one leg references a fixed value and the other leg  references a floating value, Leg 1 elements should refer to the leg that references a fixed value and Leg 2 elements should refer to the leg that references a floating value. For products having two legs where each leg references a floating value respectively, the legs should be ordered based on the alphabetical ordering of the names of the respective underliers. In cases where the names of the respective underliers are the same, but they are differentiated by a tenor, Leg 1 elements should refer to the leg referencing the underlier with the shorter tenor."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" // TH Sprint 2025-11: date must be changed after retro-review is done
+        provision "CSA leg ordering for SpreadNotationLeg1 and SpreadNotationLeg2 follows csa-specific alignment logic at the reporting rule level, and is not overriden by the corresponding common fields. Therefore, leg ordering must be implemented individually within each field's reporting rule."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied in any way to the Equity asset class, there are no products which fall into the definition. Canadian rules describe logic for determining Leg 1 and Leg 2 when the same underlier exists with different tenors. Equities do not have tenors, they are not defined by maturity profiles or benchmark curves."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied to the Credit asset class. Specifically, Total Return Swap on debt instruments such as Loans or Bonds are classified as Credit asset class."]
+    filter IsAllowableActionForCSA
+    then if IsCSALeg2Aligned
+        then CSALegEnrichment(
+                    common.LegEnrichment(
+                            cde.Leg2(item, SpreadNotationLeg2, 99999999999999999999.99999),
+                            cde.quantity.NotionalAmountScheduleLeg2,
+                            cde.quantity.NotionalQuantityScheduleLeg2,
+                            common.quantity.NotionalQuantityLeg2,
+                            common.payment.FloatingRateResetFrequencyPeriodLeg2,
+                            common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg2,
+                            common.datetime.FixingDateLeg2,
+                            common.quantity.QuantityFrequencyLeg2(item) -> period,
+                            common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty
+                        ),
+                    QuantityUnitOfMeasureLeg2, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    empty,
+                    DTCC_Leg2CommodityUnderlyerID,
+                    DTCC_Leg2CommodityInstrumentID,
+                    DTCC_Leg2FloatingRateIndex
+                )
+        else CSALegEnrichment(
+                common.LegEnrichment(
+                        cde.Leg1(item, SpreadNotationLeg2, 99999999999999999999.99999),
+                        cde.quantity.NotionalAmountScheduleLeg1,
+                        cde.quantity.NotionalQuantityScheduleLeg1,
+                        common.quantity.NotionalQuantityLeg1,
+                        common.payment.FloatingRateResetFrequencyPeriodLeg1,
+                        common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg1,
+                        common.datetime.FixingDateLeg1,
+                        common.quantity.QuantityFrequencyLeg1(item) -> period,
+                        common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier,
+                        empty,
+                        empty,
+                        empty,
+                        empty,
+                        empty
+                    ),
+                QuantityUnitOfMeasureLeg2, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                DTCC_Leg1CommodityUnderlyerID,
+                DTCC_Leg1CommodityInstrumentID,
+                DTCC_Leg1FloatingRateIndex
+            )
+
+reporting rule Leg1Report from TransactionReportInstruction: <"Leg 1 Report">
+    [regulatoryReference CSA Trade
+        provision "Depending on the product being reported and the related market convention, a multi-leg or multi-stream product could be reported using a particular data element more than once. Unless the data element is listed as leg, it cannot be reported more than once. For products where the multi-leg or multi-stream concept is not applicable, report values in the designated data element for the first leg (Leg 1) for all fields that are specified as leg-based data elements. For products having two legs where one leg references a fixed value and the other leg  references a floating value, Leg 1 elements should refer to the leg that references a fixed value and Leg 2 elements should refer to the leg that references a floating value. For products having two legs where each leg references a floating value respectively, the legs should be ordered based on the alphabetical ordering of the names of the respective underliers. In cases where the names of the respective underliers are the same, but they are differentiated by a tenor, Leg 1 elements should refer to the leg referencing the underlier with the shorter tenor."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" // TH Sprint 2025-11: date must be changed after retro-review is done
+        provision "CSA leg ordering for SpreadNotationLeg1 and SpreadNotationLeg2 follows csa-specific alignment logic at the reporting rule level, and is not overriden by the corresponding common fields. Therefore, leg ordering must be implemented individually within each field's reporting rule."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied in any way to the Equity asset class, there are no products which fall into the definition. Canadian rules describe logic for determining Leg 1 and Leg 2 when the same underlier exists with different tenors. Equities do not have tenors, they are not defined by maturity profiles or benchmark curves."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied to the Credit asset class. Specifically, Total Return Swap on debt instruments such as Loans or Bonds are classified as Credit asset class."]
+    filter IsAllowableActionForCSA
+    then if IsCSALeg1Aligned
+        then CSALegEnrichment(
+                    common.LegEnrichment(
+                            cde.Leg1(item, SpreadNotationLeg1, 99999999999999999999.99999),
+                            cde.quantity.NotionalAmountScheduleLeg1,
+                            cde.quantity.NotionalQuantityScheduleLeg1,
+                            common.quantity.NotionalQuantityLeg1,
+                            common.payment.FloatingRateResetFrequencyPeriodLeg1,
+                            common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg1,
+                            common.datetime.FixingDateLeg1,
+                            common.quantity.QuantityFrequencyLeg1(item) -> period,
+                            common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty
+                        ),
+                    QuantityUnitOfMeasureLeg1, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                    cde.underlier.UnderlierIDOtherLeg1,
+                    cde.underlier.UnderlierIDOtherSourceLeg1,
+                    UnderlyingAssetTradingPlatformIdentifierLeg1,
+                    UnderlyingAssetPriceSourceLeg1,
+                    CryptoAssetUnderlyingIndicatorLeg1,
+                    PayerIdentifierLeg1,
+                    ReceiverIdentifierLeg1,
+                    cde.execution.SettlementLocationLeg1,
+                    DTCC_Leg1CommodityUnderlyerID,
+                    DTCC_Leg1CommodityInstrumentID,
+                    DTCC_Leg1FloatingRateIndex
+                )
+        else CSALegEnrichment(
+                common.LegEnrichment(
+                        cde.Leg2(item, SpreadNotationLeg1, 99999999999999999999.99999),
+                        cde.quantity.NotionalAmountScheduleLeg2,
+                        cde.quantity.NotionalQuantityScheduleLeg2,
+                        common.quantity.NotionalQuantityLeg2,
+                        common.payment.FloatingRateResetFrequencyPeriodLeg2,
+                        common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg2,
+                        common.datetime.FixingDateLeg2,
+                        common.quantity.QuantityFrequencyLeg2(item) -> period,
+                        common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier,
+                        empty,
+                        empty,
+                        empty,
+                        empty,
+                        empty
+                    ),
+                QuantityUnitOfMeasureLeg1, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                cde.underlier.UnderlierIDOtherLeg2,
+                cde.underlier.UnderlierIDOtherSourceLeg2,
+                UnderlyingAssetTradingPlatformIdentifierLeg2,
+                UnderlyingAssetPriceSourceLeg2,
+                CryptoAssetUnderlyingIndicatorLeg2,
+                PayerIdentifierLeg2,
+                ReceiverIdentifierLeg2,
+                cde.execution.SettlementLocationLeg2,
+                DTCC_Leg2CommodityUnderlyerID,
+                DTCC_Leg2CommodityInstrumentID,
+                DTCC_Leg2FloatingRateIndex
+            )
+
+reporting rule Leg2Report from TransactionReportInstruction: <"Leg 2 Report">
+    [regulatoryReference CSA Trade
+        provision "Depending on the product being reported and the related market convention, a multi-leg or multi-stream product could be reported using a particular data element more than once. Unless the data element is listed as leg, it cannot be reported more than once. For products where the multi-leg or multi-stream concept is not applicable, report values in the designated data element for the first leg (Leg 1) for all fields that are specified as leg-based data elements. For products having two legs where one leg references a fixed value and the other leg  references a floating value, Leg 1 elements should refer to the leg that references a fixed value and Leg 2 elements should refer to the leg that references a floating value. For products having two legs where each leg references a floating value respectively, the legs should be ordered based on the alphabetical ordering of the names of the respective underliers. In cases where the names of the respective underliers are the same, but they are differentiated by a tenor, Leg 1 elements should refer to the leg referencing the underlier with the shorter tenor."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" // TH Sprint 2025-11: date must be changed after retro-review is done
+        provision "CSA leg ordering for SpreadNotationLeg1 and SpreadNotationLeg2 follows csa-specific alignment logic at the reporting rule level, and is not overriden by the corresponding common fields. Therefore, leg ordering must be implemented individually within each field's reporting rule."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied in any way to the Equity asset class, there are no products which fall into the definition. Canadian rules describe logic for determining Leg 1 and Leg 2 when the same underlier exists with different tenors. Equities do not have tenors, they are not defined by maturity profiles or benchmark curves."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250709"
+        provision "CSA-specific Leg Ordering logic should not be applied to the Credit asset class. Specifically, Total Return Swap on debt instruments such as Loans or Bonds are classified as Credit asset class."]
+    filter IsAllowableActionForCSA
+    then if IsCSALeg2Aligned
+        then CSALegEnrichment(
+                    common.LegEnrichment(
+                            cde.Leg2(item, SpreadNotationLeg2, 99999999999999999999.99999),
+                            cde.quantity.NotionalAmountScheduleLeg2,
+                            cde.quantity.NotionalQuantityScheduleLeg2,
+                            common.quantity.NotionalQuantityLeg2,
+                            common.payment.FloatingRateResetFrequencyPeriodLeg2,
+                            common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg2,
+                            common.datetime.FixingDateLeg2,
+                            common.quantity.QuantityFrequencyLeg2(item) -> period,
+                            common.quantity.QuantityFrequencyLeg2(item) -> periodMultiplier,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty
+                        ),
+                    QuantityUnitOfMeasureLeg2, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                    cde.underlier.UnderlierIDOtherLeg2,
+                    cde.underlier.UnderlierIDOtherSourceLeg2,
+                    UnderlyingAssetTradingPlatformIdentifierLeg2,
+                    UnderlyingAssetPriceSourceLeg2,
+                    CryptoAssetUnderlyingIndicatorLeg2,
+                    PayerIdentifierLeg2,
+                    ReceiverIdentifierLeg2,
+                    empty,
+                    DTCC_Leg2CommodityUnderlyerID,
+                    DTCC_Leg2CommodityInstrumentID,
+                    DTCC_Leg2FloatingRateIndex
+                )
+        else CSALegEnrichment(
+                common.LegEnrichment(
+                        cde.Leg1(item, SpreadNotationLeg2, 99999999999999999999.99999),
+                        cde.quantity.NotionalAmountScheduleLeg1,
+                        cde.quantity.NotionalQuantityScheduleLeg1,
+                        common.quantity.NotionalQuantityLeg1,
+                        common.payment.FloatingRateResetFrequencyPeriodLeg1,
+                        common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg1,
+                        common.datetime.FixingDateLeg1,
+                        common.quantity.QuantityFrequencyLeg1(item) -> period,
+                        common.quantity.QuantityFrequencyLeg1(item) -> periodMultiplier,
+                        empty,
+                        empty,
+                        empty,
+                        empty,
+                        empty
+                    ),
+                QuantityUnitOfMeasureLeg2, // Leg ordering is handled in the QuantityUnitOfMeasure functions
+                cde.underlier.UnderlierIDOtherLeg1,
+                cde.underlier.UnderlierIDOtherSourceLeg1,
+                UnderlyingAssetTradingPlatformIdentifierLeg1,
+                UnderlyingAssetPriceSourceLeg1,
+                CryptoAssetUnderlyingIndicatorLeg1,
+                PayerIdentifierLeg1,
+                ReceiverIdentifierLeg1,
+                empty,
+                DTCC_Leg1CommodityUnderlyerID,
+                DTCC_Leg1CommodityInstrumentID,
+                DTCC_Leg1FloatingRateIndex
+            )
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call Amount">
+    [regulatoryReference CSA Trade dataElement "28" field "Call Amount"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to buy."]
+    filter IsAllowableActionForCSA
+    then if IsFXOption(ProductForEvent)
+        then cde.quantity.ExtractCallAmount(item, 9999999999999999999999999)
+        as "28 Call amount"
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call Currency">
+    [regulatoryReference CSA Trade dataElement "29" field "Call Currency"
+        provision "For foreign exchange options, the currency in which the Call amount is denominated."]
+    filter IsAllowableActionForCSA
+    then if IsFXOption(ProductForEvent) then cde.quantity.CallCurrency
+        as "29 Call currency"
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put Amount">
+    [regulatoryReference CSA Trade dataElement "30" field "Put Amount"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to sell."]
+    filter IsAllowableActionForCSA
+    then if IsFXOption(ProductForEvent)
+        then cde.quantity.ExtractPutAmount(item, 9999999999999999999999999)
+        as "30 Put Amount"
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put Currency">
+    [regulatoryReference CSA Trade dataElement "31" field "Put Currency"
+        provision "For foreign exchange options, the currency in which the Put amount is denominated."]
+    filter IsAllowableActionForCSA
+    then if IsFXOption(ProductForEvent) then cde.quantity.PutCurrency
+        as "31 Put currency"
+
+reporting rule QuantityUnitOfMeasureLeg1 from TransactionReportInstruction: <"Quantity Unit Of Measure-Leg 1">
+    filter IsAllowableActionForCSA
+    then extract TradeForEvent
+    then extract
+        if Qualify_Commodity_Swap_Basis(
+                    ProductForTrade -> contractualProduct -> economicTerms
+                ) = True
+        then drr.regulation.csa.rewrite.trade.CommodityLeg1(ProductForTrade) -> priceQuantity -> quantitySchedule
+        else if Qualify_Commodity_Swap_FixedFloat(
+                    ProductForTrade -> contractualProduct -> economicTerms
+                ) = True
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> fixedPricePayout only-element -> priceQuantity -> quantitySchedule
+        else if Qualify_Commodity_Swaption(
+                        tradableProduct -> product -> contractualProduct -> economicTerms
+                    ) = True
+                and Qualify_Commodity_Swap_Basis(
+                        UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                    )
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule
+        else if Qualify_Commodity_Swaption(
+                        tradableProduct -> product -> contractualProduct -> economicTerms
+                    ) = True
+                and Qualify_Commodity_Swap_FixedFloat(
+                        UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                    )
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule
+        else if IsCommodityOption(tradableProduct -> product)
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule
+        else if IsEquityOption(ProductForTrade)
+                and EconomicTermsForProduct(ProductForTrade) -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule
+        else if IsEquityForward(ProductForTrade)
+                and EconomicTermsForProduct(ProductForTrade) -> payout -> forwardPayout only-element -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> forwardPayout only-element -> priceQuantity -> quantitySchedule
+        else if EconomicTermsForProduct(ProductForTrade) -> payout -> performancePayout only-element -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then EconomicTermsForProduct(ProductForTrade) -> payout -> performancePayout only-element -> priceQuantity -> quantitySchedule
+        else if IsEquity(ProductForTrade)
+                and tradableProduct -> tradeLot -> priceQuantity -> quantity -> unit -> financialUnit exists
+        then (tradableProduct -> tradeLot only-element -> priceQuantity -> quantity
+            then filter unit -> financialUnit exists
+            then only-element)
+    then extract cdebase.quantity.QuantityUnitOfMeasure default "OTHR"
+
+reporting rule QuantityUnitOfMeasureLeg2 from TransactionReportInstruction: <"Quantity Unit Of Measure-Leg 2">
+    filter IsAllowableActionForCSA
+    then extract TradeForEvent
+    then extract
+        if IsCommoditySwap(tradableProduct -> product)
+        then drr.regulation.csa.rewrite.trade.CommodityLeg2(ProductForTrade) -> priceQuantity -> quantitySchedule
+        else if IsEquity(ProductForTrade)
+                and drr.regulation.common.InterestRateLeg2(ProductForTrade) -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+        then drr.regulation.common.InterestRateLeg2(ProductForTrade) -> priceQuantity -> quantitySchedule
+    then extract cdebase.quantity.QuantityUnitOfMeasure default "OTHR"
+
+reporting rule ExchangeRate from TransactionReportInstruction: <"Exchange Rate">
+    [regulatoryReference CSA Trade dataElement "43" field "Exchange Rate"
+        provision "Exchange rate between the two different currencies specified in the OTC derivative transaction agreed by the counterparties at the inception of the transaction, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426. Forward exchange rate should be reported."]
+    [regulatoryReference CSA Trade dataElement "43" field "Exchange Rate" footnote "24"
+        provision "For FX, forward exchange rate would be reported in this data element."]
+    filter IsAllowableActionForCSA
+    then cde.price.ExchangeRate
+        as "43 Exchange rate"
+
+reporting rule ExchangeRateBasis from TransactionReportInstruction: <"Exchange Rate Basis">
+    filter IsAllowableActionForCSA
+    then cde.price.ExchangeRateBasis
+        as "44 Exchange rate basis"
+
+reporting rule Price from TransactionReportInstruction: <"Price">
+    [regulatoryReference CSA Trade dataElement "46" field "Price (Monetary)"
+        provision "Price specified in the OTC derivative transaction. It does not include fees, taxes or commissions.
+        For commodity fixed/float swaps and similar products26 with periodic payments, this data element refers to the fixed price of the fixed leg(s).
+        For commodity and equity forwards and similar products, this data element refers to the forward price of the underlying or reference asset.
+        For equity swaps, portfolios swaps, andsimilar products, this data element refers to the initial price of the underlying or reference asset.
+        For contracts for difference and similar products, this data element refers to the initial price of the underlier.
+        This data element is not applicable to:
+        - Interest rate swaps and forward rate agreements, as it is understood that the information included in the data elements Fixed rate and Spread may be interpreted as the price of the transaction.
+        - Interest rate options and interest rate swaptions as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+        - Commodity basis swaps as it is understood that the information included in the data element Spread may be interpreted as the price of the transaction.
+        - Foreign exchange swaps, forwards and options, as it is understood that the information included in the data elements Exchange rate, Strike price, and Option premium may be interpreted as the price of the transaction.
+        - Equity options as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+        - Credit default swaps and credit total return swaps, as it is understood that the information included in the data elements Fixed rate, Spread and Upfront payment (Other payment type: Upfront payment) may be interpreted as the price of the transaction.
+        - Commodity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+        Where the price is not known when a new transaction is reported, the price is updated as it becomes available. For transactions that are part of a package, this data element contains the price of the component transaction where applicable."]
+    [regulatoryReference CSA Trade dataElement "46" field "Price" footnote "25"
+        provision "While Price (#46) captures the prices at which counterparties negotiate contracts, market prices are reflected in the valuation amounts."]
+    [regulatoryReference CSA Trade dataElement "46" field "Price" footnote "26"
+        provision "References to product in CDE data element explanations should be read to mean derivative."]
+    filter IsAllowableActionForCSA
+    then filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+    then extract
+        cdebase.price.PriceFormatFromNotation(cde.price.PriceNoFormat, PriceNotation)
+
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price currency">
+    [regulatoryReference CSA Trade dataElement "47" field "Price currency"
+        provision "Currency in which the price is denominated. Price currency is only applicable if Price notation = 1."]
+    filter IsAllowableActionForCSA
+    then filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+    then extract cde.price.PriceCurrency
+        as "47 Price currency"
+
+reporting rule PriceNotation from TransactionReportInstruction: <"Price notation">
+    [regulatoryReference CSA Trade dataElement "48" field "Price notation"
+        provision "Manner in which the price is expressed."]
+    filter IsAllowableActionForCSA
+    then filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+    // Monetary and Decimal are the only allowabe values for this field. Thus, in case Percentage is notated, it will be reported as Decimal.
+    then common.price.DefaultPercentageToDecimal(cde.price.PriceNotation, False)
+        as "48 Price notation"
+
+reporting rule PriceUnitOfMeasure from TransactionReportInstruction: <"Price unit of measure">
+    [regulatoryReference CSA Trade dataElement "49" field "Price unit of measure"
+        provision "Unit of measure in which the price is expressed."]
+    filter IsAllowableActionForCSA
+    then filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+    then if cde.price.PriceUnitOfMeasure = empty
+        then "OTHR"
+        else cde.price.PriceUnitOfMeasure
+        as "49 Price unit of measure"
+
+reporting rule ContractPriceSchedule from TransactionReportInstruction: <"Contract Price Schedule">
+    [regulatoryReference CSA Trade dataElement "50-52" field "Contract Price Schedule"
+        provision "Fields 50-52 are repeatable."]
+    filter IsAllowableActionForCSA
+    then filter
+        Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+    then extract cde.price.GetReportablePricePeriod(item, PriceNotation)
+
+reporting rule SpreadNotationLeg1 from TransactionReportInstruction: <"Spread Notation-Leg 1">
+    [regulatoryReference CSA Trade dataElement "55" field "Spread Notation-Leg 1"
+        provision "For each leg of the transaction, where applicable: the manner in which the spread is expressed."]
+    extract
+        if IsCSALeg1Aligned
+        then common.price.DefaultPercentageToDecimal(
+                    cde.price.SpreadLeg1NotationEnum,
+                    False
+                )
+        else common.price.DefaultPercentageToDecimal(
+                cde.price.SpreadLeg2NotationEnum,
+                False
+            )
+
+reporting rule SpreadNotationLeg2 from TransactionReportInstruction: <"Spread Notation-Leg 2">
+    [regulatoryReference CSA Trade dataElement "55" field "Spread Notation-Leg 2"
+        provision "For each leg of the transaction, where applicable: the manner in which the spread is expressed."]
+    extract
+        if IsCSALeg2Aligned
+        then common.price.DefaultPercentageToDecimal(
+                    cde.price.SpreadLeg2NotationEnum,
+                    False
+                )
+        else common.price.DefaultPercentageToDecimal(
+                cde.price.SpreadLeg1NotationEnum,
+                False
+            )
+        as "55 Spread Notation-Leg 2"
+
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike price">
+    [regulatoryReference CSA Trade dataElement "56" field "Strike price"
+        provision "- For options other than FX options, swaptions and similar products, the price at which the owner of an option can buy or sell the underlying asset of the option.
+        - For FX options, the exchange rate at which the option can be exercised, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426. Where the strike price is not known when a new transaction is reported, the strike price is updated as it becomes available.
+        - For volatility and variance swaps and similar products, the volatility / variance strike price."]
+    [regulatoryReference CSA Trade dataElement "56" field "Strike Price" footnote "28"
+        provision "References to FX in CDE data element explanations should be read to mean foreign exchange."]
+    filter IsAllowableActionForCSA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.StrikePriceNoFormat,
+                StrikePriceNotation
+            )
+
+reporting rule StrikePriceCurrencyCurrencyPair from TransactionReportInstruction: <"Strike price currency/currency pair">
+    [regulatoryReference CSA Trade dataElement "57" field "Strike price currency/currency pair"
+        provision "For equity options, commodity options, and similar products, the currency in which the strike price is denominated. For foreign exchange options: the currency pair and order in which the strike price is expressed. The strike price is expressed as unit currency/quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency, USD 1 = EUR 0.9426 Strike price currency/currency pair is only applicable if Strike price notation = 1."]
+    filter IsAllowableActionForCSA
+    then cde.price.StrikePriceCurrency
+        as "57 Strike price currency/currency pair"
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike price notation">
+    [regulatoryReference CSA Trade dataElement "58" field "Strike price notation"
+        provision "Manner in which the strike price is expressed."]
+    filter IsAllowableActionForCSA
+    then extract
+        common.price.DefaultPercentageToDecimal(cde.price.StrikePriceNotationEnum, False)
+        as "58 Strike price notation"
+
+reporting rule StrikePriceSchedule from TransactionReportInstruction: <"Strike Price Schedule">
+    [regulatoryReference CSA Trade dataElement "65-67" field "Strike Price Schedule"
+        provision "Fields 65-67 are repeatable."]
+    filter IsAllowableActionForCSA
+    then extract cde.price.GetReportableStrikePricePeriod(item, StrikePriceNotation)
+
+reporting rule NonStandardizedTermIndicator from TransactionReportInstruction: <"Non-standardized Term Indicator">
+    filter IsAllowableActionForCSA
+    then extract
+        if IsCleared(originatingWorkflowStep) = False
+                and originatingWorkflowStep -> nextEvent -> intent <> Clearing
+        then common.contract.NonStandardizedTermIndicator
+
+reporting rule Cleared from TransactionReportInstruction: <"Cleared">
+    [regulatoryReference CSA Trade dataElement "72" field "Cleared"
+        provision "Indicator of whether the transaction has been cleared, or is intended to be cleared, by a clearing agency central counterparty."]
+    [regulatoryReference CSA Trade dataElement "72" field "Cleared" footnote "30"
+        provision "References to central counterparty in CDE data element explanations should be read to mean clearing agency or, in Quebec, clearing house."]
+    filter IsAllowableActionForCSA
+    then cde.execution.Cleared
+        as "72 Cleared"
+
+reporting rule CentralCounterpartyIdentifier from TransactionReportInstruction: <"Central Counterparty Identifier">
+    [regulatoryReference CSA Trade dataElement "73" field "Central Counterparty Identifier"
+        provision "Identifier of the central counterparty (CCP) that cleared the transaction. This data element is not applicable if the value of the data element 'Cleared' is 'N' (No, not centrally cleared) or 'I' (Intent to clear)."]
+    filter IsAllowableActionForCSA
+    then cde.execution.CentralCounterparty
+        as "73 Central Counterparty Identifier"
+
+reporting rule ClearingAccountOrigin from TransactionReportInstruction: <"Clearing Account Origin">
+    filter IsAllowableActionForCSA
+    then common.execution.ClearingAccountOrigin
+        as "74 Clearing Account Origin"
+
+reporting rule ClearingMemberIdentifier from TransactionReportInstruction: <"Clearing Member Identifier">
+    filter IsAllowableActionForCSA
+    then cde.execution.ClearingMember
+
+reporting rule ClearingReceiptTimestamp from TransactionReportInstruction: <"Clearing Receipt Timestamp">
+    filter IsAllowableActionForCSA and (IsActionTypeEROR = False or IsActionTypePRTO = False)
+    then common.datetime.ClearingReceiptTimestamp
+        as "76 Clearing Receipt Timestamp"
+
+reporting rule ClearingExceptionsAndExemptionsCounterparty1 from TransactionReportInstruction: <"Clearing Exceptions And Exemptions Counterparty 1">
+    filter IsAllowableActionForCSA
+    then filter
+        IsCleared(originatingWorkflowStep) = False
+            and IntendedToClear(originatingWorkflowStep) = False
+    then extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter partyReference = reportInstruction -> reportingSide -> reportingParty
+            then filter
+                regimeInformation -> clearingException -> clearingException any = True
+            then extract regimeInformation
+            then flatten
+            then if regimeName any = DoddFrankAct or supervisoryBody any = CFTC
+                then (filter regimeName = CSA
+                then filter SupervisoryBodyForCSA any = supervisoryBody
+                then extract clearingException -> clearingExceptionReason
+                then flatten
+                then extract ClearingExceptionsAndExemptions)
+                else (filter regimeName = CSA
+                then filter SupervisoryBodyForCSA any = supervisoryBody
+                then extract clearingException -> clearingExceptionReason
+                then flatten
+                then filter ([Inter_Affiliate, Exception] any = item)
+                then extract ClearingExceptionsAndExemptions)
+    ]
+
+reporting rule ClearingExceptionsAndExemptionsCounterparty2 from TransactionReportInstruction: <"Clearing Exceptions And Exemptions Counterparty 2">
+    filter IsAllowableActionForCSA
+    then filter
+        IsCleared(originatingWorkflowStep) = False
+            and IntendedToClear(originatingWorkflowStep) = False
+    then extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter
+                partyReference = reportInstruction -> reportingSide -> reportingCounterparty
+            then filter
+                regimeInformation -> clearingException -> clearingException any = True
+            then extract regimeInformation
+            then flatten
+            then if regimeName any = DoddFrankAct or supervisoryBody any = CFTC
+                then (filter regimeName = CSA
+                then filter SupervisoryBodyForCSA any = supervisoryBody
+                then extract clearingException -> clearingExceptionReason
+                then flatten
+                then extract ClearingExceptionsAndExemptions)
+                else (filter regimeName = CSA
+                then filter SupervisoryBodyForCSA any = supervisoryBody
+                then extract clearingException -> clearingExceptionReason
+                then flatten
+                then filter ([Inter_Affiliate, Exception] any = item)
+                then extract ClearingExceptionsAndExemptions)
+    ]
+
+reporting rule VariationMarginCollateralPortfolioCode from TransactionReportInstruction: <"Variation Margin Collateral Portfolio Code">
+    filter IsAllowableActionForCSA
+    then extract common.collateral.VariationMarginCollateralPortfolioCode
+
+reporting rule InitialMarginCollateralPortfolioCode from TransactionReportInstruction: <"Initial Margin Collateral Portfolio Code">
+    filter IsAllowableActionForCSA
+    then extract common.collateral.InitialMarginCollateralPortfolioCode
+
+reporting rule EventTimestamp from TransactionReportInstruction: <"Event Timestamp">
+    [regulatoryReference CSA Trade dataElement "95" field "Event Timestamp"
+        provision "Date and time of occurrence of the event. In the case of a modification agreed for a future date, this data element should reflect the date, the modification occurs (becomes effective) and not when it was negotiated. In the case of a correction, this data element should reflect the date and time as of when the correction is applicable. In the case of a clearing event, this data element should reflect the recorded date and time when the alpha transaction is accepted by the central counterparty (CCP) for clearing. In the case of collateral update, the date and time for which the information contained in the report is provided."]
+    [regulatoryReference CSA Trade dataElement "95" field "Event Timestamp" footnote "48"
+        provision "Both the date and time portion are required to be reported. The time element is as specific as technologically practicable. If the time portion is not available, report 00:00:00 for the time portion."]
+    filter IsAllowableActionForCSA
+    then extract cde.datetime.EventTimestamp
+        as "95 Event Timestamp"
+
+reporting rule Level from ReportableEvent: <"Level">
+    filter IsAllowableActionForCSA
+    then extract cde.event.Level
+
+reporting rule EventIdentifier from TransactionReportInstruction: <"Event Identifier">
+    [regulatoryReference CSA Trade dataElement "97" field "Event Identifier"
+        provision "Unique identifier to link transactions entering into and resulting from an event, which may be, but is not limited to, compression, or other post trade risk reduction exercises and credit event, etc. The unique identifier may be assigned by the reporting counterparty or CCP providing the service."]
+    [regulatoryReference CSA Trade dataElement "97" field "Event Identifier" footnote "49"
+        provision "The identifier which relates to the same event should be unique per event."]
+    filter IsAllowableActionForCSA
+    then extract cde.event.EventIdentifier
+        as "97 Event identifier"
+
+reporting rule ActionType from TransactionReportInstruction: <"Action Type">
+    [regulatoryReference CSA Trade dataElement "98" field "Action Type"
+        provision "Type of action taken on the transaction or type of end-of-day reporting. See Appendix 3.8 for a description of the allowable values."]
+    [regulatoryReference CSA Trade dataElement "98" field "Action Type" footnote "50"
+        provision "Only one Action type value is allowed per submission. Multiple Action type values should not be submitted in one transaction report. For example, if a data element needs to be corrected on a previously submitted transaction that is getting terminated, the Correct (CORR) value should be submitted as a separate submission prior to the submission of the Terminate (TERM) transaction."]
+    extract cde.event.ActionType
+        as "98 Action Type"
+
+reporting rule EventType from TransactionReportInstruction: <"Event Type">
+    [regulatoryReference CSA Trade dataElement "99" field "Event Type"
+        provision "Explanation or reason for the action being taken on the transaction. See Appendix 3.7 for a description of the allowable values."]
+    filter IsAllowableActionForCSA
+    then cde.event.EventType
+        as "99 Event type"
+
+reporting rule AmendmentIndicator from TransactionReportInstruction: <"Amendment Indicator">
+    filter
+        IsAllowableActionForCSA and (IsActionTypeTERM = False or IsActionTypeEROR = False or IsActionTypePRTO = False)
+    then extract common.event.AmendmentIndicator
+
+reporting rule PackageIndicator from TransactionReportInstruction: <"Package Indicator">
+    filter IsAllowableActionForCSA
+    then extract common.link.PackageIndicator
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package Identifier">
+    [regulatoryReference CSA Trade dataElement "110" field "Package Identifier"
+        provision "Identifier (determined by the reporting counterparty) in order to connect:
+        - two or more transactions that are reported separately by the reporting counterparty, but that are negotiated together as the product of a single economic agreement.
+        - two or more reports pertaining to the same transaction whenever jurisdictional reporting requirement does not allow the transaction to be reported with a single report to trade repositories.
+        A package may include reportable and non-reportable transactions. This data element is not applicable:
+        - if no package is involved, or
+        - to allocations.
+        Where the package identifier is not known when a new transaction is reported, the package identifier is updated as it becomes available."]
+    [regulatoryReference CSA Trade dataElement "110" field "Package Identifier" footnote "55"
+        provision "To report a collar, this field should be populated to link the cap and floor legs. To report a straddle, this field should be populated to link the payer swaption and receiver swaption legs."]
+    [regulatoryReference CSA Trade dataElement "110" field "Package Identifier" footnote "56"
+        provision "In addition, a package transaction also includes a transaction involving two or more instruments: (1) that is executed between two or more counterparties; (2) that is priced or quoted as one economic transaction with simultaneous or near simultaneous execution of all components; (3) where the execution of each component is contingent upon the execution of all other components; (4) where each component is assigned a Unique Swap Identifier (USI) or Unique Transaction Identifier (UTI); and (5) each component is reported separately."]
+    [regulatoryReference CSA Trade dataElement "110" field "Package Identifier" footnote "57"
+        provision "'UNKNOWN' is accepted when the value is not available."]
+    filter IsAllowableActionForCSA
+    then extract cde.link.PackageIdentifier
+        as "110 Package Identifier"
+
+reporting rule PackageTransactionPrice from TransactionReportInstruction: <"Package Transaction Price">
+    [regulatoryReference CSA Trade dataElement "111" field "Package Transaction Price"
+        provision "Traded price of the entire package in which the reported derivative transaction is a component. This data element is not applicable if: 
+        - no package is involved, or
+        - package transaction spread is used.
+        Prices and related data elements of the transactions (Price currency, Price notation, Price unit of measure) that represent individual components of the package are reported when available. The Package transaction price may not be known when a new transaction is reported but may be updated later."]
+    [regulatoryReference CSA Trade dataElement "111" field "Package Transaction Price" footnote "58"
+        provision "Default value with all 9s, for any of the allowable formats, is accepted when the value is unknown. When [Package transaction price notation] = 1 use 99999.9999999999999 (18 numerical characters including 13 decimal places). When [Package transaction price notation] = 3 use 9.9999999999 (11 numerical characters including 10 decimal places)."]
+    filter IsAllowableActionForCSA
+    then extract
+        if cde.price.PackageTransactionPriceNoFormat exists
+        then cdebase.price.PriceFormatFromNotation(
+                    cde.price.PackageTransactionPriceNoFormat,
+                    PackageTransactionPriceNotation
+                )
+        else (if PackageTransactionPriceNotation = Monetary
+        then cdebase.price.PriceFormat {
+                monetary: 99999.9999999999999,
+                ...
+            }
+        else if PackageTransactionPriceNotation = Decimal
+        then cdebase.price.PriceFormat {
+                decimal: 9.9999999999,
+                ...
+            })
+
+reporting rule PackageTransactionPriceCurrency from TransactionReportInstruction: <"Package Transaction Price Currency">
+    [regulatoryReference CSA Trade dataElement "112" field "Package Transaction Price Currency"
+        provision "Currency in which the Package transaction price is denominated. This data element is not applicable if:
+        - no package is involved, or
+        - Package transaction spread is used, or
+        - Package transaction price notation = 3"]
+    filter IsAllowableActionForCSA
+    then extract cde.price.PackageTransactionPriceCurrency
+        as "112 Package Transaction Price Currency"
+
+reporting rule PackageTransactionSpread from TransactionReportInstruction: <"Package Transaction Spread">
+    [regulatoryReference CSA Trade dataElement "113" field "Package Transaction Spread"
+        provision "Traded price of the entire package in which the reported derivative transaction is a component of a package transaction. Package transaction price when the price of the package is expressed as a spread, difference between two reference prices. This data element is not applicable if:
+        - no package is involved, or
+        - Package transaction price is used.
+        Spread and related data elements of the transactions (spread currency, Spread notation) that represent individual components of the package are reported when available. Package transaction spread may not be known when a new transaction is reported but may be updated later."]
+    [regulatoryReference CSA Trade dataElement "113" field "Package Transaction Spread" footnote "59"
+        provision "Default value with all 9s, for any of the allowable formats, is accepted when the value is unknown. When [Package transaction spread notation] = 1 use 99999.9999999999999 (18 numerical characters including 13 decimal places). When [Package transaction spread notation] = 3 use 9.9999999999 (11 numerical characters including 10 decimal places). When [Package transaction spread notation] = 4 use 99999 (5 numerical characters with no decimal places)."]
+    filter IsAllowableActionForCSA
+    then extract
+        if cde.price.PackageTransactionSpreadNoFormat exists
+        then cdebase.price.PriceFormatFromNotation(
+                    cde.price.PackageTransactionSpreadNoFormat,
+                    PackageTransactionSpreadNotation
+                )
+        else (if PackageTransactionSpreadNotation = Monetary
+        then cdebase.price.PriceFormat {
+                monetary: 99999.9999999999999,
+                ...
+            }
+        else if PackageTransactionSpreadNotation = Decimal
+        then cdebase.price.PriceFormat {
+                decimal: 9.9999999999,
+                ...
+            }
+        else if PackageTransactionSpreadNotation = Basis
+        then cdebase.price.PriceFormat {
+                basis: 99999,
+                ...
+            })
+
+reporting rule PackageTransactionSpreadCurrency from TransactionReportInstruction:
+    [regulatoryReference CSA Trade dataElement "114" field "Package Transaction Spread Currency"
+        provision "Currency in which the Package transaction spread is denominated. This data element is not applicable if:
+        - no package is involved, or
+        - Package transaction price is used, or
+        - Package transaction spread is expressed as decimal or basis points"]
+    filter IsAllowableActionForCSA
+    then extract cde.price.PackageTransactionSpreadCurrency
+        as "114 Package Transaction Spread Currency"
+
+reporting rule PackageTransactionSpreadNotation from TransactionReportInstruction: <"Package Transaction Spread Notation">
+    [regulatoryReference CSA Trade dataElement "115" field "Package Transaction Spread Notation"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if:
+        - no package is involved, or
+        - Package transaction price is used."]
+    filter IsAllowableActionForCSA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionSpreadNotationEnum,
+                False
+            )
+        as "115 Package Transaction Spread Notation"
+
+reporting rule PackageTransactionPriceNotation from TransactionReportInstruction: <"Package Transaction Price Notation">
+    [regulatoryReference CSA Trade dataElement "116" field "Package Transaction Price Notation"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if no package is involved."]
+    filter IsAllowableActionForCSA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionPriceNotationEnum,
+                False
+            )
+        as "116 Package Transaction Price Notation"
+
+reporting rule UniqueProductIdentifier from TransactionReportInstruction: <"Unique Product Identifier">
+    [regulatoryReference CSA Trade dataElement "117" field "Unique Product Identifier"
+        provision "A unique set of characters that represents a particular OTC derivative."]
+    [regulatoryReference CSA Trade dataElement "117" field "Unique Product Identifier" footnote "60"
+        provision "Refer to section 1.2.6 Use of UPI Instrument Types for explanation on Unique Product Identifiers."]
+    filter IsAllowableActionForCSA
+    then extract upi.UniqueProductIdentifier
+        as "117 Unique Product Identifier"
+
+reporting rule CDSIndexAttachmentPoint from TransactionReportInstruction: <"CDS Index Attachment Point">
+    [regulatoryReference CSA Trade dataElement "118" field "CDS Index Attachment Point"
+        provision "Defined lower point at which the level of losses in the underlying portfolio reduces the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% will be reduced after 3% of losses in the portfolio have occurred. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    filter IsAllowableActionForCSA
+    then extract
+        if IsCreditDefaultSwap(ProductForEvent)
+        then cde.index.CDSIndexAttachmentPoint
+        as "118 CDS Index Attachment Point"
+
+reporting rule CDSIndexDetachmentPoint from TransactionReportInstruction: <"CDS Index Detachment Point">
+    [regulatoryReference CSA Trade dataElement "119" field "CDS Index Detachment Point"
+        provision "Defined point beyond which losses in the underlying portfolio no longer reduce the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% and a detachment point of 6% will be reduced after there have been 3% of losses in the portfolio. 6% losses in the portfolio deplete the notional of the tranche. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    filter IsAllowableActionForCSA
+    then extract
+        if IsCreditDefaultSwap(ProductForEvent)
+        then cde.index.CDSIndexDetachmentPoint
+        as "119 CDS Index Detachment Point"
+
+reporting rule IndexFactor from TransactionReportInstruction: <"Index Factor">
+    [regulatoryReference CSA Trade dataElement "120" field "Index Factor"
+        provision "The index version factor or percent, expressed as a decimal value, that multiplied by the Notional amount yields the notional amount covered by the seller of protection for credit default swap."]
+    filter IsAllowableActionForCSA
+    then extract common.index.IndexFactor
+        as "120 Index factor"
+
+reporting rule CryptoAssetUnderlyingIndicatorLeg1 from TransactionReportInstruction: <"Crypto asset underlying indicator-Leg 1">
+    extract
+        if Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+        then cde.underlier.CryptoAssetUnderlyingIndicator
+
+reporting rule CryptoAssetUnderlyingIndicatorLeg2 from TransactionReportInstruction: <"Crypto asset underlying indicator-Leg 2">
+    extract
+        if IsCommoditySwapFloatFloat(ProductForEvent)
+                or IsCommoditySwapFixedFloat(ProductForEvent)
+        then cde.underlier.CryptoAssetUnderlyingIndicator
+
+reporting rule CustomBasketCode from TransactionReportInstruction: <"Custom Basket Code">
+    filter IsAllowableActionForCSA
+    then extract cde.basket.CustomBasketCode
+
+reporting rule CustomBasketIndicator from TransactionReportInstruction: <"Custom Basket Indicator">
+    filter IsAllowableActionForCSA
+    then extract ProductForEvent
+    then extract
+        if contractualProduct -> economicTerms -> payout -> forwardPayout exists
+        then contractualProduct -> economicTerms -> payout -> forwardPayout -> underlier -> basket exists
+        else if contractualProduct -> economicTerms -> payout -> optionPayout exists
+        then contractualProduct -> economicTerms -> payout -> optionPayout -> underlier -> basket exists
+                or contractualProduct -> economicTerms -> payout -> optionPayout -> underlier -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+        else if contractualProduct -> economicTerms -> payout -> performancePayout exists
+        then contractualProduct -> economicTerms -> payout -> performancePayout -> underlier -> basket exists
+        else if contractualProduct -> economicTerms -> payout -> creditDefaultPayout exists
+        then contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+        else False
+        as "123 Custom Basket Indicator"
+
+//Sprint 2025-11: CSA basket constituents type should extend from common.basket.BasketConstituentsReport once DSL gets upgraded to support deserializing multi-cardinality sub-types
+reporting rule BasketConstituents from TransactionReportInstruction: <"Basket constituents">
+    [regulatoryReference CSA Trade dataElement "124-127" field "Basket constituents"
+        provision "Field 124 and 127 are repeatable and shall be populated in case there is a basket with constituents."]
+    filter IsAllowableActionForCSA and CustomBasketIndicator
+    then extract TradeForEvent
+    then extract common.basket.GetBasketConstituents
+    then extract
+        cdebase.basket.BasketConstituentsReport {
+            identifier: BasketConstituentIdentifier,
+            source: BasketConstituentIdentifierSource,
+            numberOfUnits: BasketConstituentNumberOfUnits,
+            unitOfMeasure: BasketConstituentUnitOfMeasure
+        }
+
+reporting rule BasketConstituentIdentifier from product.template.BasketConstituent: <"Basket Constituent Identifier">
+    [regulatoryReference CSA Trade dataElement "124" field "Basket Constituent Identifier"
+        provision "An identifier that represents a constituent of an underlying custom basket in line with the Underlier ID within the ISO 4914 UPI reference data elements, as maintained by the UPI Service Provider or in line with an identifier that would be reported as an Underlier ID (Other) where the UPI Underlier ID is OTHER. This data element is not applicable if no custom basket is involved."]
+    [regulatoryReference CSA Trade dataElement "124" field "Basket Constituent Identifier" footnote "62"
+        provision "In line with the Underlier ID within the UPI reference data elements, as maintained by the UPI service provider, or in accordance with section 5.2 of the CPMI-IOSCO Technical Guidance: Harmonization of the Unique Product Identifier."]
+    extract common.basket.BasketConstituentIdentifier
+        as "124/127-$ 124 Basket Constituent Identifier"
+
+reporting rule BasketConstituentIdentifierSource from product.template.BasketConstituent: <"Basket Constituent Identifier Source">
+    [regulatoryReference CSA Trade dataElement "125" field "Basket Constituent Identifier Source"
+        provision "The origin, or publisher, of the associated Basket constituent identifier, in line with the Underlier ID source within the ISO 4914 UPI reference data elements as maintained by the UPI Service Provider or in line with the allowable value that would be reported as an Underlier ID (Other) source where the UPI Underlier ID is OTHER. This data element is not applicable if no custom basket is involved."]
+    [regulatoryReference CSA Trade dataElement "125" field "Basket Constituent Identifier Source" footnote "63"
+        provision "In line with the Underlier ID within the UPI reference data elements, as maintained by the UPI service provider, or in accordance with section 5.2 of the CPMI-IOSCO Technical Guidance: Harmonization of the Unique Product Identifier."]
+    extract common.basket.BasketConstituentIdentifierSource
+        as "124/127-$ 125 Basket Constituent Identifier Source"
+
+reporting rule BasketConstituentNumberOfUnits from product.template.BasketConstituent: <"Basket Constituent Number Of Units">
+    [regulatoryReference CSA Trade dataElement "126" field "Basket Constituent Number Of Units"
+        provision "The number of units of a particular constituent in a custom basket. This data element is not applicable if no custom basket is involved."]
+    [regulatoryReference CSA Trade dataElement "126" field "Basket Constituent Number Of Units" footnote "64"
+        provision "For commodities baskets where calculated formula of different % weights of indices are used, provide values without the %. For example, 10% should be reported as 10."]
+    extract common.basket.BasketConstituentNumberOfUnits
+        as "124/127-$ 126 Basket Constituent Number Of Units"
+
+reporting rule BasketConstituentUnitOfMeasure from product.template.BasketConstituent: <"Basket Constituent Unit Of Measure">
+    [regulatoryReference CSA Trade dataElement "127" field "Basket Constituent Unit Of Measure"
+        provision "Unit of measure in which the number of units of a particular custom basket constituent is expressed. This data element is not applicable if no custom basket is involved."]
+    extract common.basket.BasketConstituentUnitOfMeasure
+        as "124/127-$ 127 Basket Constituent Unit Of Measure"
+
+reporting rule UnderlyingAssetTradingPlatformIdentifierLeg1 from TransactionReportInstruction: <"Underlying Asset Trading Platform Identifier-Leg 1">
+    extract
+        if IsEquity(ProductForEvent)
+                or IsEquityForward(ProductForEvent)
+                or Qualify_AssetClass_Credit(EconomicTermsForProduct(ProductForEvent))
+        then cde.underlier.UnderlyingAssetTradingPlatformIdentifierLeg1
+
+reporting rule UnderlyingAssetTradingPlatformIdentifierLeg2 from TransactionReportInstruction: <"Underlying Asset Trading Platform Identifier-Leg 2">
+    extract
+        if IsEquity(ProductForEvent)
+                or IsEquityForward(ProductForEvent)
+                or Qualify_AssetClass_Credit(EconomicTermsForProduct(ProductForEvent))
+        then cde.underlier.UnderlyingAssetTradingPlatformIdentifierLeg2
+
+reporting rule UnderlyingAssetPriceSourceLeg1 from TransactionReportInstruction: <"Underlying Asset Price Source-Leg 1">
+    filter
+        reportableInformation -> transactionInformation -> csaTransactionInformation -> underlierTradedOnTradingVenue any = False
+    then cde.underlier.UnderlyingAssetPriceSourceLeg1
+
+reporting rule UnderlyingAssetPriceSourceLeg2 from TransactionReportInstruction: <"Underlying Asset Price Source-Leg 2">
+    filter
+        reportableInformation -> transactionInformation -> csaTransactionInformation -> underlierTradedOnTradingVenue any = False
+    then cde.underlier.UnderlyingAssetPriceSourceLeg2
+
+reporting rule EmbeddedOptionType from TransactionReportInstruction: <"Embedded Option Type">
+    [regulatoryReference CSA Trade dataElement "132" field "Embedded Option Type"
+        provision "Type of option or optional provision embedded in a contract."]
+    filter IsAllowableActionForCSA
+    then extract common.contract.EmbeddedOptionType
+        as "132 Embedded Option Type"
+
+reporting rule FinalContractualSettlementDate from TransactionReportInstruction: <"Final Contractual Settlement Date">
+    [regulatoryReference CSA Trade dataElement "133" field "Final Contractual Settlement Date"
+        provision "Unadjusted date as per the contract, by which all transfer of cash or assets should take place and the counterparties should no longer have any outstanding obligations to each other under that contract. For products that may not have a final contractual settlement date (e.g., American options), this data element reflects the date by which the transfer of cash or asset would take place if termination were to occur on the expiration date."]
+    filter IsAllowableActionForCSA
+    then extract cde.execution.FinalContractualSettlementDate
+        as "133 Final Contractual Settlement Date"
+
+reporting rule SettlementLocation from TransactionReportInstruction: <"Settlement Location">
+    filter IsAllowableActionForCSA
+    then extract cde.execution.SettlementLocation
+
+reporting rule OtherPayment from TransactionReportInstruction: <"Other Payment">
+    [regulatoryReference CSA Trade dataElement "136-141" field "Other Payment"
+        provision "Fields 136-141 are repeatable and shall be populated in the case of derivatives involving other payments."]
+    filter IsAllowableActionForCSA
+    then extract cde.payment.OtherPayment
+
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option Premium Amount">
+    [regulatoryReference CSA Trade dataElement "144" field "Option Premium Amount"
+        provision "For options and swaptions of all asset classes, monetary amount paid by the option buyer. This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    filter IsAllowableActionForCSA
+    then common.price.OptionPremiumAmount
+        as "144 Option Premium Amount"
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction: <"Option Premium Currency">
+    [regulatoryReference CSA Trade dataElement "145" field "Option Premium Currency"
+        provision "For options and swaptions of all asset classes, currency in which the option premium amount is denominated. This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    filter IsAllowableActionForCSA
+    then cde.price.OptionPremiumCurrency
+        as "145 Option Premium Currency"
+
+reporting rule OptionPremiumPaymentDate from TransactionReportInstruction: <"Option Premium Payment Date">
+    [regulatoryReference CSA Trade dataElement "146" field "Option Premium Payment Date"
+        provision "Unadjusted date on which the option premium is paid."]
+    filter IsAllowableActionForCSA
+    then cde.price.OptionPremiumPaymentDate
+        as "146 Option Premium Payment Date"
+
+reporting rule FirstExerciseDate from TransactionReportInstruction: <"First Exercise Date">
+    [regulatoryReference CSA Trade dataElement "147" field "First Exercise Date"
+        provision "First unadjusted date during the exercise period in which an option can be exercised.
+        For European-style options, this date is same as the Expiration date. For American-style options, the first possible exercise date is the unadjusted date included in the Execution timestamp.
+        For knock-in options, where the first exercise date is not known when a new transaction is reported, the first exercise date is updated as it becomes available.
+        This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    filter IsAllowableActionForCSA
+    then cde.price.FirstExerciseDate
+        as "147 First exercise date"
+
+reporting rule InstrumentType from TransactionReportInstruction: <"Instrument Type (non-reportable)">
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250416" field "Instrument Type (non-reportable)"
+        provision "The firms proposed extracting post-UPI information through an alternative method for entities not utilizing the UPI, with the objective of enabling the use of the Validation Rules. Consequently, this non-reportable field has been created, which in this instance extracts the Instrument Type."]
+    extract GetInstrumentType
+        as "Instrument Type (non-reportable)"
+
+reporting rule ReturnorPayoutTrigger from TransactionReportInstruction: <"Return or Payout Trigger (non-reportable)">
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250416" field "Return or Payout Trigger (non-reportable)"
+        provision "The firms proposed extracting post-UPI information through an alternative method for entities not utilizing the UPI, with the objective of enabling the use of the Validation Rules. Consequently, this non-reportable field has been created, which in this instance extracts the Return or Payout Trigger ."]
+    extract
+        if IsReturnorPayoutTriggerCFD
+        then "Contract_for_Difference_CFD_"
+                // Only modelled for Return or Payout Trigger considered in Validation Rules for CSA
+        as "Return or Payout Trigger (non-reportable)"
+
+func IsAllowableActionForCSA: <"Indicates the allowable actions for CSA">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        isAllowableAction boolean (1..1)
+
+    set isAllowableAction:
+        IsActionTypeNEWT(reportableEvent)
+            or IsActionTypeMODI(reportableEvent)
+            or IsActionTypePositionMODI(reportableEvent)
+            or IsActionTypeCORR(reportableEvent)
+            or IsActionTypeREVI(reportableEvent)
+            or IsActionTypeTERM(reportableEvent)
+            or IsActionTypeEROR(reportableEvent)
+            or IsActionTypePRTO(reportableEvent)
+
+func SupervisoryBodyForCSA: <"Contains all supervisory bodies that can be used for CSA">
+    output:
+        supervisoryBodyCSA SupervisoryBodyEnum (1..*)
+
+    add supervisoryBodyCSA:
+        [CA_AB_ASC, CA_BC_BCSC, CA_MB_MSC, CA_NB_FCSC, CA_NL_DSS, CA_NS_NSSC, CA_NT_NTSO, CA_NU_NSO, CA_ON_OSC, CA_PEI_OSS, CA_QC_AMF, CA_SK_FCAA, CA_YT_OSS]

@@ -1,0 +1,69 @@
+namespace drr.standards.iosco.cde.version2.quantity
+version "${project.version}"
+
+import cdm.base.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iosco.cde.version2.* as cdeV2
+
+reporting rule Delta from ReportableEvent: <"Delta">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "71"
+        provision "The ratio of the change in price of an OTC derivative transaction to the change in the price of the underlier, at the time a new transaction is reported or when a change in the notional amount is reported.
+        - Allowable Values: Any value between negative one and one"]
+    cdeV1.quantity.Delta
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call Amount">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "72"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to buy."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // BlackRock
+        provision "The Call Amount can be determined as the currency amount being received by the buyer of the option"]
+    extract ExtractCallAmount(item, empty)
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put Amount">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "73"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to sell."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // REGnosys
+        provision "The Call Amount can be determined as the currency amount being received by the buyer of the option"]
+    extract ExtractPutAmount(item, empty)
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "75"
+        provision "For foreign exchange options, the currency in which the Call amount is denominated."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown" // REGnosys-Saeid
+        provision "The call currency is determined by a validation rule which determines who is the buyer of the option."]
+    cdeV1.quantity.CallCurrency
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "76"
+        provision "For foreign exchange options, the currency in which the Put amount is denominated."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown" // REGnosys-Saeid
+        provision "The put currency is determined by a validation rule which determines who is the buyer of the option."]
+    cdeV1.quantity.PutCurrency
+
+reporting rule QuantityUnitOfMeasureLeg1 from TransactionReportInstruction: <"Quantity unit of measure">
+    cdeV1.quantity.QuantityUnitOfMeasureLeg1
+
+reporting rule QuantityUnitOfMeasureLeg2 from TransactionReportInstruction: <"Quantity unit of measure">
+    cdeV1.quantity.QuantityUnitOfMeasureLeg2
+
+reporting rule NotionalCurrencyLeg1 from TransactionReportInstruction: <"Notional Currency Leg 1">
+    cdeV1.quantity.NotionalCurrencyLeg1
+
+reporting rule NotionalCurrencyLeg2 from TransactionReportInstruction: <"Notional Currency Leg 2">
+    cdeV1.quantity.NotionalCurrencyLeg2
+
+reporting rule NotionalAmountScheduleLeg1 from TransactionReportInstruction: <"Notional Amount Schedule">
+    cdeV1.quantity.NotionalAmountScheduleLeg1
+
+reporting rule NotionalAmountScheduleLeg2 from TransactionReportInstruction: <"Notional Amount Schedule">
+    cdeV1.quantity.NotionalAmountScheduleLeg2
+
+reporting rule NotionalQuantityScheduleLeg1 from TransactionReportInstruction: <"Notional quantity schedule - Leg 1">
+    cdeV1.quantity.NotionalQuantityScheduleLeg1
+
+// then sort [ item -> effectiveDate ] workaround for DSL issue #998
+reporting rule NotionalQuantityScheduleLeg2 from TransactionReportInstruction: <"Notional quantity schedule - Leg 2">
+    cdeV1.quantity.NotionalQuantityScheduleLeg2
+// then sort [ item -> effectiveDate ] workaround for DSL issue #998

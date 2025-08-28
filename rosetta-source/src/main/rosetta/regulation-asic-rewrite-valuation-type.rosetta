@@ -1,0 +1,112 @@
+namespace drr.regulation.asic.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.asic.*
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+type ASICValuationReport:
+    [rootType]
+    uniqueTransactionIdentifier Max52AlphaNumericText (0..1)
+        [ruleReference UniqueTransactionIdentifier]
+    utiProprietaryID UTIProprietaryIDFormat (0..1)
+        [ruleReference UniqueTransactionIdentifierProprietary]
+    reportingEntity LEIIdentifier (1..1)
+        [ruleReference ReportingEntity]
+    counterparty1 LEIIdentifier (1..1)
+        [ruleReference Counterparty1]
+    counterparty2 Min20Max72AlphaNumericText (1..1)
+        [ruleReference Counterparty2]
+    counterparty2IdentifierTypeIndicator boolean (1..1)
+        [ruleReference Counterparty2IdentifierTypeIndicator]
+    executionAgentOfTheCounterparty1 LEIIdentifier (0..1)
+        [ruleReference ExecutionAgentOfTheCounterparty1]
+    actionType string (1..1)
+        [ruleReference ActionType]
+    reportingTimestamp zonedDateTime (1..1) 
+        [ruleReference ReportingTimestamp]
+    reportSubmittingEntityID string (1..1)
+        [ruleReference ReportSubmittingEntity]
+    smallScaleBuySideEntityIndicator string (0..1)
+        [ruleReference SmallScaleBuySideEntityIndicator]
+    valuationTimestamp zonedDateTime (1..1)
+        [ruleReference ValuationTimestamp]
+    valuationAmount ShortFraction5DecimalNumber (1..1) 
+        [ruleReference ValuationAmount]
+    valuationCurrency ISOCurrencyCodeEnum (1..1)
+        [ruleReference ValuationCurrency]
+    valuationMethod ValuationType1Code (1..1)
+        [ruleReference ValuationMethod]
+    delta ShortFraction5DecimalNumber (0..1)
+        [ruleReference Delta]
+    nextFloatingReferenceResetDateLeg1 ISODate (0..1)
+        [ruleReference NextFloatingReferenceResetDateLeg1]
+    nextFloatingReferenceResetDateLeg2 ISODate (0..1)
+        [ruleReference NextFloatingReferenceResetDateLeg2]
+    technicalRecordId string (1..1)
+        [ruleReference TechnicalRecordId]
+    executionAgentOfTheCounterparty2 LEIIdentifier (0..1)
+    [ruleReference ExecutionAgentOfTheCounterparty2DTCC]
+
+    condition DTCC_ASIC_BR_1006_01: <"Counterparty 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "6" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, ERROR, MARU, VALU then [Counterparty 1] must NOT = [Counterparty 2] if [Counterparty 2 identifier type] is = LEI"]
+        if ActionTypeEnum -> VALU to-string = actionType and counterparty2IdentifierTypeIndicator
+        then counterparty1 <> counterparty2
+
+    condition DTCC_ASIC_BR_1007_02: <"Counterparty 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "7" validationRule "Transaction"
+        provision "when [Action Type] = TERM, PRTO, ERROR, MARU, VALU then [Counterparty 1] must NOT = [Counterparty 2] if [Counterparty 2 identifier type] is = LEI."]
+        if ActionTypeEnum -> VALU to-string = actionType
+        then counterparty1 <> counterparty2
+
+    condition DTCC_ASIC_BR_1013_01: <"Execution agent of the Counterparty 1">
+        [docReference ASIC DTCC_Specs table "1" dataElement "13" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, EROR, MARU, VALU then [Execution agent of Counterparty 1] must NOT = [Counterparty 1] or [Counterparty 2] or [Reporting Entity]"]
+        if ActionTypeEnum -> VALU to-string = actionType
+        then executionAgentOfTheCounterparty1 <> counterparty1
+                or executionAgentOfTheCounterparty1 <> counterparty2
+                or executionAgentOfTheCounterparty1 <> reportingEntity
+
+    condition DTCC_ASIC_BR_1103_02: <"Reporting Timestamp">
+        [docReference ASIC DTCC_Specs table "1" dataElement "103" validationRule "Valuation"
+        provision "when [Action Type] = VALU then [Reporting timestamp] must be equal to or before the [Message Received timestamp] derived by the TR.
+            Reject if the date value of the [Reporting timestamp] is more than 2 days before the date value of the [Message Received timestamp].
+            [Reporting timestamp] must be equal to or greater than the [Valuation timestamp]"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+            provision "The logic regarding the order between submissions is not modelled. The condition cannot be executed in a stateless environment."]
+        if actionType = ActionTypeEnum -> VALU to-string
+        then reportingTimestamp -> date >= valuationTimestamp -> date
+
+    condition DTCC_ASIC_BR_2008_01: <"Valuation currency">
+        [docReference ASIC DTCC_Specs table "2" dataElement "8" validationRule "Valuation"
+        provision "when [Action Type] = VALU then Reject if [Valuation currency] = XAG, XAU, XBA, XBB, XBC, XBD, XDR, XEU, XFU, XPD, XPT, XTS, XXX."]
+        if actionType = ActionTypeEnum -> VALU to-string
+        then [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] all <> valuationCurrency
+
+    condition DTCC_ASIC_BR_2010_01: <"Delta">
+        [docReference ASIC DTCC_Specs table "2" dataElement "10" validationRule "Valuation"
+        provision "when [Action Type] = VALU then Required if [Small-scale Buy-side Entity indicator] is NOT equal to 'SSBS'.
+            Reject if [Contract type] is NOT = OPTN & SWPT
+            Check the related base trade for applicable contracts types."]
+        if actionType = ActionTypeEnum -> VALU to-string
+        then if smallScaleBuySideEntityIndicator <> "SSBS"
+            then delta exists
+
+    condition DTCC_ASIC_BR_1013a_01: <"Execution agent of Counterparty 2">
+        [docReference ASIC DTCC_Specs table "1" dataElement "[Not in Regulation]" validationRule "Transaction"
+        provision "when [Action Type] = NEWT, MODI, CORR, REVI, TERM, PRTO, EROR, VALU then Required if [Execution agent of Counterparty 1] = NOAP."]
+        if [
+                ActionTypeEnum -> NEWT to-string,
+                ActionTypeEnum -> MODI to-string,
+                ActionTypeEnum -> CORR to-string,
+                ActionTypeEnum -> REVI to-string,
+                ActionTypeEnum -> TERM to-string,
+                ActionTypeEnum -> PRTO to-string,
+                ActionTypeEnum -> VALU to-string
+            ] any = actionType
+        then if executionAgentOfTheCounterparty1 = "NOAP"
+            then executionAgentOfTheCounterparty2 exists

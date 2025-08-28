@@ -1,0 +1,60 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CDTI" ],
+  "corporateSectorOfTheCounterparty2" : [ "AIFD" ],
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2018-02-09",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI02",
+  "eventDate" : "2018-02-09",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-02-09T22:23:00Z",
+  "expirationDate" : "2019-02-11",
+  "finalContractualSettlementDate" : "2019-02-11",
+  "intragroup" : false,
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 2002.10821,
+    "notionalCurrency" : "USD",
+    "totalNotionalQuantity" : 1820098.37
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 23.232,
+    "notionalCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 21120
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "price" : {
+    "monetary" : 0.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "productClassification" : "STJXXC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPINDEX01",
+  "venueOfExecution" : "XXXX"
+}

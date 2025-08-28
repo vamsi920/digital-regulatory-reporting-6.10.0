@@ -1,0 +1,8 @@
+namespace drr.regulation.common.trade.party
+version "${project.version}"
+
+enum NatureOfCounterpartyEnum:
+    F <"Financial">
+    N <"NonFinancial">
+    C <"CentralCounterparty">
+    O <"Exempt">

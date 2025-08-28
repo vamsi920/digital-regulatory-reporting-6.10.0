@@ -1,0 +1,254 @@
+namespace drr.standards.iosco.cde.version1.party
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.party.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1 (reporting counterparty)">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "6"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question. In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty. In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty."]
+    extract PartyLei(reportingSide -> reportingParty -> partyId)
+
+reporting rule Counterparty2 from TransactionReportInstruction: <"Counterparty 2">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "7"
+        provision "Identifier of the second counterparty to an OTC derivative transaction. In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220703"
+        provision "Peer review recommended to detect private individual party representations (instead of LEI scheme). For natural persons who are acting as private individuals (not business entities): LEI of the reporting counterparty followed by a unique identifier assigned and maintained consistently by the reporting counterparty for that natural person(s) for regulatory reporting purpose."]
+    extract
+        PartyLeiAndPersonByRoles(
+                reportingSide -> reportingCounterparty,
+                reportingSide -> reportingParty
+            )
+
+reporting rule Counterparty2IdentifierType from TransactionReportInstruction: <"Counterparty 2 Identifier Type">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "8"
+        provision "Indicator of whether LEI was used to identify the Counterparty 2"]
+    [regulatoryReference ISDA PeerReviewGroup date "20220703"
+        provision "Peer review recommended to detect private individual party representations (instead of LEI scheme). For natural persons who are acting as private individuals (not business entities): LEI of the reporting counterparty followed by a unique identifier assigned and maintained consistently by the reporting counterparty for that natural person(s) for regulatory reporting purpose."]
+    extract reportInstruction [
+        extract
+            if TradeForEvent(reportInstruction) -> tradableProduct -> counterparty -> partyReference exists
+            then TradeForEvent(reportInstruction) -> tradableProduct -> counterparty -> partyReference
+            else if PositionForEvent(reportInstruction) -> positionBase -> counterparty -> partyReference exists
+            then PositionForEvent(reportInstruction) -> positionBase -> counterparty -> partyReference
+        then filter item = reportInstruction -> reportingSide -> reportingCounterparty
+        then only-element
+        then extract
+            if personRole -> role any = NaturalPersonRoleEnum -> Buyer
+                    or personRole -> role any = NaturalPersonRoleEnum -> Seller
+                    or partyId -> identifierType all <> PartyIdentifierTypeEnum -> LEI
+            then False
+            else if PartyLei(partyId) exists
+            then True
+    ]
+
+reporting rule Beneficiary1 from TransactionReportInstruction: <"Beneficiary 1">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "9"
+        provision "Identifier of the beneficiary of an OTC derivative transaction for Counterparty 1. For each transaction that is executed, this data element identifies the party that becomes subject to the rights and obligations arising from the contract, rather than any party who executes the transaction on behalf of or otherwise represents such party.
+        If a beneficiary is a structure such as trust or collective investment vehicle, this data element would identify the structure, rather than the entities that hold ownership interests in the structure."]
+    extract reportInstruction [
+        extract reportableInformation -> partyInformation
+        then filter partyReference = reportInstruction -> reportingSide -> reportingParty
+        then extract
+            ExtractPartyFromRelatedPartyByRole(relatedParty, PartyRoleEnum -> Beneficiary)
+        then extract
+            PartyLeiAndPersonByRoles(
+                    item,
+                    reportInstruction -> reportingSide -> reportingParty
+                )
+        then only-element
+    ]
+
+reporting rule Beneficiary1IdentifierTypeIndicator from TransactionReportInstruction: <"Beneficiary 1 identifier type indicator">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "10"
+        provision "Indicator of whether LEI was used to identify the beneficiary 1."]
+    extract reportInstruction [
+        extract reportableInformation -> partyInformation
+        then filter
+            ExtractPartyFromRelatedPartyByRole(relatedParty, PartyRoleEnum -> Beneficiary)
+                exists
+        then extract
+            if partyReference = reportInstruction -> reportingSide -> reportingParty
+            then ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> Beneficiary
+                    )
+        then only-element
+        then extract
+            if PartyLei(partyId) exists
+                    and PartyLeiAndPersonByRoles(
+                            item,
+                            reportInstruction -> reportingSide -> reportingParty
+                        )
+                        = PartyLei(partyId)
+            then True
+            else False
+    ]
+
+reporting rule Beneficiary2 from TransactionReportInstruction: <"Beneficiary 2">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "11"
+        provision "Identifier of the beneficiary on an OTC derivative transaction for the counterparty 2. For each transaction that is executed, this data element identifies the second party that becomes subject to the rights and obligations arising from the contract, rather than any party who executes the transaction on behalf of or otherwise represents such party.
+        If a beneficiary is a structure such as trust or collective investment vehicle, the beneficiary identifier would identify the structure, rather than the entities that hold ownership interests in the structure."]
+    extract reportInstruction [
+        extract reportableInformation -> partyInformation
+        then filter
+            partyReference = reportInstruction -> reportingSide -> reportingCounterparty
+        then extract
+            ExtractPartyFromRelatedPartyByRole(relatedParty, PartyRoleEnum -> Beneficiary)
+        then extract
+            PartyLeiAndPersonByRoles(
+                    item,
+                    reportInstruction -> reportingSide -> reportingParty
+                )
+        then only-element
+    ]
+
+reporting rule Beneficiary2IdentifierTypeIndicator from TransactionReportInstruction: <"Beneficiary 2">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "12"
+        provision "Indicator of whether LEI was used to identify the beneficiary 2"]
+    extract reportInstruction [
+        extract reportableInformation -> partyInformation
+        then filter
+            ExtractPartyFromRelatedPartyByRole(relatedParty, PartyRoleEnum -> Beneficiary)
+                exists
+        then extract
+            if partyReference = reportInstruction -> reportingSide -> reportingCounterparty
+            then ExtractPartyFromRelatedPartyByRole(
+                        relatedParty,
+                        PartyRoleEnum -> Beneficiary
+                    )
+        then only-element
+        then extract
+            if PartyLei(partyId) exists
+                    and PartyLeiAndPersonByRoles(
+                            item,
+                            reportInstruction -> reportingSide -> reportingParty
+                        )
+                        = PartyLei(partyId)
+            then True
+            else False
+    ]
+
+reporting rule Direction1BuyerIdentifier from TransactionReportInstruction: <"2.13 Direction. Reporting counterparties should use either:
+  	- the element Direction 1 or Buyer identifier and Seller identifier to identify the direction of the transaction for the reporting counterparty as Buyer or Seller (model 1); or
+  	- the element Direction 2 or Payer identifier and Receiver identifier to identify the payer and the receiver of each leg (model 2).
+ 	Reporting counterparties should NOT use both approaches, but adopt the appropriate one for the type of instrument concerned.">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "13" dataElement "1"
+        provision "Identifier of the counterparty that is the buyer and the counterparty that is the seller, as determined at the time of the transaction.
+			A non-exhaustive list of examples of instruments for which this data element could apply are:
+				- most forwards and forward-like contracts (except for foreign exchange forwards and foreign exchange non-deliverable forwards)
+				- most options and option-like contracts including swaptions, caps and floors
+				- credit default swaps (buyer/seller of protection)
+				- variance, volatility and correlation swaps
+				- contracts for difference and spreadbets
+			This data element is not applicable to instrument types covered by data elements Direction 2 or by Payer identifier and Receiver identifier."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown" // BNPP
+        provision "Splitting definition into separate rules for Buyer and Seller"]
+    [regulatoryReference ISDA USComplianceGroup date "20211123"
+        provision "Discussed on US Compliance WG - confirmed as per ISDA best practice for direction provided to CPMI-IOSCO best practice and CFTC tiebreaker logic  - Interest rate FRA  should be reported as payer/receiver."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220703"
+        provision "Peer review recommended to detect private individual party representations (instead of LEI scheme)."]
+    [regulatoryReference ISDA USComplianceGroup date "20221011"
+        provision "As per market direction convention ISDA formed for CDE; ForeignExchange:SimpleExotic:Vol/Var follows buyer/seller direction convention. A variance buyer and a variance seller agree to exchange payments based on the difference b/w (i) an amount proportional to the observed level of variance (as defined under the terms of the variance swap) of the exchange rate for a specified currency pair realized over a known observation period and (ii) a fixed amount of variance that is agreed at execution."]
+    extract
+        PartyLeiAndPersonByRoles(
+                Direction1BuyerParty(TradeForEvent),
+                reportingSide -> reportingParty
+            )
+
+reporting rule Direction1SellerIdentifier from TransactionReportInstruction: <"2.13 Direction. Reporting counterparties should use either:
+  	- the element Direction 1 or Buyer identifier and Seller identifier to identify the direction of the transaction for the reporting counterparty as Buyer or Seller (model 1); or
+  	- the element Direction 2 or Payer identifier and Receiver identifier to identify the payer and the receiver of each leg (model 2).
+ 	Reporting counterparties should NOT use both approaches, but adopt the appropriate one for the type of instrument concerned.">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "13" dataElement "1"
+        provision "Identifier of the counterparty that is the buyer and the counterparty that is the seller, as determined at the time of the transaction.
+			A non-exhaustive list of examples of instruments for which this data element could apply are:
+				- most forwards and forward-like contracts (except for foreign exchange forwards and foreign exchange non-deliverable forwards)
+				- most options and option-like contracts including swaptions, caps and floors
+				- credit default swaps (buyer/seller of protection)
+				- variance, volatility and correlation swaps
+				- contracts for difference and spreadbets
+			This data element is not applicable to instrument types covered by data elements Direction 2 or by Payer identifier and Receiver identifier."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown" // BNPP
+        provision "Splitting definition into separate rules for Buyer and Seller"]
+    [regulatoryReference ISDA USComplianceGroup date "20211123"
+        provision "Discussed on US Compliance WG - confirmed as per ISDA best practice for direction provided to CPMI-IOSCO best practice and CFTC tiebreaker logic  - Interest rate FRA  should be reported as payer/receiver."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220703"
+        provision "Peer review recommended to detect private individual party representations (instead of LEI scheme)."]
+    [regulatoryReference ISDA USComplianceGroup date "20221011"
+        provision "As per market direction convention ISDA formed for CDE; ForeignExchange:SimpleExotic:Vol/Var follows buyer/seller direction convention. A variance buyer and a variance seller agree to exchange payments based on the difference b/w (i) an amount proportional to the observed level of variance (as defined under the terms of the variance swap) of the exchange rate for a specified currency pair realized over a known observation period and (ii) a fixed amount of variance that is agreed at execution."]
+    extract
+        PartyLeiAndPersonByRoles(
+                Direction1SellerParty(TradeForEvent),
+                reportingSide -> reportingParty
+            )
+
+reporting rule Direction2Leg1 from TransactionReportInstruction: <"2.13 Direction. Reporting counterparties should use either:
+    - the element Direction 1 or Buyer identifier and Seller identifier to identify the direction of the transaction for the reporting counterparty as Buyer or Seller (model 1); or
+    - the element Direction 2 or Payer identifier and Receiver identifier to identify the payer and the receiver of each leg (model 2).
+    Reporting counterparties should NOT use both approaches, but adopt the appropriate one for the type of instrument concerned.">
+    extract
+        Direction2(
+                item,
+                TradeForEvent
+                    extract trade [
+                        trade -> tradableProduct -> product
+                            extract
+                                if IsCommoditySwapFloatFloat
+                                then CommodityLeg1 -> payerReceiver
+                                else if IsCommoditySwapFixedFloat
+                                then FixedPriceLeg1 -> payerReceiver
+                                else if (IsEquity and ((IsVarianceSwap or IsVolatilitySwap) = False)) or IsCreditTotalReturnSwap
+                                then contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver
+                                else if IsFXForward
+                                then FXLeg1(ProductForTrade(trade)) -> payerReceiver
+                                else if IsFXSwap
+                                then FXSwapLeg1 -> payerReceiver
+                                else if Qualify_InterestRate_Option_Swaption(
+                                                contractualProduct -> economicTerms
+                                            ) = False
+                                        and Qualify_InterestRate_CapFloor(
+                                                contractualProduct -> economicTerms
+                                            ) = False
+                                        and Qualify_AssetClass_Credit(
+                                                contractualProduct -> economicTerms
+                                            ) = False
+                                then InterestRateLeg1 -> payerReceiver
+                    ]
+            )
+
+reporting rule Direction2Leg2 from TransactionReportInstruction: <"Direction 2 - Leg 2">
+    extract
+        Direction2(
+                item,
+                TradeForEvent -> tradableProduct -> product
+                    then extract
+                        if IsCommoditySwap
+                        then CommodityLeg2 -> payerReceiver
+                        else if (IsEquity and ((IsVarianceSwap or IsVolatilitySwap) = False)) or IsCreditTotalReturnSwap
+                        then (if InterestRateLeg2 exists
+                            then InterestRateLeg2 -> payerReceiver
+                            else if contractualProduct -> economicTerms -> payout -> fixedPricePayout exists
+                            then contractualProduct -> economicTerms -> payout -> fixedPricePayout -> payerReceiver
+                                distinct
+                                only-element)
+                        else if IsFXForward
+                        then FXLeg2 -> payerReceiver
+                        else if IsFXSwap
+                        then FXSwapLeg2 -> payerReceiver
+                        else if Qualify_InterestRate_Option_Swaption(
+                                        contractualProduct -> economicTerms
+                                    ) = False
+                                and Qualify_InterestRate_CapFloor(
+                                        contractualProduct -> economicTerms
+                                    ) = False
+                                and Qualify_AssetClass_Credit(
+                                        contractualProduct -> economicTerms
+                                    ) = False
+                        then InterestRateLeg2 -> payerReceiver
+            )

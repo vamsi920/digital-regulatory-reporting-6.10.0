@@ -1,0 +1,107 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2022-02-28",
+  "eventIdentifier" : "D8EBBAFF652BA228E0538CB0CC0A66F3",
+  "eventTimestamp" : "2022-02-28T09:35:21Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-28T09:33:22Z",
+  "expirationDate" : "2023-02-28",
+  "finalContractualSettlementDate" : "2023-02-28",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "payerIdentifier" : "549300V2LQD6SX1WIG70",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRatePaymentFrequencyPeriod" : "YEAR",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "YEAR"
+    },
+    "receiverIdentifier" : "549300CWK6F65W566G32",
+    "receiverIdentifierFormat" : "Lei",
+    "spread" : {
+      "basis" : 23
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "payerIdentifier" : "549300CWK6F65W566G32",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRatePaymentFrequencyPeriod" : "YEAR",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "YEAR"
+    },
+    "receiverIdentifier" : "549300V2LQD6SX1WIG70",
+    "receiverIdentifierFormat" : "Lei",
+    "spread" : {
+      "basis" : 3
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "GBP",
+          "NotionalSchedule" : "Constant",
+          "OtherLegReferenceRateTermUnit" : "YEAR",
+          "OtherLegReferenceRateTermValue" : 1,
+          "OtherLegUnderlierID" : "GBP-RONIA-OIS Compound",
+          "OtherLegUnderlierIDSource" : "FPML",
+          "ReferenceRateTermUnit" : "YEAR",
+          "ReferenceRateTermValue" : 1,
+          "UnderlierID" : "GBP-SONIA-OIS Compound",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Basis_OIS"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : true,
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

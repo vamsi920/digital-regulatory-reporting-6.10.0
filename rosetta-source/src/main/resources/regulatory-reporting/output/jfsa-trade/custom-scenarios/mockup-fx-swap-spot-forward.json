@@ -1,0 +1,38 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "cleared" : "I",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2011-02-12",
+  "entityResponsibleForReporting" : "549300O5MFEP1XJ40B46",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2011-02-04T16:42:18Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.9175,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2011-02-04T16:21:47Z",
+  "expirationDate" : "2011-12-21",
+  "finalContractualSettlementDate" : "2011-12-21",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 10000000,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 9175000,
+    "notionalCurrency" : "USD"
+  },
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "BANKX0001",
+  "uniqueTransactionIdentifier" : "MOCKUPFXSWAPSPOTFO01"
+}

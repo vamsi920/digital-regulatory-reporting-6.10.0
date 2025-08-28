@@ -1,0 +1,58 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2017-01-01",
+  "entityResponsibleForReporting" : "213800IV9PCAC364HN60",
+  "eventDate" : "2022-03-17",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2017-12-31",
+  "finalContractualSettlementDate" : "2017-12-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 3184100,
+    "notionalCurrency" : "USD",
+    "totalNotionalQuantity" : 1700000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 3184100,
+    "notionalCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 1700000
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "OTHR",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "price" : {
+    "monetary" : 1.873
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "productClassification" : "STJXXC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPENERG02",
+  "venueOfExecution" : "XXXX"
+}

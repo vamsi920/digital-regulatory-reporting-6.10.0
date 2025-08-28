@@ -1,0 +1,47 @@
+namespace drr.regulation.common.trade.basket
+version "${project.version}"
+
+import cdm.product.* as product
+
+import drr.regulation.*
+import drr.regulation.common.*
+import drr.standards.*
+import drr.standards.iosco.cde.version3.* as cde
+
+reporting rule CustomBasketIndicator from TransactionReportInstruction: <"Custom Basket Indicator">
+    extract cde.basket.CustomBasketCode exists
+
+reporting rule BasketConstituentIdentifier from product.template.BasketConstituent: <"Basket constituent identifier">
+    if security exists
+    then security -> productIdentifier
+    else if loan exists
+    then loan -> productIdentifier
+    else if commodity exists
+    then commodity -> productIdentifier
+    else if index exists
+    then index -> productIdentifier
+        then GetProductIdentifierFilteringISIN -> identifier
+
+reporting rule BasketConstituentUnitOfMeasure from product.template.BasketConstituent: <"Basket constituent unit of measure">
+    extract quantity only-element -> unit
+    then extract
+        if capacityUnit exists
+        then CapacityUnitToISO20022UnitOfMeasure(capacityUnit)
+        else if weatherUnit exists
+        then WeatherUnitToISO20022UnitOfMeasure(weatherUnit)
+        else if financialUnit exists
+        then FinancialUnitToISO20022UnitOfMeasure(financialUnit)
+
+reporting rule BasketConstituentNumberOfUnits from product.template.BasketConstituent: <"Basket constituent number of units">
+    quantity only-element -> value
+
+reporting rule BasketConstituentIdentifierSource from product.template.BasketConstituent: <"Basket constituent identifier source">
+    if security exists
+    then security -> productIdentifier
+    else if loan exists
+    then loan -> productIdentifier
+    else if commodity exists
+    then commodity -> productIdentifier
+    else if index exists
+    then index -> productIdentifier
+        then GetProductIdentifierFilteringISIN -> source

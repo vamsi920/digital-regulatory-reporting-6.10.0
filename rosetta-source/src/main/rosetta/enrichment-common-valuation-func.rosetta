@@ -1,0 +1,235 @@
+namespace drr.enrichment.common.valuation
+version "${project.version}"
+
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+
+import drr.enrichment.common.trade.*
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.standards.iso.*
+
+func Create_RegimeReportableValuation: <"Creates RegimeReportableEvent from a ReportableEvent and list of RegimeReportingSide.">
+    inputs:
+        reportableValuation ReportableValuation (1..1)
+        regimeReportingSide RegimeReportingSide (0..*)
+    output:
+        regimeReportableValuation RegimeReportableValuation (1..1)
+
+    set regimeReportableValuation:
+        RegimeReportableValuation {
+            valuationDetails: reportableValuation -> valuationDetails,
+            reportableInformation: reportableValuation -> reportableInformation,
+            collateralDetails: reportableValuation -> collateralDetails,
+            regimeReportingSide: regimeReportingSide,
+            eventIdentifier: reportableValuation -> eventIdentifier
+        }
+
+func Create_ValuationReportInstruction: <"Creates ValuationReportInstruction from a ReportableValuation and ReportingSide.">
+    inputs:
+        reportableValuation ReportableValuation (1..1)
+        reportingSide ReportingSide (1..1)
+    output:
+        valuationReportInstruction ValuationReportInstruction (1..1)
+
+    set valuationReportInstruction:
+        ValuationReportInstruction {
+            valuationDetails: reportableValuation -> valuationDetails,
+            reportableInformation: reportableValuation -> reportableInformation,
+            collateralDetails: reportableValuation -> collateralDetails,
+            reportingSide: reportingSide,
+            eventIdentifier: reportableValuation -> eventIdentifier
+        }
+
+func Create_ValuationReportInstructionForRegime: <"Creates ValuationReportInstruction from a RegimeReportableValuation for the specified regime and supervisory body.">
+    inputs:
+        regimeReportableValuation RegimeReportableValuation (1..1)
+        regimeName RegimeNameEnum (1..1)
+        supervisoryBody SupervisoryBodyEnum (1..1)
+        delegatedReporting boolean (1..1)
+    output:
+        valuationReportInstruction ValuationReportInstruction (0..1)
+
+    alias reportingSide:
+        regimeReportableValuation -> regimeReportingSide
+            filter
+                item -> regimeName = regimeName
+                    and item -> supervisoryBody = supervisoryBody
+            then extract
+                if delegatedReporting
+                then delegatedReportingSide
+                else reportingSide
+            then only-element
+
+    set valuationReportInstruction:
+        if reportingSide exists
+        then Create_ValuationReportInstruction(regimeReportableValuation, reportingSide)
+
+func Create_ValuationDetailsFromReportableEvent: <"Creates a ValuationDetails with the latest valuationHistory included in Valuation and the necessary ValuationTradeInformation, from a reportableEvent, including RegimeNameEnum to support jurisdiction-specific leg ordering.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        regimeNameEnum RegimeNameEnum (0..1)
+    output:
+        enrichedValuationDetails ValuationDetails (1..1)
+    alias enrichedReportableEvent: Create_ReportableEventFromInstruction(reportableEvent)
+
+    set enrichedValuationDetails:
+        ValuationDetails {
+            valuation: Valuation {
+                amount: GetValuation(reportableEvent) -> amount,
+                timestamp: GetValuation(reportableEvent) -> timestamp,
+                method: GetValuation(reportableEvent) -> method,
+                source: GetValuation(reportableEvent) -> source,
+                delta: GetValuation(reportableEvent) -> delta,
+                ...
+            },
+            tradeInformation: ValuationTradeInformation {
+                uniqueTradeIdentifier: if TradeForEvent(reportableEvent) exists
+                then (TradeForEvent(reportableEvent) -> tradeIdentifier
+                    filter
+                        identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier)
+                    then distinct only-element,
+                uniqueProductIdentifier: if TradeForEvent(reportableEvent) exists
+                    then (TradeForEvent(reportableEvent) -> tradableProduct -> product -> contractualProduct -> productIdentifier),
+                action: if IsActionTypeVALU(reportableEvent)
+                    then ActionTypeEnum -> VALU,
+                nextFloatingReferenceResetDateLeg1: GetNextFloatingReferenceResetDate(
+                        reportableEvent,
+                        if regimeNameEnum = RegimeNameEnum -> CSA
+                                and drr.regulation.csa.rewrite.trade.IsCSALeg1Aligned(
+                                        reportableEvent
+                                    ) = False
+                        then InterestRateLeg2(ProductForEvent(reportableEvent))
+                        else InterestRateLeg1(ProductForEvent(reportableEvent))
+                    ),
+                nextFloatingReferenceResetDateLeg2: GetNextFloatingReferenceResetDate(
+                        reportableEvent,
+                        if regimeNameEnum = RegimeNameEnum -> CSA
+                                and drr.regulation.csa.rewrite.trade.IsCSALeg1Aligned(
+                                        reportableEvent
+                                    ) = False
+                        then InterestRateLeg1(ProductForEvent(reportableEvent))
+                        else InterestRateLeg2(ProductForEvent(reportableEvent))
+                    ),
+                lastFloatingReference: LastFloatingReference {
+                    lastFloatingReferenceResetDateLeg1: GetLastFloatingReferenceResetDate(
+                            FilterResetHistoryByLeg(
+                                    reportableEvent,
+                                    if regimeNameEnum = RegimeNameEnum -> CSA
+                                            and drr.regulation.csa.rewrite.trade.IsCSALeg1Aligned(
+                                                    reportableEvent
+                                                ) = False
+                                    then PayoutLeg2(
+                                                TradableProductForEvent(reportableEvent) -> product,
+                                                TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                                reportableEvent -> reportableInformation
+                                            )
+                                    else PayoutLeg1(
+                                            TradableProductForEvent(reportableEvent) -> product,
+                                            TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                            reportableEvent -> reportableInformation
+                                        )
+                                )
+                        ),
+                    lastFloatingReferenceResetDateLeg2: GetLastFloatingReferenceResetDate(
+                            FilterResetHistoryByLeg(
+                                    reportableEvent,
+                                    if regimeNameEnum = RegimeNameEnum -> CSA
+                                            and drr.regulation.csa.rewrite.trade.IsCSALeg1Aligned(
+                                                    reportableEvent
+                                                ) = False
+                                    then PayoutLeg1(
+                                                TradableProductForEvent(reportableEvent) -> product,
+                                                TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                                reportableEvent -> reportableInformation
+                                            )
+                                    else PayoutLeg2(
+                                            TradableProductForEvent(reportableEvent) -> product,
+                                            TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                            reportableEvent -> reportableInformation
+                                        )
+                                )
+                        ),
+                    lastFloatingReferenceValueLeg1: GetLastFloatingReferenceValue(
+                            FilterResetHistoryByLeg(
+                                    reportableEvent,
+                                    if regimeNameEnum = RegimeNameEnum -> CSA
+                                            and drr.regulation.csa.rewrite.trade.IsCSALeg1Aligned(
+                                                    reportableEvent
+                                                ) = False
+                                    then PayoutLeg2(
+                                                TradableProductForEvent(reportableEvent) -> product,
+                                                TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                                reportableEvent -> reportableInformation
+                                            )
+                                    else PayoutLeg1(
+                                            TradableProductForEvent(reportableEvent) -> product,
+                                            TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                            reportableEvent -> reportableInformation
+                                        )
+                                )
+                        ),
+                    lastFloatingReferenceValueLeg2: GetLastFloatingReferenceValue(
+                            FilterResetHistoryByLeg(
+                                    reportableEvent,
+                                    if regimeNameEnum = RegimeNameEnum -> CSA
+                                            and drr.regulation.csa.rewrite.trade.IsCSALeg1Aligned(
+                                                    reportableEvent
+                                                ) = False
+                                    then PayoutLeg1(
+                                                TradableProductForEvent(reportableEvent) -> product,
+                                                TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                                reportableEvent -> reportableInformation
+                                            )
+                                    else PayoutLeg2(
+                                            TradableProductForEvent(reportableEvent) -> product,
+                                            TradableProductForEvent(reportableEvent) -> tradeLot only-element,
+                                            reportableEvent -> reportableInformation
+                                        )
+                                )
+                        )
+                },
+                assetClass: common.contract.AssetClass(reportableEvent)
+        }}
+
+func Create_StandaloneValuationFromReportableEvent: <"Creates a ReportableValuation with valuationDetails, reportableInformation and collateralDetails from a reportableEvent, including RegimeNameEnum to support jurisdiction-specific leg ordering.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        regimeNameEnum RegimeNameEnum (0..1)
+    output:
+        standaloneValuation ReportableValuation (1..1)
+    set standaloneValuation:
+        ReportableValuation {
+            valuationDetails: Create_ValuationDetailsFromReportableEvent(
+                    reportableEvent,
+                    regimeNameEnum
+                ),
+            reportableInformation: reportableEvent -> reportableInformation,
+            collateralDetails: TradeForEvent(reportableEvent) -> collateral,
+            eventIdentifier: reportableEvent -> originatingWorkflowStep -> eventIdentifier
+        }
+
+func Create_ValuationReportInstructionFromInstruction: <"Creates a ValuationReportInstruction from an originatingWorkflowStep containing an instruction, reportableInformation, and the references to the counterparty roles for the ReportingSide attributes.RegimeNameEnum is included to support jurisdiction-specific leg ordering.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        reportingPartyRole CounterpartyRoleEnum (1..1)
+        counterpartyRole CounterpartyRoleEnum (1..1)
+        partyResponsibleForReportingRole CounterpartyRoleEnum (0..1)
+        reportSubmittingPartyRole CounterpartyRoleEnum (0..1)
+        regimeNameEnum RegimeNameEnum (0..1)
+    output:
+        valuationReportInstruction ValuationReportInstruction (1..1)
+    alias enrichedValuation:
+        Create_StandaloneValuationFromReportableEvent(reportableEvent, regimeNameEnum)
+    alias enrichedReportableEvent: Create_ReportableEventFromInstruction(reportableEvent)
+    alias enrichedReportingSide:
+        Create_ReportingSideFromReportableEvent(
+                enrichedReportableEvent,
+                reportingPartyRole,
+                counterpartyRole,
+                partyResponsibleForReportingRole,
+                reportSubmittingPartyRole
+            )
+    set valuationReportInstruction:
+        Create_ValuationReportInstruction(enrichedValuation, enrichedReportingSide)

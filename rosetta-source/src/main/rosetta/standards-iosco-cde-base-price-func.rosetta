@@ -1,0 +1,291 @@
+namespace drr.standards.iosco.cde.base.price
+version "${project.version}"
+
+import cdm.base.math.*
+import cdm.base.staticdata.asset.common.*
+import cdm.observable.asset.*
+import cdm.product.qualification.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.price.*
+
+func MultiplyPrice: <"This functions converts default Decimal values into required formats for Basis (x 10000) and Percentages (x 100)">
+    inputs:
+        value number (0..1)
+        notation PriceNotationEnum (0..1)
+    output:
+        multipliedValue number (0..1)
+
+    set multipliedValue:
+        if value exists
+        then (if notation = Basis
+            then RoundToPrecision(value * 10000, 0, RoundingDirectionEnum -> Nearest)
+            else if notation = Percentage
+            then RoundToPrecision(value * 100, 10, RoundingDirectionEnum -> Nearest)
+            else RoundToPrecision(value, 13, RoundingDirectionEnum -> Nearest))
+
+func Contract_Price: <"Price">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        prices PriceSchedule (0..*)
+    alias trade: TradeForEvent(reportableEvent)
+    alias position: PositionForEvent(reportableEvent)
+    add prices:
+        if trade exists
+        then SingleTradeLot(trade) -> priceQuantity -> price
+        else if position exists
+        then (position -> positionBase -> tradeLot only-element) -> priceQuantity -> price
+
+func Contract_StrikePrice: <"Strike Price">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        prices PriceSchedule (0..*)
+    alias tradableProduct: TradableProductForEvent(reportableEvent)
+    alias product: ProductForEvent(reportableEvent)
+    add prices:
+        if IsIRSwaption(product) or IsCreditSwaption(product)
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> interestRatePayout -> rateSpecification -> fixedRate -> rateSchedule -> price
+        else if Qualify_Commodity_Swaption(EconomicTermsForProduct(product)) = True
+        then FixedPriceLeg1(UnderlierForProduct(product)) -> fixedPrice -> price
+        else if IsOption(product)
+                and EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> strike -> strikePrice exists
+        then EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> strike -> strikePrice
+        else if IsOption(product)
+                and EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> strike -> strikeReference exists
+        then EconomicTermsForProduct(product) -> payout -> optionPayout -> exerciseTerms -> strike -> strikeReference -> rateSchedule -> price
+        else if IsCap(product)
+        then EconomicTermsForProduct(product) -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> capRateSchedule -> price
+        else if IsFloor(product)
+        then EconomicTermsForProduct(product) -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> floorRateSchedule -> price
+        else if IsVarianceSwap(product)
+        then EconomicTermsForProduct(product) -> payout -> performancePayout -> returnTerms -> varianceReturnTerms -> varianceStrikePrice
+        else if IsVolatilitySwap(product)
+        then EconomicTermsForProduct(product) -> payout -> performancePayout -> returnTerms -> volatilityReturnTerms -> volatilityStrikePrice
+        else if IsEquitySwap(tradableProduct)
+        then tradableProduct -> tradeLot -> priceQuantity -> price
+            filter
+                item -> priceType = PriceTypeEnum -> Variance
+                    or item -> priceType = PriceTypeEnum -> Volatility
+
+func Contract_Price_Monetary: <"Price">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        prices PriceSchedule (0..*)
+
+    alias tradableProduct: TradableProductForEvent(reportableEvent)
+    alias economicTerms: EconomicTermsForProduct(tradableProduct -> product)
+
+    add prices:
+        if // Equity Swaps
+            IsEquitySwap(tradableProduct)
+                or IsEquityOther(tradableProduct -> product)
+                or Qualify_Commodity_OptionOther(
+                        EconomicTermsForProduct(tradableProduct -> product)
+                    )
+                or Qualify_Credit_OptionOther(
+                        EconomicTermsForProduct(tradableProduct -> product)
+                    )
+        then (if economicTerms -> payout -> performancePayout only-element -> returnTerms -> priceReturnTerms -> valuationPriceInitial exists
+            then economicTerms -> payout -> performancePayout only-element -> returnTerms -> priceReturnTerms -> valuationPriceInitial
+            else (tradableProduct -> tradeLot -> priceQuantity -> price
+                filter
+                    item -> priceType = PriceTypeEnum -> AssetPrice
+                        or item -> priceType = PriceTypeEnum -> CashPrice))
+        else if // Equity Forwards
+            Qualify_BaseProduct_EquityForward(economicTerms)
+                or (economicTerms -> payout -> forwardPayout exists
+                    and economicTerms -> payout -> forwardPayout only-element -> underlier -> basket -> productTaxonomy only-element -> primaryAssetClass = AssetClassEnum -> Equity)
+        then ((tradableProduct -> tradeLot -> priceQuantity -> price
+                filter
+                    item -> priceType = PriceTypeEnum -> AssetPrice
+                        or item -> priceType = PriceTypeEnum -> CashPrice) default economicTerms -> payout -> forwardPayout only-element -> priceQuantity -> priceSchedule)
+        else if IsTotalReturnSwapDebtUnderlier(tradableProduct -> product) // Bond Swaps
+                or Qualify_InterestRate_Forward_Debt(economicTerms) // Bond Forwards
+        then tradableProduct -> tradeLot -> priceQuantity -> price
+            filter
+                item -> priceType = PriceTypeEnum -> AssetPrice
+                    or item -> priceType = PriceTypeEnum -> CashPrice
+        // Futures ETD
+        else if (economicTerms -> payout -> forwardPayout only exists
+                and IsProductETD(tradableProduct -> product))
+        then tradableProduct -> tradeLot -> priceQuantity -> price
+            filter
+                item -> priceType = PriceTypeEnum -> AssetPrice
+                    or item -> priceType = PriceTypeEnum -> CashPrice
+                    or item -> priceType = PriceTypeEnum -> ExchangeRate
+        // Commodity Swaps
+        else if IsCommoditySwapFixedFloat(tradableProduct -> product)
+        then FixedPriceLeg1(ProductForEvent(reportableEvent)) -> fixedPrice -> price
+        // Commodity Forwards
+        else if IsCommodityForward(tradableProduct -> product)
+        then (if EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> fixedPricePayout
+                only-element
+                exists
+            then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> fixedPricePayout only-element -> fixedPrice -> price
+            else if EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> forwardPayout
+                only-element
+                exists
+            then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> forwardPayout only-element -> priceQuantity -> priceSchedule)
+
+func FormatToBaseOne18Rate: <"Rounds the number to fit within 18 digits, including up to 13 decimals. If the length of the integer part exceeds the allowed digit limit, the original value is returned without alteration.">
+    inputs:
+        inputNumber number (1..1)
+    output:
+        formattedNumber number (1..1)
+    set formattedNumber:
+        if Abs(inputNumber) <= 999999999999999999
+        then (RoundToPrecisionRemoveTrailingZeros(
+                inputNumber,
+                13,
+                RoundingDirectionEnum -> Nearest
+            )
+            then RoundToSignificantFigures(item, 18, RoundingDirectionEnum -> Nearest))
+        else inputNumber
+
+func FormatToBaseOneRate: <"Rounds the number to fit within 11 digits, including up to 10 decimals. If the length of the integer part exceeds the allowed digit limit, the original value is returned without alteration.">
+    inputs:
+        inputNumber number (1..1)
+    output:
+        formattedNumber number (1..1)
+    set formattedNumber:
+        if Abs(inputNumber) <= 99999999999
+        then (RoundToPrecisionRemoveTrailingZeros(
+                inputNumber,
+                10,
+                RoundingDirectionEnum -> Nearest
+            )
+            then RoundToSignificantFigures(item, 11, RoundingDirectionEnum -> Nearest))
+        else inputNumber
+
+func FormatToMax5Number: <"Rounds the number to fit within 5 digits, with no decimals. If the length of the integer part exceeds the allowed limit, the original value is returned without alteration.">
+    inputs:
+        inputNumber number (1..1)
+    output:
+        formattedNumber number (1..1)
+    set formattedNumber:
+        if Abs(inputNumber) <= 99999
+        then (RoundToPrecisionRemoveTrailingZeros(
+                inputNumber,
+                0,
+                RoundingDirectionEnum -> Nearest
+            )
+            then RoundToSignificantFigures(item, 5, RoundingDirectionEnum -> Nearest))
+        else inputNumber
+
+func GetReportableSchedulePeriod: <"Extracts the period for a strike price schedule">
+    inputs:
+        priceSchedule PriceSchedule (1..1)
+        calculationSchedule CalculationSchedule (0..1)
+        notation PriceNotationEnum (1..1)
+    output:
+        pricePeriod PricePeriod (1..*)
+    add pricePeriod:
+        priceSchedule -> datedValue
+            extract priceSchedulePeriod [
+                // use value and dates from price period
+                PricePeriod {
+                    price: PriceFormatFromNotation(priceSchedulePeriod -> value, notation),
+                    effectiveDate: priceSchedulePeriod -> date,
+                    endDate: if calculationSchedule exists
+                    then calculationSchedule -> schedulePeriod // then loop through each schedulePeriod
+                        filter customPeriod [
+                            priceSchedulePeriod -> date = customPeriod -> calculationPeriod -> startDate
+                        ]
+                        then extract calculationPeriod -> endDate
+                        then only-element
+                }
+            ]
+            then sort [ item -> effectiveDate ]
+
+func PriceOfEvent:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        amount number (1..1)
+
+    alias price: Contract_Price_Monetary(reportableEvent) only-element
+
+    alias eventDate:
+        reportableEvent -> originatingWorkflowStep -> businessEvent -> eventDate
+
+    alias schedule:
+        // Only applicable for commodity schedules
+        if Qualify_Commodity_Swap_FixedFloat(
+                    EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                )
+                or Qualify_Commodity_Swap_Basis(
+                        EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                    )
+        then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> commodityPayout -> schedule first
+        else if Qualify_Commodity_Option(
+                    EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                )
+                or Qualify_Commodity_Swaption(
+                        EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                    )
+        then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> optionPayout only-element -> schedule
+        else if Qualify_Commodity_Forward(
+                    EconomicTermsForProduct(ProductForEvent(reportableEvent))
+                )
+        then EconomicTermsForProduct(ProductForEvent(reportableEvent)) -> payout -> forwardPayout only-element -> schedule
+
+    alias schedulePeriod:
+        if eventDate <= schedule -> schedulePeriod -> calculationPeriod -> startDate min
+        then schedule -> schedulePeriod min [ item -> calculationPeriod -> startDate ]
+        else if eventDate >= schedule -> schedulePeriod -> calculationPeriod -> endDate max
+        then schedule -> schedulePeriod max [ item -> calculationPeriod -> startDate ]
+        else (schedule -> schedulePeriod
+            then filter
+                item -> calculationPeriod -> startDate <= eventDate and item -> calculationPeriod -> endDate >= eventDate
+            then only-element)
+
+    set amount:
+        if price -> composite -> operandType = PriceOperandEnum -> AccruedInterest
+        then price -> composite -> baseValue
+        else if price -> value exists
+        then price -> value
+        else if price -> datedValue exists
+        then (price -> datedValue
+            filter item -> date = schedulePeriod -> calculationPeriod -> startDate
+            then extract item -> value
+            then only-element)
+
+func PriceOfZeroCouponSwaps:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        knownAmountPrice NonNegativeQuantitySchedule (1..*)
+
+    add knownAmountPrice:
+        TradableProductForEvent(reportableEvent)
+            extract tradeLot -> priceQuantity
+            then filter observable is absent
+            then extract quantity
+            then flatten
+            then only-element
+
+func PriceFormatFromNotation:
+    inputs:
+        price number (1..1)
+        notation PriceNotationEnum (1..1)
+    output:
+        priceFormat PriceFormat (0..1)
+    set priceFormat:
+        PriceFormat {
+            monetary: if notation = Monetary
+            then MultiplyPrice(price, Monetary)
+                then FormatToBaseOne18Rate,
+            decimal: if notation = Decimal
+            then MultiplyPrice(price, Decimal)
+                then FormatToBaseOneRate,
+            percentage: if notation = Percentage
+            then MultiplyPrice(price, Percentage)
+                then FormatToBaseOneRate,
+            basis: if notation = Basis
+            then MultiplyPrice(price, Basis)
+                then FormatToMax5Number
+        }

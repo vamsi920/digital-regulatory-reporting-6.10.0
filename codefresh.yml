@@ -1,0 +1,211 @@
+version: "1.0"
+stages:
+  - setup
+  - build
+  - distribute
+  - finalise
+steps:
+  main_clone:
+    stage: 'setup'
+    title: Cloning main repository...
+    type: git-clone
+    git: rosetta-models
+    repo: "${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}"
+    revision: "${{CF_REVISION}}"
+
+  BuildProperties:
+    stage: 'setup'
+    title: Setup shared build properties
+    image: alpine
+    commands:
+      - echo "${{ARTIFACT_REGISTRY_SA_KEY}}"|base64 -d>"${{CF_VOLUME_PATH}}"/sa
+      - cf_export GOOGLE_APPLICATION_CREDENTIALS="${{CF_VOLUME_PATH}}"/sa
+
+  MvnSettings:
+    stage: 'setup'
+    title: Setup Maven settings
+    image: alpine/git
+    commands:
+      - cf_export MVN_CLI_OPT="-Dmaven.repo.local=\"${{CF_VOLUME_PATH}}/${{CF_REPO_NAME}}_m2/repository\""
+
+  ReleaseProperties:
+    stage: 'setup'
+    title: Setup Release build
+    image: alpine/git
+    when:
+      condition:
+        all:
+          releaseNameNotDefined: "${{TAG_REPO}} == true"
+    commands:
+      - cf_export MAVEN_REPO=isda-maven
+      - cf_export MVN_BUILD_CMD="${{MVN_CLI_OPT}} clean"
+      - cf_export RELEASE_NAME=${{TAG_NAME}}
+      - cf_export MVN_SET_VERSION="${{MVN_CLI_OPT}} versions:set -DnewVersion=${{TAG_NAME}}"
+      - cf_export GH_TOKEN=${{REGNOSYS_OPS_TOKEN}}
+      - cf_export GITHUB_RELEASE_API="https://api.github.com/repos/${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}/releases"
+      - >-
+        cf_export GITHUB_API_CURL="curl -L  -X POST -H \"Accept: application/vnd.github+json\" -H \"Authorization: Bearer ${{REGNOSYS_OPS_TOKEN}}\""
+
+  BranchProperties:
+    stage: 'setup'
+    title: Setup Branch build
+    image: alpine/git
+    when:
+      condition:
+        all:
+          releaseNameNotDefined: "${{TAG_REPO}} == false"
+    commands:
+      - cf_export MAVEN_REPO=isda-maven-snapshot
+      - cf_export MVN_BUILD_CMD="${{MVN_CLI_OPT}} clean"
+      - export SNAPSHOT_VERSION=${{GLOBAL_RELEASE_VERSION}}.${{CF_BRANCH_TAG_NORMALIZED}}-SNAPSHOT
+      - cf_export RELEASE_NAME=$SNAPSHOT_VERSION
+      - cf_export MVN_SET_VERSION="${{MVN_CLI_OPT}} versions:set -DnewVersion=$SNAPSHOT_VERSION"
+
+  BuildMavenWithZipImage:
+    stage: 'setup'
+    title: Build Maven with Zip Docker Image
+    image_name: build-with-zip
+    type: build
+    working_directory: ./
+    dockerfile: zip.dockerfile
+    disable_push: true
+
+  Build:
+    stage: 'build'
+    title: Maven build
+    fail_fast: false
+    image: ${{BuildMavenWithZipImage}}
+    working_directory: ./
+    commands:
+      - mvn ${{MVN_SET_VERSION}}
+      - mvn ${{MVN_BUILD_CMD}} deploy -pl '!:distribution'
+      - zip -r examples/target/examples-${{RELEASE_NAME}}.zip ./examples/ -x "*.git/*" -x "*.versionsBackup*" -x "examples/target/*"
+      - mvn deploy:deploy-file -Durl=artifactregistry://europe-west1-maven.pkg.dev/production-208613/${{MAVEN_REPO}} -DgroupId=com.regnosys.drr -DartifactId=examples -Dversion=${{RELEASE_NAME}} -DrepositoryId=${{MAVEN_REPO}} -Dfile=examples/target/examples-${{RELEASE_NAME}}.zip -DgeneratePom=false
+
+  BuildDistribution:
+    stage: 'distribute'
+    title: Maven distribution build
+    fail_fast: false
+    image: maven:3.9.9-eclipse-temurin-21-alpine
+    working_directory: ./
+    when:
+      condition:
+        all:
+          buildPassed: steps.Build.result == 'success'
+    commands:
+      - mvn ${{MVN_SET_VERSION}}
+      - cd distribution
+      - mvn ${{MVN_BUILD_CMD}} deploy -P distribute
+
+  NotifySlackOnFail:
+    stage: 'finalise'
+    title: Trigger Slack dev channel notification if master build failed
+    image: codefresh/cli
+    when:
+      branch:
+        only:
+          - master
+          - 5.x.x
+      condition:
+        any:
+          buildNormalFailed: steps.Build.result == 'error'
+          distributeNormalFailed: steps.BuildDistributionNormal.result == 'error'
+          distributeReleaseFailed: steps.BuildDistributionRelease.result == 'error'
+    commands:
+      - export SAFE_COMMIT_AUTHOR='${{CF_COMMIT_AUTHOR}}'
+      - export COMMIT_AUTHOR=${SAFE_COMMIT_AUTHOR:-MissingAuthor}
+      - export SAFE_REPO_NAME='${{CF_REPO_NAME}}'
+      - export REPO_NAME=${SAFE_REPO_NAME:-NoRepo}
+      - export SAFE_COMMIT_MESSAGE='${{CF_COMMIT_MESSAGE}}'
+      - export COMMIT_MESSAGE=${SAFE_COMMIT_MESSAGE:-NoCommitMsg}
+      - echo Author is $SAFE_COMMIT_AUTHOR and commit msg is $SAFE_COMMIT_MESSAGE and repo is $SAFE_REPO_NAME
+      - echo After substitution author is $COMMIT_AUTHOR and commit msg is $COMMIT_MESSAGE and repo is $REPO_NAME
+      - codefresh run slack-notifier -v REPO_NAME="${REPO_NAME}" -v COMMIT_AUTHOR="${COMMIT_AUTHOR}" -v COMMIT_MESSAGE="${COMMIT_MESSAGE}"  --detach
+
+  FailPipeline:
+    stage: 'finalise'
+    title: Fail pipeline if the Maven build failed
+    image: codefresh/cli
+    when:
+      condition:
+        any:
+          normalBuildFailure: steps.Build.result == 'failure'
+          distributeNormalFailure: steps.BuildDistributionNormal.result == 'failure'
+          distributeReleaseFailure: steps.BuildDistributionRelease.result == 'failure'
+    commands:
+      - exit 1
+
+  TagRepo:
+    stage: 'finalise'
+    title: Tag git repo with release name
+    image: alpine/git
+    when:
+      condition:
+        all:
+          buildPassed: steps.Build.result == 'success'
+          isRelease: "${{TAG_REPO}}"
+    commands:
+      - echo This is a release build, tag repos with release name [${{TAG_NAME}}]
+      - git fetch --prune https://${{ROSETTA_MODELS_USER}}:${{ROSETTA_MODELS_PWD}}@github.com/rosetta-models/digital-regulatory-reporting.git "+refs/tags/*:refs/tags/*"
+      - git tag ${{TAG_NAME}}
+      - git push https://${{ROSETTA_MODELS_USER}}:${{ROSETTA_MODELS_PWD}}@github.com/rosetta-models/digital-regulatory-reporting.git ${{TAG_NAME}}
+
+  BuildDocsDockerImage:
+    stage: 'finalise'
+    title: Build DRR Docs Docker Image
+    image_name: regnosys/drr-docs
+    type: build
+    working_directory: ./documentation
+    dockerfile: Dockerfile
+    tag: ${{TAG_NAME}}
+    build_arguments:
+      - LATEST_RELEASE_ID=${{TAG_NAME}}
+    registry: regnosys-docker
+    when:
+      branch:
+        only:
+          - master
+      condition:
+        all:
+          buildPassed: steps.Build.result == 'success'
+          isRelease: "${{TAG_REPO}}"
+
+  DeployDocsRCServer:
+    stage: 'finalise'
+    title: Deploy rc Server Image
+    type: deploy
+    kind: kubernetes
+    cluster: rc-cluster-private
+    namespace: drr-docs-rc
+    service: drr-docs
+    candidate:
+      image: "${{BuildDocsDockerImage}}"
+      registry: regnosys-docker
+    when:
+      branch:
+        only:
+          - master
+      condition:
+        all:
+          buildPassed: steps.Build.result == 'success'
+          isRelease: "${{TAG_REPO}}"
+
+  DeployDocsProdServer:
+    stage: 'finalise'
+    title: Deploy prod DRR documentation Server Image
+    type: deploy
+    kind: kubernetes
+    cluster: prod-cluster-private
+    namespace: drr-docs-prod
+    service: drr-docs
+    candidate:
+      image: regnosys/drr-docs:${{RELEASE_NAME}}
+      registry: regnosys-docker
+    when:
+      branch:
+        only:
+          - master
+      condition:
+        all:
+          buildPassed: steps.Build.result == 'success'
+          isRelease: "${{TAG_REPO}}"

@@ -1,0 +1,266 @@
+namespace drr.regulation.csa.rewrite.margin
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.common.*
+import drr.regulation.csa.*
+import drr.standards.iso.*
+
+type CSAMarginReport:
+    [rootType]
+    counterparty1 LEIIdentifier (1..1)
+        [ruleReference Counterparty1]
+    counterparty2 Min20Max72AlphaNumericText (1..1)
+        [ruleReference Counterparty2]
+    counterparty2IdentifierSource Max4Text (1..1)
+        [ruleReference Counterparty2IdentifierSource]
+    reportingTimestamp zonedDateTime (1..1)
+        [ruleReference ReportingTimestamp]
+    uniqueTransactionIdentifier Max52AlphaNumericText (0..1)
+        [ruleReference UniqueTransactionIdentifier]
+    submitterIdentifier string (1..1)
+        [ruleReference SubmitterIdentifier]
+    collateralisationCategory CollateralisationType3Code__1 (0..1)
+        [ruleReference CollateralisationCategory]
+    portfolioContainingNonReportableComponentIndicator boolean (1..1)
+        [ruleReference PortfolioContainingNonReportableComponentIndicator]
+    initialMarginPostedByTheReportingCounterpartyPreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginPostedByTheReportingCounterpartyPreHaircut]
+    initialMarginPostedByTheReportingCounterpartyPostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginPostedByTheReportingCounterpartyPostHaircut]
+    currencyOfInitialMarginPosted ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfInitialMarginPosted]
+    initialMarginCollectedByTheReportingCounterpartyPreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginCollectedByTheReportingCounterpartyPreHaircut]
+    initialMarginCollectedByTheReportingCounterpartyPostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginCollectedByTheReportingCounterpartyPostHaircut]
+    currencyOfInitialMarginCollected ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfInitialMarginCollected]
+    variationMarginPostedByTheReportingCounterpartyPreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterpartyPreHaircut]
+    variationMarginPostedByTheReportingCounterpartyPostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterpartyPostHaircut]
+    currencyOfVariationMarginPosted ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfVariationMarginPosted]
+    variationMarginCollectedByTheReportingCounterpartyPreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterpartyPreHaircut]
+    variationMarginCollectedByTheReportingCounterpartyPostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterpartyPostHaircut]
+    currencyOfVariationMarginCollected ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfVariationMarginCollected]
+    variationMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference VariationMarginCollateralPortfolioCode]
+    initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference InitialMarginCollateralPortfolioCode]
+    eventTimestamp zonedDateTime (1..1)
+        [ruleReference EventTimestamp]
+    actionType MarginActionEnum (1..1)
+        [ruleReference ActionType]
+    // DTCC additional fields
+    tradeParty1IDType PartyIdentifierTypeEnum (1..1)
+        [ruleReference DTCC_TradeParty1IDType]
+    submittingPartyIDType PartyIdentifierTypeEnum (1..1)
+        [ruleReference DTCC_SubmittingPartyIDType]
+    usiID string (1..1)
+        [ruleReference DTCC_USIID]
+    usiIDPrefix string (1..1)
+        [ruleReference DTCC_USIIDPrefix]
+    tradeParty1ReportingDestination SupervisoryBodyEnum (1..*)
+        [ruleReference DTCC_TradeParty1ReportingDestination]
+    comment1 string (1..1)
+        [ruleReference DTCC_Comment1]
+    messageID string (1..1)
+        [ruleReference DTCC_MessageID]
+    messageType string (1..1)
+        [ruleReference DTCC_MessageType]
+    version string (1..1)
+        [ruleReference DTCC_Version]
+
+    condition DTCC_CSA_VR_0002_01: <"Counterparty 2 (non-reporting counterparty)">
+        [docReference DTCC Margin dataElement "2" validationRule "Collateral"
+      provision "If [NoA - Action Type] = 'EROR', 'TERM', or 'PRTO', rules have been relaxed to allow for the termination of trades where the Counterparty's identifiers are not known as follows:
+        - Counterparty fields [Trade Party 2 - ID] and [Trade Party 2 - ID Type] do not have to match the [Trade Party 2 - ID] and [Trade Party 2 - ID Type] of the live trade.
+        - However, if there is more than one live trade (for the same UTI/USI)  where [Trade Party 1 - ID] and [Trade Party 1 - ID Type] are the same, the submission will NACK."]
+        [docReference DTCC ISDAWorkingGroup date "unknown"
+        provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DTCC_CSA_VR_0003_01: <"Counterparty 2 Identifier Source">
+        [docReference DTCC Margin dataElement "3" validationRule "Collateral"
+      provision "If [NoA - Action Type] = 'EROR', 'TERM', or 'PRTO', rules have been relaxed to allow for the termination of trades where the Counterparty's identifiers are not known as follows:
+        - Counterparty fields [Trade Party 2 - ID] and [Trade Party 2 - ID Type] do not have to match the [Trade Party 2 - ID] and [Trade Party 2 - ID Type] of the live trade."]
+        [docReference DTCC ISDAWorkingGroup date "unknown"
+        provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition CSA_VR_0016_01: <"Unique Transaction Identifier">
+        [regulatoryReference CSA Margin dataElement "16" validationRule "Collateral"
+      provision "C if [Initial margin collateral portfolio code] = TRANSACTIONLEVEL, else {blank}."]
+        if initialMarginCollateralPortfolioCode = "TRANSACTIONLEVEL"
+        then uniqueTransactionIdentifier exists
+        else uniqueTransactionIdentifier is absent
+
+    condition DTCC_CSA_VR_0079_01: <"Collateralisation Category">
+        [docReference DTCC Margin dataElement "79" validationRule "Collateral"
+      provision "Required when [NoA - Action Type] = 'MARU."]
+        if actionType = MARU then collateralisationCategory exists
+
+    condition CSA_VR_0081_01: <"Initial margin posted by the reporting counterparty Pre-Haircut">
+        [regulatoryReference CSA Margin dataElement "81" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = OWC1 or OWP1 or FLCL), else {blank}."]
+        if ["OWC1", "OWP1", "FLCL"] any = collateralisationCategory to-string
+        then initialMarginPostedByTheReportingCounterpartyPreHaircut exists
+        else initialMarginPostedByTheReportingCounterpartyPreHaircut is absent
+
+    condition CSA_VR_0082_01: <"Initial margin posted by the reporting counterparty Post-Haircut">
+        [regulatoryReference CSA Margin dataElement "82" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = OWC1 or OWP1 or FLCL), else {blank}."]
+        if ["OWC1", "OWP1", "FLCL"] any = collateralisationCategory to-string
+        then initialMarginPostedByTheReportingCounterpartyPostHaircut exists
+        else initialMarginPostedByTheReportingCounterpartyPostHaircut is absent
+
+    condition CSA_VR_0083_01: <"Currency Of Initial Margin Posted">
+        [regulatoryReference CSA Margin dataElement "83" validationRule "Collateral"
+      provision "C if [Initial margin posted by the reporting counterparty (post-haircut)] or [Initial margin posted by the reporting counterparty (pre-haircut)] is populated, else {blank}."]
+        if initialMarginPostedByTheReportingCounterpartyPostHaircut exists
+                or initialMarginPostedByTheReportingCounterpartyPreHaircut exists
+        then currencyOfInitialMarginPosted exists
+        else currencyOfInitialMarginPosted is absent
+
+    condition CSA_VR_0084_01: <"Initial margin collected by the reporting counterparty Pre-Haircut">
+        [regulatoryReference CSA Margin dataElement "84" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = OWC2 or  OWP2 or FLCL), else {blank}."]
+        if ["OWC2", "OWP2", "FLCL"] any = collateralisationCategory to-string
+        then initialMarginCollectedByTheReportingCounterpartyPreHaircut exists
+        else initialMarginCollectedByTheReportingCounterpartyPreHaircut is absent
+
+    condition CSA_VR_0085_01: <"Initial margin collected by the reporting counterparty Post-Haircut">
+        [regulatoryReference CSA Margin dataElement "85" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = OWC2 or  OWP2 or FLCL), else {blank}."]
+        if ["OWC2", "OWP2", "FLCL"] any = collateralisationCategory to-string
+        then initialMarginCollectedByTheReportingCounterpartyPostHaircut exists
+        else initialMarginCollectedByTheReportingCounterpartyPostHaircut is absent
+
+    condition CSA_VR_0086_01: <"Currency Of Initial Margin Collected">
+        [regulatoryReference CSA Margin dataElement "86" validationRule "Collateral"
+      provision "C if [Initial margin collected by the reporting counterparty (post-haircut)] or [Initial margin collected by the reporting counterparty (pre-haircut)] is populated, else {blank}."]
+        if initialMarginCollectedByTheReportingCounterpartyPostHaircut exists
+                or initialMarginCollectedByTheReportingCounterpartyPreHaircut exists
+        then currencyOfInitialMarginCollected exists
+        else currencyOfInitialMarginCollected is absent
+
+    condition CSA_VR_0087_01: <"Variation margin posted by the reporting counterparty Pre-Haircut">
+        [regulatoryReference CSA Margin dataElement "87" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = PRC1 or  PRCL or OWC1 or OWP1 or OWP2 or FLCL), else {blank}."]
+        if ["OWC1", "OWP1", "PRC1", "OWP2", "PRCL", "FLCL"]
+                any = collateralisationCategory to-string
+        then variationMarginPostedByTheReportingCounterpartyPreHaircut exists
+        else variationMarginPostedByTheReportingCounterpartyPreHaircut is absent
+
+    condition CSA_VR_0088_01: <"Variation margin posted by the reporting counterparty Post-Haircut">
+        [regulatoryReference CSA Margin dataElement "88" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = PRC1 or  PRCL or OWC1 or OWP1 or OWP2 or FLCL), else {blank}."]
+        if ["OWC1", "OWP1", "PRC1", "OWP2", "PRCL", "FLCL"]
+                any = collateralisationCategory to-string
+        then variationMarginPostedByTheReportingCounterpartyPostHaircut exists
+        else variationMarginPostedByTheReportingCounterpartyPostHaircut is absent
+
+    condition CSA_VR_0089_01: <"Currency of variation margin posted">
+        [regulatoryReference CSA Margin dataElement "89" validationRule "Collateral"
+      provision "C if [Variation margin posted by the reporting counterparty (pre-haircut)] is populated, else {blank}."]
+        if variationMarginPostedByTheReportingCounterpartyPreHaircut exists
+        then currencyOfVariationMarginPosted exists
+        else currencyOfVariationMarginPosted is absent
+
+    condition DTCC_CSA_VR_0089_01: <"Currency of variation margin posted">
+        [docReference DTCC Margin dataElement "89" validationRule "Collateral"
+      provision "C if [Variation margin posted by the reporting counterparty (pre-haircut)] or [Variation margin posted by the reporting counterparty (post-haircut)] is populated, else {blank}."]
+        if variationMarginPostedByTheReportingCounterpartyPreHaircut exists
+                or variationMarginPostedByTheReportingCounterpartyPostHaircut exists
+        then currencyOfVariationMarginPosted exists
+        else currencyOfVariationMarginPosted is absent
+
+    condition CSA_VR_0090_01: <"Variation margin collected by the reporting counterparty Pre-Haircut">
+        [regulatoryReference CSA Margin dataElement "90" validationRule "Collateral"
+      provision "C if ([Collateralisation category] = PRC2 or PRCL or OWC2 or OWP1 or OWP2 or FLCL), else {blank}."]
+        if ["OWP1", "PRC2", "OWC2", "OWP2", "PRCL", "FLCL"]
+                any = collateralisationCategory to-string
+        then variationMarginCollectedByTheReportingCounterpartyPreHaircut exists
+        else variationMarginCollectedByTheReportingCounterpartyPreHaircut is absent
+
+    condition CSA_VR_0091_01: <"Variation margin collected by the reporting counterparty Post-Haircut">
+        [regulatoryReference CSA Margin dataElement "91" validationRule "Collateral"
+      provision "Collateral C if ([Collateralisation category] = PRC2 or PRCL or OWC2 or OWP1 or OWP2 or FLCL), else {blank}."]
+        if ["OWP1", "PRC2", "OWC2", "OWP2", "PRCL", "FLCL"]
+                any = collateralisationCategory to-string
+        then variationMarginCollectedByTheReportingCounterpartyPostHaircut exists
+        else variationMarginCollectedByTheReportingCounterpartyPostHaircut is absent
+
+    condition CSA_VR_0092_01: <"Currency of variation margin collected">
+        [regulatoryReference CSA Margin dataElement "92" validationRule "Collateral"
+      provision "Collateral C if [Variation margin collected by the reporting counterparty (pre-haircut)] is populated, else {blank}."]
+        if variationMarginCollectedByTheReportingCounterpartyPreHaircut exists
+        then currencyOfVariationMarginCollected exists
+        else currencyOfVariationMarginCollected is absent
+
+    condition DTCC_CSA_VR_0092_01: <"Currency of variation margin collected">
+        [docReference DTCC Margin dataElement "92" validationRule "Collateral"
+      provision "Collateral C if [Variation margin collected by the reporting counterparty (pre-haircut)] or [Variation margin collected by the reporting counterparty (post-haircut)] is populated, else {blank}."]
+        if variationMarginCollectedByTheReportingCounterpartyPreHaircut exists
+                or variationMarginCollectedByTheReportingCounterpartyPostHaircut exists
+        then currencyOfVariationMarginCollected exists
+        else currencyOfVariationMarginCollected is absent
+
+    condition DTCC_CSA_VR_0093_01: <"Variation Margin Collateral Portfolio Code">
+        [docReference DTCC Margin dataElement "93" validationRule "Collateral"
+      provision "Required if [Initial margin collateral portfolio code] is blank."]
+        if initialMarginCollateralPortfolioCode is absent
+        then variationMarginCollateralPortfolioCode exists
+
+    condition DTCC_CSA_VR_0093_02: <"Variation Margin Collateral Portfolio Code">
+        [docReference DTCC Margin dataElement "93" validationRule "Collateral"
+      provision "If USI or UTI is populated, the only accepted values are 'TRANSACTIONLEVEL' or 'NOTAPPLICABLE'. All other values will be rejected."]
+        if usiID exists or uniqueTransactionIdentifier exists
+        then variationMarginCollateralPortfolioCode = "TRANSACTIONLEVEL"
+                or variationMarginCollateralPortfolioCode = "NOTAPPLICABLE"
+
+    condition DTCC_CSA_VR_0093_03: <"Variation Margin Collateral Portfolio Code">
+        [docReference DTCC Margin dataElement "93" validationRule "Collateral"
+      provision "Reject if [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] are both blank."]
+        if initialMarginCollateralPortfolioCode is absent
+                and variationMarginCollateralPortfolioCode is absent
+        then False
+
+    condition DTCC_CSA_VR_0094_01: <"Initial Margin Collateral Portfolio Code">
+        [docReference DTCC Margin dataElement "94" validationRule "Collateral"
+      provision "Required if [Variation margin collateral portfolio code] is blank."]
+        if variationMarginCollateralPortfolioCode is absent
+        then initialMarginCollateralPortfolioCode exists
+
+    condition DTCC_CSA_VR_0094_02: <"Initial Margin Collateral Portfolio Code">
+        [docReference DTCC Margin dataElement "94" validationRule "Collateral"
+      provision "If USI or UTI is populated, the only accepted values are 'TRANSACTIONLEVEL' or 'NOTAPPLICABLE'. All other values will be rejected."]
+        if usiID exists or uniqueTransactionIdentifier exists
+        then initialMarginCollateralPortfolioCode = "TRANSACTIONLEVEL"
+                or initialMarginCollateralPortfolioCode = "NOTAPPLICABLE"
+
+    condition DTCC_CSA_VR_0094_03: <"Initial Margin Collateral Portfolio Code">
+        [docReference DTCC Margin dataElement "94" validationRule "Collateral"
+      provision "Reject if [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] are both blank."]
+        if initialMarginCollateralPortfolioCode is absent
+                and variationMarginCollateralPortfolioCode is absent
+        then False
+
+    condition CSA_VR_0098_01: <"Action Type">
+        [regulatoryReference CSA Margin dataElement "98" validationRule "Collateral"
+      provision "M, must equal MARU"]
+        actionType = MARU
+
+    condition DTCC_CSA_VR_DTCC_01: <"USI ID">
+        [docReference DTCC DTCC_Harmonized validationRule "Transaction"
+      provision "Required if [Initial margin collateral portfolio code] = TRANSACTIONLEVEL and [UTI ID] is not populated."]
+        if initialMarginCollateralPortfolioCode = "TRANSACTIONLEVEL"
+                and uniqueTransactionIdentifier is absent
+        then usiID exists

@@ -1,0 +1,82 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "DUMMY0000000000LEI02",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "SEF1232024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "STM-FP",
+      "underlyingAssetIDType" : "SingleOther"
+    }, {
+      "underlyingAssetID" : "STMicroelectronics N.V. ordinary shares",
+      "underlyingAssetIDType" : "SingleOther"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2001-07-13",
+  "eventIdentifier" : "SEF123",
+  "eventTimestamp" : "2001-07-13T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2001-07-13T16:20:47Z",
+  "expirationDate" : "2005-09-27",
+  "finalContractualSettlementDate" : "2005-09-27",
+  "firstExerciseDate" : "2001-07-13",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 4800000,
+    "notionalCurrency" : "EUR",
+    "notionalQuantity" : 150000,
+    "quantityUnitOfMeasure" : "SHAS",
+    "totalNotionalQuantity" : 150000,
+    "underlierIDOther" : "STM-FP",
+    "underlierIDOtherSource" : "Other"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "OptionExerciseStyle" : "AMER",
+          "OptionType" : "CALL"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 405000,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2001-07-17",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI01",
+  "strikePrice" : {
+    "monetary" : 32
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER02R17E16C15I14R13P12N11O10I9T8P7O6"
+}

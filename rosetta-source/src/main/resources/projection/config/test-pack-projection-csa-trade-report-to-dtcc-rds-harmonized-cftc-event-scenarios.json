@@ -1,0 +1,416 @@
+{
+  "id" : "test-pack-projection-csa-trade-report-to-dtcc-rds-harmonized-cftc-event-scenarios",
+  "pipelineId" : "pipeline-projection-csa-trade-report-to-dtcc-rds-harmonized",
+  "name" : "Cftc event scenarios",
+  "samples" : [ {
+    "id" : "example-01-submission-03",
+    "name" : "Example 01 Submission 03",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-01-Submission-03.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-01-Submission-03.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-01-submission-1",
+    "name" : "Example 01 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-01-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-01-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-01-submission-2",
+    "name" : "Example 01 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-01-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-01-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-01-submission-3",
+    "name" : "Example 01 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-01-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-01-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-01-submission-4",
+    "name" : "Example 01 Submission 4",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-01-Submission-4.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-01-Submission-4.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-02-submission-1",
+    "name" : "Example 02 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-02-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-02-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-02-submission-2",
+    "name" : "Example 02 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-02-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-02-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-03-submission-1",
+    "name" : "Example 03 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-03-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-03-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-03-submission-2",
+    "name" : "Example 03 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-03-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-03-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-04-submission-1",
+    "name" : "Example 04 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-04-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-04-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-04-submission-2",
+    "name" : "Example 04 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-04-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-04-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-04-submission-3",
+    "name" : "Example 04 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-04-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-04-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-05-submission-1",
+    "name" : "Example 05 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-05-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-05-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-05-submission-2",
+    "name" : "Example 05 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-05-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-05-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-05-submission-3",
+    "name" : "Example 05 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-05-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-05-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-06-submission-1",
+    "name" : "Example 06 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-06-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-06-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-06-submission-2",
+    "name" : "Example 06 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-06-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-06-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-06-submission-3",
+    "name" : "Example 06 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-06-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-06-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-06-submission-4",
+    "name" : "Example 06 Submission 4",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-06-Submission-4.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-06-Submission-4.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-1",
+    "name" : "Example 07 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-2",
+    "name" : "Example 07 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-3",
+    "name" : "Example 07 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-4",
+    "name" : "Example 07 Submission 4",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-4.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-4.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-5",
+    "name" : "Example 07 Submission 5",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-5.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-5.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-6",
+    "name" : "Example 07 Submission 6",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-6.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-6.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-07-submission-7",
+    "name" : "Example 07 Submission 7",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-07-Submission-7.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-07-Submission-7.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-08-submission-1",
+    "name" : "Example 08 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-08-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-08-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-08-submission-2",
+    "name" : "Example 08 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-08-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-08-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-09-submission-1",
+    "name" : "Example 09 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-09-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-09-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-09-submission-2",
+    "name" : "Example 09 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-09-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-09-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-09-submission-3",
+    "name" : "Example 09 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-09-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-09-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-10-submission-1",
+    "name" : "Example 10 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-10-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-10-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-10-submission-2",
+    "name" : "Example 10 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-10-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-10-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-11-submission-1",
+    "name" : "Example 11 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-11-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-11-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-11-submission-2",
+    "name" : "Example 11 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-11-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-11-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-11-submission-3",
+    "name" : "Example 11 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-11-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-11-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-11-submission-4",
+    "name" : "Example 11 Submission 4",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-11-Submission-4.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-11-Submission-4.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-12-submission-1",
+    "name" : "Example 12 Submission 1",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-12-Submission-1.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-12-Submission-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-12-submission-2",
+    "name" : "Example 12 Submission 2",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-12-Submission-2.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-12-Submission-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-12-submission-3",
+    "name" : "Example 12 Submission 3",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-12-Submission-3.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-12-Submission-3.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "example-12-submission-4",
+    "name" : "Example 12 Submission 4",
+    "inputPath" : "regulatory-reporting/output/csa-trade/cftc-event-scenarios/Example-12-Submission-4.json",
+    "outputPath" : "projection/output/csa-trade-report-to-dtcc-rds-harmonized/cftc-event-scenarios/Example-12-Submission-4.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  } ]
+}

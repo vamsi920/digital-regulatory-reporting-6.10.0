@@ -1,0 +1,160 @@
+{
+    "valuationDetails": {
+        "valuation": {
+            "amount": {
+                "value": 250000,
+                "unit": {
+                    "currency": {"value": "USD"}
+                },
+                "meta": {"globalKey": "2d9c1b2"}
+            },
+            "timestamp": "2021-03-13T06:32:49Z",
+            "method": "MarkToMarket",
+            "delta": 8200
+        },
+        "tradeInformation": {
+            "uniqueTradeIdentifier": {
+                "issuer": {
+                    "value": "9991234569",
+                    "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/issuer-identifier"}
+                },
+                "assignedIdentifier": [
+                    {
+                        "identifier": {
+                            "value": "DTD380513903T7YHJ898VALUATIONEX001UNIQUETRANSACTION1",
+                            "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/unique-transaction-identifier"}
+                        }
+                    }
+                ],
+                "meta": {"globalKey": "acf64e79"},
+                "identifierType": "UniqueTransactionIdentifier"
+            },
+            "action": "VALU",
+            "nextFloatingReferenceResetDateLeg1": "2011-02-12",
+            "nextFloatingReferenceResetDateLeg2": "2021-02-12"
+        }
+    },
+    "reportableInformation": {
+        "partyInformation": [
+            {
+                "partyReference": {
+                    "value": {
+                        "partyId": [
+                            {
+                                "identifier": {
+                                    "value": "5493001RKR55V4X61F71",
+                                    "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/iso17442"}
+                                },
+                                "identifierType": "LEI",
+                                "meta": {"globalKey": "c87765a4"}
+                            }
+                        ],
+                        "name": {"value": "asdasfsFsdf"},
+                        "meta": {
+                            "globalKey": "6ed88044",
+                            "externalKey": "party1"
+                        }
+                    }
+                },
+                "relatedParty": [
+                    {
+                        "partyReference": {
+                            "globalReference": "927989ca",
+                            "externalReference": "executionAgent"
+                        },
+                        "role": "ExecutionAgent"
+                    }
+                ],
+                "regimeInformation": [
+                    {
+                        "regimeName": {"value": "EMIR"},
+                        "supervisoryBody": {"value": "ESMA"},
+                        "reportingRole": "ReportingParty"
+                    },
+                    {
+                        "regimeName": {"value": "UKEMIR"},
+                        "supervisoryBody": {"value": "FCA"},
+                        "reportingRole": "ReportingParty"
+                    },
+                    {
+                        "regimeName": {"value": "ASIC"},
+                        "supervisoryBody": {"value": "ASIC"},
+                        "reportingRole": "ReportingParty",
+                        "technicalRecordId": {
+                            "value": "040147849555123459991234569BR777123456789",
+                            "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/technical-record-id"}
+                        }
+                    },
+                    {
+                        "regimeName": {"value": "JFSA"},
+                        "supervisoryBody": {"value": "JFSA"},
+                        "reportingRole": "ReportingParty",
+                        "technicalRecordId": {
+                            "value": "040147849555123459991234569BR777123456789",
+                            "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/technical-record-id"}
+                        }
+                    },
+                    {
+                        "regimeName": {"value": "MAS"},
+                        "supervisoryBody": {"value": "MAS"},
+                        "reportingRole": "ReportingParty",
+                        "technicalRecordId": {
+                            "value": "040147849555123459991234569BR777123456789",
+                            "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/technical-record-id"}
+                        }
+                    }
+                ]
+            },
+            {
+                "partyReference": {
+                    "value": {
+                        "partyId": [
+                            {
+                                "identifier": {
+                                    "value": "5U0XI89JRFVHWIBS4F54",
+                                    "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/iso17442"}
+                                },
+                                "identifierType": "LEI",
+                                "meta": {"globalKey": "bb49950e"}
+                            }
+                        ],
+                        "meta": {
+                            "globalKey": "bb49950e",
+                            "externalKey": "party2"
+                        }
+                    }
+                }
+            },
+            {
+                "partyReference": {
+                    "value": {
+                        "partyId": [
+                            {
+                                "identifier": {
+                                    "value": "TESTEXAGENTLEI000011",
+                                    "meta": {"scheme": "http://www.fpml.org/coding-scheme/external/iso17442"}
+                                },
+                                "identifierType": "LEI",
+                                "meta": {"globalKey": "927989ca"}
+                            }
+                        ],
+                        "meta": {
+                            "globalKey": "927989ca",
+                            "externalKey": "executionAgent"
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    "reportingSide": {
+        "reportingParty": {
+            "globalReference": "6ed88044",
+            "externalReference": "party1"
+        },
+        "reportingCounterparty": {
+            "globalReference": "bb49950e",
+            "externalReference": "party2"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "actionType" : "VALU",
+  "counterparty1" : "5493001RKR55V4X61F71",
+  "counterparty2" : "5U0XI89JRFVHWIBS4F54",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierTypeIndicator" : true,
+  "delta" : 8200,
+  "entityResponsibleForReporting" : "5493001RKR55V4X61F71",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "submitterIdentifier" : "5493001RKR55V4X61F71",
+  "uniqueTransactionIdentifier" : "DTD380513903T7YHJ898VALUATIONEX001UNIQUETRANSACTION1",
+  "valuationAmount" : 250000,
+  "valuationCurrency" : "USD",
+  "valuationMethod" : "MTMA",
+  "valuationTimestamp" : "2021-03-13T06:32:49Z"
+}

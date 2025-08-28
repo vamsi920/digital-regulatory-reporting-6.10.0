@@ -1,0 +1,48 @@
+namespace drr.regulation.common.trade.price
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.standards.iosco.cde.version3.* as cde
+
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option premium amount">
+    if GetContractType = OPTN and cde.price.OptionPremiumAmount is absent
+    then 0
+    else cde.price.OptionPremiumAmount
+
+reporting rule FixedRateLeg1 from TransactionReportInstruction: <"Fixed Rate Leg 1">
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then cde.price.InterestRateFixedRate(InterestRateLeg1)
+
+reporting rule FixedRateLeg2 from TransactionReportInstruction: <"Fixed Rate Leg 2">
+    extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then cde.price.InterestRateFixedRate(InterestRateLeg2)
+
+/* Barrier Price*/
+reporting rule SingleOrUpperAndLowerBarrier from TransactionReportInstruction: <"Lower or only barrier price notation">
+    if IsOption(ProductForEvent)
+    then extract
+        EconomicTermsForProduct(ProductForEvent) -> payout -> optionPayout only-element -> feature -> knock
+        then SingleOrUpperAndLowerBarrier {
+                _single: if (knockIn exists and knockOut is absent)
+                then knockIn
+                else if (knockOut exists and knockIn is absent)
+                then knockOut
+                    then extract BarrierFromTriggerEvent,
+                lower: if (knockIn exists and knockOut exists)
+                then if (knockIn -> trigger -> level <= knockOut -> trigger -> level)
+                    then knockIn
+                    else knockOut
+                    then extract BarrierFromTriggerEvent,
+                upper: if (knockIn exists and knockOut exists)
+                then if (knockIn -> trigger -> level >= knockOut -> trigger -> level)
+                    then knockIn
+                    else knockOut
+                    then extract BarrierFromTriggerEvent
+            }
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction:
+    extract cde.price.OptionPremiumCurrency default common.execution.SettlementCurrencyLeg1
+    default cde.quantity.NotionalCurrencyLeg1

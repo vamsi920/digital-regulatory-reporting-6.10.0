@@ -1,0 +1,71 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "beneficiary1" : "213800WWTABZ1GOJHH37",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "SWAP",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierType" : true,
+  "effectiveDate" : "2038-11-01",
+  "entityResponsibleForReporting" : "213800WWTABZ1GOJHH37",
+  "eventIdentifier" : "001229414555123459991234569BR777123456789",
+  "eventTimestamp" : "2019-03-21T12:00:09Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2038-11-30",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 2433787.93112,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 75.22,
+    "quantityUnitOfMeasure" : "MWHO",
+    "totalNotionalQuantity" : 54233.62
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 2433787.93112,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 75.22,
+    "quantityUnitOfMeasure" : "MWHO",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 54233.62
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "ELECTRICITY-PALO VERDE NON-FIRM (OFF-PEAK)-DOW JONES POWER",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "platformIdentifier" : "XXXX",
+  "price" : {
+    "monetary" : 44.876
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "MWHO",
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "COMMODITYSWAPENERG01",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPENERG02"
+}

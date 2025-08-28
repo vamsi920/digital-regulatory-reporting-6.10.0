@@ -1,0 +1,82 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true
+  },
+  "cleared" : "I",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "countryOfTheCounterparty2" : "US",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2011-02-12",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2011-02-04T16:42:18Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.918,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2011-02-04T16:21:47Z",
+  "expirationDate" : "2011-02-14",
+  "finalContractualSettlementDate" : "2011-02-14",
+  "jurisdiction" : "MIXX",
+  "leg1" : {
+    "notionalAmount" : 50000000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "549300O5MFEP1XJ40B46",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "5493001RKR55V4X61F71",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 45175000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "5493001RKR55V4X61F71",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "549300O5MFEP1XJ40B46",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "packageIdentifier" : "MOCKUPFXSTRATEGYSPP17S16Y15G14E13T1",
+  "packageIndicator" : true,
+  "platformIdentifier" : "XNAS",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPFXSTRATEGYSP01"
+}

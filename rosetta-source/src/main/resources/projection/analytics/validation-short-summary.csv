@@ -1,0 +1,21 @@
+Projection,Failures,Total,Success,,DRR: CONDITION All Valid,DRR: CONDITION All Valid Total,DRR: CONDITION All Valid Success,,ISO: XML Schema Failures,ISO: XML Schema Total,ISO: XML Schema Success
+drr.projection.dtcc.rds.harmonized.csa.rewrite.trade.functions.Project_CSATradeReportToDtccRdsHarmonized,1951,375502,99.5,,0,231,0,,26,231,88.7
+drr.projection.dtcc.rds.harmonized.csa.rewrite.trade.functions.Project_CsaPpdReportToDtccRdsHarmonized,1097,374326,99.7,,3,231,1.3,,26,231,88.7
+drr.projection.dtcc.rds.harmonized.csa.rewrite.valuation.functions.Project_CSAValuationReportToDtccRdsHarmonized,9,1066,99.2,,1,1,100,,1,1,0
+drr.projection.iso20022.asic.rewrite.margin.functions.Project_ASICMarginReportToIso20022,2,63,96.8,,1,1,100,,1,1,0
+drr.projection.iso20022.asic.rewrite.trade.functions.Project_ASICTradeReportToIso20022,1416,114518,98.8,,7,190,3.7,,190,190,0
+drr.projection.iso20022.esma.emir.refit.margin.functions.Project_EsmaEmirMarginReportToIso20022,12,218,94.5,,0,1,0,,1,1,0
+drr.projection.iso20022.esma.emir.refit.trade.functions.Project_EsmaEmirTradeReportToIso20022,2602,174210,98.5,,0,209,0,,89,209,57.4
+drr.projection.iso20022.fca.ukemir.refit.margin.functions.Project_FcaUkEmirMarginReportToIso20022,13,216,94,,0,1,0,,1,1,0
+drr.projection.iso20022.fca.ukemir.refit.trade.functions.Project_FcaUkEmirTradeReportToIso20022,2297,143128,98.4,,0,168,0,,77,168,54.2
+drr.projection.iso20022.hkma.rewrite.margin.dtcc.functions.Project_HKMADtccMarginReportToIso20022,5,75,93.3,,1,1,100,,1,1,0
+drr.projection.iso20022.hkma.rewrite.margin.tr.functions.Project_HKMATrMarginReportToIso20022,5,75,93.3,,1,1,100,,1,1,0
+drr.projection.iso20022.hkma.rewrite.trade.dtcc.functions.Project_HKMADtccTradeReportToIso20022,768,105917,99.3,,98,190,51.6,,167,190,12.1
+drr.projection.iso20022.hkma.rewrite.trade.tr.functions.Project_HKMATrTradeReportToIso20022,732,105914,99.3,,98,190,51.6,,190,190,0
+drr.projection.iso20022.hkma.rewrite.valuation.dtcc.functions.Project_HKMADtccValuationReportToIso20022,5,101,95,,1,1,100,,1,1,0
+drr.projection.iso20022.hkma.rewrite.valuation.tr.functions.Project_HKMATrValuationReportToIso20022,5,100,95,,1,1,100,,1,1,0
+drr.projection.iso20022.jfsa.rewrite.margin.functions.Project_JFSARewriteMarginReportToIso20022,1,70,98.6,,1,1,100,,1,1,0
+drr.projection.iso20022.jfsa.rewrite.trade.functions.Project_JFSARewriteTradeReportToIso20022,808,102795,99.2,,15,190,7.9,,167,190,12.1
+drr.projection.iso20022.mas.rewrite.margin.functions.Project_MASMarginReportToIso20022,15,175,91.4,,0,1,0,,1,1,0
+drr.projection.iso20022.mas.rewrite.trade.functions.Project_MASTradeReportToIso20022,2163,113894,98.1,,2,190,1.1,,190,190,0
+Total,13906,1612363,99.1,,230,1799,12.8,,1132,1799,37.1

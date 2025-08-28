@@ -1,0 +1,40 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "NCNF",
+  "contractType" : "FORW",
+  "counterparty1" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2" : "254900QEE322YIK4P067",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2019-01-31",
+  "entityResponsibleForReporting" : "GGDZP1UYGU9STUHRDP48",
+  "eventIdentifier" : "SI17764828466sz33wbbkr6u3664g4adt",
+  "eventTimestamp" : "2019-01-31T08:56:02Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1111.11,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionTimestamp" : "2019-01-31T08:56:02Z",
+  "expirationDate" : "2019-03-20",
+  "finalContractualSettlementDate" : "2019-03-20",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixingDate" : "2019-03-18T00:00:00Z",
+    "notionalAmount" : 3763000000,
+    "notionalCurrency" : "KRW",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 38999950.3,
+    "notionalCurrency" : "USD"
+  },
+  "platformIdentifier" : "XOFF",
+  "reportSubmittingEntityID" : "GGDZP1UYGU9STUHRDP48",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "SI17764828466sz33wbbkr6u3664g4adt",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02"
+}

@@ -1,0 +1,57 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "FORW",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2020-01-01",
+  "eventTimestamp" : "2020-01-01T10:06:10Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1,
+  "exchangeRateBasis" : "USD/JPY",
+  "executionTimestamp" : "2020-01-01T08:59:51Z",
+  "expirationDate" : "2021-08-16",
+  "finalContractualSettlementDate" : "2021-08-16",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1,
+    "notionalCurrency" : "JPY",
+    "settlementCurrency" : "JPY"
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "platformIdentifier" : "XOFF",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingSpecifiedPerson" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "DUMMY0000000000LEI01"
+}

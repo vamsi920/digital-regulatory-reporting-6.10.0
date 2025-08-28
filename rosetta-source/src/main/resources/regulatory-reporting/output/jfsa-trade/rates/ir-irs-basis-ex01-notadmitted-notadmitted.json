@@ -1,0 +1,70 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "confirmationTimestamp" : "2021-12-10T19:19:04Z",
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "TESTLEIINFBS00000002",
+  "counterparty2" : "TESTLEIINFBS00000001",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2021-03-11",
+  "entityResponsibleForReporting" : "TESTLEIINFBS00000002",
+  "eventIdentifier" : "DTDApproved2380083603EMIRRiskNewNewInterest",
+  "eventTimestamp" : "2021-03-09T13:13:23Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-09T13:12:38Z",
+  "expirationDate" : "2031-03-11",
+  "finalContractualSettlementDate" : "2031-03-11",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "EFFR",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "DAIL",
+      "floatingRateReferencePeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 6
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "SOFR",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "DAIL",
+      "floatingRateReferencePeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 1
+    },
+    "spreadNotation" : "Basis"
+  },
+  "platformIdentifier" : "EGSI",
+  "reportSubmittingEntityID" : "TESTLEIINFBS00000002",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "DTDApproved2380083603EMIRRiskNewNewInterest",
+  "underlyingIdentificationType" : "X",
+  "underlyingIndexIndicator" : "EFFR",
+  "uniqueProductIdentifier" : "MOCKUPI",
+  "uniqueTransactionIdentifier" : "DUMMYTRADEIDENTIFY01IRSBASISEX01"
+}

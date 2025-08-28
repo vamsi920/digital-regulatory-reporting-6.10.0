@@ -1,0 +1,91 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "DUMMY0000000000LEI01",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "D93BC898C3AA5771E0538CB0CC0A067E2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "otherPaymentPayerIDType" : [ "LEI" ],
+    "otherPaymentReceiverIDType" : [ "LEI" ],
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "EXAMPLESUBMISSIONX02",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "USX17N16O151",
+      "underlyingAssetIDType" : "Index"
+    } ],
+    "underlyingAssetName" : {
+      "underlyingAssetName" : [ "ABX.HE.AA.06-1" ]
+    },
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-03-08",
+  "eventIdentifier" : "D93BC898C3AA5771E0538CB0CC0A067E",
+  "eventTimestamp" : "2018-04-01T14:15:36Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-04-01T14:15:36Z",
+  "expirationDate" : "2045-07-25",
+  "finalContractualSettlementDate" : "2045-07-25",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.0032,
+    "notionalAmount" : 20000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "Underlying" : {
+            "UnderlierIDSource" : "CRIDX",
+            "UnderlyingInstrumentIndexTermUnit" : "YEAR"
+          },
+          "UnderlyingIssuerType" : "Corporate"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Index"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "otherPayment" : [ {
+    "amount" : 987.0001,
+    "currency" : "USD",
+    "date" : "2022-03-11",
+    "payer" : "DUMMY0000000000LEI02",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "DUMMY0000000000LEI01",
+    "receiverFormat" : "Lei"
+  } ],
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI02",
+  "uniqueTransactionIdentifier" : "EXAMPLESUBMISSIONX04"
+}

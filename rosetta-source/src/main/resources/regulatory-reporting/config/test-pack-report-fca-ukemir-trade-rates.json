@@ -1,0 +1,465 @@
+{
+  "id" : "test-pack-report-fca-ukemir-trade-rates",
+  "pipelineId" : "pipeline-report-fca-ukemir-trade",
+  "name" : "Rates",
+  "samples" : [ {
+    "id" : "ir-capfloor-ex01-cap-premium",
+    "name" : "IR CapFloor ex01 Cap Premium",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CapFloor-ex01-Cap-Premium.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CapFloor-ex01-Cap-Premium.json",
+    "assertions" : {
+      "modelValidationFailures" : 14,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-capfloor-ex02-cap-spread",
+    "name" : "IR CapFloor ex02 Cap Spread",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CapFloor-ex02-Cap-Spread.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CapFloor-ex02-Cap-Spread.json",
+    "assertions" : {
+      "modelValidationFailures" : 14,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-capfloor-ex03-cap",
+    "name" : "IR CapFloor ex03 Cap",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CapFloor-ex03-Cap.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CapFloor-ex03-Cap.json",
+    "assertions" : {
+      "modelValidationFailures" : 12,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-fixed-ex01",
+    "name" : "IR CCS Fixed Fixed ex01",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CCS-Fixed-Fixed-ex01.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CCS-Fixed-Fixed-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-fixed-ex02",
+    "name" : "IR CCS Fixed Fixed ex02",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CCS-Fixed-Fixed-ex02.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CCS-Fixed-Fixed-ex02.json",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-float-ex02",
+    "name" : "IR CCS Fixed Float ex02",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CCS-Fixed-Float-ex02.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CCS-Fixed-Float-ex02.json",
+    "assertions" : {
+      "modelValidationFailures" : 14,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-float-ex03-nds",
+    "name" : "IR CCS Fixed Float ex03 NDS",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CCS-Fixed-Float-ex03-NDS.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CCS-Fixed-Float-ex03-NDS.json",
+    "assertions" : {
+      "modelValidationFailures" : 14,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-ccs-fixed-float-ex04",
+    "name" : "IR CCS Fixed Float ex04",
+    "inputPath" : "regulatory-reporting/input/rates/IR-CCS-Fixed-Float-ex04.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-CCS-Fixed-Float-ex04.json",
+    "assertions" : {
+      "modelValidationFailures" : 12,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-forward-debt-ex01",
+    "name" : "IR Forward Debt ex01",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Forward-Debt-ex01.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Forward-Debt-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-forward-debt-ex02",
+    "name" : "IR Forward Debt ex02",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Forward-Debt-ex02.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Forward-Debt-ex02.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-fra-ex01",
+    "name" : "IR FRA ex01",
+    "inputPath" : "regulatory-reporting/input/rates/IR-FRA-ex01.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-FRA-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-fra-ex02",
+    "name" : "IR FRA ex02",
+    "inputPath" : "regulatory-reporting/input/rates/IR-FRA-ex02.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-FRA-ex02.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-inflation-fixed-float-ex01-yoy",
+    "name" : "IR Inflation Fixed Float ex01 YoY",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Inflation-Fixed-Float-ex01-YoY.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Inflation-Fixed-Float-ex01-YoY.json",
+    "assertions" : {
+      "modelValidationFailures" : 16,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-inflation-fixed-float-ex02-zc-fixedamt",
+    "name" : "IR Inflation Fixed Float ex02 ZC FixedAmt",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Inflation-Fixed-Float-ex02-ZC-FixedAmt.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Inflation-Fixed-Float-ex02-ZC-FixedAmt.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-inflation-fixed-float-zc-notionalamt",
+    "name" : "IR Inflation Fixed Float ZC NotionalAmt",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Inflation-Fixed-Float-ZC-NotionalAmt.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Inflation-Fixed-Float-ZC-NotionalAmt.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01",
+    "name" : "IR IRS Basis ex01",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Basis-ex01.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Basis-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 20,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-admitted-admitted",
+    "name" : "ir irs basis ex01 admitted admitted",
+    "inputPath" : "regulatory-reporting/input/rates/ir-irs-basis-ex01-admitted-admitted.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/ir-irs-basis-ex01-admitted-admitted.json",
+    "assertions" : {
+      "modelValidationFailures" : 19,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-admitted-notadmitted",
+    "name" : "ir irs basis ex01 admitted notadmitted",
+    "inputPath" : "regulatory-reporting/input/rates/ir-irs-basis-ex01-admitted-notadmitted.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/ir-irs-basis-ex01-admitted-notadmitted.json",
+    "assertions" : {
+      "modelValidationFailures" : 19,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-notadmitted-admitted",
+    "name" : "ir irs basis ex01 notadmitted admitted",
+    "inputPath" : "regulatory-reporting/input/rates/ir-irs-basis-ex01-notadmitted-admitted.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/ir-irs-basis-ex01-notadmitted-admitted.json",
+    "assertions" : {
+      "modelValidationFailures" : 19,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex01-notadmitted-notadmitted",
+    "name" : "ir irs basis ex01 notadmitted notadmitted",
+    "inputPath" : "regulatory-reporting/input/rates/ir-irs-basis-ex01-notadmitted-notadmitted.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/ir-irs-basis-ex01-notadmitted-notadmitted.json",
+    "assertions" : {
+      "modelValidationFailures" : 19,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex02",
+    "name" : "IR IRS Basis ex02",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Basis-ex02.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Basis-ex02.json",
+    "assertions" : {
+      "modelValidationFailures" : 16,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex03",
+    "name" : "IR IRS Basis ex03",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Basis-ex03.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Basis-ex03.json",
+    "assertions" : {
+      "modelValidationFailures" : 21,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex03-ois",
+    "name" : "IR IRS Basis ex03 OIS",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Basis-ex03-OIS.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Basis-ex03-OIS.json",
+    "assertions" : {
+      "modelValidationFailures" : 16,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-basis-ex03-xoff",
+    "name" : "ir irs basis ex03 xoff",
+    "inputPath" : "regulatory-reporting/input/rates/ir-irs-basis-ex03-xoff.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/ir-irs-basis-ex03-xoff.json",
+    "assertions" : {
+      "modelValidationFailures" : 20,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-1-1-a020",
+    "name" : "IR IRS Fixed Float DCF 1 1 A020",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-DCF-1-1-A020.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-DCF-1-1-A020.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-30e-360-isda-a007",
+    "name" : "IR IRS Fixed Float DCF 30E 360 ISDA A007",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-DCF-30E-360-ISDA-A007.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-DCF-30E-360-ISDA-A007.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-365l-a009",
+    "name" : "IR IRS Fixed Float DCF ACT 365L A009",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-DCF-ACT-365L-A009.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-365L-A009.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-act-afb-a010",
+    "name" : "IR IRS Fixed Float DCF ACT ACT AFB A010",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-AFB-A010.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-AFB-A010.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-act-icma-a006",
+    "name" : "IR IRS Fixed Float DCF ACT ACT ICMA A006",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ICMA-A006.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ICMA-A006.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-dcf-act-act-isda-a008",
+    "name" : "IR IRS Fixed Float DCF ACT ACT ISDA A008",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ISDA-A008.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-DCF-ACT-ACT-ISDA-A008.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01",
+    "name" : "IR IRS Fixed Float ex01",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex01.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01-compensation-ois",
+    "name" : "IR IRS Fixed Float ex01 Compensation OIS",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex01-Compensation-OIS.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex01-Compensation-OIS.json",
+    "assertions" : {
+      "modelValidationFailures" : 17,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01-conversion-ois",
+    "name" : "IR IRS Fixed Float ex01 Conversion OIS",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex01-Conversion-OIS.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex01-Conversion-OIS.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex01-week",
+    "name" : "IR IRS Fixed Float ex01 Week",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex01-Week.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex01-Week.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex02",
+    "name" : "IR IRS Fixed Float ex02",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex02.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex02.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex02-zc",
+    "name" : "IR IRS Fixed Float ex02 ZC",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex02-ZC.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex02-ZC.json",
+    "assertions" : {
+      "modelValidationFailures" : 12,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex03",
+    "name" : "IR IRS Fixed Float ex03",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex03.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex03.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex04-spread",
+    "name" : "IR IRS Fixed Float ex04 Spread",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex04-Spread.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex04-Spread.json",
+    "assertions" : {
+      "modelValidationFailures" : 16,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex05",
+    "name" : "IR IRS Fixed Float ex05",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex05.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex05.json",
+    "assertions" : {
+      "modelValidationFailures" : 10,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex06-ois",
+    "name" : "IR IRS Fixed Float ex06 OIS",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex06-OIS.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex06-OIS.json",
+    "assertions" : {
+      "modelValidationFailures" : 16,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex07",
+    "name" : "IR IRS Fixed Float ex07",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex07.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex07.json",
+    "assertions" : {
+      "modelValidationFailures" : 14,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-ex08",
+    "name" : "IR IRS Fixed Float ex08",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-ex08.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-ex08.json",
+    "assertions" : {
+      "modelValidationFailures" : 14,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-submitter-id-1",
+    "name" : "IR IRS Fixed Float Submitter ID 1",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-Submitter-ID-1.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-Submitter-ID-1.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-submitter-id-2",
+    "name" : "IR IRS Fixed Float Submitter ID 2",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-Submitter-ID-2.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-Submitter-ID-2.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixed-float-submitter-id-3",
+    "name" : "IR IRS Fixed Float Submitter ID 3",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-Fixed-Float-Submitter-ID-3.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-Fixed-Float-Submitter-ID-3.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-irs-fixedfloat-zc-knownamount",
+    "name" : "IR IRS FixedFloat ZC KnownAmount",
+    "inputPath" : "regulatory-reporting/input/rates/IR-IRS-FixedFloat-ZC-KnownAmount.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-IRS-FixedFloat-ZC-KnownAmount.json",
+    "assertions" : {
+      "modelValidationFailures" : 12,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-option-debt-option-ex01",
+    "name" : "IR Option Debt Option ex01",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Option-Debt-Option-ex01.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Option-Debt-Option-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 11,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-option-swaption-ex01-bermuda",
+    "name" : "IR Option Swaption ex01 Bermuda",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Option-Swaption-ex01-Bermuda.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Option-Swaption-ex01-Bermuda.json",
+    "assertions" : {
+      "modelValidationFailures" : 9,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-option-swaption-ex02-europe",
+    "name" : "IR Option Swaption ex02 Europe",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Option-Swaption-ex02-Europe.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Option-Swaption-ex02-Europe.json",
+    "assertions" : {
+      "modelValidationFailures" : 13,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-package-price",
+    "name" : "IR Package Price",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Package-Price.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Package-Price.json",
+    "assertions" : {
+      "modelValidationFailures" : 17,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "ir-package-spread",
+    "name" : "IR Package Spread",
+    "inputPath" : "regulatory-reporting/input/rates/IR-Package-Spread.json",
+    "outputPath" : "regulatory-reporting/output/fca-ukemir-trade/rates/IR-Package-Spread.json",
+    "assertions" : {
+      "modelValidationFailures" : 17,
+      "runtimeError" : false
+    }
+  } ]
+}

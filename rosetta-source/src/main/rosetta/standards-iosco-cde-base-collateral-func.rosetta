@@ -1,0 +1,56 @@
+namespace drr.standards.iosco.cde.base.collateral
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.event.common.*
+import cdm.observable.asset.*
+import cdm.product.collateral.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+
+func GetCollateralBalancesForMarginType: <"'GetCollateralBalancesForMarginType' is a custom function that fetches Collateral Balances for required Margin Type.">
+    inputs:
+        reportableCollateral ReportableCollateral (1..1)
+        marginType CollateralMarginTypeEnum (1..1)
+    output:
+        collateralBalances CollateralBalance (0..*)
+
+    add collateralBalances:
+        reportableCollateral -> collateralDetails -> collateral -> collateralPortfolio
+            filter
+                legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = marginType
+            then extract collateralBalance
+            then flatten
+
+func GetMarginValue: <"'GetMarginValue' is a custom function that fetches Collateral Margin values for the required Margin Type.">
+    inputs:
+        partyCollateralBalances CollateralBalance (0..*)
+        haircutType HaircutIndicatorEnum (1..1)
+    output:
+        marginValue Money (0..1)
+
+    set marginValue:
+        partyCollateralBalances
+            filter haircutIndicator = haircutType
+            then filter collateralBalanceStatus = CollateralStatusEnum -> FullAmount
+            then extract amountBaseCurrency
+            then only-element
+
+func GetMarginCurrency: <"'GetMarginCurrency' is a custom function that fetches Collateral Margin currency for the required Margin Type.">
+    inputs:
+        partyCollateralBalances CollateralBalance (0..*)
+    output:
+        marginCurrency ISOCurrencyCodeEnum (0..1)
+
+    /*
+     * Rationale Reference: The rationale for the following code snippet is discussed in ISDA DRR Technical Execution Working Group on July 27' 2023.
+     * Rationale: Current structure of CDM Collateral Object allows margin currency to be posted for each type of Haircut (Pre or Post). ESMA EMIR regulatory Rules does not specify the type of haircut to be considered for margin currency. This code snippet ensures and checks for both pre and post currency to be same.
+     */
+    set marginCurrency:
+        if (GetMarginValue(partyCollateralBalances, HaircutIndicatorEnum -> PreHaircut) -> unit -> currency = GetMarginValue(
+                    partyCollateralBalances,
+                    HaircutIndicatorEnum -> PostHaircut
+                ) -> unit -> currency)
+        then (GetMarginValue(partyCollateralBalances, HaircutIndicatorEnum -> PreHaircut) -> unit -> currency
+            then extract ConvertNonISOToISOCurrency)

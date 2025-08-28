@@ -1,0 +1,87 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "US22266T1097",
+    "source" : "ISIN"
+  }, {
+    "identifier" : "US70438V1061",
+    "source" : "ISIN"
+  }, {
+    "identifier" : "LU1778762911",
+    "source" : "ISIN"
+  } ],
+  "bookingLocation" : "US",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "HWR6ATEU4L0XN8IT6Y39",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2025-04-07",
+  "eventTimestamp" : "2025-04-07T20:16:40Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2025-04-07T19:49:58Z",
+  "expirationDate" : "2026-03-04",
+  "finalContractualSettlementDate" : "2026-03-04",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 9735282.0201,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 75
+    },
+    "spreadNotation" : "Basis"
+  },
+  "nonReportable" : {
+    "enrichment" : {
+      "leiData" : [ {
+        "leiValidation" : false
+      } ],
+      "micData" : [ {
+        "city" : "N/A",
+        "countryCode" : "ZZ",
+        "creationDate" : "2005-10-24",
+        "lastUpdateDate" : "2005-10-24",
+        "marketCategory" : "OTHR",
+        "mic" : "XXXX",
+        "micType" : "OPRT",
+        "nameInstitutionDescription" : "NO MARKET (E.G. UNLISTED)",
+        "operatingMic" : "XXXX",
+        "status" : "ACTIVE"
+      } ],
+      "upiData" : [ {
+        "upiValidation" : false
+      } ]
+    }
+  },
+  "platformIdentifier" : "XXXX",
+  "price" : {
+    "monetary" : 83.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "SHAS",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingSpecifiedPerson" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueProductIdentifier" : "QZ3HXD0QWPVZ"
+}

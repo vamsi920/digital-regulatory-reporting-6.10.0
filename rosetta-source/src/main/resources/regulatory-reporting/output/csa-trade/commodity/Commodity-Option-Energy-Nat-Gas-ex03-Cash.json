@@ -1,0 +1,85 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "DUMMY0000000000LEI02",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "001229414555123459991234569BR7771234567892024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "Put",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "O-:OPT:OPT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-01-01",
+  "eventIdentifier" : "001229414555123459991234569BR777123456789",
+  "eventTimestamp" : "2019-11-16T00:00:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2024-12-31",
+  "finalContractualSettlementDate" : "2024-12-31",
+  "firstExerciseDate" : "2024-11-30",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "commodityInstrumentID" : "ELECTRICITY-PALO VERDE NON-FIRM (OFF-PEAK)-DOW JONES POWER",
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 10412000,
+    "notionalCurrency" : "CAD",
+    "notionalQuantity" : 5000,
+    "quantityFrequency" : "DAIL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "GGJL",
+    "settlementCurrency" : "CAD",
+    "totalNotionalQuantity" : 5480000
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "PUTO",
+          "UnderlierID" : "ELECTRICITY-PALO VERDE NON-FIRM (OFF-PEAK)-DOW JONES POWER",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "213800IV9PCAC364HN60",
+  "strikePrice" : {
+    "monetary" : 1.9
+  },
+  "strikePriceCurrency" : "CAD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONENE02"
+}

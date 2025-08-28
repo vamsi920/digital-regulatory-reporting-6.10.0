@@ -1,0 +1,289 @@
+namespace drr.regulation.common.trade.payment
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.*
+import drr.standards.iosco.cde.base.* as cde
+import drr.standards.iso.*
+
+func PaymentFrequencyPeriodLeg1Fixed_Validation: <"Payment frequency leg 1, DTCC_ASIC_BR_1068_01 & DTCC_MAS_BR_0119_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        fixedRateLeg1 Max11Number (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        periodicPaymentLeg1 cde.payment.PeriodicPayment (1..1) // CommonPeriodicPayment (1..1) to use CommonPeriodicPayment after DSL fix
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if fixedRateLeg1 exists
+            then periodicPaymentLeg1 -> fixedRatePaymentFrequencyPeriod exists
+
+func PaymentFrequencyPeriodLeg2Fixed_Validation: <"Payment frequency leg 2, DTCC_ASIC_BR_1069_01 & DTCC_MAS_BR_0121_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        fixedRateLeg2 Max11Number (1..1)
+        assetClass CommonAssetClass (1..1)
+        contractType CommonContractType (1..1)
+        periodicPaymentLeg2 cde.payment.PeriodicPayment (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+                and [CommonContractType -> FRAS, CommonContractType -> OPTN, CommonContractType -> SWAP, CommonContractType -> SWPT, CommonContractType -> OTHR] any = contractType
+        then if fixedRateLeg2 exists
+            then periodicPaymentLeg2 -> fixedRatePaymentFrequencyPeriod exists
+
+func OtherPaymentAmount_Validation: <"Other payment amount Condition. DTCC_ASIC_BR_1074_01	& DTCC_MAS_BR_0128_01">
+    inputs:
+        otherPayment cde.payment.OtherPayment (0..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if otherPayment -> paymentType exists
+        then otherPayment -> amount exists
+                and (if otherPayment -> amount count <> otherPayment -> paymentType count
+                            or otherPayment -> amount count
+                                <> otherPayment -> currency count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> date count
+                            or otherPayment -> amount count <> otherPayment -> payer count
+                            or otherPayment -> amount count
+                                <> otherPayment -> receiver count
+                    then False)
+
+func OtherPaymentType_01A_Validation: <"Other payment type Condition - DTCC_ASIC_BR_1075_01 & DTCC_MAS_BR_0127_01">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        otherPayment cde.payment.OtherPayment (0..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CURR, CommonAssetClass -> COMM, CommonAssetClass -> EQUI] any = assetClass
+                and (otherPayment -> amount exists or otherPayment -> currency exists or otherPayment -> payer exists or otherPayment -> receiver exists)
+        then otherPayment -> paymentType exists
+                and (if otherPayment -> paymentType count <> otherPayment -> amount count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> currency count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> date count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> payer count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> receiver count
+                    then False)
+
+func OtherPaymentCurrency_Validation: <"DTCC_ASIC_BR_1076_01 & DTCC_MAS_BR_0129_01">
+    inputs:
+        otherPayment cde.payment.OtherPayment (1..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if otherPayment -> amount exists and otherPayment -> amount all <> 0
+        then otherPayment -> currency exists
+                and [ISOCurrencyCodeEnum -> XAG, ISOCurrencyCodeEnum -> XAU, ISOCurrencyCodeEnum -> XBA, ISOCurrencyCodeEnum -> XBB, ISOCurrencyCodeEnum -> XBC, ISOCurrencyCodeEnum -> XBD, ISOCurrencyCodeEnum -> XDR, ISOCurrencyCodeEnum -> XPD, ISOCurrencyCodeEnum -> XPT, ISOCurrencyCodeEnum -> XTS, ISOCurrencyCodeEnum -> XXX] <> otherPayment -> currency
+                and (if otherPayment -> currency count <> otherPayment -> amount count
+                            or otherPayment -> currency count
+                                <> otherPayment -> paymentType count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> date count
+                            or otherPayment -> currency count <> otherPayment -> payer count
+                            or otherPayment -> currency count
+                                <> otherPayment -> receiver count
+                    then False)
+
+func OtherPaymentPayer_Validation: <"Other payment payer condition - DTCC_ASIC_BR_1078_01 & DTCC_MAS_BR_0130_01">
+    inputs:
+        otherPayment cde.payment.OtherPayment (1..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if otherPayment -> amount exists and otherPayment -> amount all <> 0
+        then otherPayment -> payer exists
+                and (if otherPayment -> payer count <> otherPayment -> amount count
+                            or otherPayment -> payer count
+                                <> otherPayment -> paymentType count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> date count
+                            or otherPayment -> payer count <> otherPayment -> currency count
+                            or otherPayment -> payer count <> otherPayment -> receiver count
+                    then False)
+
+func OtherPaymentReceiver_Validation: <"Other payment receiver condition - DTCC_ASIC_BR_1079_01 & DTCC_MAS_BR_0131_01">
+    inputs:
+        otherPayment cde.payment.OtherPayment (1..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if otherPayment -> amount exists
+        then otherPayment -> receiver exists
+        else if (otherPayment -> amount count <> otherPayment -> paymentType count and otherPayment -> paymentType count <> otherPayment -> currency count and otherPayment -> currency count <> otherPayment -> date count and otherPayment -> payer count <> otherPayment -> receiver count)
+        then False
+
+func OtherPaymentDate_Validation:
+    inputs:
+        otherPayment cde.payment.OtherPayment (1..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if otherPayment -> amount exists
+        then otherPayment -> date exists
+        else if otherPayment -> date count <> otherPayment -> amount count
+                or otherPayment -> date count <> otherPayment -> paymentType count
+                or otherPayment -> date count <> otherPayment -> currency count
+                or otherPayment -> date count <> otherPayment -> payer count
+                or otherPayment -> date count <> otherPayment -> receiver count
+        then False
+
+func DayCountConvLeg1Fixed_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        fixedRateLeg1 Max11Number (1..1)
+        periodicPaymentLeg1 cde.payment.PeriodicPayment (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if fixedRateLeg1 exists
+            then periodicPaymentLeg1 -> fixedRateDayCountConvention exists
+
+func DayCountConvLeg2Fixed_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        fixedRateLeg2 Max11Number (1..1)
+        periodicPaymentLeg2 cde.payment.PeriodicPayment (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CRDT, CommonAssetClass -> EQUI, CommonAssetClass -> COMM] any = assetClass
+        then if fixedRateLeg2 exists
+            then periodicPaymentLeg2 -> fixedRateDayCountConvention exists
+
+func OtherPaymentType_01B_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        otherPayment cde.payment.OtherPayment (1..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if actionType = ActionTypeEnum -> TERM
+                and [CommonAssetClass -> INTR, CommonAssetClass -> CURR, CommonAssetClass -> COMM, CommonAssetClass -> EQUI] any = assetClass
+                and (otherPayment -> amount exists or otherPayment -> currency exists or otherPayment -> payer exists or otherPayment -> receiver exists)
+        then otherPayment -> paymentType exists
+                and otherPayment -> paymentType all = PaymentType4Code -> UWIN
+                and (if otherPayment -> paymentType count <> otherPayment -> amount count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> currency count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> date count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> payer count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> receiver count
+                    then False)
+
+func OtherPaymentType_02A_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        otherPayment cde.payment.OtherPayment (1..*)
+        fixedRateLeg1 Max11Number (1..1)
+        fixedRateLeg2 Max11Number (1..1)
+        spreadLeg1 cde.price.PriceFormat (1..1)
+        spreadLeg2 cde.price.PriceFormat (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CRDT
+        then if (actionType = ActionTypeEnum -> NEWT
+                    and fixedRateLeg1 is absent
+                    and fixedRateLeg2 is absent
+                    and spreadLeg1 is absent
+                    and spreadLeg2 is absent)
+            then otherPayment -> paymentType any = UFRO
+            else if (otherPayment -> amount count <> otherPayment -> paymentType count and otherPayment -> paymentType count <> otherPayment -> currency count and otherPayment -> currency count <> otherPayment -> date count and otherPayment -> payer count <> otherPayment -> receiver count)
+            then False
+
+func OtherPaymentType_02B_Validation:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        otherPayment cde.payment.OtherPayment (1..*)
+    output:
+        result boolean (0..1)
+    set result:
+        if ActionTypeEnum -> TERM = actionType
+                and assetClass = CommonAssetClass -> CRDT
+                and (otherPayment -> amount exists
+                    or otherPayment -> currency exists
+                    or otherPayment -> payer exists
+                    or otherPayment -> receiver exists)
+        then otherPayment -> paymentType exists
+                and otherPayment -> paymentType all = PaymentType4Code -> UWIN
+                and (if otherPayment -> paymentType count <> otherPayment -> amount count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> currency count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> date count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> payer count
+                            or otherPayment -> paymentType count
+                                <> otherPayment -> receiver count
+                    then False)
+
+func PeriodicPaymentToCommonPeriodicPayment:
+    inputs:
+        periodicPayment cde.payment.PeriodicPayment (1..1)
+    output:
+        commonPeriodicPayment CommonPeriodicPayment (1..1)
+
+    set commonPeriodicPayment:
+        CommonPeriodicPayment {
+            fixedRateDayCountConvention: periodicPayment -> fixedRateDayCountConvention,
+            floatingRateDayCountConvention: periodicPayment -> floatingRateDayCountConvention,
+            fixedRatePaymentFrequencyPeriod: periodicPayment -> fixedRatePaymentFrequencyPeriod,
+            floatingRatePaymentFrequencyPeriod: periodicPayment -> floatingRatePaymentFrequencyPeriod,
+            fixedRatePaymentFrequencyPeriodMultiplier: periodicPayment -> fixedRatePaymentFrequencyPeriodMultiplier,
+            floatingRatePaymentFrequencyPeriodMultiplier: periodicPayment -> floatingRatePaymentFrequencyPeriodMultiplier,
+            ...
+        }
+
+func CallCurrency_Validationn:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        callAmount ShortFraction5DecimalNumber (1..1)
+        callCurrency ISOCurrencyCodeEnum (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+        then if callAmount exists then callCurrency exists
+
+func PutCurrency_Validationn:
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        assetClass CommonAssetClass (1..1)
+        putAmount ShortFraction5DecimalNumber (1..1)
+        putCurrency ISOCurrencyCodeEnum (1..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and assetClass = CommonAssetClass -> CURR
+        then if putAmount exists then putCurrency exists

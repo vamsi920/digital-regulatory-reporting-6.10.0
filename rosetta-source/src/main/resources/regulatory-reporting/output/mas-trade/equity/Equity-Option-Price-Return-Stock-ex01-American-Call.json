@@ -1,0 +1,60 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "OPTL",
+  "direction1" : "BYER",
+  "effectiveDate" : "2001-07-13",
+  "eventTimestamp" : "2001-07-13T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2001-07-13T16:20:47Z",
+  "expirationDate" : "2005-09-27",
+  "finalContractualSettlementDate" : "2005-09-27",
+  "firstExerciseDate" : "2001-07-13",
+  "leg1" : {
+    "notionalAmount" : 4800000,
+    "notionalCurrency" : "EUR",
+    "notionalQuantity" : 150000,
+    "quantityUnitOfMeasure" : "SHAS",
+    "totalNotionalQuantity" : 150000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "OptionExerciseStyle" : "AMER",
+          "OptionType" : "CALL"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 405000,
+  "optionPremiumCurrency" : "EUR",
+  "optionStyle" : "AMER",
+  "optionType" : "CALL",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingSpecifiedPerson" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 32
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "underlyingIdOther" : "STM-FP",
+  "underlyingIdOtherSource" : "Other",
+  "underlyingIdentificationType" : "O",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER02R17E16C15I14R13P12N11O10I9T8P7O6"
+}

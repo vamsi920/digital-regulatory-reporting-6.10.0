@@ -1,0 +1,53 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2022-02-10T05:42:21Z",
+  "confirmed" : "ECNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CSDS" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "DUMMYLEI123456789001",
+  "counterparty2" : "DUMMYLEI123456789002",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2022-02-14",
+  "entityResponsibleForReporting" : "DUMMYLEI123456789001",
+  "eventDate" : "2022-02-10",
+  "eventType" : "ALOC",
+  "executionTimestamp" : "2022-02-10T05:42:21Z",
+  "intragroup" : false,
+  "leg1" : {
+    "notionalAmount" : 90000,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "SOFR",
+      "floatingRateReferencePeriod" : "DAIL",
+      "floatingRateReferencePeriodMultiplier" : 1
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SEBPXX",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI123456789001",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYPORTFOLIOSWA03",
+  "venueOfExecution" : "XXXX"
+}

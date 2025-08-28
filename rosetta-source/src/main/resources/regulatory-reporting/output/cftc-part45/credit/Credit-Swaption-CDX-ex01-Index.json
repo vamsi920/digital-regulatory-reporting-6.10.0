@@ -1,0 +1,75 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "549300CWK6F65W566G32",
+  "cftcGuidebook" : {
+    "assetClass" : "Credit",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "maturityDateOfTheUnderlier" : "2025-12-20",
+    "messageType" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "PUTO",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "PHYS"
+  },
+  "cleared" : "N",
+  "counterparty1" : "549300CWK6F65W566G32",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "549300V2LQD6SX1WIG70",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2022-03-08",
+  "eventIdentifier" : "D93BC6C9BAF65828E0538CB0CC0A0450",
+  "eventTimestamp" : "2022-03-08T13:46:04Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-03-08T13:43:55Z",
+  "expirationDate" : "2022-03-25",
+  "finalContractualSettlementDate" : "2025-12-20",
+  "firstExerciseDate" : "2022-03-25",
+  "indexFactor" : 0.01,
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 23434,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2022-03-11",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "549300CWK6F65W566G32",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "549300V2LQD6SX1WIG70",
+  "strikePrice" : {
+    "decimal" : 0.01
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "CREDITSWAPTIONCDXE04"
+}

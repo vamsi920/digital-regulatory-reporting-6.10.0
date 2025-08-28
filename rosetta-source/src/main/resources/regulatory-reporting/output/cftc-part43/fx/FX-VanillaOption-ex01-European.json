@@ -1,0 +1,77 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "callAmount" : 19500000,
+  "callCurrency" : "USD",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "RR3QWICWWIPCS8A4S074",
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2015-02-03",
+  "eventTimestamp" : "2015-02-03T13:26:29Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.822,
+  "exchangeRateBasis" : "USD/CHF",
+  "executionTimestamp" : "2015-02-03T13:26:29Z",
+  "expirationDate" : "2019-02-01",
+  "firstExerciseDate" : "2019-02-01",
+  "leg1" : {
+    "notionalAmount" : 16029000,
+    "notionalCurrency" : "CHF",
+    "settlementCurrency" : "CHF"
+  },
+  "leg2" : {
+    "notionalAmount" : 19500000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CHF",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 20022222.5,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 16029000,
+  "putCurrency" : "CHF",
+  "reportSubmittingEntityID" : "RR3QWICWWIPCS8A4S074",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 0.822
+  },
+  "strikePriceCurrency" : "USD/CHF",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

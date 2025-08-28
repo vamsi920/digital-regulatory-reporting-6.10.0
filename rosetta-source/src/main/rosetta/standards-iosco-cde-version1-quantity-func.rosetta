@@ -1,0 +1,201 @@
+namespace drr.standards.iosco.cde.version1.quantity
+version "${project.version}"
+
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.quantity.*
+
+func NotionalAmountLeg1:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        notionalAmountLeg1 number (0..1)
+    set notionalAmountLeg1:
+        GetProductForQuantity(transactionReportInstruction)
+            then extract
+                PayoutLeg1(
+                        item -> product,
+                        item -> tradeLot only-element,
+                        transactionReportInstruction -> reportableInformation
+                    )
+            then extract
+                (if NotionalLeg -> value = 0
+                        and Qualify_AssetClass_ForeignExchange(
+                                EconomicTermsForProduct(
+                                        ProductForEvent(transactionReportInstruction)
+                                    )
+                            )
+                then defaultValue
+                else NotionalLeg -> value)
+            then FormatToNonNegativeShortFraction5DecimalNumber
+
+func NotionalAmountLeg2:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        notionalAmountLeg2 number (0..1)
+    set notionalAmountLeg2:
+        GetProductForQuantity(transactionReportInstruction)
+            then extract
+                PayoutLeg2(
+                        item -> product,
+                        item -> tradeLot only-element,
+                        transactionReportInstruction -> reportableInformation
+                    )
+            then extract
+                (if NotionalLeg -> value = 0
+                        and Qualify_AssetClass_ForeignExchange(
+                                EconomicTermsForProduct(
+                                        ProductForEvent(transactionReportInstruction)
+                                    )
+                            )
+                then defaultValue
+                else NotionalLeg -> value)
+            then FormatToNonNegativeShortFraction5DecimalNumber
+
+func TotalNotionalQuantityLeg1:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        totalTotalNotionalQuantityLeg1 number (0..1)
+    set totalTotalNotionalQuantityLeg1:
+        TradeForEvent(transactionReportInstruction)
+            then filter IsEquity(ProductForTrade) or IsCommodity(ProductForTrade)
+            then extract
+                (if IsEquity(ProductForTrade)
+                then EquityTotalNotionalQuantity(tradableProduct)
+                else if IsCommoditySwapFloatFloat(ProductForTrade)
+                then CommodityTotalNotionalQuantity(CommodityLeg1(ProductForTrade))
+                else if IsSingleCommodityPayoutProduct(ProductForTrade)
+                        or IsCommodityFloatingPriceForward(ProductForTrade)
+                then CommodityTotalNotionalQuantity(
+                            EconomicTermsForProduct(ProductForTrade) -> payout -> commodityPayout only-element
+                        )
+                else if IsCommoditySwapFixedFloat(ProductForTrade)
+                then FixedPriceTotalNotionalQuantity(FixedPriceLeg1(ProductForTrade))
+                else if IsCommodityFixedPriceForward(ProductForTrade)
+                then FixedPriceTotalNotionalQuantity(
+                            EconomicTermsForProduct(ProductForTrade) -> payout -> fixedPricePayout only-element
+                        )
+                else if Qualify_Commodity_Swaption(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                        and Qualify_Commodity_Swap_Basis(
+                                UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                            )
+                then CommodityTotalNotionalQuantity(
+                            CommodityLeg1(UnderlierForProduct(ProductForTrade))
+                        )
+                else if Qualify_Commodity_Swaption(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                        and Qualify_Commodity_Swap_FixedFloat(
+                                UnderlierForProduct(ProductForTrade) -> contractualProduct -> economicTerms
+                            )
+                then FixedPriceTotalNotionalQuantity(
+                            FixedPriceLeg1(UnderlierForProduct(ProductForTrade))
+                        )
+                else if Qualify_Commodity_Option(
+                            ProductForTrade -> contractualProduct -> economicTerms
+                        )
+                then OptionTotalNotionalQuantity(
+                            ProductForTrade -> contractualProduct -> economicTerms -> payout -> optionPayout only-element
+                        )) default defaultValue
+            then FormatToShortFraction5DecimalNumber
+
+func TotalNotionalQuantityLeg2:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        totalTotalNotionalQuantityLeg2 number (0..1)
+    set totalTotalNotionalQuantityLeg2:
+        ProductForEvent(transactionReportInstruction)
+            then filter IsEquity or IsCommodity
+            then extract
+                if IsCommoditySwap
+                then CommodityTotalNotionalQuantity(CommodityLeg2) default defaultValue
+                else if IsEquity and InterestRateLeg2 -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+                then (InterestRateLeg2 -> priceQuantity -> quantitySchedule
+                        then extract
+                            if multiplier exists
+                            then value * multiplier -> value
+                            else value
+                        ) default defaultValue
+            then FormatToShortFraction5DecimalNumber
+
+func ExtractCallAmount: <"CDE Call Amount with error value provided as this can differ between jurisdiction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        callAmount number (0..1)
+
+    set callAmount:
+        ProductForTrade(GetTradeForQuantity(transactionReportInstruction))
+            extract
+                if IsCallOption
+                then (if Qualify_Commodity_Option(contractualProduct -> economicTerms)
+                    then CommodityOptionNotional(
+                                contractualProduct -> economicTerms -> payout -> optionPayout only-element
+                            )
+                    else if Qualify_Commodity_Swaption(contractualProduct -> economicTerms)
+                    then CommodityNotional(
+                                FixedPriceLeg1(UnderlierForProduct) -> priceQuantity -> quantitySchedule,
+                                FixedPriceLeg1(UnderlierForProduct) -> fixedPrice -> price
+                            )
+                    // Equity options with monetary quantity schedule
+                    else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> currency exists
+                    then contractualProduct -> economicTerms -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule -> value
+                    // Equity options with non-monetary quantity schedule
+                    else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+                    then contractualProduct -> economicTerms -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule -> value * contractualProduct -> economicTerms -> payout -> optionPayout only-element -> exerciseTerms -> strike -> strikePrice -> value
+                    else if CallQuantity -> value = 0
+                            and Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct)
+                    then defaultValue
+                    else CallQuantity -> value)
+                else if CallQuantity -> value = 0
+                        and Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct)
+                then defaultValue
+                else CallQuantity -> value
+            then FormatToShortFraction5DecimalNumber
+
+func ExtractPutAmount: <"CDE Put Amount with error value provided as this can differ between jurisdiction.">
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        defaultValue number (1..1)
+    output:
+        putAmount number (0..1)
+
+    set putAmount:
+        ProductForTrade(GetTradeForQuantity(transactionReportInstruction))
+            extract
+                if IsPutOption
+                then (if Qualify_Commodity_Option(contractualProduct -> economicTerms)
+                    then CommodityOptionNotional(
+                                contractualProduct -> economicTerms -> payout -> optionPayout only-element
+                            )
+                    else if Qualify_Commodity_Swaption(contractualProduct -> economicTerms)
+                    then CommodityNotional(
+                                FixedPriceLeg1(UnderlierForProduct) -> priceQuantity -> quantitySchedule,
+                                FixedPriceLeg1(UnderlierForProduct) -> fixedPrice -> price
+                            )
+                    // Equity options with monetary quantity schedule
+                    else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> currency exists
+                    then contractualProduct -> economicTerms -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule -> value
+                    // Equity options with non-monetary quantity schedule
+                    else if IsEquityOption and contractualProduct -> economicTerms -> payout -> optionPayout -> priceQuantity -> quantitySchedule -> unit -> financialUnit exists
+                    then contractualProduct -> economicTerms -> payout -> optionPayout only-element -> priceQuantity -> quantitySchedule -> value * contractualProduct -> economicTerms -> payout -> optionPayout only-element -> exerciseTerms -> strike -> strikePrice -> value
+                    else if PutQuantity -> value = 0
+                            and Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct)
+                    then defaultValue
+                    else PutQuantity -> value)
+                else if PutQuantity -> value = 0
+                        and Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct)
+                then defaultValue
+                else PutQuantity -> value
+            then FormatToShortFraction5DecimalNumber

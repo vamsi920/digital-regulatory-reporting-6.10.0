@@ -1,0 +1,14 @@
+{
+  "actionType" : "EROR",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "counterparty1" : "549300K7EEOSKRJDRI19",
+  "counterparty2" : "549300O5MFEP1XJ40B46",
+  "counterparty2IdentifierFormat" : "Lei",
+  "entityResponsibleForReporting" : "549300K7EEOSKRJDRI19",
+  "eventIdentifier" : "X001",
+  "reportSubmittingEntityID" : "549300K7EEOSKRJDRI19",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "HKMA-549300K7EEOSKRJDRI19-549300O5MFEP1XJ40B46-WITHDRAWALERROREXX01",
+  "uniqueTransactionIdentifier" : "WITHDRAWALERROREXX01"
+}

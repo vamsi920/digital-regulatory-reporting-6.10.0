@@ -1,0 +1,57 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "OTHR",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "BYER",
+  "effectiveDate" : "2011-02-04",
+  "entityResponsibleForReporting" : "549300O5MFEP1XJ40B46",
+  "eventIdentifier" : "BANKX001",
+  "eventTimestamp" : "2011-02-04T15:38:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T15:38:00Z",
+  "expirationDate" : "2005-09-27",
+  "leg1" : {
+    "notionalAmount" : 4800000,
+    "notionalCurrency" : "EUR",
+    "notionalQuantity" : 150000,
+    "quantityUnitOfMeasure" : "SHAS",
+    "totalNotionalQuantity" : 150000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "OPTL",
+          "OptionExerciseStyle" : "AMER",
+          "OptionType" : "CALL"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "price" : {
+    "decimal" : 99999999999
+  },
+  "priceNotation" : "Decimal",
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 32
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "underlyingIdOther" : "STM-FP",
+  "underlyingIdOtherSource" : "Other",
+  "underlyingIdentificationType" : "O",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01"
+}

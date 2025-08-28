@@ -1,0 +1,270 @@
+namespace drr.standards.iosco.cde.version2.price
+version "${project.version}"
+
+import cdm.base.*
+import cdm.product.asset.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.base.price.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iosco.cde.version2.* as cdeV2
+
+reporting rule PriceNoFormat from TransactionReportInstruction: <"Price">
+    cdeV1.price.PriceNoFormat
+
+reporting rule Price from TransactionReportInstruction: <"Price">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" dataElement "50" field "Price"
+        provision "Price specified in the OTC derivative transaction. It does not include fees, taxes or commissions.
+        For commodity fixed/float swaps and similar products with periodic payments, this data element refers to the fixed price of the fixed leg(s).
+        For commodity and equity forwards and similar products, this data element refers to the forward price of the underlying or reference asset.
+        For equity swaps, portfolios swaps, and similar products, this data element refers to the initial price of the underlying or reference asset.
+        For contracts for difference and similar products, this data element refers to the initial price of the underlier.
+        This data element is not applicable to:
+            - Interest rate swaps and forward rate agreements, as it is understood that the information included in the data elements Fixed rate and Spread may be interpreted as the price of the transaction.
+            - Interest rate options and interest rate swaptions, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+            - Commodity basis swaps, and the floating leg of the commodity fixed/float swaps, as it is understood that the information included in the data element Spread may be interpreted as the price of the transaction.
+            - Foreign exchange swaps, forwards and options, as it is understood that the information included in the data elements Exchange rate, Strike price, and Option premium may be interpreted as the price of the transaction.
+            - Equity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+            - Credit default swaps and credit total return swaps, as it is understood that the information included in the data elements Fixed rate, Spread and Upfront payment (Other payment type: Upfront payment) may be interpreted as the price of the transaction.
+            - Commodity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction. Where the price is not known when a new transaction is reported, the price is updated as it becomes available.
+        For transactions that are part of a package, this data element contains the price of the component transaction where applicable."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20221117"
+        provision "For Zero Coupon Swaps with a Known Amount, the Known Amount is reported as a Price. The Known Amount is not the notional, as it includes a rolled up interest component by definition."]
+    // IR Zero Coupon Swaps
+    PriceFormatFromNotation(PriceNoFormat, PriceNotation)
+
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "51"
+        provision "Currency in which the price is denominated. Price currency is only applicable if Price notation = 1."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20221117"
+        provision "For Zero Coupon Swaps with a Known Amount, the Known Amount is reported as a Price. The Known Amount is not the notional, as it includes a rolled up interest component by definition."]
+    // IR Zero Coupon Swaps
+    cdeV1.price.PriceCurrency
+
+reporting rule PriceNotation from ReportableEvent: <"Price Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "52"
+        provision "Manner in which the price is expressed."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20221117"
+        provision "For Zero Coupon Swaps with a Known Amount, the Known Amount is reported as a Price. The Known Amount is not the notional, as it includes a rolled up interest component by definition."]
+    // IR Zero Coupon Swaps
+    cdeV1.price.PriceNotation
+
+reporting rule PriceNotationString from TransactionReportInstruction: <"Price Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "52"
+        provision "Manner in which the price is expressed."]
+    cdeV1.price.PriceNotationString
+
+reporting rule PriceUnitOfMeasure from TransactionReportInstruction: <"Price Unit Of Measure">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "53"
+        provision "Unit of measure in which the price is expressed."]
+    cdeV1.price.PriceUnitOfMeasure
+
+reporting rule PriceSchedule from TransactionReportInstruction: <"Price Schedule">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "54.1"
+        provision "Unadjusted effective date of the price"]
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "54.2"
+        provision "Unadjusted end date of the price (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)"]
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "54.3"
+        provision "Price in effect between the unadjusted effective date and unadjusted end date inclusive.
+        Price schedule is only applicable if the price varies per schedule.
+        The currency, notation, and unit of measure for the varying prices in the schedule are reported in Price
+        currency, Price notation, and Price unit of measure data elements."]
+    cdeV1.price.PriceSchedule
+
+reporting rule InterestRateFixedRate from InterestRatePayout: <"Fixed Rate for Interest Rates">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "55"
+        provision "For each leg of the transaction, where applicable: for OTC derivative transactions with periodic payments, per annum rate of the fixed leg(s)."]
+    cdeV1.price.InterestRateFixedRate
+
+reporting rule SpreadLeg1 from TransactionReportInstruction: <"Spread of Leg 1">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "57a"
+        provision "For each leg of the transaction, where applicable: for OTC derivative transactions with periodic payments (eg interest rate fixed/float swaps, interest rate basis swaps         commodity swaps), spread on the individual floating leg(s) index reference price, in the case where there is a spread on a floating leg(s).
+    For example, USD-LIBOR-BBA plus .03 or WTI minus USD 14.65;
+    or
+    difference between the reference prices of the two floating leg indexes. For example, the 9.00 USD Spread for a WCS vs. WTI basis swap where WCS is priced at 43 USD and WTI is priced at 52 US
+    "]
+    cdeV1.price.SpreadLeg1
+
+reporting rule SpreadLeg1NotationEnum from TransactionReportInstruction: <"Spread of Leg 1 Notation Enum">
+    cdeV1.price.SpreadLeg1NotationEnum
+
+reporting rule SpreadLeg1Notation from TransactionReportInstruction: <"Spread of Leg 1 Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "59a"
+        provision "For each leg of the transaction, where applicable: manner in which the spread is expressed."]
+    cdeV1.price.SpreadLeg1Notation
+
+reporting rule SpreadLeg1Currency from TransactionReportInstruction: <"Spread of Leg 1 Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "58a"
+        provision "For each leg of the transaction, where applicable: currency in which the spread is denominated.
+                    This data element is only applicable if Spread notation = 1."]
+    cdeV1.price.SpreadLeg1Currency
+
+reporting rule SpreadLeg2 from TransactionReportInstruction: <"Spread of Leg 2">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "57b"
+        provision "For each leg of the transaction, where applicable: for OTC derivative transactions with periodic payments (eg interest rate fixed/float swaps, interest rate basis swaps commodity swaps), spread on the individual floating leg(s) index reference price, in the case where there is a spread on a floating leg(s).
+    For example, USD-LIBOR-BBA plus .03 or WTI minus USD 14.65;
+    or
+    difference between the reference prices of the two floating leg indexes. For example, the 9.00 USD Spread for a WCS vs. WTI basis swap where WCS is priced at 43 USD and WTI is priced at 52 US
+    "]
+    cdeV1.price.SpreadLeg2
+
+reporting rule SpreadLeg2NotationEnum from TransactionReportInstruction: <"Spread of Leg 2 Notation Enum">
+    cdeV1.price.SpreadLeg2NotationEnum
+
+reporting rule SpreadLeg2Notation from TransactionReportInstruction: <"Spread of Leg 2 Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "57b"
+        provision "For each leg of the transaction, where applicable: manner in which the spread is expressed."]
+    cdeV1.price.SpreadLeg2Notation
+
+reporting rule SpreadLeg2Currency from TransactionReportInstruction: <"Spread of Leg 2 Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "58a"
+        provision "For each leg of the transaction, where applicable: currency in which the spread is denominated.
+                    This data element is only applicable if Spread notation = 1."]
+    cdeV1.price.SpreadLeg2Currency
+
+reporting rule Spread_InterestRate from InterestRatePayout: <"Spread (from InterestRatePayout)">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "57"
+        provision "For each leg of the transaction, where applicable: for OTC derivative transactions with periodic payments (eg interest rate fixed/float swaps, interest rate basis swaps, commodity swaps), spread on the individual floating leg(s) index reference price, in the case where there is a spread on a floating leg(s). For example, USD-LIBOR-BBA plus .03 or WTI minus USD 14.65; or difference between the reference prices of the two floating leg indexes. For example, the 9.00 USD Spread for a WCS vs. WTI basis swap where WCS is priced at 43 USD and WTI is priced at 52 USD."]
+    cdeV1.price.Spread_InterestRate
+
+reporting rule Spread_Commodity from CommodityPayout: <"Spread (from CommodityPayout)">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "57"
+        provision "For each leg of the transaction, where applicable: for OTC derivative transactions with periodic payments (eg interest rate fixed/float swaps, interest rate basis swaps, commodity swaps), spread on the individual floating leg(s) index reference price, in the case where there is a spread on a floating leg(s). For example, USD-LIBOR-BBA plus .03 or WTI minus USD 14.65; or difference between the reference prices of the two floating leg indexes. For example, the 9.00 USD Spread for a WCS vs. WTI basis swap where WCS is priced at 43 USD and WTI is priced at 52 USD."]
+    cdeV1.price.Spread_Commodity
+
+reporting rule StrikePriceNoFormat from TransactionReportInstruction: <"Strike Price">
+    cdeV1.price.StrikePriceNoFormat
+
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike Price">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "60"
+        provision "For options other than FX options, swaptions and similar products, price at which the owner of an option can buy or sell the underlying asset of the option. For foreign exchange options, exchange rate at which the option can be exercised, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426.Where the strike price is not known when a new transaction is reported, the strike price is updated as it becomes available.  For volatility and variance swaps and similar products the volatility strike price is reported in this data element."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220615"
+        provision "For variance swaps, the volatility strike price can be included as part of the product in CDM. The assumption in DRR is that volatility strike price must be reported for variance swaps."]
+    PriceFormatFromNotation(StrikePriceNoFormat, StrikePriceNotationEnum)
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike Price Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "62"
+        provision "Manner in which the Strike price is expressed."]
+    cdeV1.price.StrikePriceNotation
+
+reporting rule StrikePriceNotationEnum from TransactionReportInstruction: <"Strike Price Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "62"
+        provision "Manner in which the Strike price is expressed."]
+    cdeV1.price.StrikePriceNotationEnum
+
+reporting rule StrikePriceCurrency from TransactionReportInstruction: <"Strike price currency/currency pair">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "61"
+        provision "For equity options, commodity options, and similar products, currency in which the strike price is denominated. For foreign exchange options: Currency pair and order in which the strike price is expressed. It is expressed as unit currency/quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency, USD 1 = EUR 0.9426 Strike price currency/currency pair is only applicable if Strike price notation = 1."]
+    cdeV1.price.StrikePriceCurrency
+
+reporting rule StrikePriceSchedule from TransactionReportInstruction: <"Strike price schedule">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "63.1"
+        provision "Unadjusted effective date of the strike price"]
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "63.2"
+        provision "Unadjusted end date of the strike price (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)"]
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "63.3"
+        provision "Strike price in effect between the unadjusted effective date and unadjusted end date inclusive.
+        Strike price schedule is only applicable if the strike price varies per schedule.
+        The currency for the varying strike prices in the schedule is reported in Strike price currency data element"]
+    cdeV1.price.StrikePriceSchedule
+
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option Premium Amount">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "64"
+        provision "For options and swaptions of all asset classes, monetary amount paid by the option buyer. This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230717"
+        provision "Members agreed to report the premium specific to each event, but for lifecycle events unrelated to a change in premium, the previously reported premium and payment date will be persisted."]
+    cdeV1.price.OptionPremiumAmount
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction: <"Option Premium Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "65"
+        provision "For options and swaptions of all asset classes, currency in which the option premium amount is denominated. This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230717"
+        provision "Members agreed to report the premium specific to each event, but for lifecycle events unrelated to a change in premium, the previously reported premium and payment date will be persisted."]
+    cdeV1.price.OptionPremiumCurrency
+
+reporting rule OptionPremiumPaymentDate from TransactionReportInstruction: <"Option Premium Payment Date">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "66"
+        provision "Unadjusted date on which the option premium is paid."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230717"
+        provision "Members agreed to report the premium specific to each event, but for lifecycle events unrelated to a change in premium, the previously reported premium and payment date will be persisted."]
+    cdeV1.price.OptionPremiumPaymentDate
+
+reporting rule FirstExerciseDate from TransactionReportInstruction: <"First Exercise Date">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "67"
+        provision "First unadjusted date during the exercise period in which an option can be exercised.
+			For European-style options, this date is same as the Expiration date. For American-style options,
+			the first possible exercise date is the unadjusted date included in the execution timestamp.
+			For knock-in options, where the first exercise date is not known when a new transaction is
+			reported, the first exercise date is updated as it becomes available.
+			This data element is not applicable if the instrument is not an option or does not embed any
+			optionality."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    cdeV1.price.FirstExerciseDate
+
+reporting rule ExchangeRate from TransactionReportInstruction: <"Exchange Rate">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "68"
+        provision "Exchange rate between the two different currencies specified in the OTC derivative transaction agreed by the counterparties at the inception of the transaction, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426."]
+    cdeV1.price.ExchangeRate
+
+reporting rule ExchangeRateBasis from TransactionReportInstruction: <"Exchange Rate Basis">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "69"
+        provision "Currency pair and order in which the exchange rate is denominated, expressed as unit currency/quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency, USD 1 = EUR 0.9426."]
+    [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+        provision "Per CDE definition 0.9426 EUR (CDM unitOfAmount) per 1 USD (CDM perUnitOfAmount) should be expressed as USD/EUR"]
+    cdeV1.price.ExchangeRateBasis
+
+reporting rule PackageTransactionPriceNoFormat from TransactionReportInstruction: <"Packages Price">
+    cdeV1.price.PackageTransactionPriceNoFormat
+
+reporting rule PackageTransactionPrice from TransactionReportInstruction: <"Packages Price">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "90"
+        provision "Traded price of the entire package in which the reported derivative transaction is a component. This data element is not applicable if no package is involved, or package transaction spread is used. Prices and related data elements of the transactions (P Price currency, Price notation, Price unit of measure) that represent individual components of the package are reported when available. The package transaction price may not be known when a new transaction is reported but may be updated later."]
+    PriceFormatFromNotation(
+            PackageTransactionPriceNoFormat,
+            PackageTransactionPriceNotationEnum
+        )
+
+reporting rule PackageTransactionPriceCurrency from TransactionReportInstruction: <"Packages Price Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "91"
+        provision "Currency in which the Package transaction price is denominated. This data element is not applicable if no package is involved, or Package transaction spread is used, or Package transaction price notation = 2 , or = 3"]
+    cdeV1.price.PackageTransactionPriceCurrency
+
+reporting rule PackageTransactionPriceNotationEnum from TransactionReportInstruction: <"Packages Price Notation Enum">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "92"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if no package is involved, or Package transaction spread is used"]
+    cdeV1.price.PackageTransactionPriceNotationEnum
+
+reporting rule PackageTransactionPriceNotation from TransactionReportInstruction: <"Packages Price Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "92"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if no package is involved, or Package transaction spread is used"]
+    cdeV1.price.PackageTransactionPriceNotation
+
+reporting rule PackageTransactionSpreadNoFormat from TransactionReportInstruction: <"Package Transaction Spread">
+    cdeV1.price.PackageTransactionSpreadNoFormat
+
+reporting rule PackageTransactionSpread from TransactionReportInstruction: <"Packages Spread">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "93"
+        provision "Traded price of the entire package in which the reported derivative transaction is a component of a package transaction. Package transaction price when the price of the package is expressed as a spread, difference between two reference prices. This data element is not applicable if no package is involved, or Package transaction price is used. Spread and related data elements of the transactions (spread currency, Spread notation) that represent individual components of the package are reported when available. Package transaction spread may not be known when a new transaction is reported but may be updated later."]
+    PriceFormatFromNotation(
+            PackageTransactionSpreadNoFormat,
+            PackageTransactionSpreadNotationEnum
+        )
+
+reporting rule PackageTransactionSpreadCurrency from TransactionReportInstruction: <"Packages Spread Currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "94"
+        provision "Currency in which the Package transaction spread is denominated. This data element is not applicable if no package is involved, or Package transaction price is used, or Package transaction spread notation = 2, or = 3 or = 4"]
+    cdeV1.price.PackageTransactionSpreadCurrency
+
+reporting rule PackageTransactionSpreadNotationEnum from TransactionReportInstruction: <"Packages Price Notation Enum">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "95"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if no package is involved, or Package transaction spread is used"]
+    cdeV1.price.PackageTransactionSpreadNotationEnum
+
+reporting rule PackageTransactionSpreadNotation from TransactionReportInstruction: <"Packages Price Notation">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "95"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if no package is involved, or Package transaction spread is used"]
+    cdeV1.price.PackageTransactionSpreadNotation

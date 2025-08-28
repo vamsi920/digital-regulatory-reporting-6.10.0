@@ -1,0 +1,65 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2" : "254900QEE322YIK4P067",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "SI17764828466sz33wbbkr6u3664g4adt2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "GGDZP1UYGU9STUHRDP48",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXNDFEXXMLXXXXXXXX01",
+    "tradeParty2ExecutionAgentID" : "2549007904V5LEBO0B08",
+    "tradeParty2ExecutionAgentIDType" : "LEI",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2019-01-31",
+  "eventTimestamp" : "2019-01-31T08:56:02Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1111.11,
+  "exchangeRateBasis" : "USD/KRW",
+  "executionTimestamp" : "2019-01-31T08:56:02Z",
+  "expirationDate" : "2019-03-20",
+  "leg1" : {
+    "fixingDate" : "2019-03-18T00:00:00Z",
+    "notionalAmount" : 3763000000,
+    "notionalCurrency" : "KRW",
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "notionalAmount" : 38999950.3,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "KRW",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "reportSubmittingEntityID" : "GGDZP1UYGU9STUHRDP48",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXNDFEXXMLXXXXXXXX02"
+}

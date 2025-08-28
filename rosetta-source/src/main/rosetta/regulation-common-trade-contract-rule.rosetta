@@ -1,0 +1,203 @@
+namespace drr.regulation.common.trade.contract
+version "${project.version}"
+
+import cdm.legaldocumentation.common.*
+import cdm.legaldocumentation.master.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+reporting rule AssetClass from ReportableEvent: <"Asset class">
+    extract ProductForEvent
+    then extract
+        if Qualify_AssetClass_InterestRate(EconomicTermsForProduct)
+        then CommonAssetClass -> INTR
+        else if Qualify_AssetClass_Credit(EconomicTermsForProduct)
+        then CRDT
+        else if Qualify_AssetClass_Equity(EconomicTermsForProduct)
+        then EQUI
+        else if Qualify_AssetClass_Commodity(EconomicTermsForProduct) or IsSingleCommodityPayoutProduct
+        then COMM
+        else if Qualify_AssetClass_ForeignExchange(EconomicTermsForProduct)
+        then CURR
+
+reporting rule ContractType from TransactionReportInstruction: <"Contract type">
+    GetContractType
+
+reporting rule OptionType from TransactionReportInstruction: <"Option Type">
+    extract ProductForEvent
+    then extract
+        if IsPutOption or IsFloor
+        then OptionTypeCode -> PUTO
+        else if IsCallOption or IsCap
+        then OptionTypeCode -> CALL
+        else if IsOption
+        then OptionTypeCode -> OTHR
+
+reporting rule OptionStyle from TransactionReportInstruction: <"Option Style">
+    extract ProductForEvent
+    then extract
+        if (EconomicTermsForProduct -> payout -> optionPayout only-element -> exerciseTerms -> strike -> averagingStrikeFeature exists
+                or EconomicTermsForProduct -> payout -> optionPayout only-element -> feature -> averagingFeature exists)
+        then OptionStyleEnum -> ASIA
+        else if IsFloor or IsCap
+        then OptionStyleEnum -> EURO
+        else if IsOption
+        then (EconomicTermsForProduct -> payout -> optionPayout only-element -> exerciseTerms -> optionStyle
+            extract
+                if americanExercise exists
+                then OptionStyleEnum -> AMER
+                else if europeanExercise exists
+                then OptionStyleEnum -> EURO
+                else if bermudaExercise exists
+                then OptionStyleEnum -> BERM)
+
+reporting rule DeliveryType from TransactionReportInstruction:
+    extract ProductForEvent
+    then extract DeliveryTypeForProducts
+
+reporting rule EmbeddedOptionType from TransactionReportInstruction: <"Embedded option type">
+    extract TradeForEvent
+    then extract tradableProduct -> product -> contractualProduct -> economicTerms
+    then extract
+        if terminationProvision -> extendibleProvision only exists
+        then EmbeddedOptionTypeEnum -> EXTD
+        else if terminationProvision -> cancelableProvision only exists
+        then EmbeddedOptionTypeEnum -> CANC
+        else if terminationProvision -> earlyTerminationProvision only exists
+                and terminationProvision -> earlyTerminationProvision -> optionalEarlyTermination only exists
+        then EmbeddedOptionTypeEnum -> OPET
+        else if terminationProvision -> earlyTerminationProvision only exists
+                and terminationProvision -> earlyTerminationProvision -> mandatoryEarlyTermination only exists
+        then EmbeddedOptionTypeEnum -> MDET
+        else if terminationProvision -> extendibleProvision exists
+                or terminationProvision -> cancelableProvision exists
+                or terminationProvision -> earlyTerminationProvision exists
+        then EmbeddedOptionTypeEnum -> OTHR
+
+reporting rule MasterAgreementType from TransactionReportInstruction: <"Master Agreement type">
+    extract
+        (if TradeForEvent exists
+        then TradeForEvent -> contractDetails
+        else if PositionForEvent exists
+        then PositionForEvent -> contractDetails)
+    then extract documentation
+    then filter
+        legalAgreementIdentification -> agreementName -> agreementType = MasterAgreement
+    then only-element
+    then extract legalAgreementIdentification -> agreementName
+    then extract
+        if masterAgreementType = ISDAMaster
+        then MasterAgreementEnum -> ISDA
+        else if masterAgreementType = ISDAFIA_CDEA
+        then CDEA
+        else if masterAgreementType = EMA
+        then EUMA
+        else if masterAgreementType = FBF
+        then FMAT
+        else if masterAgreementType = German
+        then DERV
+        else if masterAgreementType = CMOF
+        then CMOP
+        else if masterAgreementType = Swiss
+        then CHMA
+        else if masterAgreementType = EFETElectricity
+        then EFMA
+        else if masterAgreementType = EFETGas
+        then EFMA
+        else if masterAgreementType = GMRA
+        then GMRA
+        else if masterAgreementType = GMSLA
+        then GMSL
+        else if masterAgreementType = Bespoke
+        then BIAG
+        else if masterAgreementType = ISDAIIFM_TMA
+        then IDMA
+        else OTHR
+
+//      TO DO: check full list to confirm if others need code other than OTHR
+reporting rule OtherMasterAgreementType from TransactionReportInstruction: <"Other master agreement type">
+    extract
+        (if TradeForEvent exists
+        then TradeForEvent -> contractDetails
+        else if PositionForEvent exists
+        then PositionForEvent -> contractDetails)
+    then extract documentation
+    then filter
+        legalAgreementIdentification -> agreementName -> agreementType = LegalAgreementTypeEnum -> MasterAgreement
+    then only-element
+    then extract legalAgreementIdentification -> agreementName
+    then extract
+        if masterAgreementType = MasterAgreementTypeEnum -> AFB
+        then "AFBMAForFXAndDerivativesTransactions"
+        else if masterAgreementType = MasterAgreementTypeEnum -> CMA
+        then "ClearingMA"
+        else if masterAgreementType = MasterAgreementTypeEnum -> IFEMA
+        then "InternationalForeignExchangeMA"
+        else if masterAgreementType = MasterAgreementTypeEnum -> IFEOMA
+        then "InternationalForeignExchangeAndOptionsMA"
+        else if masterAgreementType = MasterAgreementTypeEnum -> ICOM
+        then "InternationalCurrencyOptionsMarketMA"
+        else if masterAgreementType = MasterAgreementTypeEnum -> JSCC
+        then "MasterAgreementOfJapanSecuritiesClearingCorp"
+        else if masterAgreementType = MasterAgreementTypeEnum -> EEIPower
+        then "EEIMasterPowerPurchaseAndSaleAgreement"
+        else if masterAgreementType = MasterAgreementTypeEnum -> GTMA
+        then "FOAGridTradeMasterAgreement"
+        else if masterAgreementType = MasterAgreementTypeEnum -> GasEDI
+        then "GasEDIBaseCntrctShortTermSaleAndPurNatGas"
+        else if masterAgreementType = MasterAgreementTypeEnum -> IETA_ERPA
+        then "IntlEmissionTAEmissionReductionPurchaseAgrmt"
+        else if masterAgreementType = MasterAgreementTypeEnum -> IETA_ETMA
+        then "IntlEmissionsTradingAssocEmissionsTradingMA"
+        else if masterAgreementType = MasterAgreementTypeEnum -> IETA_IETMA
+        then "IntlEmissionsTradingAssocAndTradingMA"
+        else if masterAgreementType = MasterAgreementTypeEnum -> LBMA
+        then "IntlBullionMATermsByTheLdnBullionMktAssoc"
+        else if masterAgreementType = MasterAgreementTypeEnum -> LEAP
+        then "LeadershipInEnergyAutomatedProcessing"
+        else if masterAgreementType = MasterAgreementTypeEnum -> MCPSA
+        then "CTAMasterCoalPurchaseAndSalesAgreement"
+        else if masterAgreementType = MasterAgreementTypeEnum -> NAESBGas
+        then "NAESBBaseContractSaleAndPurchaseOfNaturalGas"
+        else if masterAgreementType = MasterAgreementTypeEnum -> NBP
+        then "ShortTermFlatNBPTradingTermsAndConditions"
+        else if masterAgreementType = MasterAgreementTypeEnum -> RussianDerivatives
+        then "StdDocForDerivTxnsOnTheRussianFinMarkets"
+        else if masterAgreementType = MasterAgreementTypeEnum -> RussianRepo
+        then "MAForRepurchaseAgreementOnTheRussianFinMkt"
+        else if masterAgreementType = MasterAgreementTypeEnum -> SCoTA
+        then "globalCOALStandardCoalTradingAgreement"
+        else if masterAgreementType = MasterAgreementTypeEnum -> TTF
+        then "TTFHubNaturalGasTradingTermsAndConditions"
+        else if masterAgreementType = MasterAgreementTypeEnum -> ZBT
+        then "ZeebruggeHubNaturalGasTradingTandC"
+        else otherAgreement
+
+reporting rule MasterAgreementVersion from TransactionReportInstruction: <"Master Agreement version">
+    extract TradeForEvent
+    then extract contractDetails -> documentation
+    then filter
+        legalAgreementIdentification -> agreementName -> agreementType = MasterAgreement
+    then only-element
+    then extract legalAgreementIdentification -> vintage
+
+reporting rule NonStandardizedTermIndicator from TransactionReportInstruction: <"Non-standardized Term Indicator">
+    extract TradeForEvent
+    then extract ProductForTrade
+    then extract
+        if contractualProduct -> economicTerms -> nonStandardisedTerms exists
+        then contractualProduct -> economicTerms -> nonStandardisedTerms
+        else False
+
+reporting rule UnderlyingAssetType from TransactionReportInstruction: <"Underlying Asset Type (non-reportable)">
+    extract
+        if IsUnderlyingAssetTypeFixedFixed
+        then "Fixed_Fixed"
+        else if Qualify_CreditDefaultSwap_IndexTranche(
+                    EconomicTermsForProduct(ProductForEvent)
+                )
+        then "Index_Tranche"
+        else if IsUnderlyingAssetTypeIndex
+        then "Index"

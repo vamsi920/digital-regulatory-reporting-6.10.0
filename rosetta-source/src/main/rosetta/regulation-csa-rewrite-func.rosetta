@@ -1,0 +1,126 @@
+namespace drr.regulation.csa.rewrite
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+func GetUnderlierIDForIndexCSA: <"Extracts the index identifier of the underlier.">
+    inputs:
+        product Product (1..1)
+    output:
+        indexId string (0..*)
+
+    add indexId:
+        if UnderlierForProduct(product) -> index exists
+        then UnderlierForProduct(product) -> index -> productIdentifier -> identifier
+        else if EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> index exists
+        then EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> index -> productIdentifier -> identifier
+        else if EconomicTermsForProduct(product) -> payout -> optionPayout -> underlier -> index exists
+        then EconomicTermsForProduct(product) -> payout -> optionPayout -> underlier -> index -> productIdentifier -> identifier
+        else if EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId
+        else if EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId
+
+func IsUnderlierForIndex: <"Checks whether the index identifier of the underlier exists.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        result boolean (0..1)
+
+    set result:
+        ProductForEvent(reportableEvent)
+            then extract
+                (if IsCreditSwaption
+                then UnderlierForProduct
+                else item)
+            then extract
+                (if GetUnderlierIDForIndexCSA exists
+                then True
+                else False)
+
+func GetUnderlierIDForBasketCSA: <"Extracts the basket identifier of the underlier.">
+    inputs:
+        product Product (1..1)
+    output:
+        basketId string (0..*)
+
+    add basketId:
+        if UnderlierForProduct(product) -> basket exists
+        then UnderlierForProduct(product) -> basket -> productIdentifier -> identifier
+        else if EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> basket exists
+        then EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> basket -> productIdentifier -> identifier
+        else if EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> basketId
+        else if EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> basketId
+
+func GetUnderlierLEIForCreditCSA: <"Extracts the LEI of a credit.">
+    inputs:
+        product Product (1..1)
+    output:
+        lei string (0..*)
+
+    add lei:
+        if EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceEntity -> entityId exists
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceEntity -> entityId
+        else if EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceEntity -> entityId exists
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceEntity -> entityId
+
+func CSALegEnrichment: <"Converts the default value to the decimal one required by the regulator of CSA.">
+    inputs:
+        legEnrichment trade.CommonLeg (1..1)
+        quantityUnitOfMeasure Max4Text (0..1)
+        underlierIDOther Max350AlphaNumericTextAllSplChars (0..1)
+        underlierIDOtherSource string (0..1)
+        underlyingAssetTradingPlatformIdentifier Max4Text (0..1)
+        underlyingAssetPriceSource Max50AlphaNumericText (0..1)
+        cryptoAssetUnderlyingIndicator boolean (0..1)
+        payerIdentifier Min20Max72AlphaNumericText (0..1)
+        receiverIdentifier Min20Max72AlphaNumericText (0..1)
+        settlementLocation ISOCountryCodeEnum (0..1)
+        commodityUnderlyerID string (0..1)
+        commodityInstrumentID string (0..1)
+        floatingRateIndex string (0..1)
+    output:
+        csaEnrichedLeg trade.CSALeg (1..1)
+
+    set csaEnrichedLeg -> periodicPayment: legEnrichment -> periodicPayment
+    set csaEnrichedLeg -> notionalAmountSchedule: legEnrichment -> notionalAmountSchedule
+    set csaEnrichedLeg -> notionalQuantitySchedule:
+        legEnrichment -> notionalQuantitySchedule
+    set csaEnrichedLeg -> notionalCurrency: legEnrichment -> notionalCurrency
+
+    set csaEnrichedLeg -> fixedRate: legEnrichment -> fixedRate
+    set csaEnrichedLeg -> settlementCurrency: legEnrichment -> settlementCurrency
+    set csaEnrichedLeg -> spread: legEnrichment -> spread
+    set csaEnrichedLeg -> spreadNotation: legEnrichment -> spreadNotation
+    set csaEnrichedLeg -> spreadCurrency: legEnrichment -> spreadCurrency
+    set csaEnrichedLeg -> direction2: empty
+
+    set csaEnrichedLeg -> notionalQuantity: legEnrichment -> notionalQuantity
+    set csaEnrichedLeg -> fixingDate: legEnrichment -> fixingDate
+    set csaEnrichedLeg -> quantityFrequency: legEnrichment -> quantityFrequency
+    set csaEnrichedLeg -> quantityFrequencyMultiplier:
+        legEnrichment -> quantityFrequencyMultiplier
+    set csaEnrichedLeg -> payerIdentifier: payerIdentifier
+    set csaEnrichedLeg -> receiverIdentifier: receiverIdentifier
+    set csaEnrichedLeg -> settlementLocation: settlementLocation
+
+    set csaEnrichedLeg -> underlierIDOther: underlierIDOther
+    set csaEnrichedLeg -> underlierIDOtherSource: underlierIDOtherSource
+    set csaEnrichedLeg -> underlyingAssetTradingPlatformIdentifier:
+        underlyingAssetTradingPlatformIdentifier
+    set csaEnrichedLeg -> cryptoAssetUnderlyingIndicator: cryptoAssetUnderlyingIndicator
+    set csaEnrichedLeg -> quantityUnitOfMeasure: quantityUnitOfMeasure
+
+    set csaEnrichedLeg -> totalNotionalQuantity: legEnrichment -> totalNotionalQuantity
+    set csaEnrichedLeg -> notionalAmount: legEnrichment -> notionalAmount
+
+    set csaEnrichedLeg -> commodityUnderlyerID: commodityUnderlyerID
+    set csaEnrichedLeg -> commodityInstrumentID: commodityInstrumentID
+    set csaEnrichedLeg -> floatingRateIndex: floatingRateIndex

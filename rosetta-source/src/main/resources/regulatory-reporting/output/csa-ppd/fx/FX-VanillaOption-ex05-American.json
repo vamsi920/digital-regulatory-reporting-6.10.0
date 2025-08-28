@@ -1,0 +1,72 @@
+{
+  "actionType" : "NEWT",
+  "callAmount" : 100,
+  "callCurrency" : "EUR",
+  "cleared" : "N",
+  "counterparty1" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2" : "W22LROWP2IHZNBB6K528",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "envuatuatExt1c7b35f7cf35543d3a181a69cb15ee8f22024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "MXKQVM4U1OHBQWFPG196",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2020-11-18",
+  "eventTimestamp" : "2020-11-18T14:13:20Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1.1,
+  "exchangeRateBasis" : "EUR/USD",
+  "executionTimestamp" : "2020-11-18T14:12:30Z",
+  "expirationDate" : "2020-11-20",
+  "firstExerciseDate" : "2020-11-18",
+  "leg1" : {
+    "notionalAmount" : 100,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "notionalAmount" : 110,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "AMER",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 500,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "putAmount" : 110,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "MXKQVM4U1OHBQWFPG196",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 1.1
+  },
+  "strikePriceCurrency" : "EUR/USD",
+  "strikePriceNotation" : "Monetary"
+}

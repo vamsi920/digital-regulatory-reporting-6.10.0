@@ -1,0 +1,86 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "DUMMY0000000000LEI02",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "dc14950bba834b9395eee132efe00bed2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "Call",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "O-:OPT:OPT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2021-06-21",
+  "eventIdentifier" : "dc14950bba834b9395eee132efe00bed",
+  "eventTimestamp" : "2021-06-21T21:28:54.2885611Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-06-21T21:26:47Z",
+  "expirationDate" : "2023-06-21",
+  "finalContractualSettlementDate" : "2023-06-21",
+  "firstExerciseDate" : "2023-06-21",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "commodityInstrumentID" : "ELECTRICITY PJM-EASTERN HUB-REAL TIME",
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 1400001.2858,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 5347.19,
+    "quantityFrequency" : "EXPI",
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 5347.19
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "UnderlierID" : "ELECTRICITY PJM-EASTERN HUB-REAL TIME",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 57960,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2021-06-23",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI01",
+  "strikePrice" : {
+    "monetary" : 261.82
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONIND01"
+}

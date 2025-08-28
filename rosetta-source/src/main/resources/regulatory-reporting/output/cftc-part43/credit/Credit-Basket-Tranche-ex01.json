@@ -1,0 +1,65 @@
+{
+  "actionType" : "NEWT",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "Credit",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "mandatoryClearingIndicator" : false,
+    "messageType" : "RT",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "213800H14XVWOV87OI72",
+  "counterparty2" : "I7331LVCZKQKX5T7XV54",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : true,
+  "effectiveDate" : "2004-03-23",
+  "eventTimestamp" : "2004-01-24T04:36:35-08:00",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2015-01-24T16:20:47Z",
+  "expirationDate" : "2014-03-20",
+  "leg1" : {
+    "fixedRate" : 0.006,
+    "notionalAmount" : 25000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A008",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    },
+    "settlementCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "Underlying" : {
+            "UnderlierID" : "US0089ABC985",
+            "UnderlierIDSource" : "ISIN"
+          }
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XNAS",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "213800H14XVWOV87OI72",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "CREDITBASKETTRANCH01"
+}

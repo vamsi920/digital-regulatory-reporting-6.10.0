@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-mas-valuation",
+  "name" : "MAS / Valuation",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.mas.rewrite.valuation.reports.MASValuationReportFunction",
+    "inputType" : "drr.regulation.common.ValuationReportInstruction",
+    "outputType" : "drr.regulation.mas.rewrite.valuation.MASValuationReport"
+  }
+}

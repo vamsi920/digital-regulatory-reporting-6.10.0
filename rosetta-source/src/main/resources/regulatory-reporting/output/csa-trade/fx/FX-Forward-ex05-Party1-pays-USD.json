@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "envuatuatExt10f8072af860547f9b07204d954b089b22024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "ForeignExchange",
+    "secondaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "W22LROWP2IHZNBB6K528",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXFORWARDEXPARTYPA01",
+    "tradeParty2ExecutionAgentID" : "FOR8UP27PHTHYVLBNG30",
+    "tradeParty2ExecutionAgentIDType" : "LEI",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-11-09",
+  "eventIdentifier" : "envuatuatExt10f8072af860547f9b07204d954b089b2",
+  "eventTimestamp" : "2020-11-09T04:28:05Z",
+  "eventType" : "ALOC",
+  "exchangeRate" : 1.25,
+  "exchangeRateBasis" : "USD/EUR",
+  "executionTimestamp" : "2020-11-09T16:28:05Z",
+  "expirationDate" : "2020-12-23",
+  "finalContractualSettlementDate" : "2020-12-23",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 125,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "MXKQVM4U1OHBQWFPG196",
+    "receiverIdentifier" : "W22LROWP2IHZNBB6K528",
+    "underlierIDOther" : "EUR",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "leg2" : {
+    "notionalAmount" : 100,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "W22LROWP2IHZNBB6K528",
+    "receiverIdentifier" : "MXKQVM4U1OHBQWFPG196",
+    "underlierIDOther" : "USD",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

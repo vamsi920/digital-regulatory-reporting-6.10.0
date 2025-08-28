@@ -1,0 +1,102 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "TESTLEIINFBS00000002",
+  "counterparty2" : "TESTLEIINFBS00000001",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "DTDApproved2380083603EMIRRiskNewNewInterest2024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "InterestRate",
+    "submittedForParty" : "TESTLEIINFBS00000002",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2021-03-11",
+  "eventIdentifier" : "DTDApproved2380083603EMIRRiskNewNewInterest",
+  "eventTimestamp" : "2021-03-09T13:13:23Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-09T13:12:38Z",
+  "expirationDate" : "2031-03-11",
+  "finalContractualSettlementDate" : "2031-03-11",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "TESTLEIINFBS00000002",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "receiverIdentifier" : "TESTLEIINFBS00000001",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 6
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "notionalAmount" : 15000000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "TESTLEIINFBS00000001",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "DAIL"
+    },
+    "receiverIdentifier" : "TESTLEIINFBS00000002",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "basis" : 1
+    },
+    "spreadNotation" : "Basis"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "NotionalCurrency" : "USD",
+          "NotionalSchedule" : "Constant",
+          "OtherLegReferenceRateTermUnit" : "DAYS",
+          "OtherLegReferenceRateTermValue" : 1,
+          "OtherLegUnderlierID" : "USD-SOFR-COMPOUND",
+          "OtherLegUnderlierIDSource" : "FPML",
+          "ReferenceRateTermUnit" : "DAYS",
+          "ReferenceRateTermValue" : 1,
+          "UnderlierID" : "USD-Federal Funds-H.15",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Basis"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : true,
+  "packageIndicator" : false,
+  "platformIdentifier" : "EGSI",
+  "reportSubmittingEntityID" : "TESTLEIINFBS00000002",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "DUMMYTRADEIDENTIFY01IRSBASISEX01"
+}

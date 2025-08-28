@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-csa-ppd",
+  "name" : "CSA / PPD",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.csa.rewrite.trade.reports.CSAPPDReportFunction",
+    "inputType" : "drr.regulation.common.TransactionReportInstruction",
+    "outputType" : "drr.regulation.csa.rewrite.trade.CSATransactionReport"
+  }
+}

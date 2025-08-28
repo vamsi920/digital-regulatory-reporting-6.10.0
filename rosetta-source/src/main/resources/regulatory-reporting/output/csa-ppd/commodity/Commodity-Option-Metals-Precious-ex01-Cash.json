@@ -1,0 +1,74 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "934b7270fa78493799011af415699b0b2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "Call",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "O-:OPT:OPT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2021-02-25",
+  "eventTimestamp" : "2021-10-18T16:18:41.9999485Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-02-25T13:55:09Z",
+  "expirationDate" : "2022-01-31",
+  "firstExerciseDate" : "2022-01-31",
+  "leg1" : {
+    "commodityInstrumentID" : "GOLD-COMEX",
+    "notionalAmount" : 46494750,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 11750,
+    "quantityFrequency" : "EXPI",
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 11750
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "UnderlierID" : "GOLD-COMEX",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 777850,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 3957
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONMET01"
+}

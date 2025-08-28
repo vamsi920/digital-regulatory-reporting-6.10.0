@@ -1,0 +1,73 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2017-01-01",
+  "eventTimestamp" : "2020-11-16T00:00:00Z",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2017-12-31",
+  "finalContractualSettlementDate" : "2017-12-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 3184100,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 84000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "BARL",
+    "totalNotionalQuantity" : 1700000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 3184100,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 84000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "BARL",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 1700000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "OIL-WTI-PLATTS MARKETWIRE",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "price" : {
+    "monetary" : 1.873
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "BARL",
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingSpecifiedPerson" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPENERG02"
+}

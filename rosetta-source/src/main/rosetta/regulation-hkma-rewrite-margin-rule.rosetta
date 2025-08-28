@@ -1,0 +1,378 @@
+namespace drr.regulation.hkma.rewrite.margin
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.math.*
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.*
+import drr.regulation.common.*
+import drr.regulation.hkma.*
+import drr.regulation.hkma.rewrite.trade.* as hkmaTrade
+import drr.standards.*
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iso.*
+
+corpus Dissemination Margin
+
+corpus Dissemination DTCC_Harmonized
+
+report HKMA Margin in T+1
+  	from CollateralReportInstruction
+  	when ReportableProduct
+  	with type HKMAMarginReport
+
+eligibility rule ReportableProduct from CollateralReportInstruction: <"When eligible for HKMA">
+    [regulatoryReference HKMA Margin
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+reporting rule ReportingTimestamp from CollateralReportInstruction: <"Reporting Timestamp">
+    [regulatoryReference HKMA Margin dataElement "4" field "Reporting Timestamp"
+        provision "Date and time when the contract was reported to the trade repository."]
+    Now
+        as "4 Reporting timestamp"
+
+reporting rule Counterparty1 from CollateralReportInstruction: <"Counterparty 1">
+    [regulatoryReference HKMA Margin dataElement "6" field "Counterparty 1"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question.
+In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty."]
+    extract PartyLei(reportingSide -> reportingParty -> partyId)
+        as "6 Counterparty 1"
+
+reporting rule Counterparty2 from CollateralReportInstruction: <"Counterparty 2">
+    [regulatoryReference HKMA Margin dataElement "7" field "Counterparty 2"
+        provision "Identifier of the second counterparty to an OTC derivative transaction.
+
+        For Party ID SWIFTBIC and BRN, party should input the first eight digits only. 
+        e.g. SwiftBIC: HKMAHKHHXXX should be inputted as HKMAHKHH
+            BRN: 12345678 - 000 - 04 - 11 - A should be inputted as 12345678.
+
+        For Party ID CICR, party should input all character(s) and digits.
+        e.g. For Local company (CI): Seven digits such as 9999999 .
+            For Non-local company (CR): Character(s) plus seven digits 
+                such as X9999999 or XX9999999.
+        "]
+    extract
+        PartyLeiAndPersonByRoles(
+                reportingSide -> reportingCounterparty,
+                reportingSide -> reportingParty
+            )
+        as "7 Counterparty 2"
+
+reporting rule Counterparty2Name from CollateralReportInstruction: <"Counterparty 2 name">
+    [regulatoryReference HKMA Margin dataElement "8" field "Counterparty 2 name"
+        provision "If the identifier reported for Counterparty 2 is not an LEI, or SWIFTBIC, the legal name of Counterparty 2."]
+    extract reportingSide -> reportingCounterparty
+    then filter
+        partyId -> identifierType all <> PartyIdentifierTypeEnum -> LEI
+            and partyId -> identifier all <> "ANON"
+    then extract name
+        as "8 Counterparty 2 name"
+
+reporting rule Counterparty2IdentifierTypeIndicator from CollateralReportInstruction: <"Counterparty 2 identifier type indicator">
+    [regulatoryReference HKMA Margin dataElement "9" field "Counterparty 2 identifier type indicator"
+        provision "Indicator of whether LEI was used to identify the Counterparty 2."]
+    extract reportingSide -> reportingCounterparty
+    then extract
+        if partyId -> identifierType only-element = PartyIdentifierTypeEnum -> LEI
+        then True
+        else False
+        as "9 Counterparty 2 identifier type indicator"
+
+reporting rule CollateralPortfolioIndicator from CollateralReportInstruction: <"Collateral portfolio indicator">
+    [regulatoryReference HKMA Margin dataElement "38" field "Collateral portfolio indicator"
+        provision "Indicator of whether the collateralisation was performed on a portfolio basis, if applicable. By on a portfolio basis, it is meant a set of transactions that are margined together (either on a net or a gross basis) contrary to the scenario where the margin is calculated and posted for each individual transaction separately."]
+    extract collateralDetails -> collateral -> portfolioIdentifier exists
+        as "38 Collateral portfolio indicator"
+
+reporting rule InitialMarginPostedByTheReportingCounterparty1PreHaircut from CollateralReportInstruction: <"Initial margin posted by the counterparty 1 (pre-haircut)">
+    [regulatoryReference HKMA Margin dataElement "39" field "Initial margin posted by the counterparty 1 (pre-haircut)"
+        provision "Monetary value of initial margin that has been posted by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. If the collateralisation is performed at portfolio level, the initial margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin posted relates to such single transaction. This refers to the total current value of the initial margin, rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include default fund contributions, nor collateral posted against liquidity provisions to the central counterparty, i.e. committed credit lines. If the initial margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.InitialMarginPostedByReportingCounterpartyPreHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "39 Initial margin posted by the reporting counterparty 1 (pre-haircut)"
+
+reporting rule InitialMarginPostedByTheReportingCounterparty1PostHaircut from CollateralReportInstruction: <"Initial margin posted by the counterparty 1 (post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "40" field "Initial margin posted by the counterparty 1 (post-haircut)"
+        provision "Monetary value of initial margin that has been posted by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. If the collateralisation is performed at portfolio level, the initial margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin posted relates to such single transaction. This refers to the total current value of the initial margin after application of the haircut (if applicable), rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include default fund contributions, nor collateral posted against liquidity provisions to the central counterparty, i.e. committed credit lines. If the initial margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.InitialMarginPostedByReportingCounterpartyPostHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "40 Initial margin posted by the counterparty 1 (post-haircut)"
+
+reporting rule CurrencyOfInitialMarginPosted from CollateralReportInstruction: <"Currency of initial margin posted (pre-haircut/post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "41" field "Currency of initial margin posted (pre-haircut/post-haircut)"
+        provision "Currency in which the initial margin posted (pre-haircut/post-haircut) is denominated, if applicable. If the initial margin posted is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of posted initial margins."]
+    extract
+        cde.collateral.InitialMarginPostedByReportingCounterpartyCurrency(
+                item,
+                reportingSide -> reportingParty
+            )
+        as "41 Currency of initial margin posted (pre-haircut/post-haircut)"
+
+reporting rule InitialMarginCollectedByTheReportingCounterparty1PreHaircut from CollateralReportInstruction: <"Initial margin collected by the counterparty 1 (pre-haircut)">
+    [regulatoryReference HKMA Margin dataElement "42" field "Initial margin collected by the counterparty 1 (pre-haircut)"
+        provision "Monetary value of initial margin that has been collected by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. If the collateralisation is performed at portfolio level, the initial margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin collected relates to such single transaction. This refers to the total current value of the initial margin, rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include collateral collected by the central counterparty as part of its investment activity. If the initial margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.InitialMarginCollectedByReportingCounterpartyPreHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "42 Initial margin collected by the counterparty 1 (pre-haircut)"
+
+reporting rule InitialMarginCollectedByTheReportingCounterparty1PostHaircut from CollateralReportInstruction: <"Initial margin collected by the counterparty 1 (post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "43" field "Initial margin collected by the counterparty 1 (post-haircut)"
+        provision "Monetary value of initial margin that has been collected by the reporting counterparty, including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements. If the collateralisation is performed at portfolio level, the initial margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the initial margin collected relates to such single transaction. This refers to the total current value of the initial margin after application of the haircut (if applicable), rather than to its daily change. The data element refers both to uncleared and centrally cleared transactions. For centrally cleared transactions, the data element does not include collateral collected by the central counterparty as part of its investment activity. If the initial margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    cde.collateral.InitialMarginCollectedByReportingCounterpartyPostHaircut(
+            item,
+            reportingSide -> reportingParty
+        )
+        then extract RoundToPrecision(item, 5, Nearest)
+        as "43 Initial margin collected by the counterparty 1 (post-haircut)"
+
+reporting rule CurrencyOfInitialMarginCollected from CollateralReportInstruction: <"Currency of initial margin collected (pre-haircut/post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "44" field "Currency of initial margin collected (pre-haircut/post-haircut)"
+        provision "Currency in which the initial margin collected (pre-haircut/post-haircut) is denominated, if applicable. If the initial margin collected is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of collected initial margins."]
+    extract
+        cde.collateral.InitialMarginCollectedByReportingCounterpartyCurrency(
+                item,
+                reportingSide -> reportingParty
+            )
+        as "44 Currency of initial margin collected (pre-haircut/post-haircut)"
+
+reporting rule VariationMarginPostedByTheReportingCounterparty1PreHaircut from CollateralReportInstruction: <"Variation margin posted by the counterparty 1 (pre-haircut)">
+    [regulatoryReference HKMA Margin dataElement "45" field "Variation margin posted by the counterparty 1 (pre-haircut)"
+        provision "Monetary value of the variation margin posted by the reporting counterparty (including the cash-settled one), and including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. Contingent variation margin is not included. If the collateralisation is performed at portfolio level, the variation margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the variation margin posted relates to such single transaction. This data element refers to the total current value of the variation margin, cumulated since the first reporting of variation margins posted for the portfolio/transaction. If the variation margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.VariationMarginPostedByReportingCounterpartyPreHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "45 Variation margin posted by the counterparty 1 (pre-haircut)"
+
+reporting rule VariationMarginPostedByTheReportingCounterparty1PostHaircut from CollateralReportInstruction: <"Variation margin posted by the counterparty 1 (post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "46" field "Variation margin posted by the counterparty 1 (post-haircut)"
+        provision "Monetary value of the variation margin posted by the reporting counterparty (including the cash-settled one), and including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. Contingent variation margin is not included. If the collateralisation is performed at portfolio level, the variation margin posted relates to the whole portfolio; if the collateralisation is performed for single transactions, the variation margin posted relates to such single transaction. This data element refers to the total current value of the variation margin after application of the haircut (if applicable), cumulated since the first reporting of posted variation margins for the portfolio/transaction. If the variation margin posted is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.VariationMarginPostedByReportingCounterpartyPostHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "46 Variation margin posted by the counterparty 1 (post-haircut)"
+
+reporting rule CurrencyOfVariationMarginPosted from CollateralReportInstruction: <"Currency of variation margin posted (pre-haircut/post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "47" field "Currency of variation margin posted (pre-haircut/post-haircut)"
+        provision "Currency in which the variation margin posted (pre-haircut/post-haircut) is denominated, if applicable. If the variation margin posted is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of posted variation margins."]
+    extract
+        cde.collateral.VariationMarginPostedByReportingCounterpartyCurrency(
+                item,
+                reportingSide -> reportingParty
+            )
+        as "47 Currency of variation margin posted (pre-haircut/post-haircut)"
+
+reporting rule VariationMarginCollectedByTheReportingCounterparty1PreHaircut from CollateralReportInstruction: <"Variation margin collected by the counterparty 1 (pre-haircut)">
+    [regulatoryReference HKMA Margin dataElement "48" field "Variation margin collected by the counterparty 1 (pre-haircut)"
+        provision "Monetary value of the variation margin collected by the reporting counterparty (including the cash- settled one), and including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. Contingent variation margin is not included. If the collateralisation is performed at portfolio level, the variation margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the variation margin collected relates to such single transaction. This refers to the total current value of the variation margin, cumulated since the first reporting of collected variation margins for the portfolio/transaction. If the variation margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.VariationMarginCollectedByReportingCounterpartyPreHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "48 Variation margin collected by the counterparty 1 (pre-haircut)"
+
+reporting rule VariationMarginCollectedByTheReportingCounterparty1PostHaircut from CollateralReportInstruction: <"Variation margin collected by the counterparty 1 (post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "49" field "Variation margin collected by the counterparty 1 (post-haircut)"
+        provision "Monetary value of the variation margin collected by the reporting counterparty (including the cash- settled one), and including any margin that is in transit and pending settlement unless inclusion of such margin is not allowed under the jurisdictional requirements, if applicable. Contingent variation margin is not included. If the collateralisation is performed at portfolio level, the variation margin collected relates to the whole portfolio; if the collateralisation is performed for single transactions, the variation margin collected relates to such single transaction. This refers to the total current value of the variation margin collected after application of the haircut (if applicable), cumulated since the first reporting of collected variation margins for the portfolio/transaction. If the variation margin collected is denominated in more than one currency, those amounts are converted into a single currency chosen by the reporting counterparty and reported as one total value."]
+    extract
+        cde.collateral.VariationMarginCollectedByReportingCounterpartyPostHaircut(
+                item,
+                reportingSide -> reportingParty
+            )
+    then extract RoundToPrecision(item, 5, Nearest)
+        as "49 Variation margin collected by the counterparty 1 (post-haircut)"
+
+reporting rule CurrencyOfVariationMarginCollected from CollateralReportInstruction: <"Currency of variation margin collected (pre-haircut/post-haircut)">
+    [regulatoryReference HKMA Margin dataElement "50" field "Currency of variation margin collected (pre-haircut/post-haircut)"
+        provision "Currency in which the variation margin collected (pre-haircut/post-haircut) is denominated, if applicable. If the variation margin collected is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of collected variation margins."]
+    extract
+        cde.collateral.VariationMarginCollectedByReportingCounterpartyCurrency(
+                item,
+                reportingSide -> reportingParty
+            )
+        as "50  Currency of variation margin collected (pre-haircut/post-haircut)"
+
+reporting rule ExcessCollateralPostedByTheCounterparty1 from CollateralReportInstruction: <"Excess Collateral Posted By The Counterparty 1">
+    [regulatoryReference HKMA Margin dataElement "51" field "Excess collateral posted by the counterparty 1"
+        provision "Monetary value of any additional collateral posted by the reporting counterparty separate and independent from initial and variation margin. This refers to the total current value of the excess collateral before application of the haircut (if applicable), rather than to its daily change. Any initial or variation margin amount posted that exceeds the required initial margin or required variation margin, is reported as part of the initial margin posted or variation margin posted respectively rather than included as excess collateral posted. For centrally cleared transactions, excess collateral is reported only to the extent it can be assigned to a specific portfolio or transaction."]
+    cde.collateral.ExcessCollateralPostedByTheReportingCounterparty
+        then extract RoundToPrecision(item, 5, RoundingDirectionEnum -> Nearest)
+        as "51 Excess collateral posted by the counterparty 1"
+
+reporting rule CurrencyOfExcessCollateralPosted from CollateralReportInstruction: <"Currency of excess collateral posted">
+    [regulatoryReference HKMA Margin dataElement "52" field "Currency of excess collateral posted"
+        provision "Currency in which the excess collateral posted is denominated, if applicable. If the excess collateral posted is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of posted excess collateral."]
+    cde.collateral.CurrencyOfExcessCollateralPosted
+        as "52 Currency of excess collateral posted"
+
+reporting rule ExcessCollateralCollectedByTheCounterparty1 from CollateralReportInstruction: <"Excess Collateral Collected By The Counterparty 1">
+    [regulatoryReference HKMA Margin dataElement "53" field "Excess collateral collected by the counterparty 1"
+        provision "Monetary value of any additional collateral collected by the reporting counterparty separate and independent from initial and variation margin. This data element refers to the total current value of the excess collateral before application of the haircut (if applicable), rather than to its daily change. Any initial or variation margin amount collected that exceeds the required initial margin or required variation margin, is reported as part of the initial margin collected or variation margin collected respectively, rather than included as excess collateral collected. For centrally cleared transactions excess collateral is reported only to the extent it can be assigned to a specific portfolio or transaction."]
+    cde.collateral.ExcessCollateralCollectedByTheReportingCounterparty
+        then extract RoundToPrecision(item, 5, RoundingDirectionEnum -> Nearest)
+        as "53 Excess collateral collected by the counterparty 1"
+
+reporting rule CurrencyOfExcessCollateralCollected from CollateralReportInstruction: <"Currency Of Excess Collateral Collected">
+    [regulatoryReference HKMA Margin dataElement "54" field "Currency of excess collateral collected"
+        provision "Currency in which the excess collateral collected is denominated, if applicable. If the excess collateral is denominated in more than one currency, this data element reflects one of those currencies into which the reporting counterparty has chosen to convert all the values of collected excess collateral."]
+    cde.collateral.CurrencyOfExcessCollateralCollected
+        as "54 Currency of excess collateral collected"
+
+reporting rule CollateralisationCategory from CollateralReportInstruction: <"Collateralisation category">
+    [regulatoryReference HKMA Margin dataElement "55" field "Collateralisation category"
+        provision "Indicator of whether a collateral agreement (or collateral agreements) between the counterparties exists (uncollateralised/partially collateralised/one-way collateralised/fully collateralised), if applicable. This data element is provided for each transaction or each portfolio, depending on whether the collateralisation is performed at the transaction or portfolio level, and is applicable to both cleared and uncleared transactions."]
+    extract
+        item -> collateralDetails -> collateralisationCategory to-enum CollateralisationType3Code__1
+        as "55 Collateralisation category"
+
+reporting rule ActionType from CollateralReportInstruction: <"Action type">
+    [regulatoryReference HKMA Margin dataElement "134" field "Action type"
+        provision "Type of action taken on the transaction or type of end-of-day reporting."]
+    extract
+        if collateralDetails -> action = MarginActionEnum -> MARU
+        then collateralDetails -> action
+        as "134 Action type"
+
+reporting rule EventTimestamp from CollateralReportInstruction: <"Event Timestamp">
+    [regulatoryReference HKMA Margin dataElement "136" field "Event Timestamp"
+        provision "Date and time of occurrence of the event. In the case of a modification agreed for a future date, this data element should reflect the date, the modification occurs (becomes effective) and not when it was negotiated. In the case of a correction, this data element should reflect the date and time as of when the correction is applicable. In the case of a clearing event, this data element should reflect the recorded date and time when the alpha transaction is accepted by the central counterparty (CCP) for clearing."]
+    extract collateralDetails -> collateralTimestamp
+        as "136 Event Timestamp"
+
+reporting rule HKMAUniqueTransactionIdentifier from CollateralReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Margin dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017."]
+    extract
+        if GetRegimeSpecificIdentifiers(
+                reportableInformation,
+                SupervisoryBodyEnum -> HKMA,
+                TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            )
+            exists
+        then GetRegimeSpecificIdentifiers(
+                    reportableInformation,
+                    SupervisoryBodyEnum -> HKMA,
+                    TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+                )
+        else item -> collateralDetails -> uniqueTradeIdentifier -> assignedIdentifier -> identifier
+    then distinct
+    then only-element
+
+reporting rule UniqueTransactionIdentifier from CollateralReportInstruction: <"Unique Transaction Identifier (UTI)">
+    [regulatoryReference HKMA Margin dataElement "138" field "Unique Transaction Identifier (UTI)"
+        provision "The unique transaction identifier as described in the Technical Guidance on the Harmonization of the Unique Transaction Identifier published by the Committee on Payments and Market Infrastructures and Board of International Organization of Securities Commissions in February 2017. "]
+    HKMAUniqueTransactionIdentifier then filter IsMax32UpperCaseAlphanumericText = True
+        as "138 Unique Transaction Identifier (UTI)"
+
+reporting rule InitialMarginCollateralPortfolioCode from CollateralReportInstruction: <"Initial margin collateral portfolio code">
+    [regulatoryReference HKMA Margin dataElement "150" field "Initial margin collateral portfolio code"
+        provision "If collateral is reported on a portfolio basis, a unique code assigned by the reporting counterparty to the portfolio that tracks the aggregate initial margin of a set of open swap transactions, if applicable. This data element is not applicable if the collateralisation was performed on a transaction level basis, or if there is no collateral agreement, or if no collateral is posted or received or if only one collateral portfolio of amounts of margin that does not distinguish between margin that is initial margin and margin that is variation margin."]
+    extract collateralDetails -> collateral -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = InitialMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last
+        as "150 Initial margin collateral portfolio code"
+
+reporting rule PortfolioContainingNonReportableComponentIndicator from CollateralReportInstruction: <"Portfolio containing nonreportable component indicator">
+    [regulatoryReference HKMA Margin dataElement "151" field "Portfolio containing nonreportable component indicator"
+        provision "If collateral is reported on a portfolio basis, indicator of whether the collateral portfolio includes swap transactions exempt from reporting., if applicable."]
+    extract item -> reportableInformation -> partyInformation
+    then extract regimeInformation
+    then flatten
+    then filter hkmaTrade.SupervisoryBodyForHKMA any = supervisoryBody
+    then only-element
+    then extract
+        if hkmaPartyInformation -> nonReportedTradePortfolio exists
+        then hkmaPartyInformation -> nonReportedTradePortfolio
+        else False
+        as "151 Portfolio containing non-reportable component indicator"
+
+reporting rule VariationMarginCollateralPortfolioCode from CollateralReportInstruction: <"Variation margin collateral portfolio code">
+    [regulatoryReference HKMA Margin dataElement "152" field "Variation margin collateral portfolio code"
+        provision "If collateral is reported on a portfolio basis, a unique code assigned by the reporting counterparty to the portfolio that tracks the aggregate variation margin related to a set of open swap transactions, if applicable. This data element is not applicable if the collateralisation was performed on a transaction level basis, or if there is no collateral agreement, or if no collateral is posted or received or if only one collateral portfolio of amounts of margin that does not distinguish between margin that is initial margin and margin that is variation margin."]
+    extract collateralDetails -> collateral -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = VariationMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last
+        as "152 Variation margin collateral portfolio code"
+
+reporting rule SubmitterIdentifier from CollateralReportInstruction: <"Submitter Identifier">
+    [regulatoryReference HKMA Margin dataElement "153" field "Submitter Identifier"
+        provision "Identifier of the entity submitting the OTC derivative transaction to the Trade Repository."]
+    extract ExtractReportSubmittingPartyIdentifier(reportingSide)
+        as "153 Submitter identifier"
+
+reporting rule EntityResponsibleForReporting from CollateralReportInstruction: <"Entity responsible for reporting">
+    [regulatoryReference HKMA Margin dataElement "154" field "Entity responsible for reporting"
+        provision "Identification code of the Reporting Party who has the obligation to report the transaction."]
+    extract ExtractPartyResponsibleForReportingIdentifier(reportingSide)
+        as "154 Entity responsible for reporting"
+
+reporting rule CollateralTimestamp from CollateralReportInstruction: <"Collateral timestamp">
+    [regulatoryReference HKMA Margin dataElement "184" field "Collateral timestamp"
+        provision "Date and time of the last margin update. Collateral timestamp reflects the moment in time that reported margin values were current."]
+    extract collateralDetails -> collateralTimestamp
+        as "184 Collateral timestamp"
+
+reporting rule NumberRecords from CollateralReportInstruction: <"Number records">
+    [regulatoryReference HKMA Margin dataElement "199" field "Number records"
+        provision "Indicates the number of trade action in the request file."]
+    empty
+        as "199 Number records"
+
+reporting rule TechnicalRecordId from CollateralReportInstruction: <"Technical record identification">
+    [regulatoryReference HKMA Margin dataElement "200" field "Technical record identification"
+        provision "Unique identifier of a trade action used as part of error management and status advice message."]
+    extract reportableInformation -> partyInformation -> regimeInformation
+    then filter regimeName = RegimeNameEnum -> HKMA
+    then extract technicalRecordId
+    then distinct only-element
+        as "200 Technical record identification"
+
+reporting rule EventDate from CollateralReportInstruction: <"Event date">
+    [regulatoryReference HKMA Margin field "Event date (Non Reportable)"
+        provision "Date on which the reportable event relating to the derivative contract and captured by the report took place. In the case of collateral update - the date for which the information contained in the report is provided."]
+    extract ExtractDateFromDateTime(collateralDetails -> collateralTimestamp)
+        as "Event date (Non Reportable)"
+
+reporting rule Counterparty2IdentifierFormat from CollateralReportInstruction: <"Counterparty 2 Identifier Format">
+    [regulatoryReference HKMA Margin field "Counterparty 2 Identifier Format (Non Reportable)"
+        provision "Determines the identifier format of Counterparty 2 based on role or identifier type"]
+    extract reportInstruction [
+        extract reportingSide -> reportingCounterparty
+        then extract
+            if personRole -> role any = [NaturalPersonRoleEnum -> Buyer, NaturalPersonRoleEnum -> Seller]
+                    only-element
+            then PartyIdentifierFormat2Enum -> NaturalPerson
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+            then PartyIdentifierFormat2Enum -> Lei
+            else if partyId -> identifierType any = PartyIdentifierTypeEnum -> BIC
+            then PartyIdentifierFormat2Enum -> SWIFTBIC
+            else PartyIdentifierFormat2Enum -> Other
+    ]
+        as "Counterparty 2 Identifier Format (Non Reportable)"

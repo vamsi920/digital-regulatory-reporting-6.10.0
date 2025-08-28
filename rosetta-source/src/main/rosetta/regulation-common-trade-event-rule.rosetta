@@ -1,0 +1,60 @@
+namespace drr.regulation.common.trade.event
+version "${project.version}"
+
+import cdm.base.staticdata.party.*
+import cdm.event.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+reporting rule AmendmentIndicator from TransactionReportInstruction: <"Amendment Indicator">
+    extract
+        if IsActionTypeMODI = True
+        then originatingWorkflowStep -> businessEvent
+    then extract
+        if Qualify_PartialNovation = True
+        then True
+        else if intent = Novation
+        then True
+        else if Qualify_PartialTermination = True
+        then True
+        else if intent = Decrease
+        then True
+        else if Qualify_Compression = True
+        then False
+        else if intent = Compression
+        then False
+        else if Qualify_Allocation = True
+        then False
+        else if intent = Allocation
+        then False
+        else if Qualify_Increase = True
+        then True
+        else if intent = Increase
+        then True
+        else if Qualify_Exercise = True
+        then False
+        else if intent = OptionExercise
+        then False
+        else if Qualify_CashTransfer = True
+        then False
+        else if intent = ContractTermsAmendment
+        then True
+        else if Qualify_CorporateActionDetermined
+        then True
+        else if intent = CorporateActionAdjustment
+        then True
+        else if Qualify_CreditEventDetermined
+        then True
+        else if intent = CreditEvent
+        then True
+
+reporting rule TypeOfPTRRTechnique from TransactionReportInstruction: <"Type of PTRR technique">
+    filter IsAllowableAction or IsActionTypeTERM
+    then extract
+        if IsCompressed(originatingWorkflowStep)
+        then (if originatingWorkflowStep -> businessEvent -> instruction -> primitiveInstruction -> execution -> partyRoles -> role any = PartyRoleEnum -> PTRRServiceProvider
+            then RiskReductionTechniqueEnum -> PWAS
+            else PWOS)
+        else if IsPortfolioRebalancing(originatingWorkflowStep)
+        then PRBM

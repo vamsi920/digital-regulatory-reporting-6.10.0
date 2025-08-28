@@ -1,0 +1,224 @@
+namespace drr.standards.iosco.cde.version1.payment
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.datetime.daycount.*
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.observable.asset.*
+import cdm.product.asset.*
+import cdm.product.common.settlement.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.base.payment.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iso.*
+
+reporting rule DayCountConvention from InterestRatePayout: <"Day Count Convention">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "22"
+        provision "For each leg of the transaction, where applicable: day count convention (often also referred to as day count fraction or day count basis or day count method) that determines how interest payments are calculated. It is used to compute the year fraction of the calculation period, and indicates the number of days in the calculation period divided by the number of days in the year.
+        A001 = IC30360ISDAor30360AmericanBasicRule;
+        A002 = IC30365;
+        A003 = IC30Actual;
+        A004 = Actual360;
+        A005 = Actual365Fixed;
+        A006 = ActualActualICMA;
+        A007 = IC30E360orEuroBondBasismodel1;
+        A008 = ActualActualISDA;
+        A009 = Actual365LorActuActubasisRule; 
+        A010 = ActualActualAFB; 
+        A011 = IC30360ICMAor30360basicrule;
+        A012 = IC30E2360orEurobondbasismodel2;
+        A013 = IC30E3360orEurobondbasismodel3;
+        A014 = Actual365NL;
+        A015 = ActualActualUltimo;
+        A016 = IC30EPlus360;
+        A017 = Actual364;
+        A018 = Business252;
+        A019 = Actual360NL;
+        A020 = 1/1;
+        NARR = Narrative"]
+    [regulatoryReference ISDA PeerReviewGroup date "unknown"
+        provision "Additional Day Count Fractions commented out will be inserted back in the model and in the reporting logic once evidence of business use cases and corresponding test data is made available"]
+    [regulatoryReference ISDA PeerReviewGroup date "07202402"
+        provision "It is not an issue to have unrecognizable codes in ISO (i.e. codes we cannot infer from the CDM enum). This is because we do not have a use case for that scenarios. They do not exist, so we will not report them."]
+    if dayCountFraction = DayCountFractionEnum -> _30_360
+    then InterestComputationMethod4Code -> A001
+    else if dayCountFraction = DayCountFractionEnum -> ACT_360
+    then InterestComputationMethod4Code -> A004
+    else if dayCountFraction = DayCountFractionEnum -> ACT_365_FIXED
+    then InterestComputationMethod4Code -> A005
+    else if dayCountFraction = DayCountFractionEnum -> ACT_ACT_ICMA
+    then InterestComputationMethod4Code -> A006
+    else if dayCountFraction = DayCountFractionEnum -> _30E_360_ISDA
+    then InterestComputationMethod4Code -> A007
+    else if dayCountFraction = DayCountFractionEnum -> ACT_ACT_ISDA
+    then InterestComputationMethod4Code -> A008
+    else if dayCountFraction = DayCountFractionEnum -> ACT_365L
+    then InterestComputationMethod4Code -> A009
+    else if dayCountFraction = DayCountFractionEnum -> ACT_ACT_AFB
+    then InterestComputationMethod4Code -> A010
+    else if dayCountFraction = DayCountFractionEnum -> _30E_360
+    then InterestComputationMethod4Code -> A011
+    else if dayCountFraction = DayCountFractionEnum -> ACT_ACT_ISMA
+    then InterestComputationMethod4Code -> A015
+    else if dayCountFraction = DayCountFractionEnum -> ACT_364
+    then InterestComputationMethod4Code -> A017
+    else if dayCountFraction = DayCountFractionEnum -> CAL_252
+    then InterestComputationMethod4Code -> A018
+    else if dayCountFraction = DayCountFractionEnum -> _1_1
+    then InterestComputationMethod4Code -> A020
+    else if dayCountFraction exists
+    then InterestComputationMethod4Code -> NARR
+
+reporting rule PaymentFrequencyPeriod from InterestRatePayout: <"Payment Frequency Period">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "23"
+        provision "For each leg of the transaction, where applicable: time unit associated with the frequency of payments, eg day, week, month, year or term of the stream"]
+    if paymentDates -> paymentFrequency -> period exists
+    then (if paymentDates -> paymentFrequency -> period = PeriodExtendedEnum -> C
+        then MapCDEFrequencyPeriod(
+                    calculationPeriodDates -> calculationPeriodFrequency -> period
+                )
+        else MapCDEFrequencyPeriod(paymentDates -> paymentFrequency -> period))
+    else if paymentDates -> paymentFrequency is absent
+            and paymentDates -> paymentDateSchedule exists
+    then FrequencyPeriodEnum -> ADHO
+
+reporting rule PaymentFrequencyPeriodAdjusted from InterestRatePayout: <"Payment Frequency Period">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "23"
+        provision "For each leg of the transaction, where applicable: time unit associated with the frequency of payments, eg day, week, month, year or term of the stream"]
+    if paymentDates -> paymentFrequency -> period exists
+    then (if paymentDates -> paymentFrequency -> period = PeriodExtendedEnum -> C
+        then AdjustPeriod(
+                    MapCDEFrequencyPeriod(
+                            calculationPeriodDates -> calculationPeriodFrequency -> period
+                        ),
+                    PaymentFrequencyPeriodMultiplier
+                )
+        else AdjustPeriod(
+                MapCDEFrequencyPeriod(paymentDates -> paymentFrequency -> period),
+                PaymentFrequencyPeriodMultiplier
+            ))
+    else if paymentDates -> paymentFrequency is absent
+            and paymentDates -> paymentDateSchedule exists
+    then FrequencyPeriodEnum -> ADHO
+
+reporting rule PaymentFrequencyPeriodMultiplier from InterestRatePayout: <"Payment Frequency Period Multiplier">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "24"
+        provision "For each leg of the transaction, where applicable: number of time units (as expressed by the payment frequency period) that determines the frequency at which periodic payment dates occur. For example, a transaction with payments occurring every two months is represented with a payment frequency period of MNTH (monthly) and a payment frequency period multiplier of 2. This data element is not applicable if the payment frequency period is ADHO. If payment frequency period is EXPI, then the payment frequency period multiplier is 1. If the payment frequency is intraday, then the payment frequency period is DAIL and the payment frequency multiplier is 0."]
+    extract paymentDates -> paymentFrequency -> periodMultiplier
+    then FormatToMax3Number
+
+reporting rule PaymentFrequencyPeriodMultiplierAdjusted from InterestRatePayout: <"Payment Frequency Period Multiplier">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "24"
+        provision "For each leg of the transaction, where applicable: number of time units (as expressed by the payment frequency period) that determines the frequency at which periodic payment dates occur. For example, a transaction with payments occurring every two months is represented with a payment frequency period of MNTH (monthly) and a payment frequency period multiplier of 2. This data element is not applicable if the payment frequency period is ADHO. If payment frequency period is EXPI, then the payment frequency period multiplier is 1. If the payment frequency is intraday, then the payment frequency period is DAIL and the payment frequency multiplier is 0."]
+    extract
+        AdjustPeriodMultiplier(
+                PaymentFrequencyPeriod(item),
+                paymentDates -> paymentFrequency -> periodMultiplier
+            )
+    then FormatToMax3Number
+
+reporting rule OtherPaymentAmount from TransferState: <"Other Payment Amount">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "83"
+        provision "Payment  amounts  with  corresponding  payment  types  to  accommodate  requirements  of transaction descriptions from different asset classes."]
+    extract transfer -> quantity -> value
+    then FormatToShortFraction5DecimalNumber
+        as "2.83 Other Payment Amount"
+
+reporting rule OtherPaymentType from TransferState: <"Other Payment Type">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "84"
+        provision "Type of Other payment amount. Option  premium  payment  is  not  included  as  a  payment  type  as  premiums  for  option  are reported using the option premium dedicated data element.
+			UFRO = Upfront Payment, ie the initial payment made by one of the counterparties either to bring a transaction to fair value or for any other reason that may be the cause of an off-market transaction.
+			UWIN = Unwind or Full termination, ie the final settlement payment made when a transaction is unwound prior to its end date; Payments that may result due to full termination of derivative transaction(s)
+			PEXH = Principal Exchange, ie Exchange of notional values for cross-currency swaps"]
+    extract transfer -> transferExpression
+    then extract
+        if priceTransfer = FeeTypeEnum -> Upfront
+        then "UFRO"
+        else if priceTransfer = FeeTypeEnum -> Termination
+        then "UWIN"
+        else if scheduledTransfer -> transferType = ScheduledTransferEnum -> PrincipalPayment
+        then "PEXH"
+        as "2.84 Other Payment Type"
+
+reporting rule OtherPaymentCurrency from TransferState: <"Other Payment Currency">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "85"
+        provision "Currency in which Other payment amount is denominated."]
+    extract transfer -> quantity -> unit -> currency
+    then extract ConvertNonISOToISOCurrency
+        as "2.85 Other Payment Currency"
+
+reporting rule OtherPaymentDate from TransferState: <"Other Payment Date">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "86"
+        provision "Unadjusted date on which the other payment amount is paid."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220811"
+        provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+    extract AdjustableOrAdjustedOrRelativeDateResolution(transfer -> settlementDate)
+        as "2.86 Other Payment Date"
+
+reporting rule OtherPaymentPayer from TransferState: <"Other Payment Payer">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "87"
+        provision "Identifier of the payer of Other payment amount."]
+    extract transfer -> payerReceiver -> payerPartyReference
+    then extract PartyLeiAndPersonByRoles(item, empty)
+        as "2.87 Other Payment Payer"
+
+reporting rule OtherPaymentReceiver from TransferState: <"Other Payment Receiver">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "88"
+        provision "Identifier of the receiver of Other payment amount."]
+    extract transfer -> payerReceiver -> receiverPartyReference
+    then extract PartyLeiAndPersonByRoles(item, empty)
+        as "2.88 Other Payment Receiver"
+
+reporting rule PeriodicPayment from InterestRatePayout:
+    extract
+        PeriodicPayment {
+            fixedRateDayCountConvention: (filter rateSpecification -> fixedRate exists
+            then extract DayCountConvention),
+            floatingRateDayCountConvention: (filter
+                rateSpecification -> floatingRate exists
+                    or rateSpecification -> inflationRate exists
+            then extract DayCountConvention),
+            fixedRatePaymentFrequencyPeriod: (filter rateSpecification -> fixedRate exists
+            then extract PaymentFrequencyPeriod),
+            floatingRatePaymentFrequencyPeriod: (filter
+                rateSpecification -> floatingRate exists
+                    or rateSpecification -> inflationRate exists
+            then extract PaymentFrequencyPeriod),
+            fixedRatePaymentFrequencyPeriodMultiplier: (filter
+                rateSpecification -> fixedRate exists
+            then extract PaymentFrequencyPeriodMultiplier),
+            floatingRatePaymentFrequencyPeriodMultiplier: (filter
+                rateSpecification -> floatingRate exists
+                    or rateSpecification -> inflationRate exists)
+            then extract PaymentFrequencyPeriodMultiplier
+        }
+
+/*Other Payment Report*/
+reporting rule OtherPayment from TransactionReportInstruction: <"Other Payment">
+    extract transactionReportInstruction [
+        TradeStateForEvent
+            then extract transferHistory
+            then filter IsOtherPayment
+            then extract
+                OtherPayment {
+                    paymentType: OtherPaymentType to-enum PaymentType4Code,
+                    amount: OtherPaymentAmount,
+                    currency: OtherPaymentCurrency,
+                    date: OtherPaymentDate,
+                    payer: if transfer -> payerReceiver -> payerPartyReference -> partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+                        then ExtractOtherPaymentPayer(item, transactionReportInstruction)
+                    else transfer -> payerReceiver -> payerPartyReference -> partyId -> identifier first,
+                    payerFormat: if transfer -> payerReceiver -> payerPartyReference -> partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+                        then OtherPaymentPayerFormat,
+                    receiver: if transfer -> payerReceiver -> receiverPartyReference -> partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+                        then ExtractOtherPaymentReceiver(item, transactionReportInstruction)
+                    else transfer -> payerReceiver -> receiverPartyReference -> partyId -> identifier first,
+                    receiverFormat: if transfer -> payerReceiver -> receiverPartyReference -> partyId -> identifierType any = PartyIdentifierTypeEnum -> LEI
+                        then OtherPaymentReceiverFormat,
+                    ...
+                }
+    ]

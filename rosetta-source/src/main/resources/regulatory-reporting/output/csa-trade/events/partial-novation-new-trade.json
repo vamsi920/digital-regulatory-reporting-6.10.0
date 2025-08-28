@@ -1,0 +1,82 @@
+{
+  "actionType" : "NEWT",
+  "brokerID" : "549300OL8KL0WCQ34V31",
+  "cleared" : "N",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "SEF0062024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "InterestRate",
+    "submittedForParty" : "549300O5MFEP1XJ40B46",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1BrokerIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2011-02-08",
+  "eventIdentifier" : "SEF006",
+  "eventTimestamp" : "2011-07-01T11:13:07Z",
+  "eventType" : "NOVA",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2016-02-08",
+  "finalContractualSettlementDate" : "2016-02-08",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixedRate" : 0.0253,
+    "notionalAmount" : 2500000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "549300O5MFEP1XJ40B46",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A011",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    },
+    "receiverIdentifier" : "549300ZFFF6TMXQVF884"
+  },
+  "leg2" : {
+    "notionalAmount" : 2500000,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "549300ZFFF6TMXQVF884",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "549300O5MFEP1XJ40B46"
+  },
+  "level" : "TCTN",
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "USD",
+          "NotionalSchedule" : "Constant",
+          "ReferenceRateTermUnit" : "MNTH",
+          "ReferenceRateTermValue" : 6,
+          "UnderlierID" : "USD-LIBOR-BBA",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Fixed_Float"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

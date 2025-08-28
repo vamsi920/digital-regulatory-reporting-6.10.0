@@ -1,0 +1,210 @@
+namespace drr.enrichment.common.trade
+version "${project.version}"
+
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.event.workflow.*
+
+import drr.regulation.common.*
+
+func Create_ReportableEventFromInstruction: <"Creates a Reportable Event from an originatingWorkflowStep containing an instruction, and reportableInformation.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        enrichedReportableEvent ReportableEvent (0..1)
+
+    set enrichedReportableEvent: <"Initializes the reportableEvent.">
+        reportableEvent
+
+    set enrichedReportableEvent -> reportableInformation -> reportableAction: <"Sets reportableAction to Error if the workflow step is cancelled. In the other cases, the action remains unaltered.">
+        if reportableEvent -> originatingWorkflowStep -> action = ActionEnum -> Cancel
+        then ReportableActionEnum -> Error
+        else reportableEvent -> reportableInformation -> reportableAction
+
+    set enrichedReportableEvent -> originatingWorkflowStep -> action: <"If the Workflow Step is cancelled, sets WorkflowStep action to New to allow reporting; otherwise, action remains unaltered.">
+        if reportableEvent -> originatingWorkflowStep -> action = ActionEnum -> Cancel
+        then ActionEnum -> New
+        else reportableEvent -> originatingWorkflowStep -> action
+
+    set enrichedReportableEvent -> originatingWorkflowStep: <"Generates an accepted workflowStep.">
+        if enrichedReportableEvent -> originatingWorkflowStep -> businessEvent is absent
+                and enrichedReportableEvent -> originatingWorkflowStep -> proposedEvent exists
+        then Create_AcceptedWorkflowStepFromInstruction(
+                    enrichedReportableEvent -> originatingWorkflowStep
+                )
+        else enrichedReportableEvent -> originatingWorkflowStep
+
+func Create_ReportableEvents: <"Creates a list of Reportable Events from a single workflow step by following steps: Pre-enrich, filter eligible trades, then decompose.">
+    inputs:
+        workflowStep WorkflowStep (1..1)
+    output:
+        reportableEventsOut ReportableEvent (0..*)
+
+    alias workflowStepEvent: <"Translate WorkflowStep instruction to event, if necessary.">
+        if workflowStep -> businessEvent is absent and workflowStep -> proposedEvent exists
+        then Create_AcceptedWorkflowStepFromInstruction(workflowStep)
+        else workflowStep
+
+    alias enrichedWorkflowStep: <"Enriches a workflowStep with all additional information required for reporting of the transaction (e.g. LEI)">
+        PreEnrich(workflowStepEvent)
+
+    alias eligibleTradeStates: <"Filter to eligible trades">
+        enrichedWorkflowStep -> businessEvent -> after
+            filter IsEligible(item, enrichedWorkflowStep)
+
+    add reportableEventsOut: <"Create a list of reportable Events that have been decomposed where required, and contain reportable information.">
+        ReportableEvents(eligibleTradeStates, enrichedWorkflowStep)
+
+func IsEligible: <"Determine if trade is eligible for reporting."> //functional implementation of the eligibility rules
+    inputs:
+        tradeState TradeState (1..1)
+        enrichedWorkflowStep WorkflowStep (1..1)
+    output:
+        isEligible boolean (1..1)
+
+    set isEligible: True
+
+func ReportableEvents: <"For each eligible trade, create a ReportableEvent.">
+    inputs:
+        eligibleTradeStates TradeState (0..*)
+        enrichedWorkflowStep WorkflowStep (1..1)
+    output:
+        reportableEvents ReportableEvent (0..*)
+
+    add reportableEvents:
+        eligibleTradeStates extract Create_ReportableEvent(item, enrichedWorkflowStep)
+
+func Create_ReportableEvent:
+    inputs:
+        tradeState TradeState (1..1)
+        enrichedWorkflowStep WorkflowStep (1..1)
+    output:
+        reportableEvent ReportableEvent (1..1)
+
+    set reportableEvent:
+        ReportableEvent {
+            originatingWorkflowStep: enrichedWorkflowStep,
+            reportableTrade: tradeState,
+            reportableInformation: PostEnrich(tradeState, enrichedWorkflowStep),
+            ...
+        }
+
+func PreEnrich: <"Enrich LEI, PersonID etc. Custom implementation looking up internal/external ref data">
+    inputs:
+        workflowStep WorkflowStep (1..1)
+    output:
+        enrichedWorkflowStep WorkflowStep (1..1)
+
+    set enrichedWorkflowStep: workflowStep
+
+func PostEnrich: <"Enrich jurisdictional eligibility determination etc. Custom implementation looking up reportable information, either as a pass through or looking up internal/external ref data">
+    [codeImplementation]
+    inputs:
+        tradeState TradeState (1..1)
+        enrichedWorkflowStep WorkflowStep (1..1)
+    output:
+        reportableInformation ReportableInformation (1..1)
+
+func Create_RegimeReportableEvent: <"Creates RegimeReportableEvent from a ReportableEvent and list of RegimeReportingSide.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        regimeReportingSide RegimeReportingSide (0..*)
+    output:
+        regimeReportableEvent RegimeReportableEvent (1..1)
+
+    set regimeReportableEvent:
+        RegimeReportableEvent {
+            originatingWorkflowStep: reportableEvent -> originatingWorkflowStep,
+            reportableTrade: reportableEvent -> reportableTrade,
+            reportableInformation: reportableEvent -> reportableInformation,
+            reportablePosition: reportableEvent -> reportablePosition,
+            regimeReportingSide: regimeReportingSide
+        }
+
+func Create_TransactionReportInstruction: <"Creates TransactionReportInstruction from a ReportableEvent and ReportingSide.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        reportingSide ReportingSide (1..1)
+    output:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+
+    set transactionReportInstruction:
+        TransactionReportInstruction {
+            originatingWorkflowStep: reportableEvent -> originatingWorkflowStep,
+            reportableTrade: reportableEvent -> reportableTrade,
+            reportableInformation: reportableEvent -> reportableInformation,
+            reportablePosition: reportableEvent -> reportablePosition,
+            reportingSide: reportingSide
+        }
+
+func Create_TransactionReportInstructionForRegime: <"Creates TransactionReportInstruction from a RegimeReportableEvent for the specified regime and supervisory body.">
+    inputs:
+        regimeReportableEvent RegimeReportableEvent (1..1)
+        regimeName RegimeNameEnum (1..1)
+        supervisoryBody SupervisoryBodyEnum (0..1)
+        delegatedReporting boolean (1..1)
+    output:
+        transactionReportInstruction TransactionReportInstruction (0..1)
+
+    alias reportingSide:
+        regimeReportableEvent -> regimeReportingSide
+            filter item -> regimeName = regimeName
+            then filter
+                supervisoryBody is absent or item -> supervisoryBody = supervisoryBody
+            then extract
+                if delegatedReporting
+                then delegatedReportingSide
+                else reportingSide
+            then only-element
+
+    set transactionReportInstruction:
+        if reportingSide exists
+        then Create_TransactionReportInstruction(regimeReportableEvent, reportingSide)
+
+func Create_TransactionReportInstructionFromInstruction: <"Creates a TransactionReportInstruction from an originatingWorkflowStep containing an instruction, reportableInformation, and the references to the counterparty roles for the ReportingSide attributes.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        reportingPartyRole CounterpartyRoleEnum (1..1)
+        counterpartyRole CounterpartyRoleEnum (1..1)
+        partyResponsibleForReportingRole CounterpartyRoleEnum (0..1)
+        reportSubmittingPartyRole CounterpartyRoleEnum (0..1)
+    output:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+    alias enrichedReportableEvent: Create_ReportableEventFromInstruction(reportableEvent)
+    alias enrichedReportingSide:
+        Create_ReportingSideFromReportableEvent(
+                enrichedReportableEvent,
+                reportingPartyRole,
+                counterpartyRole,
+                partyResponsibleForReportingRole,
+                reportSubmittingPartyRole
+            )
+    set transactionReportInstruction:
+        Create_TransactionReportInstruction(enrichedReportableEvent, enrichedReportingSide)
+
+func Create_ReportingSideFromReportableEvent: <"Creates a ReportingSide from a ReportableEvent given the references to the counterparty roles.">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        reportingPartyRole CounterpartyRoleEnum (1..1)
+        counterpartyRole CounterpartyRoleEnum (1..1)
+        partyResponsibleForReportingRole CounterpartyRoleEnum (0..1)
+        reportSubmittingPartyRole CounterpartyRoleEnum (0..1)
+    output:
+        reportingSide ReportingSide (1..1)
+    alias counterparties: TradeForEvent(reportableEvent) -> tradableProduct -> counterparty
+    set reportingSide:
+        ReportingSide {
+            reportingParty: ExtractCounterpartyByRole(counterparties, reportingPartyRole) -> partyReference as-key,
+            partyResponsibleForReporting: ExtractCounterpartyByRole(
+                    counterparties,
+                    partyResponsibleForReportingRole
+                ) -> partyReference as-key,
+            reportSubmittingParty: ExtractCounterpartyByRole(
+                    counterparties,
+                    reportSubmittingPartyRole
+                ) -> partyReference as-key,
+            reportingCounterparty: ExtractCounterpartyByRole(
+                    counterparties,
+                    counterpartyRole
+                ) -> partyReference as-key
+        }

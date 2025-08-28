@@ -1,0 +1,78 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "f4fff8876cbf47eb8538033b3069a2812024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.ON.OSC", "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-02-01",
+  "eventTimestamp" : "2021-11-19T21:53:36.2241368Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-11-01T14:32:02Z",
+  "expirationDate" : "2022-02-28",
+  "leg1" : {
+    "notionalAmount" : 7020000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 1300000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OTHR",
+    "totalNotionalQuantity" : 1300000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "NATURAL GAS-HENRY HUB-NYMEX",
+    "notionalAmount" : 7020000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 1300000,
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 1300000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "NATURAL GAS-HENRY HUB-NYMEX",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 5.4
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPENERG01"
+}

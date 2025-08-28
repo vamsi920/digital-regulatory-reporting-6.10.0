@@ -1,0 +1,75 @@
+{
+  "actionType" : "NEWT",
+  "callAmount" : 111500000,
+  "callCurrency" : "JPY",
+  "cleared" : "N",
+  "counterparty1" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2" : "E57ODZWZ7FF32TWEFA76",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "AL10291836316rye5ucr6u3669knmak2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "GGDZP1UYGU9STUHRDP48",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXVANILLAOPTIONEXE01",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2019-01-25",
+  "eventTimestamp" : "2019-02-04T18:14:41Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 73.5,
+  "exchangeRateBasis" : "JPY/NZD",
+  "executionTimestamp" : "2019-01-25T03:55:41Z",
+  "expirationDate" : "2019-03-21",
+  "firstExerciseDate" : "2019-03-21",
+  "leg1" : {
+    "notionalAmount" : 111500000,
+    "notionalCurrency" : "JPY",
+    "settlementCurrency" : "JPY"
+  },
+  "leg2" : {
+    "notionalAmount" : 1110000,
+    "notionalCurrency" : "NZD"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "NZD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 60085,
+  "optionPremiumCurrency" : "NZD",
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "putAmount" : 1110000,
+  "putCurrency" : "NZD",
+  "reportSubmittingEntityID" : "GGDZP1UYGU9STUHRDP48",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 73.5
+  },
+  "strikePriceCurrency" : "JPY/NZD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

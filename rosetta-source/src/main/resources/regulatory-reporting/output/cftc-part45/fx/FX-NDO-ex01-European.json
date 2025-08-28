@@ -1,0 +1,95 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "5493000WTY4OJJTSMT27",
+  "callAmount" : 222240000,
+  "callCurrency" : "CNY",
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "Trade State",
+    "optionStyle" : "EURO",
+    "optionType" : "OTHR",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false,
+    "settlementType" : "CASH"
+  },
+  "cleared" : "N",
+  "counterparty1" : "5493000WTY4OJJTSMT27",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2019-01-16",
+  "eventIdentifier" : "AL10291665756rye2hnm6u365ay7qbf",
+  "eventTimestamp" : "2019-01-16T14:11:05Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 6.6,
+  "exchangeRateBasis" : "CNY/USD",
+  "executionAgentCounterparty1" : "549300F2KFOQJZRKZ512",
+  "executionTimestamp" : "2019-01-16T14:11:05Z",
+  "expirationDate" : "2019-04-11",
+  "finalContractualSettlementDate" : "2019-04-15",
+  "firstExerciseDate" : "2019-04-11",
+  "leg1" : {
+    "notionalAmount" : 222240000,
+    "notionalCurrency" : "CNY",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei",
+    "settlementCurrency" : "CNY"
+  },
+  "leg2" : {
+    "notionalAmount" : 555500000,
+    "notionalCurrency" : "USD",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CNY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 51250,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2019-01-18",
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "putAmount" : 555500000,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "5493000WTY4OJJTSMT27",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "GGDZP1UYGU9STUHRDP48",
+  "strikePrice" : {
+    "monetary" : 6.6
+  },
+  "strikePriceCurrency" : "CNY/USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXNDOEXEUROPEANXML02"
+}

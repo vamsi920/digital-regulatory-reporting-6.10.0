@@ -1,0 +1,61 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioCode" : "NOTAVAILABLE",
+  "collateralPortfolioIndicator" : true,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CSDS" ],
+  "counterparty1" : "DUMMYLEI012345678901",
+  "counterparty2" : "DUMMYLEI012345678903",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2020-07-29",
+  "entityResponsibleForReporting" : "DUMMYLEI012345678901",
+  "eventDate" : "2021-03-31",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-03-31T07:39:42Z",
+  "expirationDate" : "2028-07-29",
+  "finalContractualSettlementDate" : "2028-07-29",
+  "intragroup" : false,
+  "leg1" : {
+    "direction2" : "TAKE",
+    "fixedRate" : 2.085,
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A020",
+      "fixedRatePaymentFrequencyPeriod" : "YEAR",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    }
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRatePaymentFrequencyPeriod" : "YEAR",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "YEAR"
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "N",
+  "productClassification" : "SRDXXX",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI012345678901",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRINFLATIONFIXEDFL03",
+  "venueOfExecution" : "XXXX"
+}

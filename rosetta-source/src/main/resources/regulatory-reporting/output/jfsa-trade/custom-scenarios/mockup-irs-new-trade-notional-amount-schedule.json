@@ -1,0 +1,88 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "I",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "5493001RKR55V4X61F71",
+  "counterparty2" : "549300O5MFEP1XJ40B46",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2004-12-16",
+  "embeddedOptionType" : "OTHR",
+  "entityResponsibleForReporting" : "5493001RKR55V4X61F71",
+  "eventIdentifier" : "PARTYA001",
+  "eventTimestamp" : "2004-12-12T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2002-12-12T16:20:47Z",
+  "expirationDate" : "2007-12-16",
+  "finalContractualSettlementDate" : "2007-12-16",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "fixedRate" : 0.0273,
+    "notionalAmount" : 0,
+    "notionalAmountSchedule" : [ {
+      "effectiveDate" : "2005-12-16",
+      "value" : 0
+    }, {
+      "effectiveDate" : "2006-12-16",
+      "value" : 23000000
+    }, {
+      "effectiveDate" : "2007-12-16",
+      "value" : 22000000
+    } ],
+    "notionalCurrency" : "KRW",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    },
+    "settlementCurrency" : "USD"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 0,
+    "notionalAmountSchedule" : [ {
+      "effectiveDate" : "2005-12-16",
+      "value" : 0
+    }, {
+      "effectiveDate" : "2006-12-16",
+      "value" : 23000000
+    }, {
+      "effectiveDate" : "2007-12-16",
+      "value" : 22000000
+    } ],
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "spread" : {
+      "basis" : 1
+    },
+    "spreadNotation" : "Basis"
+  },
+  "otherPayment" : [ {
+    "amount" : 15000,
+    "currency" : "USD",
+    "date" : "2004-12-16",
+    "payer" : "549300O5MFEP1XJ40B46",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "5493001RKR55V4X61F71",
+    "receiverFormat" : "Lei"
+  } ],
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "5493001RKR55V4X61F71",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "MOCKUPIRSNEWTRADEN01"
+}

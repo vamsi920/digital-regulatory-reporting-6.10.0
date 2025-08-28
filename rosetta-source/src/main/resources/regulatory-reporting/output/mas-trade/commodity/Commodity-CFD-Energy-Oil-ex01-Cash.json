@@ -1,0 +1,69 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "bookingLocation" : "US",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2021-08-18T14:16:25Z",
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "5U0XI89JRFVHWIBS4F54",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2022-03-01",
+  "eventTimestamp" : "2021-08-18T14:17:08Z",
+  "executionTimestamp" : "2021-08-12T07:32:01Z",
+  "expirationDate" : "2023-10-31",
+  "finalContractualSettlementDate" : "2023-10-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "notionalQuantity" : 150,
+    "quantityFrequency" : "ADHO",
+    "totalNotionalQuantity" : 3000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "notionalQuantity" : 150,
+    "quantityFrequency" : "ADHO",
+    "settlementCurrency" : "JPY",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 3000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "DUBAI",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "price" : {
+    "monetary" : 10000
+  },
+  "priceCurrency" : "JPY",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingSpecifiedPerson" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYCFDENERGY02"
+}

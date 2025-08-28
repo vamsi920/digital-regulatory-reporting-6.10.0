@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-hkma-tr-valuation-report-to-iso20022",
+  "name" : "Hkma Tr Valuation Report To Iso20022",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.iso20022.hkma.rewrite.valuation.tr.functions.Project_HKMATrValuationReportToIso20022",
+    "inputType" : "drr.regulation.hkma.rewrite.valuation.HKMAValuationReport",
+    "outputType" : "iso20022.auth030.hkma.tr.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-hkma-valuation",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/auth030-hkma-tr-rosetta-xml-config.json"
+  }
+}

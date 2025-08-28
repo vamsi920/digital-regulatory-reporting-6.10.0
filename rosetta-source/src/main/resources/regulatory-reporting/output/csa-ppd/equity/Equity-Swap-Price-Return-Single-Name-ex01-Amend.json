@@ -1,0 +1,66 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : true,
+  "dtccAdditionalFields" : {
+    "messageID" : "56b4dc698dc540c49d70869f48dcf74d2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "DUMMY0000000000LEI01",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetIDType" : "Basket"
+    } ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2020-12-14",
+  "eventTimestamp" : "2022-01-29T06:39:48.0169097Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-12-16T23:11:47Z",
+  "expirationDate" : "2022-12-19",
+  "leg1" : {
+    "notionalAmount" : 8291615,
+    "notionalCurrency" : "CAD",
+    "notionalQuantity" : 1,
+    "quantityUnitOfMeasure" : "OTHR",
+    "totalNotionalQuantity" : 1
+  },
+  "leg2" : {
+    "notionalAmount" : 8291615,
+    "notionalCurrency" : "CAD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO"
+    }
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "UnderlierID" : "CAD-BA-CDOR"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "EQUITYSWAPPRICERET01"
+}

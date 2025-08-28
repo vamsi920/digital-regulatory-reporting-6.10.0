@@ -1,0 +1,72 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "213800WWTABZ1GOJHH37",
+  "counterparty2" : "213800IV9PCAC364HN60",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "067326333555123459991234569BR7771234567892024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "213800WWTABZ1GOJHH37",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "S&P 500",
+      "underlyingAssetIDType" : "Index"
+    }, {
+      "underlyingAssetID" : "IE0031442068",
+      "underlyingAssetIDType" : "ISIN"
+    } ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2021-12-06",
+  "eventTimestamp" : "2021-12-06T17:09:12Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-06T17:09:12Z",
+  "expirationDate" : "2020-09-11",
+  "firstExerciseDate" : "2020-09-11",
+  "leg1" : {
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "notionalQuantity" : 10000,
+    "quantityUnitOfMeasure" : "OTHR",
+    "settlementCurrency" : "JPY",
+    "totalNotionalQuantity" : 10000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "SettlementCurrency" : "JPY"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 1813007.27,
+  "optionPremiumCurrency" : "JPY",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "213800WWTABZ1GOJHH37",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 3000
+  },
+  "strikePriceCurrency" : "JPY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER02"
+}

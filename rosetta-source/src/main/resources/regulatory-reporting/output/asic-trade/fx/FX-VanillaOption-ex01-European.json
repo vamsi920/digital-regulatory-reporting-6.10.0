@@ -1,0 +1,66 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "brokerID" : "549300JLS7RWEFHO2D73",
+  "callAmount" : 19500000,
+  "callCurrency" : "USD",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "contractType" : "OPTN",
+  "counterparty1" : "RR3QWICWWIPCS8A4S074",
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "BYER",
+  "effectiveDate" : "2015-02-03",
+  "entityResponsibleForReporting" : "RR3QWICWWIPCS8A4S074",
+  "eventIdentifier" : "AL1025104031by85df9m3ux9hhja",
+  "eventTimestamp" : "2015-02-03T13:26:29Z",
+  "eventType" : "TRAD",
+  "exchangeRateBasis" : "USD/CHF",
+  "executionTimestamp" : "2015-02-03T13:26:29Z",
+  "expirationDate" : "2019-02-01",
+  "leg1" : {
+    "notionalAmount" : 16029000,
+    "notionalCurrency" : "CHF",
+    "settlementCurrency" : "CHF"
+  },
+  "leg2" : {
+    "notionalAmount" : 19500000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CHF",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 20022222.5,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2019-02-05",
+  "putAmount" : 16029000,
+  "putCurrency" : "CHF",
+  "reportSubmittingEntityID" : "RR3QWICWWIPCS8A4S074",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "FXVANILLAOPTIONEXE01",
+  "strikePrice" : {
+    "monetary" : 0.822
+  },
+  "strikePriceCurrency" : "USD/CHF",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02",
+  "variationMarginCollateralPortfolioCode" : "606801"
+}

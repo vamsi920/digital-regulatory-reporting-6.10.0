@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "FOR8UP27PHTHYVLBNG30",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "envuatuatExt1162a6aafc00547e19b5f224cf1292b312024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "ForeignExchange",
+    "secondaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "W22LROWP2IHZNBB6K528",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXNDFEXXMLXXXXXXXX01",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-11-23",
+  "eventIdentifier" : "envuatuatExt1162a6aafc00547e19b5f224cf1292b31",
+  "eventTimestamp" : "2020-11-23T09:05:40Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.00131406,
+  "exchangeRateBasis" : "CLP/USD",
+  "executionTimestamp" : "2020-11-23T21:05:40Z",
+  "expirationDate" : "2020-11-25",
+  "finalContractualSettlementDate" : "2020-11-25",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "fixingDate" : "2020-11-23T00:00:00Z",
+    "notionalAmount" : 786786,
+    "notionalCurrency" : "CLP",
+    "payerIdentifier" : "W22LROWP2IHZNBB6K528",
+    "receiverIdentifier" : "FOR8UP27PHTHYVLBNG30",
+    "settlementCurrency" : "USD",
+    "underlierIDOther" : "CLP",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "leg2" : {
+    "notionalAmount" : 1033.88433,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "FOR8UP27PHTHYVLBNG30",
+    "receiverIdentifier" : "W22LROWP2IHZNBB6K528",
+    "underlierIDOther" : "USD",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "SettlementCurrency" : "USD",
+          "UnderlierID" : "CLP",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "NDF"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z"
+}

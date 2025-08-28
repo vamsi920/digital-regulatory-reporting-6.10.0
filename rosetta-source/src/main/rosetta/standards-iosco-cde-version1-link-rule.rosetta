@@ -1,0 +1,44 @@
+namespace drr.standards.iosco.cde.version1.link
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.identifier.*
+import cdm.event.common.*
+import cdm.event.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package Identifier">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "89"
+        provision "Identifier (determined by the reporting counterparty) in order to connect two or more transactions that are reported separately by the reporting counterparty, but that are negotiated together as the product of a single economic agreement, two or more reports pertaining to the same transaction whenever jurisdictional reporting requirement does not allow the transaction to be reported with a single report to TRs. A package may include reportable and non-reportable transactions. This data element is not applicable if no package is involved, or to allocations. Where the package identifier is not known when a new transaction is reported, the package identifier is updated as it becomes available."]
+    extract if GetPackageInformation exists then GetPackageInformation
+    then extract listId -> assignedIdentifier -> identifier
+    then only-element
+
+reporting rule PriorUTI from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "96"
+        provision "UTI assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (eg in the case of a novation, when transaction is terminated, and a new transaction is generated) or in a one-to-many relation between transactions (eg in clearing or if a transaction is split into several different transactions). This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (eg in the case of a compression)."]
+    [regulatoryReference ISDA TechnicalExecutionGroup date "20231214"
+        provision "CounterpartyPositionBusinessEvent does not support before State (no primitive instruction yet), as temporary solution a new field under ReportableInformation is added: subsequentPositionUTI of type PositionIdentifier"]
+    extract
+        if originatingWorkflowStep -> counterpartyPositionBusinessEvent exists
+                and (((originatingWorkflowStep -> counterpartyPositionBusinessEvent -> intent = PositionEventIntentEnum -> CorporateActionAdjustment
+                            or originatingWorkflowStep -> counterpartyPositionBusinessEvent -> intent = PositionEventIntentEnum -> Transfer)
+                        and reportablePosition -> counterpartyPosition -> positionBase -> tradeLot -> priceQuantity -> quantity -> value all <> 0)
+                    or (originatingWorkflowStep -> counterpartyPositionBusinessEvent -> intent = PositionEventIntentEnum -> OptionExercise and originatingWorkflowStep -> counterpartyPositionBusinessEvent -> after -> counterpartyPosition -> positionBase -> product -> security -> economicTerms -> payout -> forwardPayout exists))
+        then (extract reportableInformation -> counterpartyPositionPriorUTI
+        then filter identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+        then extract assignedIdentifier -> identifier
+        then only-element)
+        else if TradeForEvent -> tradeIdentifier -> assignedIdentifier -> identifier <> BeforeTradeForEvent -> tradeIdentifier -> assignedIdentifier -> identifier
+                and Qualify_Compression(originatingWorkflowStep -> businessEvent) = False
+        then (BeforeTradeForEvent
+            then extract tradeIdentifier
+            then filter
+                identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            then extract assignedIdentifier -> identifier
+            then flatten
+            then distinct
+            then only-element)

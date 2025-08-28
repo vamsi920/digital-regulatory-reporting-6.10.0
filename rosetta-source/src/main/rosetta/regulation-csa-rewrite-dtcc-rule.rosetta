@@ -1,0 +1,845 @@
+namespace drr.regulation.csa.rewrite.dtcc
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+import cdm.event.qualification.*
+import cdm.product.asset.*
+import cdm.product.qualification.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.csa.*
+import drr.regulation.csa.rewrite.*
+import drr.regulation.csa.rewrite.trade.* as csaTrade
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.uti.* as uti
+
+corpus Dissemination DTCC_Harmonized
+
+eligibility rule ReportableProduct from TransactionReportInstruction: <"When eligible for GTR Control fields from DTCC Harmonized">
+    [docReference DTCC DTCC_Harmonized
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+//DTCC Definitions
+reporting rule DTCC_ClearingVenueIDType from TransactionReportInstruction: <"Clearing Venue - ID Type">
+    [docReference DTCC DTCC_Harmonized field "Clearing Venue - ID Type"
+        provision "GTR Control Field."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract
+        if cde.execution.CentralCounterparty exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Clearing Venue - ID Type"
+
+reporting rule DTCC_TradeParty1ClearingBrokerIDType from TransactionReportInstruction: <"Trade Party 1 - Clearing Broker ID Type">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - Clearing Broker ID Type"
+        provision "GTR Control Field."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Trade Party 1 - Clearing Broker ID Type"
+        provision "Firms indicated they would only report LEI format. No expectation to have PLID format in Canadian reporting. No expectaion to have NPID format in Canadian reporting unless there is an update from ISDA CSA Data and Reporting Canadian WG."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract
+        if cde.execution.ClearingMember exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Trade Party 1 - Clearing Broker ID Type"
+
+reporting rule DTCC_TradeParty1IDType from TransactionReportInstruction: <"Trade Party 1 - ID Type">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - ID Type"
+        provision "GTR required Control Field."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Trade Party 1 - ID Type"
+        provision "Firms indicated they would only report LEI format. No expectation to have NPID or any other format in Canadian reporting unless there is an update from ISDA CSA Data and Reporting Canadian WG."]
+    [regulatoryReference ISDA CanadianDataAndReporting date "20250508" field "Trade Party 1 - ID Type"
+        provision "Reporting firms on the WG call said they would be using an LEI. There is only a possible use case for crypto trades reporting by SEFs; however, DRR is not going to model this case until is demanded by firms."]
+    extract
+        if cde.party.Counterparty1 exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Trade Party 1 - ID Type"
+
+reporting rule DTCC_SubmittingPartyIDType from TransactionReportInstruction: <"Submitting Party - ID Type">
+    [docReference DTCC DTCC_Harmonized field "Submitting Party - ID Type"
+        provision "GTR required Control Field."]
+    extract
+        if common.party.ReportSubmittingEntity exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Submitting Party - ID Type"
+
+reporting rule DTCC_AllocationType from TransactionReportInstruction: <"Allocation Type">
+    [docReference DTCC DTCC_Harmonized field "Allocation Type"
+        provision "Indicator of whether the swap transaction is intended to be allocated, will not be allocated, or is a post allocation transaction."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract
+        if Qualify_Allocation(originatingWorkflowStep -> businessEvent)
+        then "POST"
+        else if originatingWorkflowStep -> nextEvent -> intent = Allocation
+        then "PREA"
+        else "UNAL"
+        as "Allocation Type"
+
+reporting rule DTCC_USIID from TransactionReportInstruction: <"USI ID">
+    [docReference DTCC DTCC_Harmonized field "USI ID"
+        provision "The USI is a unique identifier assigned to all swap transactions which identifies the transaction (the swap and its counterparties) uniquely throughout its duration. It consists of a namespace and a transaction identifier."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220309"
+        provision "Firms do expect to report USI/UTI in both formats: as a single identifier field as well as using Issuer + identifier. The functional model needs to handle both scenarios."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract uti.GetUniqueSwapIdentifier(item, csaTrade.SupervisoryBodyForCSA)
+        as "USI ID"
+
+reporting rule DTCC_USIIDPrefix from TransactionReportInstruction: <"USI ID Prefix">
+    [docReference DTCC DTCC_Harmonized field "USI ID Prefix"
+        provision "The USI is a unique identifier assigned to all swap transactions which identifies the transaction (the swap and its counterparties) uniquely throughout its duration. It consists of a namespace and a transaction identifier."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250327" field "USI ID Prefix"
+        provision "The group agreed on not considering USI ID Prefix due to it comes from an old format and it had been agreed to only consider one field, that is USI ID, considering the concatenation of both fields. Thus, USI ID is the only field that needs to be populated."]
+    empty
+        as "USI ID Prefix"
+
+reporting rule DTCC_NewSDRIdentifier from TransactionReportInstruction: <"New SDR Identifier">
+    [docReference DTCC DTCC_Harmonized field "New SDR Identifier"
+        provision "Identifier of the new swap data repository where the swap transaction is transferred to."]
+    [docReference ISDA USComplianceGroup date "20220802"
+        provision "Not returning anything until it gets modelled"]
+    filter IsActionTypePRTO
+    then extract common.link.NewSDRIdentifier
+        as "New SDR Identifier"
+
+reporting rule DTCC_SubmittedForParty from TransactionReportInstruction: <"Submitted For Party">
+    [docReference DTCC DTCC_Harmonized field "Submitted For Party"
+        provision "Need field for GTR Processing."]
+    [regulatoryReference ISDA PeerReviewGroup date "20250507"
+        provision "Agreed to default the output to the LEI of the reporting party."]
+    extract cde.party.Counterparty1
+        as "Submitted For Party"
+
+reporting rule DTCC_TradeLegTypes from TransactionReportInstruction: <"Trade Leg Types">
+    [regulatoryReference DTCC DTCC_Harmonized field "Trade Leg Types"
+        provision "Field is needed to define the Commodity product. "]
+    extract ProductForEvent
+    then extract
+        // Option Cash
+        if Qualify_Commodity_Option_Cash(EconomicTermsForProduct)
+        then "O-:OPT:OPT"
+        // Swap Basis
+        else if Qualify_Commodity_Swap_Basis(EconomicTermsForProduct)
+        then "S-:FLT:FLT"
+        // Fixed Float
+        else if Qualify_Commodity_Swap_FixedFloat(EconomicTermsForProduct)
+        then "S-:FXD:FLT"
+        // Swaption on Basis
+        else if Qualify_Commodity_Swaption(EconomicTermsForProduct)
+                and Qualify_Commodity_Swap_Basis(
+                        EconomicTermsForProduct(UnderlierForProduct)
+                    )
+        then "SO:FLT:FLT"
+        // Swaption on Fixed Float
+        else if Qualify_Commodity_Swaption(EconomicTermsForProduct)
+                and Qualify_Commodity_Swap_FixedFloat(
+                        EconomicTermsForProduct(UnderlierForProduct)
+                    )
+        then "SO:FXD:FLT"
+        else if Qualify_Commodity_Forward(EconomicTermsForProduct)
+        then (if IsCommodityFloatingPriceForward
+            then // Averaging Forward Bullion: Forward Payout + Commodity payout
+                (if IsCommodityBullion
+                then "FO:AVG:BUL"
+                // Averaging Forward Metal
+                else if IsCommodityMetal
+                then "FO:AVG:MET")
+            /*LOGIC WITH THE OLD FUNCTIONS:
+             * //Averaging Forward Bullion: Forward Payout + Commodity payout
+             * (if IsCommodityBullion(EconomicTermsForProduct -> payout -> commodityPayout only-element -> underlier) then "FO:AVG:BUL"
+             * //Averaging Forward Metal
+             else if IsCommodityMetal(EconomicTermsForProduct -> payout -> commodityPayout only-element -> underlier) then "FO:AVG:MET")*/
+            else if IsCommodityFixedPriceForward
+            then // Fixed Price Forward Bullion: FixedPricePayout (doesn't have reference price ISDACRP as it is fixed) + Forward Payout
+                (if IsCommodityBullion
+                then "FO:FXD:BUL"
+                // Fixed Price Forward Metal
+                else if IsCommodityMetal
+                then "FO:FXD:MET"
+                // Fixed Price Forward Physical
+                else "FO:FXD:PHY"))
+        // Option physical
+        else if Qualify_Commodity_Option_Physical(EconomicTermsForProduct)
+        then // optionPayout only-element must exist
+            (if EconomicTermsForProduct -> payout -> optionPayout only-element -> exerciseTerms -> strike -> averagingStrikeFeature exists
+            then // forwardPayout must exist
+                (if IsCommodityBullion
+                then "OF:AVG:BUL"
+                // Averaging Physical Option on Metal
+                else if IsCommodityMetal
+                then "OF:AVG:MET")
+            /*LOGIC WITH THE OLD FUNCTIONS
+             * //Averaging Physical Option on Bullion
+             * (if IsCommodityBullion(EconomicTermsForProduct -> payout -> commodityPayout only-element -> underlier) then "OF:AVG:BUL" 
+             * //Averaging Physical Option on Metal
+             else if IsCommodityMetal(EconomicTermsForProduct -> payout -> commodityPayout only-element -> underlier) then "OF:AVG:MET") */
+            else if EconomicTermsForProduct -> payout -> optionPayout only-element -> exerciseTerms -> strike -> strikePrice exists
+            then // Fixed Price Physical Option on Bullion
+                (if IsCommodityBullion
+                then "OF:FXD:BUL"
+                // Fixed Price Physical Option on Metal
+                else if IsCommodityMetal
+                then "OF:FXD:MET"))
+        as "Trade Leg Types"
+
+reporting rule DTCC_TradeParty1ReportingDestination from TransactionReportInstruction: <"Trade Party 1 - Reporting Destination">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - Reporting Destination"
+        provision "Needed to report Jurisdiction."]
+    extract transactionReportInstruction [
+        reportableInformation -> partyInformation
+            then filter
+                item -> partyReference = transactionReportInstruction -> reportingSide -> reportingParty
+            then extract regimeInformation -> supervisoryBody distinct
+            then flatten
+            then extract
+                if csaTrade.SupervisoryBodyForCSA any = item
+                        or [SupervisoryBodyEnum -> CFTC, SupervisoryBodyEnum -> SEC] any = item
+                then item
+            then distinct
+    ]
+        as "Trade Party 1 - Reporting Destination"
+
+reporting rule DTCC_TradeParty2ReportingDestination from TransactionReportInstruction: <"Trade Party 2 - Reporting Destination">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 2 - Reporting Destination"
+        provision "Needed to report Jurisdiction."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract transactionReportInstruction [
+        reportableInformation -> partyInformation
+            then filter
+                item -> partyReference = transactionReportInstruction -> reportingSide -> reportingCounterparty
+            then extract regimeInformation -> supervisoryBody distinct
+            then flatten
+            then extract
+                if csaTrade.SupervisoryBodyForCSA all <> item
+                        and [SupervisoryBodyEnum -> CFTC, SupervisoryBodyEnum -> SEC] all <> item
+                then item
+            then distinct
+    ]
+        as "Trade Party 2 - Reporting Destination"
+
+reporting rule DTCC_PrimaryAssetClass from TransactionReportInstruction: <"Primary Asset Class">
+    [docReference DTCC DTCC_Harmonized field "Primary Asset Class"
+        provision "UPI RDL: Indicates whether the asset, benchmark or another derivatives contract underlying a derivatives contract is, or references, an equity, rate, credit, commodity or foreign exchange asset."]
+    extract common.contract.AssetClass
+    then extract
+        if item = INTR
+        then AssetClassEnum -> InterestRate
+        else if item = CRDT
+        then AssetClassEnum -> Credit
+        else if item = EQUI
+        then AssetClassEnum -> Equity
+        else if item = COMM
+        then AssetClassEnum -> Commodity
+        else if item = CURR
+        then AssetClassEnum -> ForeignExchange
+        as "Primary Asset Class"
+
+reporting rule DTCC_SecondaryAssetClass from TransactionReportInstruction: <"Secondary Asset Class">
+    [docReference DTCC DTCC_Harmonized field "Secondary Asset Class"
+        provision "Needed field to indicate edge cases."]
+    extract
+        ProductForEvent -> contractualProduct -> productTaxonomy -> secondaryAssetClass
+            distinct
+            only-element
+        as "Secondary Asset Class"
+
+reporting rule DTCC_Comment1 from TransactionReportInstruction: <"Comment 1">
+    [docReference DTCC DTCC_Harmonized field "Comment 1"
+        provision "For CSV submissions if populated with an * the entire line is treated as comment."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Comment 1"
+        provision "Empty because CSV submission is still not supported by current DRR model. This rule will be revisited once Harmonized CSV projection is included."]
+    empty
+        as "Comment 1"
+
+reporting rule DTCC_MessageID from TransactionReportInstruction: <"Message ID">
+    [docReference DTCC DTCC_Harmonized field "Message ID"
+        provision "Purpose of this field is to allow firms to submit a unique ID that will allow them to tie in specific submissions/modifications. For example if 5 modifications are submitted on a specific PET, this will allow the firm to ensure they receive responses for all 5 modifications."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" field "Message ID"
+        provision "Each Message ID must be unique, irrespective of the report type. This unique identification is achieved by concatenating with the Reporting Timestamp field."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ReportableEvent [
+        common.link.TechnicalRecordId(item -> reportableInformation, CSA) default originatingWorkflowStep -> messageInformation -> messageId
+            then extract item + (csaTrade.ReportingTimestamp(ReportableEvent) to-string)
+    ]
+        as "Message ID"
+
+reporting rule DTCC_MessageTypeTransaction from TransactionReportInstruction: <"Message Type (Transaction)">
+    [docReference DTCC DTCC_Harmonized field "Message Type"
+        provision "Need to indicate what message is being submitted to GTR."]
+    "Trade State"
+        as "Message Type"
+
+reporting rule DTCC_MessageTypePPD from TransactionReportInstruction: <"Message Type (PPD)">
+    [docReference DTCC DTCC_Harmonized field "Message Type"
+        provision "Need to indicate what message is being submitted to GTR."]
+    "RT"
+        as "Message Type"
+
+reporting rule DTCC_OptionStyle from TransactionReportInstruction: <"Option Style">
+    [docReference DTCC DTCC_Harmonized field "Option Style"
+        provision "Need field to determine exercise dates."]
+    filter csaTrade.IsAllowableActionForCSA
+    then filter Qualify_AssetClass_Commodity(EconomicTermsForProduct(ProductForEvent))
+    then extract common.contract.OptionStyle
+        as "Option Style"
+
+reporting rule DTCC_OptionType from TransactionReportInstruction: <"Option Type">
+    [docReference DTCC DTCC_Harmonized field "Option Type"
+        provision "The type of option reported."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250603" field "Option Type"
+        provision "'NonStandard' value is not reported because exotic/non-standard products are currently out of scope in CDM."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then extract Product [
+        filter Qualify_AssetClass_Commodity(EconomicTermsForProduct)
+        then extract
+            EconomicTermsForProduct -> payout -> optionPayout only-element -> optionType
+        then extract
+            if item = OptionTypeEnum -> Put or IsFloor(Product)
+            then "Put"
+            else if item = OptionTypeEnum -> Call or IsCap(Product)
+            then "Call"
+            else if item = OptionTypeEnum -> Receiver
+            then "Receiver"
+            else if item = OptionTypeEnum -> Payer
+            then "Payer"
+            else if item = OptionTypeEnum -> Straddle
+            then "Straddle"
+            else if IsOption(Product)
+            then "Other"
+    ]
+        as "Option Type"
+
+reporting rule DTCC_ProductID from TransactionReportInstruction: <"Product ID">
+    [docReference DTCC DTCC_Harmonized field "Product ID"
+        provision "Needed for GTR processing to derive validation based on ISDA taxonomy; A lower-level description of the characteristics of an asset or contract underlying a derivative."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250604" field "Product ID"
+        provision "A member raised that Product ID was previously considered mandatory, despite being reportable only for Commodities. Consequently, the field is now treated as optional, except for Commodities where it remains mandatory, which is the basis for this Validation Rule."]
+    extract ProductForEvent
+    then filter Qualify_AssetClass_Commodity(EconomicTermsForProduct)
+    then extract contractualProduct -> productTaxonomy
+    then filter source = ISDA and value -> name exists
+    then first
+    then extract value -> name
+        as "Product ID"
+
+reporting rule DTCC_TradeParty2ExecutionAgentID from TransactionReportInstruction: <"Trade Party 2 - Execution Agent ID">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 2 - Execution Agent ID"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract common.party.ExecutionAgentCounterparty2
+        as "Trade Party 2 - Execution Agent ID"
+
+reporting rule DTCC_TradeParty2ExecutionAgentIDType from TransactionReportInstruction: <"Trade Party 2 - Execution Agent ID Type">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 2 - Execution Agent ID Type"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract
+        if common.party.ExecutionAgentCounterparty2 exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Trade Party 2 - Execution Agent ID Type"
+
+reporting rule DTCC_TradeParty1ExecutionAgentID from TransactionReportInstruction: <"Trade Party 1 - Execution Agent ID">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - Execution Agent ID"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract reportableEvent [
+        reportableEvent -> reportableInformation -> partyInformation
+            then filter partyReference = reportableEvent -> reportingSide -> reportingParty
+            then distinct only-element
+            then extract ExtractPartyFromRelatedPartyByRole(relatedParty, ExecutionAgent)
+            then extract PartyLei(partyId)
+    ]
+        as "Trade Party 1 - Execution Agent ID"
+
+reporting rule DTCC_TradeParty1ExecutionAgentIDType from TransactionReportInstruction: <"Trade Party 1 - Execution Agent ID Type">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - Execution Agent ID Type"
+        provision "To allow submitter to name an execution agent to view the report data. "]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract reportableEvent [
+        reportableEvent -> reportableInformation -> partyInformation
+            then filter partyReference = reportableEvent -> reportingSide -> reportingParty
+            then distinct only-element
+            then extract ExtractPartyFromRelatedPartyByRole(relatedParty, ExecutionAgent)
+            then extract
+                if PartyLei(partyId) exists
+                then PartyIdentifierTypeEnum -> LEI
+    ]
+        as "Trade Party 1 - Execution Agent ID Type"
+
+reporting rule DTCC_TradeParty1TransactionID from TransactionReportInstruction: <"Trade Party 1 - Transaction ID">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - Transaction ID"
+        provision "Internal trade identifier for Counterparty 1 to map to their internal system."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract transactionReportInstruction [
+        TradeForEvent -> tradeIdentifier
+            then filter
+                issuerReference = transactionReportInstruction -> reportingSide -> reportingParty
+            then filter
+                identifierType <> UniqueTransactionIdentifier
+                    and identifierType <> UniqueSwapIdentifier
+            then extract assignedIdentifier -> identifier
+            then flatten
+            then distinct
+            then only-element
+    ]
+        as "Trade Party 1 - Transaction ID"
+
+reporting rule DTCC_VersionTransaction from TransactionReportInstruction: <"Version (Trade report)">
+    [docReference DTCC DTCC_Harmonized field "Version"
+        provision "Memo field. Used to identify the asset class and template type of submission."]
+    "CORE1.0"
+        as "Version (Trade report)"
+
+reporting rule DTCC_VersionPPD from TransactionReportInstruction: <"Version (PPD report)">
+    [docReference DTCC DTCC_Harmonized field "Version"
+        provision "Memo field. Used to identify the asset class and template type of submission."]
+    "PPD1.0"
+        as "Version (PPD report)"
+
+reporting rule DTCC_Leg1CommodityUnderlyerID from TransactionReportInstruction: <"Leg 1 - Commodity Underlyer ID">
+    [docReference DTCC DTCC_Harmonized field "Leg 1 - Commodity Underlyer ID"
+        provision "UPI RDL: An identifier that can be used to determine the asset(s), index (indices) or benchmark underlying a contract."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then filter Qualify_AssetClass_Commodity(EconomicTermsForProduct) = True
+    then extract
+        ExtractCommodityClassificationLeg1(
+                item,
+                staticdata.asset.common.TaxonomySourceEnum -> CSA,
+                1
+            )
+    then extract
+        if ["Agricultural", "Benzene", "Bullion", "Coal", "Composite Commodity Indices", "Diesel Fuel", "Electricity", "Emissions Allowances", "Ethanol and Bio Fuels", "Fuel Oil", "Freight", "Gas Oil", "Gasoline", "Heating Oil", "Jet Fuel", "Kerosene", "Metals", "Methanol", "Naptha", "Natural Gas", "NGL", "Oil", "Paper", "Plastic", "Weather"] any = item // TH Sprint 25-14: FpMl coding scheme specific for CSA (CommodityClassificationScheme) needs to be generated
+        then item
+        as "Leg 1 - Commodity Underlyer ID"
+
+reporting rule DTCC_Leg2CommodityUnderlyerID from TransactionReportInstruction: <"Leg 2 - Commodity Underlyer ID">
+    [docReference DTCC DTCC_Harmonized field "Leg 2 - Commodity Underlyer ID"
+        provision "UPI RDL: An identifier that can be used to determine the asset(s), index (indices) or benchmark underlying a contract."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then filter Qualify_AssetClass_Commodity(EconomicTermsForProduct) = True
+    then extract
+        ExtractCommodityClassificationLeg2(
+                item,
+                staticdata.asset.common.TaxonomySourceEnum -> CSA,
+                1
+            )
+    then extract
+        if ["Agricultural", "Benzene", "Bullion", "Coal", "Composite Commodity Indices", "Diesel Fuel", "Electricity", "Emissions Allowances", "Ethanol and Bio Fuels", "Fuel Oil", "Freight", "Gas Oil", "Gasoline", "Heating Oil", "Jet Fuel", "Kerosene", "Metals", "Methanol", "Naptha", "Natural Gas", "NGL", "Oil", "Paper", "Plastic", "Weather"] any = item // TH Sprint 25-14: FpMl coding scheme specific for CSA (CommodityClassificationScheme) needs to be generated
+        then item
+        as "Leg 2 - Commodity Underlyer ID"
+
+reporting rule DTCC_UnderlyingAssetID from TransactionReportInstruction: <"Underlying Asset ID">
+    [docReference DTCC DTCC_Harmonized field "Underlying Asset ID"
+        provision "UPI RDL: An identifier that can be used to determine the asset(s), index (indices) or benchmark underlying a contract."]
+    empty
+        as "Underlying Asset ID"
+
+reporting rule DTCC_Leg1FloatingRateIndex from TransactionReportInstruction: <"Leg 1 - Floating Rate Index">
+    [docReference DTCC DTCC_Harmonized field "Leg 1 - Floating Rate Index"
+        provision "UPI RDL: An identifier that can be used to determine the asset(s), index (indices) or benchmark underlying a contract."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then filter Qualify_AssetClass_InterestRate(EconomicTermsForProduct)
+    then extract ProductOrUnderlierProduct
+    then extract
+        if IsFRA
+        then InterestRateLeg1 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first
+        else if Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then ([InterestRateLeg1 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first, InterestRateLeg1 -> rateSpecification -> inflationRate -> rateOption -> indexReferenceInformation -> indexId first] only-element)
+        as "Leg 1 - Floating Rate Index"
+
+reporting rule DTCC_Leg2FloatingRateIndex from TransactionReportInstruction: <"Leg 2 - Floating Rate Index">
+    [docReference DTCC DTCC_Harmonized field "Leg 2 - Floating Rate Index"
+        provision "UPI RDL: An identifier that can be used to determine the asset(s), index (indices) or benchmark underlying a contract."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then filter Qualify_AssetClass_InterestRate(EconomicTermsForProduct)
+    then extract ProductOrUnderlierProduct
+    then extract
+        if IsFRA
+        then InterestRateLeg2 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first
+        else if Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then ([InterestRateLeg2 -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first, InterestRateLeg2 -> rateSpecification -> inflationRate -> rateOption -> indexReferenceInformation -> indexId first] only-element)
+        as "Leg 2 - Floating Rate Index"
+
+reporting rule DTCC_UnderlyingAssetIDType from ProductIdentifier: <"Underlying Asset ID Type">
+    [docReference DTCC DTCC_Harmonized field "Underlying Asset ID Type"
+        provision "UPI RDL: The origin, or publisher, of the associated underlier ID."]
+    if source = ISIN
+    then "ISIN"
+    else if [ProductIdTypeEnum -> BBGID, ProductIdTypeEnum -> BBGTICKER] any = source
+    then "Bloomberg"
+    else if source = CUSIP
+    then "CUSIP"
+    else if source = RIC
+    then "RIC"
+    else if source = SEDOL
+    then "SEDOL"
+    else if source = REDID
+    then "REDID"
+    else if source = Valoren
+    then "Valoren"
+    else "SingleOther"
+        as "Underlying Asset ID Type"
+
+reporting rule DTCC_UnderlyingAssetReport from TransactionReportInstruction: <"Underlying Asset">
+    [docReference DTCC DTCC_Harmonized field "Underlying Asset ID and Underlying Asset ID Type"
+        provision "Fields Underlying Asset ID and Underlying Asset ID Type are repeatable and shall be populated in the case of underlying of a contract."]
+    filter csaTrade.IsAllowableActionForCSA
+    then filter
+        Qualify_AssetClass_Credit(EconomicTermsForProduct(ProductForEvent))
+            or Qualify_AssetClass_Equity(EconomicTermsForProduct(ProductForEvent))
+    then extract reportableEvent [
+        ProductForEvent
+            then extract
+                (if IsCreditSwaption
+                then UnderlierForProduct
+                else item)
+            then extract
+                if GetAllUnderlierProductIdentifier exists
+                then (GetAllUnderlierProductIdentifier
+                    then extract
+                        // Condition for cases where index is applicable and the source is other than the allowable ones.
+                        if DTCC_UnderlyingAssetIDType = "SingleOther"
+                                and IsUnderlierForIndex(reportableEvent)
+                        then UnderlyingAssetReport {
+                                underlyingAssetID: identifier,
+                                underlyingAssetIDType: "Index"
+                            }
+                        else UnderlyingAssetReport {
+                            underlyingAssetID: identifier,
+                            underlyingAssetIDType: DTCC_UnderlyingAssetIDType
+                        })
+                else if GetUnderlierIDForIndexCSA exists
+                then (GetUnderlierIDForIndexCSA
+                    then extract
+                        UnderlyingAssetReport {
+                            underlyingAssetID: item,
+                            underlyingAssetIDType: "Index"
+                        })
+                else if GetUnderlyingIdentificationType(reportableEvent) = B
+                then (if GetUnderlierIDForBasketCSA exists
+                    then (GetUnderlierIDForBasketCSA
+                        then extract
+                            UnderlyingAssetReport {
+                                underlyingAssetID: item,
+                                underlyingAssetIDType: "Basket"
+                            })
+                    else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> referencePool -> referencePoolItem -> referencePair -> referenceEntity -> entityId exists
+                    then (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> referencePool -> referencePoolItem -> referencePair -> referenceEntity -> entityId
+                        then extract
+                            UnderlyingAssetReport {
+                                underlyingAssetID: item,
+                                underlyingAssetIDType: "LEI"
+                            })
+                    // In the event that the basket identifier is not submitted, only "Basket" is reported as the type.
+                    else UnderlyingAssetReport {
+                        underlyingAssetIDType: "Basket",
+                        ...
+                    })
+                else if GetUnderlierLEIForCreditCSA exists
+                then (GetUnderlierLEIForCreditCSA
+                    then extract
+                        UnderlyingAssetReport {
+                            underlyingAssetID: item,
+                            underlyingAssetIDType: "LEI"
+                        })
+    ]
+
+reporting rule DTCC_UnderlyingAssetName from TransactionReportInstruction: <"Underlying Asset Name">
+    [docReference DTCC DTCC_Harmonized field "Underlying Asset Name"
+        provision "Needed for Multi jurisdiction reporting and field is currently used for public dissemination."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract
+        if reportableInformation -> partyInformation -> regimeInformation -> regimeName any = CSA and reportableInformation -> partyInformation -> regimeInformation count > 1
+        then ProductForEvent
+    then filter Qualify_AssetClass_Credit(EconomicTermsForProduct)
+    then extract ProductOrUnderlierProduct
+    then extract
+        if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then UnderlyingAssetNameReport {
+                underlyingAssetName: EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+            }
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then UnderlyingAssetNameReport {
+                underlyingAssetName: EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+            }
+        else if GetAllUnderlierProductIdentifier exists
+        then (GetAllUnderlierProductIdentifier
+            then filter source = Name
+            then UnderlyingAssetNameReport {
+                    underlyingAssetName: identifier
+                })
+        as "Underlying Asset Name"
+
+reporting rule DTCC_SettlementType from TransactionReportInstruction: <"Settlement Type">
+    [docReference DTCC DTCC_Harmonized field "Settlement Type"
+        provision "UPI RDL: Indicates whether a derivatives contract will deliver a physical asset or a cash equivalent at settlement."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then filter Qualify_AssetClass_Commodity(EconomicTermsForProduct)
+    then extract
+        if SettlementTermsLeg1 exists
+        then SettlementTermsLeg1
+        else SettlementTermsLeg2
+    then extract
+        if (settlementType = Cash or cashSettlementTerms exists)
+        then "Cash"
+        else if (settlementType = Physical or physicalSettlementTerms exists)
+        then "Physical"
+        else if settlementType = CashOrPhysical
+        then "CashOrPhysical"
+        else if settlementType = Election
+        then "Election"
+                /* TH 05/05/25: When shall "Optional" be reported? Should Optional value be included in SettlementTypeEnum?
+                 *  Is "Not applicable" a plausible value regarding this field is optional? When should it be considered?*/
+        as "Settlement Type"
+
+reporting rule DTCC_ExecutionVenueID from TransactionReportInstruction: <"Execution Venue - ID">
+    [docReference DTCC DTCC_Harmonized field "Execution Venue - ID"
+        provision "LEI of the electronic trading venue where the transaction was executed."]
+    filter csaTrade.IsAllowableActionForCSA
+    then filter TradeForEvent -> executionDetails -> executionType = Electronic
+    then extract reportableInformation -> partyInformation -> relatedParty
+    then filter role = ExecutionFacility
+    then extract partyReference -> partyId
+    then flatten
+    then filter identifierType = LEI
+    then extract identifier
+    then first
+        as "Execution Venue - ID"
+
+reporting rule DTCC_ExecutionVenueIDType from TransactionReportInstruction: <"Execution Venue - ID Type">
+    [docReference DTCC DTCC_Harmonized field "Execution Venue - ID Type"
+        provision "Identifier Type (LEI) of the electronic trading venue where the transaction was executed."]
+    filter csaTrade.IsAllowableActionForCSA
+    then filter TradeForEvent -> executionDetails -> executionType = Electronic
+    then extract reportableInformation -> partyInformation -> relatedParty
+    then filter role = ExecutionFacility
+    then extract partyReference -> partyId
+    then flatten
+    then filter identifierType = LEI
+    then first
+    then extract
+        if identifier exists then PartyIdentifierTypeEnum -> LEI
+        as "Execution Venue - ID Type"
+
+reporting rule DTCC_ProductGrade from TransactionReportInstruction: <"Product Grade">
+    [docReference DTCC DTCC_Harmonized field "Product Grade"
+        provision "Grade of product being delivered (e.g., grade of oil)."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract EconomicTermsForProduct(ProductForEvent)
+    then filter Qualify_AssetClass_Commodity
+    then extract payout -> commodityPayout
+    then extract
+        ProductGradeReport {
+            productGrade: delivery -> commodityGrade extract to-string
+        }
+        as "Product Grade"
+
+reporting rule DTCC_DeliveryLocation from TransactionReportInstruction: <"Delivery Location">
+    [docReference DTCC DTCC_Harmonized field "Delivery Location"
+        provision "The delivery location."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract EconomicTermsForProduct(ProductForEvent)
+    then filter Qualify_AssetClass_Commodity
+    then extract
+        if Qualify_Commodity_Swap_FixedFloat or Qualify_Commodity_Swap_Basis
+        then payout -> commodityPayout -> delivery first
+        else if Qualify_Commodity_Swaption
+        then EconomicTermsForProduct(payout -> optionPayout -> underlier only-element) -> payout -> commodityPayout -> delivery first
+        else if Qualify_Commodity_Option
+        then payout -> optionPayout -> delivery only-element
+        else if Qualify_Commodity_Forward
+        then payout -> forwardPayout only-element -> delivery
+        else payout -> commodityPayout only-element -> delivery
+    then extract item -> location
+    then filter locationIdentifierType = DeliveryPoint
+    then extract assignedIdentifier -> identifier
+    then flatten
+    then first
+        as "Delivery Location"
+
+reporting rule DTCC_Leg1SettlementPeriod from TransactionReportInstruction: <"Leg 1 - Settlement Period">
+    [docReference DTCC DTCC_Harmonized field "Leg 1 - Settlement Period"
+        provision "For power, the delivery days of the week. For power, the hours of day transmission starts and ends."]
+    // TH Sprint 2025-15: This field will remain empty due to insufficient descriptive information.
+    empty
+        as "Leg 1 - Settlement Period"
+
+reporting rule DTCC_LoadType from TransactionReportInstruction: <"Load Type">
+    [docReference DTCC DTCC_Harmonized field "Load Type"
+        provision "For power, load profile for the delivery."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract EconomicTermsForProduct(ProductForEvent)
+    then filter Qualify_AssetClass_Commodity
+    then extract
+        if Qualify_Commodity_Swap_FixedFloat or Qualify_Commodity_Swap_Basis
+        then (payout -> commodityPayout
+            first
+            then extract
+                if delivery -> periods -> profile exists
+                then delivery -> periods -> profile
+                else if schedule -> schedulePeriod -> deliveryPeriod -> profile exists
+                then schedule -> schedulePeriod -> deliveryPeriod -> profile)
+        else if Qualify_Commodity_Swaption
+        then (EconomicTermsForProduct(payout -> optionPayout -> underlier only-element) -> payout -> commodityPayout
+            first
+            then extract
+                if delivery -> periods -> profile exists
+                then delivery -> periods -> profile
+                else if schedule -> schedulePeriod -> deliveryPeriod -> profile exists
+                then schedule -> schedulePeriod -> deliveryPeriod -> profile)
+        else if Qualify_Commodity_Option
+        then (payout -> optionPayout
+            only-element
+            then extract
+                if delivery -> periods -> profile exists
+                then delivery -> periods -> profile
+                else if schedule -> schedulePeriod -> deliveryPeriod -> profile exists
+                then schedule -> schedulePeriod -> deliveryPeriod -> profile)
+        else if Qualify_Commodity_Forward
+        then (payout -> forwardPayout
+            only-element
+            then extract
+                if delivery -> periods -> profile exists
+                then delivery -> periods -> profile
+                else if schedule -> schedulePeriod -> deliveryPeriod -> profile exists
+                then schedule -> schedulePeriod -> deliveryPeriod -> profile)
+        else (payout -> commodityPayout
+            only-element
+            then extract
+                if delivery -> periods -> profile exists
+                then delivery -> periods -> profile
+                else if schedule -> schedulePeriod -> deliveryPeriod -> profile exists
+                then schedule -> schedulePeriod -> deliveryPeriod -> profile)
+    then extract
+        if loadType = LoadTypeEnum -> BaseLoad
+        then "Base"
+        else if loadType = LoadTypeEnum -> PeakLoad
+        then "Peak"
+        else if loadType = LoadTypeEnum -> OffPeak
+        then "OffPeak"
+        else if loadType = LoadTypeEnum -> BlockHours
+        then "BlockHours"
+        else if loadType = LoadTypeEnum -> Shaped
+        then "Shaped"
+        else if loadType = LoadTypeEnum -> GasDay
+        then "Gas Day"
+        else if loadType = LoadTypeEnum -> Other
+        then "Custom"
+    then distinct only-element
+        as "Load Type"
+
+reporting rule DTCC_TradeParty1BrokerIDType from TransactionReportInstruction: <"Trade Party 1 - Broker ID Type">
+    [docReference DTCC DTCC_Harmonized field "Trade Party 1 - Broker ID Type"
+        provision "Identifier type of a broker that acts as an intermediary for Counterparty 1 without becoming a counterparty."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract
+        ExtractPartyFromRelatedPartyByRole(
+                reportableInformation -> partyInformation -> relatedParty,
+                ArrangingBroker
+            )
+    then extract
+        if PartyLei(partyId) exists
+        then PartyIdentifierTypeEnum -> LEI
+        as "Trade Party 1 - Broker ID Type"
+
+reporting rule DTCC_Leg1CommodityInstrumentID from TransactionReportInstruction: <"Leg 1 - Commodity Instrument ID">
+    [docReference DTCC DTCC_Harmonized field "Leg 1 - Commodity Instrument ID"
+        provision "UPI RDL: A lower-level description of the characteristics of an asset or contract underlying a derivative; Required for CFTC PPD time delay calculation."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then extract
+        if Qualify_Commodity_Option(EconomicTermsForProduct)
+        then UnderlierForProduct -> commodity
+        else if Qualify_Commodity_Swaption(EconomicTermsForProduct)
+        then CommodityLeg1(UnderlierForProduct) -> underlier -> commodity
+        else if Qualify_Commodity_Swap_Basis(EconomicTermsForProduct)
+                or Qualify_Commodity_Forward(EconomicTermsForProduct) // For a Floating Price Forward, the commodityPayout contains the Commodity Reference Price.
+        then CommodityLeg1 -> underlier -> commodity
+    then extract productIdentifier
+    then filter source = ProductIdTypeEnum -> ISDACRP
+    then only-element
+    then extract identifier
+        as "Leg 1 - Commodity Instrument ID"
+
+reporting rule DTCC_Leg2CommodityInstrumentID from TransactionReportInstruction: <"Leg 2 - Commodity Instrument ID">
+    [docReference DTCC DTCC_Harmonized field "Leg 2 - Commodity Instrument ID"
+        provision "UPI RDL: A lower-level description of the characteristics of an asset or contract underlying a derivative; Required for CFTC PPD time delay calculation."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract ProductForEvent
+    then extract
+        if Qualify_Commodity_Swaption(EconomicTermsForProduct)
+        then CommodityLeg2(UnderlierForProduct) -> underlier -> commodity
+        else if Qualify_Commodity_Swap_Basis(EconomicTermsForProduct)
+                or Qualify_Commodity_Swap_FixedFloat(EconomicTermsForProduct)
+        then CommodityLeg2 -> underlier -> commodity
+    // For commodity forwards, the forwardPayout contains the physical quantity delivered and its associated conditions, not information pertaining to the price. Consequently, it will not contain a source = ISDACRP.
+    then extract productIdentifier
+    then filter source = ProductIdTypeEnum -> ISDACRP
+    then only-element
+    then extract identifier
+        as "Leg 2 - Commodity Instrument ID"
+
+reporting rule DTCC_ResponsibleDataSubmitterIDType from TransactionReportInstruction: <"Responsible Data Submitter - ID Type">
+    [docReference DTCC DTCC_Harmonized field "Responsible Data Submitter - ID Type"
+        provision "This field contains the ID Type associated with the Ultimate Data Submitter ID."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Responsible Data Submitter - ID Type"
+        provision "Firms indicated they would not use Responsible Data Submitter - ID field. This field will be revisited after go-live; consequently, Responsible Data Submitter - ID Type will also remain empty until that time."]
+    empty
+        as "Responsible Data Submitter - ID Type"
+
+reporting rule DTCC_ResponsibleDataSubmitterID from TransactionReportInstruction: <"Responsible Data Submitter - ID">
+    [docReference DTCC DTCC_Harmonized field "Responsible Data Submitter - ID"
+        provision "This field should only populated by Third Party Submitters who have been permissioned to act on behalf of SEFs, and not by any other submitters. This field must be populated with the LEI of the SEF."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Responsible Data Submitter - ID"
+        provision "Firms indicated they would not use this field. This field will be revisited after go-live; consequently, it will remain empty until that time."]
+    empty
+        as "Responsible Data Submitter - ID"
+
+reporting rule DTCC_MaturityDateOfTheUnderlying from TransactionReportInstruction: <"Maturity Date of the Underlier">
+    [docReference DTCC DTCC_Harmonized field "Maturity Date of the Underlier"
+        provision "The date on which the underlying transaction settles if the option is exercised.
+In the case of swaptions, maturity date of the underlying swap."]
+    filter csaTrade.IsAllowableActionForCSA
+    then common.datetime.MaturityDateOfTheUnderlier
+        as "Maturity Date of the Underlier"
+
+reporting rule DTCC_CorporateActionNewTradeParty1LEI from TransactionReportInstruction: <"Corporate Action - New Trade Party 1 LEI">
+    [docReference DTCC DTCC_Harmonized field "Corporate Action - New Trade Party 1 LEI"
+        provision "In the case of a Corporate Action/Merger, populate this field with the LEI of the reporting party that will replace Trade Party 1/Reporting counterparty. The value in this field will replace [Trade Party 1 - ID] on the trade after the submission is processed."]
+    [regulatoryReference ISDA EUUKNAPeerReviewGroup date "20250507" field "Corporate Action - New Trade Party 1 LEI"
+        provision "This field is intended to update the party affected by a corporate action in a trade. It has been agreed to defer support for this field at this time."]
+    empty
+        as "Corporate Action - New Trade Party 1 LEI"
+
+reporting rule DTCC_OtherPaymentPayerIDType from TransactionReportInstruction: <"Other Payment Payer ID Type">
+    [docReference DTCC DTCC_Harmonized field "Other Payment Payer ID Type"
+        provision "Identifier type of the payer of Other payment amount."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract TradeStateForEvent -> transferHistory
+    then filter IsOtherPayment
+    then extract
+        if transfer -> payerReceiver -> payerPartyReference -> partyId -> identifierType any = LEI
+        then transfer -> payerReceiver -> payerPartyReference
+    then extract PartyIdentifierType
+    then flatten
+        as "Other Payment Payer ID Type"
+
+reporting rule DTCC_OtherPaymentReceiverIDType from TransactionReportInstruction: <"Other Payment Receiver ID Type">
+    [docReference DTCC DTCC_Harmonized field "Other Payment Receiver ID Type"
+        provision "Identifier type of the receiver of Other payment amount."]
+    filter csaTrade.IsAllowableActionForCSA
+    then extract TradeStateForEvent -> transferHistory
+    then filter IsOtherPayment
+    then extract
+        if transfer -> payerReceiver -> payerPartyReference -> partyId -> identifierType any = LEI
+        then transfer -> payerReceiver -> receiverPartyReference
+    then extract PartyIdentifierType
+    then flatten
+        as "Other Payment Receiver ID Type"

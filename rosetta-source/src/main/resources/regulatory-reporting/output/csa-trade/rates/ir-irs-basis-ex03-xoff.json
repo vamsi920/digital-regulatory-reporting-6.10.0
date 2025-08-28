@@ -1,0 +1,99 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "I",
+  "counterparty1" : "G3SDK4EG3HH735DJJ456",
+  "counterparty2" : "F226TOH6YD6XJB17KS62",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "1298907642024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "InterestRate",
+    "submittedForParty" : "G3SDK4EG3HH735DJJ456",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2018-05-24",
+  "eventIdentifier" : "129890764",
+  "eventTimestamp" : "2021-10-07T13:18:08Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-10-07T13:18:08Z",
+  "expirationDate" : "2025-05-24",
+  "finalContractualSettlementDate" : "2025-05-24",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 10000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "G3SDK4EG3HH735DJJ456",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "F226TOH6YD6XJB17KS62",
+    "spread" : {
+      "basis" : 20
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "notionalAmount" : 10000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "F226TOH6YD6XJB17KS62",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 6,
+      "floatingRateResetFrequencyMultiplier" : 6,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "G3SDK4EG3HH735DJJ456",
+    "spread" : {
+      "basis" : 15
+    },
+    "spreadNotation" : "Basis"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "OTHR",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "EUR",
+          "NotionalSchedule" : "Constant",
+          "OtherLegReferenceRateTermUnit" : "MNTH",
+          "OtherLegReferenceRateTermValue" : 6,
+          "OtherLegUnderlierID" : "EUR-EURIBOR",
+          "OtherLegUnderlierIDSource" : "FPML",
+          "ReferenceRateTermUnit" : "MNTH",
+          "ReferenceRateTermValue" : 3,
+          "UnderlierID" : "EUR-EURIBOR",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Basis"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "G3SDK4EG3HH735DJJ456",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueProductIdentifier" : "MOCKUPI",
+  "uniqueTransactionIdentifier" : "IRIRSBASISEXXMLXXX01"
+}

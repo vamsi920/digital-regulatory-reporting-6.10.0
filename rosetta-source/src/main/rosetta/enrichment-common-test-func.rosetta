@@ -1,0 +1,49 @@
+namespace drr.enrichment.common.test
+version "${project.version}"
+
+import cdm.base.staticdata.party.*
+import cdm.event.workflow.*
+
+import drr.enrichment.common.trade.*
+import drr.enrichment.common.valuation.*
+import drr.regulation.common.*
+
+func Create_TransactionReportInstructionFromIngestionDefault: <"Creates a TransactionReportInstruction with the reportingSide attributes defaulted from an originatingWorkflowStep containing an instruction, reportableInformation. To be used only for testing purposes, NOT for production.">
+    inputs:
+        originatingWorkflowStep WorkflowStep (1..1)
+        reportableInformation ReportableInformation (1..1)
+    output:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+    set transactionReportInstruction:
+        Create_TransactionReportInstructionFromInstruction(
+                ReportableEvent {
+                    originatingWorkflowStep: originatingWorkflowStep,
+                    reportableInformation: reportableInformation,
+                    ...
+                },
+                CounterpartyRoleEnum -> Party1,
+                CounterpartyRoleEnum -> Party2,
+                empty,
+                empty
+            )
+
+func Create_ValuationReportInstructionFromIngestionDefault: <"Creates a ValuationReportInstruction with the reportingSide attributes defaulted from an originatingWorkflowStep containing an instruction, reportableInformation. To be used only for testing purposes, NOT for production. RegimeNameEnum is included to support jurisdiction-specific leg ordering.">
+    inputs:
+        originatingWorkflowStep WorkflowStep (1..1)
+        reportableInformation ReportableInformation (1..1)
+        regimeNameEnum RegimeNameEnum (0..1)
+    output:
+        valuationReportInstruction ValuationReportInstruction (1..1)
+    set valuationReportInstruction:
+        Create_ValuationReportInstructionFromInstruction(
+                ReportableEvent {
+                    originatingWorkflowStep: originatingWorkflowStep,
+                    reportableInformation: reportableInformation,
+                    ...
+                },
+                CounterpartyRoleEnum -> Party1,
+                CounterpartyRoleEnum -> Party2,
+                empty,
+                empty,
+                regimeNameEnum
+            )

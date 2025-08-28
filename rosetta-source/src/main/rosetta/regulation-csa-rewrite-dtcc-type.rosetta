@@ -1,0 +1,122 @@
+namespace drr.regulation.csa.rewrite.dtcc
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.party.*
+
+import drr.regulation.common.*
+import drr.regulation.csa.*
+import drr.standards.iso.*
+
+type DTCCAdditionalFields:
+    [rootType]
+    clearingVenueIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_ClearingVenueIDType]
+    tradeParty1ClearingBrokerIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_TradeParty1ClearingBrokerIDType]
+    tradeParty1IDType PartyIdentifierTypeEnum (1..1)
+	    [ruleReference DTCC_TradeParty1IDType]
+    submittingPartyIDType PartyIdentifierTypeEnum (1..1)
+	    [ruleReference DTCC_SubmittingPartyIDType]
+    allocationType string (0..1)
+	    [ruleReference DTCC_AllocationType]
+    usiID Max42AlphaNumericText (0..1)
+	    [ruleReference DTCC_USIID]
+    usiIDPrefix string (0..1)
+	    [ruleReference DTCC_USIIDPrefix]
+    newSDRIdentifier string (0..1)
+	    [ruleReference DTCC_NewSDRIdentifier]
+    submittedForParty LEIIdentifier (1..1)
+	    [ruleReference DTCC_SubmittedForParty]
+    tradeLegTypes string (0..1)
+	    [ruleReference DTCC_TradeLegTypes]
+    tradeParty1ReportingDestination SupervisoryBodyEnum (1..*)
+	    [ruleReference DTCC_TradeParty1ReportingDestination]
+    tradeParty2ReportingDestination SupervisoryBodyEnum (0..*)
+	    [ruleReference DTCC_TradeParty2ReportingDestination]
+    primaryAssetClass AssetClassEnum (1..1)
+	    [ruleReference DTCC_PrimaryAssetClass]
+    secondaryAssetClass AssetClassEnum (0..1)
+	    [ruleReference DTCC_SecondaryAssetClass]
+    comment1 string (0..1)
+	    [ruleReference DTCC_Comment1]
+    messageID string (0..1)
+	    [ruleReference DTCC_MessageID]
+    messageTypeTransaction string (0..1)
+	    [ruleReference DTCC_MessageTypeTransaction]
+    messageTypePPD string (0..1)
+	    [ruleReference DTCC_MessageTypePPD]
+    optionStyle OptionStyleEnum (0..1)
+	    [ruleReference DTCC_OptionStyle]
+    optionType string (0..1)
+	    [ruleReference DTCC_OptionType]
+    productID string (0..1)
+	    [ruleReference DTCC_ProductID]
+    tradeParty2ExecutionAgentID string (0..1)
+	    [ruleReference DTCC_TradeParty2ExecutionAgentID]
+    tradeParty2ExecutionAgentIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_TradeParty2ExecutionAgentIDType]
+    tradeParty1ExecutionAgentID string (0..1)
+	    [ruleReference DTCC_TradeParty1ExecutionAgentID]
+    tradeParty1ExecutionAgentIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_TradeParty1ExecutionAgentIDType]
+    tradeParty1TransactionID string (0..1)
+	    [ruleReference DTCC_TradeParty1TransactionID]
+    versionTransaction string (0..1)
+	    [ruleReference DTCC_VersionTransaction]
+    versionPPD string (0..1)
+	    [ruleReference DTCC_VersionPPD]
+    leg1CommodityUnderlyerID string (0..1)
+	    [ruleReference DTCC_Leg1CommodityUnderlyerID]
+    leg2CommodityUnderlyerID string (0..1)
+	    [ruleReference DTCC_Leg2CommodityUnderlyerID]
+    leg1FloatingRateIndex string (0..1)
+        [ruleReference DTCC_Leg1FloatingRateIndex]
+    leg2FloatingRateIndex string (0..1)
+        [ruleReference DTCC_Leg2FloatingRateIndex]
+    underlyingAsset UnderlyingAssetReport (0..*)
+        [ruleReference DTCC_UnderlyingAssetReport]
+    underlyingAssetName UnderlyingAssetNameReport (0..1)
+        [ruleReference DTCC_UnderlyingAssetName]
+    settlementType string (0..1)
+        [ruleReference DTCC_SettlementType]
+    executionVenueID string (0..1)
+        [ruleReference DTCC_ExecutionVenueID]
+    executionVenueIDType PartyIdentifierTypeEnum (0..1)
+        [ruleReference DTCC_ExecutionVenueIDType]
+    productGrade ProductGradeReport (0..*)
+        [ruleReference DTCC_ProductGrade]
+    deliveryLocation string (0..1)
+        [ruleReference DTCC_DeliveryLocation]
+    leg1SettlementPeriod string (0..1)
+        [ruleReference DTCC_Leg1SettlementPeriod]
+    loadType string (0..1)
+        [ruleReference DTCC_LoadType]
+    tradeParty1BrokerIDType PartyIdentifierTypeEnum (0..1)
+        [ruleReference DTCC_TradeParty1BrokerIDType]
+    leg1CommodityInstrumentID string (0..1)
+	    [ruleReference DTCC_Leg1CommodityInstrumentID]
+    leg2CommodityInstrumentID string (0..1)
+	    [ruleReference DTCC_Leg2CommodityInstrumentID]
+    responsibleDataSubmitterIDType PartyIdentifierTypeEnum (0..1)
+	    [ruleReference DTCC_ResponsibleDataSubmitterIDType]
+    responsibleDataSubmitterID string (0..1)
+	    [ruleReference DTCC_ResponsibleDataSubmitterID]
+    maturityDateOfTheUnderlying date (0..1)
+        [ruleReference DTCC_MaturityDateOfTheUnderlying]
+    corporateActionNewTradeParty1Lei LEIIdentifier (0..1)
+        [ruleReference DTCC_CorporateActionNewTradeParty1LEI]
+    otherPaymentPayerIDType string (0..18)
+        [ruleReference DTCC_OtherPaymentPayerIDType]
+    otherPaymentReceiverIDType string (0..18)
+        [ruleReference DTCC_OtherPaymentReceiverIDType]
+
+type UnderlyingAssetReport:
+    underlyingAssetID string (0..1)
+    underlyingAssetIDType string (0..1)
+
+type UnderlyingAssetNameReport:
+    underlyingAssetName string (0..20)
+
+type ProductGradeReport:
+    productGrade Max50Text (0..*)

@@ -1,0 +1,15 @@
+{
+  "id" : "test-pack-report-hkma-valuation-valuation",
+  "pipelineId" : "pipeline-report-hkma-valuation",
+  "name" : "Valuation",
+  "samples" : [ {
+    "id" : "valuation-ex01",
+    "name" : "Valuation ex01",
+    "inputPath" : "regulatory-reporting/input/valuation/Valuation-ex01.json",
+    "outputPath" : "regulatory-reporting/output/hkma-valuation/valuation/Valuation-ex01.json",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "runtimeError" : false
+    }
+  } ]
+}

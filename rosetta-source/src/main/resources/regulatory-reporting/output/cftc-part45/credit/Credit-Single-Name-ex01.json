@@ -1,0 +1,78 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "buyerIdentifier" : "DUMMY0000000000LEI02",
+  "cftcGuidebook" : {
+    "assetClass" : "Credit",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : true,
+    "settlementType" : "PHYS"
+  },
+  "cleared" : "I",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2002-12-05",
+  "eventIdentifier" : "SEF123",
+  "eventTimestamp" : "2002-12-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2002-12-04T16:20:47Z",
+  "expirationDate" : "2007-12-05",
+  "finalContractualSettlementDate" : "2007-12-05",
+  "leg1" : {
+    "fixedRate" : 0.007,
+    "notionalAmount" : 500000000,
+    "notionalCurrency" : "JPY",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DebtSeniority" : "SNDB",
+          "DeliveryType" : "PHYS",
+          "Underlying" : {
+            "UnderlierID" : "JP310860A032",
+            "UnderlierIDSource" : "ISIN"
+          }
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "DUMMY0000000000LEI01",
+  "uniqueTransactionIdentifier" : "CREDITSINGLENAMEEX02X17E16E15M14A13N12E11L10G9N8I7S6"
+}

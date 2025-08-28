@@ -1,0 +1,71 @@
+namespace drr.regulation.common.trade
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iso.*
+
+func LegEnrichment:
+    inputs:
+        leg cde.Leg (1..1)
+        notionalAmountSchedule cdebase.quantity.NotionalPeriod (0..*)
+        notionalQuantitySchedule cdebase.quantity.NotionalPeriod (0..*)
+        notionalQuantity ShortFraction5DecimalNumber (0..1)
+        floatingRateResetFrequencyPeriod FrequencyPeriodEnum (0..1)
+        floatingRateResetFrequencyMultiplier Max3Number (0..1)
+        fixingDate zonedDateTime (0..1)
+        quantityFrequency FrequencyPeriodEnum (0..1)
+        quantityFrequencyMultiplier Max3Number (0..1)
+        floatingRateIndicator IndexEnum (0..1)
+        floatingRateIdentifier ISINOct2015Identifier (0..1)
+        floatingRateReferencePeriod FrequencyPeriodEnum (0..1)
+        floatingRateReferencePeriodMultiplier Max3Number (0..1)
+        nameOfTheFloatingRate string (0..1)
+    output:
+        enrichedLeg CommonLeg (1..1)
+
+    set enrichedLeg: LegToCommonLeg(leg)
+    set enrichedLeg -> notionalAmountSchedule: notionalAmountSchedule
+    set enrichedLeg -> notionalQuantitySchedule: notionalQuantitySchedule
+    set enrichedLeg -> notionalQuantity: notionalQuantity
+    set enrichedLeg -> fixingDate: fixingDate
+    set enrichedLeg -> quantityFrequency: quantityFrequency
+    set enrichedLeg -> quantityFrequencyMultiplier: quantityFrequencyMultiplier
+    set enrichedLeg -> periodicPayment -> floatingRateResetFrequencyPeriod:
+        floatingRateResetFrequencyPeriod
+    set enrichedLeg -> periodicPayment -> floatingRateResetFrequencyMultiplier:
+        floatingRateResetFrequencyMultiplier
+    set enrichedLeg -> periodicPayment -> floatingRateIndicator: floatingRateIndicator
+    set enrichedLeg -> periodicPayment -> floatingRateIdentifier: floatingRateIdentifier
+    set enrichedLeg -> periodicPayment -> floatingRateReferencePeriod:
+        floatingRateReferencePeriod
+    set enrichedLeg -> periodicPayment -> floatingRateReferencePeriodMultiplier:
+        floatingRateReferencePeriodMultiplier
+    set enrichedLeg -> periodicPayment -> nameOfTheFloatingRate: nameOfTheFloatingRate
+
+func LegToCommonLeg:
+    inputs:
+        leg cde.Leg (1..1)
+    output:
+        commonLeg CommonLeg (1..1)
+
+    set commonLeg:
+        CommonLeg {
+            periodicPayment: payment.PeriodicPaymentToCommonPeriodicPayment(
+                    leg -> periodicPayment
+                ),
+            fixedRate: leg -> fixedRate,
+            notionalAmount: leg -> notionalAmount,
+            notionalCurrency: leg -> notionalCurrency,
+            notionalAmountSchedule: leg -> notionalAmountSchedule,
+            totalNotionalQuantity: leg -> totalNotionalQuantity,
+            notionalQuantitySchedule: leg -> notionalQuantitySchedule,
+            settlementCurrency: leg -> settlementCurrency,
+            spread: leg -> spread,
+            spreadNotation: leg -> spreadNotation,
+            spreadCurrency: leg -> spreadCurrency,
+            quantityUnitOfMeasure: leg -> quantityUnitOfMeasure,
+            direction2: leg -> direction2,
+            ...
+        }

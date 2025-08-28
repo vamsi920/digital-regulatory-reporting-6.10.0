@@ -1,0 +1,59 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "CTCaTO",
+    "source" : "Other"
+  } ],
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "SWAP",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI02",
+  "counterparty2IdentifierType" : true,
+  "effectiveDate" : "2020-12-14",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventIdentifier" : "56b4dc698dc540c49d70869f48dcf74d",
+  "eventTimestamp" : "2022-01-29T06:39:48.0169097Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-12-16T23:11:47Z",
+  "expirationDate" : "2022-12-19",
+  "leg1" : {
+    "notionalAmount" : 8291615,
+    "notionalCurrency" : "CAD",
+    "notionalQuantity" : 1,
+    "totalNotionalQuantity" : 1
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 8291615,
+    "notionalCurrency" : "CAD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "CDOR",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO",
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3
+    }
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "UnderlierID" : "CAD-BA-CDOR"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYSWAPPRICERET01"
+}

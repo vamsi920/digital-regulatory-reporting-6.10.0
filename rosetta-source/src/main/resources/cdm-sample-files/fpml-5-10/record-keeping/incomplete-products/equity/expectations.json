@@ -1,0 +1,4 @@
+[
+{"fileName":"cdm-sample-files/fpml-5-10/record-keeping/incomplete-products/equity/Equity-Swap-Parameter-Return-Volatility-Single-Index-ex01-GenericProduct.xml","excludedPaths":0,"externalPaths":162,"outstandingMappings":64,"validationFailures":34,"qualificationExpectation":{"success":false,"qualifyResults":[],"qualifiableObjectCount":1}},
+{"fileName":"cdm-sample-files/fpml-5-10/record-keeping/incomplete-products/equity/Equity-Swap-Price-Return-Basket-ex02-New.xml","excludedPaths":0,"externalPaths":297,"outstandingMappings":157,"validationFailures":16,"qualificationExpectation":{"success":false,"qualifyResults":[],"qualifiableObjectCount":1}},
+{"fileName":"cdm-sample-files/fpml-5-10/record-keeping/incomplete-products/equity/Equity-Swap-Price-Return-Basket-ex05-Termination.xml","excludedPaths":0,"externalPaths":259,"outstandingMappings":126,"validationFailures":22,"qualificationExpectation":{"success":false,"qualifyResults":[],"qualifiableObjectCount":1}}]

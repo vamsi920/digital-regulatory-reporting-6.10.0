@@ -1,0 +1,36 @@
+namespace drr.standards.iosco.cde.version2.basket
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iosco.cde.version2.* as cdeV2
+
+reporting rule CustomBasketCode from ReportableEvent: <"Custom basket code">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "97"
+        provision "If the OTC derivative transaction is based on a custom basket, unique code assigned by the structurer of the custom basket to link its constituents. This data element is not applicable if no custom basket is involved or no unique code has been assigned to it."]
+    cdeV1.basket.CustomBasketCode
+
+reporting rule IdentifierOfBasketConstituents from ReportableEvent: <"Identifier of the basket's constituents">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "98"
+        provision "Underliers that represent the constituents of a custom basket, in line with the underlier ID within the UPI reference data elements, as defined by the CPMI-IOSCO Technical Guidance: Harmonisation of the Unique Product Identifier. This data element is not applicable if no custom basket is involved."]
+    cdeV1.basket.IdentifierOfBasketConstituents
+
+reporting rule BasketConstituentUnitOfMeasure from TransactionReportInstruction: <"Basket Constituent Unit Of Measure">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "99"
+        provision "Unit of measure in which the number of units of a particular custom basket constituent is expressed. This data element is not applicable if no custom basket is involved."]
+    cdeV1.basket.BasketConstituentUnitOfMeasure
+
+reporting rule BasketConstituentNumberOfUnits from TransactionReportInstruction: <"Basket Constituent Number Of Units">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "100"
+        provision "The number of units of a particular constituent in a custom basket. This data element is not applicable if no custom basket is involved."]
+    cdeV1.basket.BasketConstituentNumberOfUnits
+
+reporting rule SourceOfTheIdentifierOfTheBasketConstituents from ReportableEvent: <"Source of the identifier of the basket constituents">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "101"
+        provision "Source of the underliers identifiers that represent the constituents of a custom basket, in line
+        with the underlier ID source within the UPI reference data elements, as defined by the CPMIIOSCO Technical Guidance: Harmonisation of the Unique Product Identifier. This data element is not applicable if no custom basket is involved."]
+    cdeV1.basket.SourceOfTheIdentifierOfTheBasketConstituents
+
+reporting rule BasketConstituents from TransactionReportInstruction: <"Basket constituents">
+    cdeV1.basket.BasketConstituents

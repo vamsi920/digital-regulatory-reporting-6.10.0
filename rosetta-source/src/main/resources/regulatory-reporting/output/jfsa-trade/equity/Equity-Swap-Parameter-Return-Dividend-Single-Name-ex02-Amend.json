@@ -1,0 +1,36 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "effectiveDate" : "2021-12-31",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI02",
+  "eventIdentifier" : "0e49a718fc2a4fb2b8638e550039f67a",
+  "eventTimestamp" : "2022-01-19T12:09:41.4127902Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-03-17T08:03:27Z",
+  "expirationDate" : "2022-12-31",
+  "finalContractualSettlementDate" : "2022-12-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 682240,
+    "notionalCurrency" : "CAD",
+    "quantityUnitOfMeasure" : "SHAS",
+    "totalNotionalQuantity" : 656000
+  },
+  "leg2" : {
+    "direction2" : "MAKE"
+  },
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "0e49a718fc2a4fb2b8638e550039f67a",
+  "underlyingIdentification" : "CA56501R1064",
+  "underlyingIdentificationType" : "I",
+  "uniqueTransactionIdentifier" : "EQUITYSWAPPARAMETE01"
+}

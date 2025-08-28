@@ -1,0 +1,49 @@
+namespace drr.regulation.common.trade.datetime
+version "${project.version}"
+
+import com.rosetta.model.*
+
+import drr.standards.iso.*
+
+func ClearingTimestamp_Validation: <"Clearing Timestamp">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        cleared ClearedEnum (0..1)
+        clearingTimestamp zonedDateTime (0..1)
+        executionTimestamp zonedDateTime (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and cleared = Y
+        then clearingTimestamp exists
+        else if actionType = ActionTypeEnum -> NEWT and cleared = Y
+        then clearingTimestamp exists and executionTimestamp = clearingTimestamp
+        else if cleared = N or cleared = I
+        then clearingTimestamp is absent
+
+func ExecutionTimestamp_Validation: <"Execution Timestamp">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        cleared ClearedEnum (0..1)
+        clearingTimestamp zonedDateTime (0..1)
+        executionTimestamp zonedDateTime (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+                and actionType = ActionTypeEnum -> NEWT
+                and cleared = Y
+        then executionTimestamp = clearingTimestamp
+
+func ExpirationDate_Validation: <"Expiration Date">
+    inputs:
+        actionType ActionTypeEnum (1..1)
+        effectiveDate ISODate (0..1)
+        executionTimestamp /*ISO*/ zonedDateTime (1..1)
+        expirationDate ISODate (0..1)
+    output:
+        result boolean (0..1)
+    set result:
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> REVI] any = actionType
+        then expirationDate >= executionTimestamp -> date and expirationDate >= effectiveDate

@@ -1,0 +1,72 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "bookingLocation" : "US",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2022-11-17T06:51:43Z",
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "549300I0XDZ4K7PDSS04",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2023-10-01",
+  "eventTimestamp" : "2022-11-17T06:54:28Z",
+  "executionTimestamp" : "2022-11-15T03:41:10Z",
+  "expirationDate" : "2023-10-31",
+  "finalContractualSettlementDate" : "2023-10-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 10000,
+    "quantityFrequency" : "ADHO",
+    "quantityUnitOfMeasure" : "TONE",
+    "totalNotionalQuantity" : 10000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 10000,
+    "quantityFrequency" : "ADHO",
+    "quantityUnitOfMeasure" : "TONE",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 10000
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "FO_180CST_SING_CARGOES",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "price" : {
+    "monetary" : 100
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "TONE",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingSpecifiedPerson" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYCFDENERGY02"
+}

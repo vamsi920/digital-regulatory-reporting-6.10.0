@@ -1,0 +1,184 @@
+namespace drr.regulation.cftc.tr
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.product.common.settlement.*
+import cdm.product.qualification.*
+
+import drr.regulation.cftc.rewrite.*
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.standards.iosco.cde.version2.* as cde
+
+corpus Guidance "CFTC Guidebook" Guidebook_Extension <"Document to specify additional fields required by TR for Part 45">
+
+corpus Specifications "DTCC Specs" DTCC_Specs <"Document providing the message specifications required for inbound message for DTCC for CFTC rewrite">
+corpus Specifications "CME Specs" CME_Specs <"Document providing the message specifications required for inbound message for CME for CFTC rewrite">
+
+reporting rule OptionType from TransactionReportInstruction:
+    extract common.contract.OptionType to-string
+
+reporting rule OptionStyle from TransactionReportInstruction: <"Option Style">
+    extract TradeForEvent
+    then extract tradableProduct -> product
+    then extract
+        if IsFloor or IsCap
+        then "EURO"
+        else if IsOption
+        then (contractualProduct -> economicTerms -> payout -> optionPayout only-element -> exerciseTerms -> optionStyle
+            extract
+                if item -> americanExercise exists
+                then "AMER"
+                else if item -> europeanExercise exists
+                then "EURO"
+                else if item -> bermudaExercise exists
+                then "BERM")
+
+reporting rule AssetClass from TransactionReportInstruction: <"Asset Class">
+    extract common.contract.AssetClass
+    then extract
+        if item = INTR
+        then "InterestRate"
+        else if item = CRDT
+        then "Credit"
+        else if item = EQUI
+        then "Equity"
+        else if item = COMM
+        then "Commodity"
+        else if item = CURR
+        then "ForeignExchange"
+
+reporting rule MandatoryClearingIndicator from TransactionReportInstruction:
+    extract reportableInformation -> partyInformation -> regimeInformation
+    then filter supervisoryBody = SupervisoryBodyEnum -> CFTC
+    then extract
+        if mandatorilyClearable = MandatorilyClearableEnum -> ProductAndCptyMandatory
+        then True
+        else if mandatorilyClearable = MandatorilyClearableEnum -> ProductMandatoryButNotCpty
+        then False
+    then distinct only-element
+
+reporting rule MaturityDateOfTheUnderlier from TransactionReportInstruction: <"Maturity Date of the Underlier">
+    extract ProductForEvent
+    then extract
+        if IsIRSwaption or IsCreditSwaption or IsCommoditySwaption
+        then UnderlierForProduct
+    then extract cde.datetime.ExpirationDate
+
+reporting rule LargeNotionalOffFacilitySwapElectionIndicator from TransactionReportInstruction: <"Large notional off-facility swap election indicator">
+    extract reportableInformation
+    then filter
+        partyInformation -> regimeInformation -> supervisoryBody any = SupervisoryBodyEnum -> CFTC
+    then extract
+        if largeSizeTrade = True
+                and (executionVenueType <> ExecutionVenueTypeEnum -> SEF
+                    and executionVenueType <> ExecutionVenueTypeEnum -> DCM)
+        then True
+        else False
+
+reporting rule SettlementType from TransactionReportInstruction: <"Settlement Type">
+    extract ProductForEvent
+    then extract
+        if SettlementTermsLeg1 exists
+        then SettlementTermsLeg1
+        else SettlementTermsLeg2
+    then extract
+        if (settlementType = SettlementTypeEnum -> Cash or cashSettlementTerms exists)
+        then "CASH"
+        else if (settlementType = SettlementTypeEnum -> Physical
+                or physicalSettlementTerms exists)
+        then "PHYS"
+        else if (settlementType = SettlementTypeEnum -> CashOrPhysical or settlementType = SettlementTypeEnum -> Election)
+        then "OPTL"
+
+reporting rule SefOrDcmIndicator from TransactionReportInstruction: <"SEF or DCM Indicator">
+    extract reportableInformation
+    then extract
+        if (executionVenueType = ExecutionVenueTypeEnum -> SEF
+                or executionVenueType = ExecutionVenueTypeEnum -> DCM)
+        then True
+        else False
+
+reporting rule SefOrDcmAnonymousExecutionIndicator from TransactionReportInstruction: <"SEF or DCM Anonymous Execution Indicator">
+    extract reportableInformation
+    then extract
+        if ((partyInformation
+                filter regimeInformation -> supervisoryBody any = SupervisoryBodyEnum -> CFTC
+                then exists
+                )
+                and (executionVenueType = ExecutionVenueTypeEnum -> SEF or executionVenueType = ExecutionVenueTypeEnum -> DCM))
+        then if sefOrDcmAnonymousIndicator exists
+            then sefOrDcmAnonymousIndicator
+            else False
+        else False
+
+reporting rule MessageTypeTradeState from TransactionReportInstruction: <"Message type is Trade State">
+    "Trade State"
+
+reporting rule MessageTypeRealTime from TransactionReportInstruction: <"Message type is Trade State">
+    "RT"
+
+reporting rule MessageTypeValuation from TransactionReportInstruction: <"Message type is Trade State">
+    [regulatoryReference CFTC Guidebook_Extension table "Table_Ref1" field "Message Type"
+        provision "***"]
+    [regulatoryReference CFTC DTCC_Specs table "Table_Ref1" field "Message Type"
+        provision "Need to indicate what message is being submitted to GTR"]
+    [regulatoryReference CFTC CME_Specs table "Table_Ref1" field "Submission type"
+        provision "An indication of whether the submission meets the requirements of Part 43 or Part 45"]
+    "Valuation"
+        as "TR Message Type"
+
+reporting rule MessageTypeCollateral from TransactionReportInstruction: <"Message type is Trade State">
+    [regulatoryReference CFTC Guidebook_Extension table "Table_Ref1" field "Message Type"
+        provision "***"]
+    [regulatoryReference CFTC DTCC_Specs table "Table_Ref1" field "Message Type"
+        provision "Need to indicate what message is being submitted to GTR"]
+    [regulatoryReference CFTC CME_Specs table "Table_Ref1" field "Submission type"
+        provision "An indication of whether the submission meets the requirements of Part 43 or Part 45"]
+    "CollateralValue"
+        as "TR Message Type"
+
+reporting rule SdMspIndicatorParty1 from TransactionReportInstruction: <"Indicator of whether counterparty 1 is SD or MSP.">
+    extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter partyReference = reportInstruction -> reportingSide -> reportingParty
+            then filter regimeInformation -> cftcPartyInformation -> organizationType exists
+            then extract regimeInformation
+            then flatten
+            then filter supervisoryBody = SupervisoryBodyEnum -> CFTC
+            then only-element
+            then extract
+                if (cftcPartyInformation -> organizationType = CFTCEntityClassificationEnum -> SD
+                        or cftcPartyInformation -> organizationType = CFTCEntityClassificationEnum -> MSP)
+                then True
+                else False
+    ]
+
+reporting rule SdMspIndicatorParty2 from TransactionReportInstruction: <"Indicator of whether counteparty 2 is SD or MSP.">
+    extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter
+                partyReference = reportInstruction -> reportingSide -> reportingCounterparty
+            then filter regimeInformation -> cftcPartyInformation -> organizationType exists
+            then extract regimeInformation
+            then flatten
+            then filter supervisoryBody = SupervisoryBodyEnum -> CFTC
+            then only-element
+            then extract
+                if cftcPartyInformation -> organizationType = CFTCEntityClassificationEnum -> SD
+                        or cftcPartyInformation -> organizationType = CFTCEntityClassificationEnum -> MSP
+                then True
+                else False
+    ]
+
+reporting rule PhysicalCommodityIndicator from TransactionReportInstruction: <"Indicator of whether the trade is a physical commodity.">
+    extract reportInstruction [
+        reportInstruction -> reportableInformation -> partyInformation
+            filter partyReference = reportInstruction -> reportingSide -> reportingParty
+            then only-element
+            then extract
+                if regimeInformation -> cftcPartyInformation -> physicalCommodityContractIndicator exists
+                then regimeInformation -> cftcPartyInformation -> physicalCommodityContractIndicator only-element
+                else False
+    ]

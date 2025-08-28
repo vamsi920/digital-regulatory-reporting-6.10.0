@@ -1,0 +1,4 @@
+namespace drr.standards.iosco.cde.version3
+version "${project.version}"
+
+corpus TechnicalGuidance "Harmonisation of Critical Data Elements (other than UTI and UPI) version 3" CDE <"Version 3 of the CDE Technical Guidance. This new version of the CDE Technical Guidance (version 3) includes certain revisions and new data elements to the September 2021 CDE Technical Guidance. These proposed revisions and additions are deemed necessary to further improve the standardisation and understanding of the data.">

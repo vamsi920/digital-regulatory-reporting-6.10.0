@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-hkma-margin",
+  "name" : "HKMA / Margin",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.hkma.rewrite.margin.reports.HKMAMarginReportFunction",
+    "inputType" : "drr.regulation.common.CollateralReportInstruction",
+    "outputType" : "drr.regulation.hkma.rewrite.margin.HKMAMarginReport"
+  }
+}

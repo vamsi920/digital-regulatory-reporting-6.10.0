@@ -1,0 +1,54 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "basketConstituents" : [ {
+    "identifier" : "ENR1n.DE",
+    "source" : "RIC"
+  }, {
+    "identifier" : "SIEGn.DE",
+    "source" : "RIC"
+  } ],
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "effectiveDate" : "2020-09-17",
+  "eventTimestamp" : "2020-10-05T15:20:38.7635176Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-09-17T16:25:19Z",
+  "expirationDate" : "2020-10-16",
+  "finalContractualSettlementDate" : "2020-10-16",
+  "firstExerciseDate" : "2020-09-17",
+  "leg1" : {
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "AMER",
+          "OptionType" : "CALL"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Option",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 48011.94,
+  "optionPremiumCurrency" : "EUR",
+  "optionStyle" : "AMER",
+  "optionType" : "CALL",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 128
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01"
+}

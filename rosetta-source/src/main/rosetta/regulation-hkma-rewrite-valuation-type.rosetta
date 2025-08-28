@@ -1,0 +1,131 @@
+namespace drr.regulation.hkma.rewrite.valuation
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.regulation.hkma.*
+import drr.standards.iso.*
+
+type HKMAValuationReport:
+    [rootType]
+    reportingTimestamp zonedDateTime (1..1)
+        [ruleReference ReportingTimestamp]
+    counterparty1 LEIIdentifier (1..1)
+        [ruleReference Counterparty1]
+    counterparty2 Min20Max72AlphaNumericText (1..1)
+        [ruleReference Counterparty2]
+    counterparty2Name Max105AlphaNumericText (1..1)
+        [ruleReference Counterparty2Name]
+    counterparty2IdentifierTypeIndicator boolean (1..1)
+            [ruleReference Counterparty2IdentifierTypeIndicator]
+    valuationAmount ShortFraction5DecimalNumber (1..1)
+        [ruleReference ValuationAmount]
+    valuationCurrency ISOCurrencyCodeEnum (1..1)
+        [ruleReference ValuationCurrency]
+    valuationTimestamp zonedDateTime (1..1)
+        [ruleReference ValuationTimestamp]
+    valuationMethod ValuationType1Code (1..1)
+        [ruleReference ValuationMethod]
+    delta ShortFraction5DecimalNumber (0..1)
+        [ruleReference Delta]
+    actionType ActionTypeEnum (1..1)
+        [ruleReference ActionType]
+    uniqueTransactionIdentifier Max52AlphaNumericText (1..1)
+         [ruleReference UniqueTransactionIdentifier]
+    uniqueTransactionIdentifierProprietary Max52AlphaNumericText (1..1)
+        [ruleReference UniqueTransactionIdentifierProprietary]
+    submitterIdentifier string (1..1)
+        [ruleReference SubmitterIdentifier]
+    entityResponsibleForReporting LEIIdentifier (0..1)
+        [ruleReference EntityResponsibleForReporting]
+    numberRecords ShortFraction5DecimalNumber (1..1)
+        [ruleReference NumberRecords]
+    technicalRecordId string (1..1)
+        [ruleReference TechnicalRecordId]
+    remarks string (0..1)
+        [ruleReference Remarks]
+    counterparty2IdentifierFormat PartyIdentifierFormat2Enum (0..1)
+        [nonReportable]
+        [ruleReference Counterparty2IdentifierFormat]
+    counterparty2SchemeName HKTRPartyScheme (0..1)
+        [nonReportable]
+        [ruleReference Counterparty2SchemeName]
+    uniqueTransactionIdentifierProprietarySchemeName UTIProprietarySchemeNameEnum (0..1)
+        [nonReportable]
+        [ruleReference UniqueTransactionIdentifierProprietarySchemeName]
+
+    condition DOC0010: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] is expected to fall on or after the [Execution timestamp] of original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0011: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] must not be a future timestamp."]
+        if [ActionTypeEnum -> NEWT, ActionTypeEnum -> MODI, ActionTypeEnum -> CORR, ActionTypeEnum -> TERM, ActionTypeEnum -> EROR, ActionTypeEnum -> REVI, ActionTypeEnum -> PRTO] any = actionType
+        then reportingTimestamp <= Now
+
+    condition DOC0016: <"Counterparty 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "6" validationRule "Counterparty 1"
+    provision "The [Counterparty 1] and [Counterparty 2] must be the same as original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0039: <"Valuation timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "36" validationRule "Valuation timestamp"
+    provision "The [Valuation timestamp] must not be a future timestamp."]
+        if [ActionTypeEnum -> VALU] any = actionType
+        then valuationTimestamp <= Now
+
+    condition DOC0040: <"Valuation timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "36" validationRule "Valuation timestamp"
+    provision "The [Valuation timestamp] must be equal to or later than the [Execution timestamp] of original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0137: <"Unique Transaction Identifier (UTI)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "138" validationRule "Unique Transaction Identifier (UTI)"
+    provision "The [Unique Transaction Identifier] does not match with the one derived from the trade reference indicated in the [c] field."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0114: <"[Submitter Identifier]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "153" validationRule "[Submitter Identifier]*"
+    provision "The [Submitter identifier] in the message does not match with the [Submitting party (From) ] in the Business Application Header"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0115: <"Entity responsible for reporting">
+        [docReference HKMA HKMA_Specs table "1" dataElement "154" validationRule "Entity responsible for reporting"
+    provision "The [Entity responsible for reporting] of a action must be the same as other trade actions in the same request file."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0136: <"Entity responsible for reporting">
+        [docReference HKMA HKMA_Specs table "1" dataElement "154" validationRule "Entity responsible for reporting"
+    provision "The [Entity responsible for reporting] must be an active TR participant with reporting service."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0127: <"Technical record identification">
+        [docReference HKMA HKMA_Specs table "1" dataElement "200" validationRule "Technical record identification"
+    provision "The [Technical record identification] must be unique for the [Entity responsible for reporting]."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True

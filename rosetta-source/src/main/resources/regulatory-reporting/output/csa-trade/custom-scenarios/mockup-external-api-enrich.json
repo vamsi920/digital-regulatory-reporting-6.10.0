@@ -1,0 +1,90 @@
+{
+  "actionType" : "NEWT",
+  "brokerID" : "549300OL8KL0WCQ34V31",
+  "cleared" : "I",
+  "counterparty1" : "5493001RKR55V4X61F71",
+  "counterparty2" : "549300O5MFEP1XJ40B46",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "BANKX00012024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Equity",
+    "submittedForParty" : "5493001RKR55V4X61F71",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1BrokerIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "PHGe.AS",
+      "underlyingAssetIDType" : "RIC"
+    }, {
+      "underlyingAssetID" : "NL0000009322",
+      "underlyingAssetIDType" : "ISIN"
+    }, {
+      "underlyingAssetID" : "PHILIPS BUY BACK ORD",
+      "underlyingAssetIDType" : "SingleOther"
+    } ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2008-06-02",
+  "eventIdentifier" : "BANKX0001",
+  "eventTimestamp" : "2011-02-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2008-06-04",
+  "finalContractualSettlementDate" : "2009-06-04",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 300000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "549300O5MFEP1XJ40B46",
+    "receiverIdentifier" : "5493001RKR55V4X61F71",
+    "settlementCurrency" : "EUR",
+    "totalNotionalQuantity" : 99999999999999999999.99999
+  },
+  "leg2" : {
+    "notionalAmount" : 300000,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "5493001RKR55V4X61F71",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004",
+      "floatingRatePaymentFrequencyPeriod" : "ADHO",
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "549300O5MFEP1XJ40B46",
+    "settlementCurrency" : "EUR"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "SettlementCurrency" : "EUR",
+          "UnderlierID" : "EUR-EURIBOR-Reuters"
+        },
+        "Header" : {
+          "AssetClass" : "Equity",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "packageIndicator" : false,
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "5493001RKR55V4X61F71",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "MOCKUPPOSTPRICEDXM01"
+}

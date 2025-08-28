@@ -1,0 +1,21 @@
+Projection,DRR: Cardinality Failures,DRR: Cardinality Total,DRR: Cardinality Success,DRR: Type Format Failures,DRR: Type Format Total,DRR: Type Format Success,DRR: Condition Failures,DRR: Condition Total,DRR: Condition Success,DRR: CONDITION-All-Valid,,ISO: Cardinality Failures,ISO: Cardinality Total,ISO: Cardinality Success,ISO: Type Format Failures,ISO: Type Format Total,ISO: Type Format Success,,Failures,Total,Success,,ISO: XML Schema Failures,ISO: XML Schema Total,ISO: XML Schema Success,,DRR: CONDITION All Valid,DRR: CONDITION All Valid Total,DRR: CONDITION All Valid Success
+drr.projection.dtcc.rds.harmonized.csa.rewrite.trade.functions.Project_CSATradeReportToDtccRdsHarmonized,84,70667,99.9,37,19823,99.8,1804,44511,95.9,0,,26,138861,100,0,101640,100,,1951,375502,99.5,,26,231,88.7,,0,231,0
+drr.projection.dtcc.rds.harmonized.csa.rewrite.trade.functions.Project_CsaPpdReportToDtccRdsHarmonized,84,69967,99.9,7,19402,100,980,44507,97.8,0,,26,138849,100,0,101601,100,,1097,374326,99.7,,26,231,88.7,,3,231,1.3
+drr.projection.dtcc.rds.harmonized.csa.rewrite.valuation.functions.Project_CSAValuationReportToDtccRdsHarmonized,8,38,78.9,0,12,100,0,14,100,1,,1,601,99.8,0,401,100,,9,1066,99.2,,1,1,0,,1,1,100
+drr.projection.iso20022.asic.rewrite.margin.functions.Project_ASICMarginReportToIso20022,1,28,96.4,0,13,100,0,21,100,1,,1,1,0,0,0,100,,2,63,96.8,,1,1,0,,1,1,100
+drr.projection.iso20022.asic.rewrite.trade.functions.Project_ASICTradeReportToIso20022,268,44675,99.4,14,14634,99.9,551,26847,97.9,0,,419,24080,98.3,164,4282,96.2,,1416,114518,98.8,,190,190,0,,7,190,3.7
+drr.projection.iso20022.esma.emir.refit.margin.functions.Project_EsmaEmirMarginReportToIso20022,0,32,100,0,16,100,7,78,91,0,,5,66,92.4,0,26,100,,12,218,94.5,,1,1,0,,0,1,0
+drr.projection.iso20022.esma.emir.refit.trade.functions.Project_EsmaEmirTradeReportToIso20022,92,39574,99.8,13,16666,99.9,2277,82980,97.3,0,,203,30466,99.3,17,4524,99.6,,2602,174210,98.5,,89,209,57.4,,0,209,0
+drr.projection.iso20022.fca.ukemir.refit.margin.functions.Project_FcaUkEmirMarginReportToIso20022,0,32,100,0,15,100,8,76,89.5,0,,5,67,92.5,0,26,100,,13,216,94,,1,1,0,,0,1,0
+drr.projection.iso20022.fca.ukemir.refit.trade.functions.Project_FcaUkEmirTradeReportToIso20022,83,32439,99.7,8,13574,99.9,2044,67954,97,0,,143,25330,99.4,19,3831,99.5,,2297,143128,98.4,,77,168,54.2,,0,168,0
+drr.projection.iso20022.hkma.rewrite.margin.dtcc.functions.Project_HKMADtccMarginReportToIso20022,4,36,88.9,0,18,100,0,20,100,1,,1,1,0,0,0,100,,5,75,93.3,,1,1,0,,1,1,100
+drr.projection.iso20022.hkma.rewrite.margin.tr.functions.Project_HKMATrMarginReportToIso20022,4,36,88.9,0,18,100,0,20,100,1,,1,1,0,0,0,100,,5,75,93.3,,1,1,0,,1,1,100
+drr.projection.iso20022.hkma.rewrite.trade.dtcc.functions.Project_HKMADtccTradeReportToIso20022,231,38061,99.4,20,14594,99.9,213,15990,98.7,0,,144,31220,99.5,160,6052,97.4,,768,105917,99.3,,167,190,12.1,,98,190,51.6
+drr.projection.iso20022.hkma.rewrite.trade.tr.functions.Project_HKMATrTradeReportToIso20022,231,38061,99.4,20,14594,99.9,213,15990,98.7,0,,108,31231,99.7,160,6038,97.4,,732,105914,99.3,,190,190,0,,98,190,51.6
+drr.projection.iso20022.hkma.rewrite.valuation.dtcc.functions.Project_HKMADtccValuationReportToIso20022,4,21,81,0,9,100,0,10,100,1,,1,51,98,0,10,100,,5,101,95,,1,1,0,,1,1,100
+drr.projection.iso20022.hkma.rewrite.valuation.tr.functions.Project_HKMATrValuationReportToIso20022,4,21,81,0,9,100,0,10,100,1,,1,50,98,0,10,100,,5,100,95,,1,1,0,,1,1,100
+drr.projection.iso20022.jfsa.rewrite.margin.functions.Project_JFSARewriteMarginReportToIso20022,0,32,100,0,16,100,0,21,100,1,,1,1,0,0,0,100,,1,70,98.6,,1,1,0,,1,1,100
+drr.projection.iso20022.jfsa.rewrite.trade.functions.Project_JFSARewriteTradeReportToIso20022,28,33337,99.9,13,13834,99.9,460,26652,98.3,0,,145,24796,99.4,162,4176,96.1,,808,102795,99.2,,167,190,12.1,,15,190,7.9
+drr.projection.iso20022.mas.rewrite.margin.functions.Project_MASMarginReportToIso20022,1,33,97,0,18,100,7,29,75.9,0,,7,68,89.7,0,27,100,,15,175,91.4,,1,1,0,,0,1,0
+drr.projection.iso20022.mas.rewrite.trade.functions.Project_MASTradeReportToIso20022,457,44481,99,8,14428,99.9,564,26653,97.9,0,,1115,24080,95.4,19,4252,99.6,,2163,113894,98.1,,190,190,0,,2,190,1.1
+Total,1584,411571,99.6,140,141693,99.9,9128,352383,97.4,0,,2353,469820,99.5,701,236896,99.7,,13906,1612363,99.1,,1132,1799,37.1,,230,1799,12.8

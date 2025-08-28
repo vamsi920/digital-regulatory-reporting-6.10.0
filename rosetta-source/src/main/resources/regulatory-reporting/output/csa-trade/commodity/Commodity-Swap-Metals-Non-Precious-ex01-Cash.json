@@ -1,0 +1,95 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "30292b1763024c758be20e5aeb3ae3442024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.ON.OSC", "CA.AB.ASC" ],
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2022-01-01",
+  "eventIdentifier" : "30292b1763024c758be20e5aeb3ae344",
+  "eventTimestamp" : "2021-11-18T15:00:10.2261358Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-11-18T14:57:59Z",
+  "expirationDate" : "2022-03-31",
+  "finalContractualSettlementDate" : "2022-03-31",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 18734000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2000,
+    "payerIdentifier" : "DUMMY0000000000LEI01",
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 3,
+    "quantityUnitOfMeasure" : "TONE",
+    "receiverIdentifier" : "DUMMY0000000000LEI02",
+    "totalNotionalQuantity" : 2000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "COPPER-LME CASH",
+    "cryptoAssetUnderlyingIndicator" : false,
+    "notionalAmount" : 18734000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 2000,
+    "payerIdentifier" : "DUMMY0000000000LEI02",
+    "quantityFrequency" : "MNTH",
+    "quantityFrequencyMultiplier" : 3,
+    "quantityUnitOfMeasure" : "TONE",
+    "receiverIdentifier" : "DUMMY0000000000LEI01",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 2000,
+    "underlierIDOther" : "COPPER-LME CASH",
+    "underlierIDOtherSource" : "ISDACRP"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "COPPER-LME CASH",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 9367
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "TONE",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPMETAL01"
+}

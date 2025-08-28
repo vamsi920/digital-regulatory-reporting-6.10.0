@@ -1,0 +1,56 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMYLEI123456789002",
+  "counterparty2" : "DUMMYLEI123456789001",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "maturityDateOfTheUnderlying" : "2024-12-20",
+    "messageID" : "DTDUnapproved11370799001DFCFTCRiskNewNewCre2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Credit",
+    "submittedForParty" : "DUMMYLEI123456789002",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "underlyingAsset" : [ {
+      "underlyingAssetID" : "US0089ABC985",
+      "underlyingAssetIDType" : "ISIN"
+    } ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2020-02-27",
+  "eventTimestamp" : "2022-02-11T07:48:32Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-11T07:48:14Z",
+  "expirationDate" : "2020-03-18",
+  "firstExerciseDate" : "2020-03-18",
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 500000000,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "settlementCurrency" : "CNY"
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "EUR",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMYLEI123456789002",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "settlementLocation" : "HK",
+  "strikePrice" : {
+    "decimal" : 0.01
+  },
+  "strikePriceNotation" : "Decimal",
+  "uniqueTransactionIdentifier" : "CREDITSWAPTIONITRA02"
+}

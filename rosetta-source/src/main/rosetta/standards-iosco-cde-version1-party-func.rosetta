@@ -1,0 +1,411 @@
+namespace drr.standards.iosco.cde.version1.party
+version "${project.version}"
+
+import cdm.base.staticdata.party.*
+import cdm.event.common.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iso.*
+
+func Direction1BuyerParty:
+    inputs:
+        trade Trade (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterparty:
+        if EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> optionPayout exists
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> optionPayout only-element -> buyerSeller -> buyer
+                )
+        else if IsCreditDefaultSwap(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> creditDefaultPayout -> payerReceiver -> receiver
+                )
+        else if IsVarianceSwap(trade -> tradableProduct -> product)
+                or IsVolatilitySwap(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> performancePayout only-element -> payerReceiver -> receiver
+                )
+        else if IsCapFloor(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> interestRatePayout only-element -> payerReceiver -> payer
+                )
+        else if IsProductETD(trade -> tradableProduct -> product)
+                and EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> forwardPayout exists
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+        else if IsSingleCommodityPayoutProduct(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> commodityPayout only-element -> payerReceiver -> payer
+                )
+        else if IsCommodityForward(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+        else if Qualify_InterestRate_Forward_Debt(
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms
+                )
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+        else if IsTotalReturnSwapDebtUnderlier(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> payer
+                )
+        else if IsEquityForward(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+    set party: counterparty -> partyReference
+
+func Direction1SellerParty:
+    inputs:
+        trade Trade (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterparty:
+        if EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> optionPayout exists
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> optionPayout only-element -> buyerSeller -> seller
+                )
+        else if IsCreditDefaultSwap(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> creditDefaultPayout -> payerReceiver -> payer
+                )
+        // TH Review -> should apply to all VOL/VAR/CORR swaps. Correlation pending
+        else if IsVarianceSwap(trade -> tradableProduct -> product)
+                or IsVolatilitySwap(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> performancePayout only-element -> payerReceiver -> payer
+                )
+        else if IsCapFloor(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> interestRatePayout only-element -> payerReceiver -> receiver
+                )
+        else if IsProductETD(trade -> tradableProduct -> product)
+                and EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> forwardPayout exists
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+        else if IsSingleCommodityPayoutProduct(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    EconomicTermsForProduct(trade -> tradableProduct -> product) -> payout -> commodityPayout only-element -> payerReceiver -> receiver
+                )
+        else if IsCommodityForward(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+        else if Qualify_InterestRate_Forward_Debt(
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms
+                )
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+        else if IsTotalReturnSwapDebtUnderlier(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> receiver
+                )
+        else if IsEquityForward(trade -> tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    trade -> tradableProduct -> counterparty,
+                    trade -> tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+    set party: counterparty -> partyReference
+
+func Direction1: <"2.13 Direction. Reporting counterparties should use either:
+    - the element Direction 1 or Buyer identifier and Seller identifier to identify the direction of the transaction for the reporting counterparty as Buyer or Seller (model 1); or
+    - the element Direction 2 or Payer identifier and Receiver identifier to identify the payer and the receiver of each leg (model 2).
+    Reporting counterparties should NOT use both approaches, but adopt the appropriate one for the type of instrument concerned.">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "13" dataElement "1"
+        provision "Indicator of whether the counterparty 1 is the buyer or the seller as determined at the time of the transaction."]
+    inputs:
+        event TransactionReportInstruction (1..1)
+    output:
+        direction Direction1Enum (1..1)
+
+    alias tradableProduct: TradableProductForEvent(event)
+    alias reportingParty: Counterparty1(event)
+    alias buyer:
+        if EconomicTermsForProduct(tradableProduct -> product) -> payout -> optionPayout exists
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> optionPayout only-element -> buyerSeller -> buyer
+                )
+        else if IsCreditDefaultSwap(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> creditDefaultPayout -> payerReceiver -> receiver
+                )
+        else if IsVarianceSwap(tradableProduct -> product)
+                or IsVolatilitySwap(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> performancePayout only-element -> payerReceiver -> receiver
+                )
+        else if IsCapFloor(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> interestRatePayout only-element -> payerReceiver -> payer
+                )
+        else if IsProductETD(tradableProduct -> product)
+                and EconomicTermsForProduct(tradableProduct -> product) -> payout -> forwardPayout exists
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+        else if IsSingleCommodityPayoutProduct(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> commodityPayout only-element -> payerReceiver -> payer
+                )
+        else if IsCommodityForward(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+        else if Qualify_InterestRate_Forward_Debt(
+                    tradableProduct -> product -> contractualProduct -> economicTerms
+                )
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+        else if IsTotalReturnSwapDebtUnderlier(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> payer
+                )
+        else if IsEquityForward(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+
+    alias seller:
+        if EconomicTermsForProduct(tradableProduct -> product) -> payout -> optionPayout exists
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> optionPayout only-element -> buyerSeller -> seller
+                )
+        else if IsCreditDefaultSwap(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> creditDefaultPayout -> payerReceiver -> payer
+                )
+        // TH Review -> should apply to all VOL/VAR/CORR swaps. Correlation pending
+        else if IsVarianceSwap(tradableProduct -> product)
+                or IsVolatilitySwap(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> performancePayout only-element -> payerReceiver -> payer
+                )
+        else if IsCapFloor(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> interestRatePayout only-element -> payerReceiver -> receiver
+                )
+        else if IsProductETD(tradableProduct -> product)
+                and EconomicTermsForProduct(tradableProduct -> product) -> payout -> forwardPayout exists
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+        else if IsSingleCommodityPayoutProduct(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    EconomicTermsForProduct(tradableProduct -> product) -> payout -> commodityPayout only-element -> payerReceiver -> receiver
+                )
+        else if IsCommodityForward(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> payer
+                )
+        else if Qualify_InterestRate_Forward_Debt(
+                    tradableProduct -> product -> contractualProduct -> economicTerms
+                )
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+        else if IsTotalReturnSwapDebtUnderlier(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> receiver
+                )
+        else if IsEquityForward(tradableProduct -> product)
+        then ExtractCounterpartyByRole(
+                    tradableProduct -> counterparty,
+                    tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> forwardPayout only-element -> payerReceiver -> receiver
+                )
+    set direction:
+        if reportingParty = PartyLei(buyer -> partyReference -> partyId)
+        then BYER
+        else if reportingParty = PartyLei(seller -> partyReference -> partyId)
+        then SLLR
+
+func Direction2PayerPartyLeg1:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwapFloatFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsCommoditySwapFixedFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> fixedPricePayout exists
+        then FixedPriceLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg1(ProductForEvent(reportableEvent)) -> payerReceiver -> payer
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsEquitySwap(TradableProductForEvent(reportableEvent))
+        then ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> payer
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func Direction2PayerPartyLeg2:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> payer
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func Direction2ReceiverPartyLeg1:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwapFloatFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsCommoditySwapFixedFloat(ProductForTrade(TradeForEvent(reportableEvent)))
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> fixedPricePayout exists
+        then FixedPriceLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg1(ProductForEvent(reportableEvent)) -> payerReceiver -> receiver
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsEquitySwap(TradableProductForEvent(reportableEvent))
+        then ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> performancePayout only-element -> payerReceiver -> receiver
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg1(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func Direction2ReceiverPartyLeg2:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        party Party (0..1)
+
+    alias counterpartyRole:
+        if IsCommoditySwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then CommodityLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsFXForward(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if IsFXSwap(ProductForTrade(TradeForEvent(reportableEvent)))
+        then FXSwapLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+        else if Qualify_InterestRate_Option_Swaption(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and Qualify_InterestRate_CapFloor(
+                        ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms
+                    ) = False
+                and ProductForTrade(TradeForEvent(reportableEvent)) -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout is absent
+        then InterestRateLeg2(ProductForTrade(TradeForEvent(reportableEvent))) -> payerReceiver -> receiver
+    set party:
+        ExtractCounterpartyByRole(
+                TradeForEvent(reportableEvent) -> tradableProduct -> counterparty,
+                counterpartyRole
+            ) -> partyReference
+
+func Direction2: <"2.13 Direction. Reporting counterparties should use either:
+    - the element Direction 1 or Buyer identifier and Seller identifier to identify the direction of the transaction for the reporting counterparty as Buyer or Seller (model 1); or
+    - the element Direction 2 or Payer identifier and Receiver identifier to identify the payer and the receiver of each leg (model 2).
+    Reporting counterparties should NOT use both approaches, but adopt the appropriate one for the type of instrument concerned.">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "13" dataElement "1"
+        provision "Indicator of whether the reporting counterparty is the payer or the receiver of the leg as determined at the time of the transaction."]
+    inputs:
+        event TransactionReportInstruction (1..1)
+        payerReceiver PayerReceiver (1..1)
+    output:
+        direction Direction2Enum (1..1)
+
+    alias reportingParty: Counterparty1(event)
+    alias counterparties: TradeForEvent(event) -> tradableProduct -> counterparty
+    alias payerParty: ExtractCounterpartyByRole(counterparties, payerReceiver -> payer)
+    alias receiverParty:
+        ExtractCounterpartyByRole(counterparties, payerReceiver -> receiver)
+
+    set direction:
+        if reportingParty = PartyLei(payerParty -> partyReference -> partyId)
+        then MAKE
+        else if reportingParty = PartyLei(receiverParty -> partyReference -> partyId)
+        then TAKE

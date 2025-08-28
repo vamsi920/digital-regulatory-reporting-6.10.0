@@ -1,0 +1,58 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CRDT",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : true,
+  "contractType" : "OTHR",
+  "counterparty1" : "549300O5MFEP1XJ40B46",
+  "counterparty2" : "5493001RKR55V4X61F71",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "SLLR",
+  "effectiveDate" : "2009-03-26",
+  "entityResponsibleForReporting" : "549300O5MFEP1XJ40B46",
+  "eventTimestamp" : "2011-03-04T16:42:16Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2014-06-20",
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 5000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DebtSeniority" : "SNDB",
+          "DeliveryType" : "OPTL"
+        },
+        "Header" : {
+          "AssetClass" : "Credit",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "otherPayment" : [ {
+    "amount" : 1000,
+    "currency" : "USD",
+    "date" : "2009-03-28",
+    "payer" : "5493001RKR55V4X61F71",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "549300O5MFEP1XJ40B46",
+    "receiverFormat" : "Lei"
+  } ],
+  "reportSubmittingEntityID" : "549300O5MFEP1XJ40B46",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdOther" : "8G836JAF2",
+  "underlyingIdOtherSource" : "Other",
+  "underlyingIdentificationType" : "O",
+  "variationMarginCollateralPortfolioCode" : "COLL123"
+}

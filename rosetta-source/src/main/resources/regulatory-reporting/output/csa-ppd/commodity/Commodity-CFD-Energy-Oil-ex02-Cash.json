@@ -1,0 +1,82 @@
+{
+  "actionType" : "CORR",
+  "cleared" : "N",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "549300I0XDZ4K7PDSS04",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "D2F9H9SRAEF9ANZRRQS2024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "7H6GLXDRUGQFU57RNE97",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "S-:FXD:FLT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CFTC", "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "COMMODITYCFDENERGY01",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2023-10-01",
+  "eventTimestamp" : "2022-11-17T06:54:28Z",
+  "executionTimestamp" : "2022-11-15T03:41:10Z",
+  "expirationDate" : "2023-10-31",
+  "leg1" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 10000,
+    "quantityFrequency" : "ADHO",
+    "quantityUnitOfMeasure" : "TONE",
+    "totalNotionalQuantity" : 10000
+  },
+  "leg2" : {
+    "commodityInstrumentID" : "FO_180CST_SING_CARGOES",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 10000,
+    "quantityFrequency" : "ADHO",
+    "quantityUnitOfMeasure" : "TONE",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 10000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Swap",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "ReturnorPayoutTrigger" : "Total Return",
+          "UnderlierID" : "FO_180CST_SING_CARGOES",
+          "UnderlierIDSource" : "COMM"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Swap"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "returnorPayoutTrigger" : "Contract_for_Difference_CFD_",
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "price" : {
+    "monetary" : 100
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "TONE",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYCFDENERGY02"
+}

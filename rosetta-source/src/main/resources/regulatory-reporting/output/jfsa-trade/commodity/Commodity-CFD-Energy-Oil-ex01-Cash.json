@@ -1,0 +1,48 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmationTimestamp" : "2021-08-18T14:16:25Z",
+  "confirmed" : "YCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "7H6GLXDRUGQFU57RNE97",
+  "counterparty2" : "5U0XI89JRFVHWIBS4F54",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2022-03-01",
+  "entityResponsibleForReporting" : "7H6GLXDRUGQFU57RNE97",
+  "eventIdentifier" : "D2F9D3C7AEF97KMZ92S",
+  "eventTimestamp" : "2021-08-18T14:17:08Z",
+  "executionTimestamp" : "2021-08-12T07:32:01Z",
+  "expirationDate" : "2023-10-31",
+  "finalContractualSettlementDate" : "2023-10-31",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "totalNotionalQuantity" : 3000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 30000000,
+    "notionalCurrency" : "JPY",
+    "settlementCurrency" : "JPY",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 3000
+  },
+  "price" : {
+    "monetary" : 10000
+  },
+  "priceCurrency" : "JPY",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "7H6GLXDRUGQFU57RNE97",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "D2F9D3C7AEF97KMZ92S",
+  "uniqueTransactionIdentifier" : "COMMODITYCFDENERGY02"
+}

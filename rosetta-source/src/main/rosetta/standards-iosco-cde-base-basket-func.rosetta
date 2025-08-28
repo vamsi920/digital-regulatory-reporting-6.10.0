@@ -1,0 +1,51 @@
+namespace drr.standards.iosco.cde.base.basket
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.event.common.*
+
+import drr.regulation.common.*
+
+func GetBasketConstituentsProductIdentifier: <"Extracts a product identifier from each constituent of custom baskets. One product identifier per basket constituent.">
+    inputs:
+        trade Trade (1..1)
+    output:
+        productIdentifiers ProductIdentifier (0..*) <"Single product identifier per basket constituent.">
+
+    alias product: ProductForTrade(trade)
+
+    alias basketConstituents:
+        if UnderlierForProduct(product) -> basket -> basketConstituent exists
+        then UnderlierForProduct(product) -> basket -> basketConstituent
+        else if EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> basket -> basketConstituent exists
+        then EconomicTermsForProduct(product) -> payout -> performancePayout -> underlier -> basket -> basketConstituent
+        else if EconomicTermsForProduct(product) -> payout -> commodityPayout -> underlier -> basket -> basketConstituent exists
+                and IsSingleCommodityPayoutProduct(product) = False
+        then EconomicTermsForProduct(product) -> payout -> commodityPayout -> underlier -> basket -> basketConstituent
+
+    alias referenceObligations:
+        if EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> referencePool -> referencePoolItem -> referencePair -> referenceObligation exists
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> referencePool -> referencePoolItem -> referencePair -> referenceObligation
+
+    add productIdentifiers:
+        basketConstituents
+            extract
+                if security exists
+                then security -> productIdentifier
+                else if loan exists
+                then loan -> productIdentifier
+                else if commodity exists
+                then commodity -> productIdentifier
+                else if index exists
+                then index -> productIdentifier
+            then extract GetProductIdentifierFilteringISIN
+
+    add productIdentifiers:
+        referenceObligations
+            extract
+                if security exists
+                then security -> productIdentifier
+                else if loan exists
+                then loan -> productIdentifier
+            then extract GetProductIdentifierFilteringISIN

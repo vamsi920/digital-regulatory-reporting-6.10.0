@@ -1,0 +1,231 @@
+namespace drr.regulation.hkma.rewrite.margin
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.datetime.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.regulation.hkma.*
+import drr.standards.iso.*
+
+type HKMAMarginReport:
+    [rootType]
+    reportingTimestamp zonedDateTime (1..1)
+        [ruleReference ReportingTimestamp]
+    counterparty1 LEIIdentifier (1..1)
+        [ruleReference Counterparty1]
+    counterparty2 Min20Max72AlphaNumericText (1..1)
+        [ruleReference Counterparty2]
+    counterparty2Name Max105AlphaNumericText (1..1)
+        [ruleReference Counterparty2Name]
+    counterparty2IdentifierTypeIndicator boolean (1..1)
+            [ruleReference Counterparty2IdentifierTypeIndicator]
+    collateralPortfolioIndicator boolean (0..1)
+        [ruleReference CollateralPortfolioIndicator]
+    initialMarginPostedByTheReportingCounterparty1PreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginPostedByTheReportingCounterparty1PreHaircut]
+    initialMarginPostedByTheReportingCounterparty1PostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginPostedByTheReportingCounterparty1PostHaircut]
+    currencyOfInitialMarginPosted ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfInitialMarginPosted]
+    initialMarginCollectedByTheReportingCounterparty1PreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginCollectedByTheReportingCounterparty1PreHaircut]
+    initialMarginCollectedByTheReportingCounterparty1PostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference InitialMarginCollectedByTheReportingCounterparty1PostHaircut]
+    currencyOfInitialMarginCollected ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfInitialMarginCollected]
+    variationMarginPostedByTheReportingCounterparty1PreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterparty1PreHaircut]
+    variationMarginPostedByTheReportingCounterparty1PostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterparty1PostHaircut]
+    currencyOfVariationMarginPosted ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfVariationMarginPosted]
+    variationMarginCollectedByTheReportingCounterparty1PreHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterparty1PreHaircut]
+    variationMarginCollectedByTheReportingCounterparty1PostHaircut ShortFraction5DecimalNumber (0..1)
+        [ruleReference VariationMarginPostedByTheReportingCounterparty1PostHaircut]
+    currencyOfVariationMarginCollected ISOCurrencyCodeEnum (0..1)
+        [ruleReference CurrencyOfVariationMarginCollected]
+    excessCollateralPostedByTheCounterparty1 ShortFraction5DecimalNumber (0..1)
+        [ruleReference ExcessCollateralPostedByTheCounterparty1]
+    currencyOfExcessCollateralPosted string (0..1)
+        [ruleReference CurrencyOfExcessCollateralPosted]
+    excessCollateralCollectedByTheCounterparty1 ShortFraction5DecimalNumber (0..1)
+        [ruleReference ExcessCollateralCollectedByTheCounterparty1]
+    currencyOfTheExcessCollateralCollected string (0..1)
+        [ruleReference CurrencyOfExcessCollateralCollected]
+    collateralisationCategory CollateralisationType3Code__1 (0..1) 
+        [ruleReference CollateralisationCategory]
+    actionType MarginActionEnum (0..1)
+        [ruleReference ActionType]
+    eventTimestamp zonedDateTime (1..1)
+        [ruleReference EventTimestamp]
+    uniqueTransactionIdentifier UTIIdentifier (0..1)
+        [ruleReference UniqueTransactionIdentifier]
+    initialMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference InitialMarginCollateralPortfolioCode]
+    portfolioContainingNonReportableComponentIndicator boolean (1..1)
+        [ruleReference PortfolioContainingNonReportableComponentIndicator]
+    variationMarginCollateralPortfolioCode Max52AlphaNumericText (0..1)
+        [ruleReference VariationMarginCollateralPortfolioCode]
+    submitterIdentifier string (1..1)
+        [ruleReference SubmitterIdentifier]
+    entityResponsibleForReporting LEIIdentifier (0..1)
+        [ruleReference EntityResponsibleForReporting]
+    collateralTimestamp zonedDateTime (0..1)
+        [ruleReference CollateralTimestamp]
+    numberRecords ShortFraction5DecimalNumber (1..1)
+        [ruleReference NumberRecords]
+    technicalRecordId string (1..1)
+        [ruleReference TechnicalRecordId]
+    eventDate date (0..1)
+        [nonReportable]
+        [ruleReference EventDate]
+    counterparty2IdentifierFormat PartyIdentifierFormat2Enum (0..1)
+        [nonReportable]
+        [ruleReference Counterparty2IdentifierFormat]
+
+    condition DOC0010: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] is expected to fall on or after the [Execution timestamp] of original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0011: <"Reporting timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "4" validationRule "Reporting timestamp"
+    provision "The [Reporting timestamp] must not be a future timestamp."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+        then reportingTimestamp <= Now
+
+    condition DOC0016: <"Counterparty 1">
+        [docReference HKMA HKMA_Specs table "1" dataElement "6" validationRule "Counterparty 1"
+    provision "The [Counterparty 1] and [Counterparty 2] must be the same as original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0128: <"Initial margin posted by the counterparty 1 (pre-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "39" validationRule "Initial margin posted by the counterparty 1 (pre-haircut)"
+    provision "The [Initial margin posted by the counterparty 1 (pre-haircut)] is required if the [Collateralisation category] is populated with OWC1 or OWP1 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> OWC1, CollateralisationType3Code__1 -> OWP1, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then initialMarginPostedByTheReportingCounterparty1PreHaircut exists
+
+    condition DOC0129: <"Initial margin posted by the counterparty 1 (pre-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "40" validationRule "Initial margin posted by the counterparty 1 (pre-haircut)"
+    provision "The [Initial margin posted by the counterparty 1 (post-haircut)] is required if the [Collateralisation category] is populated with OWC1 or OWP1 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> OWC1, CollateralisationType3Code__1 -> OWP1, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then initialMarginPostedByTheReportingCounterparty1PostHaircut exists
+
+    condition DOC0130: <"Initial margin collected by the counterparty 1 (pre-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "42" validationRule "Initial margin posted by the counterparty 1 (pre-haircut)"
+    provision "The [Initial margin collected by the counterparty 1 (pre-haircut)] is required if the [Collateralisation category] is populated with OWC2 or OWP2 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> OWC2, CollateralisationType3Code__1 -> OWP2, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then initialMarginCollectedByTheReportingCounterparty1PreHaircut exists
+
+    condition DOC0131: <"Initial margin collected by the counterparty 1 (post-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "43" validationRule "Initial margin collected by the counterparty 1 (post-haircut)"
+    provision "The [Initial margin collected by the counterparty 1 (post-haircut)] is required if the [Collateralisation category] is populated with OWC2 or OWP2 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> OWC2, CollateralisationType3Code__1 -> OWP2, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then initialMarginCollectedByTheReportingCounterparty1PostHaircut exists
+
+    condition DOC0132: <"Variation margin posted by the counterparty 1 (pre-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "45" validationRule "Variation margin posted by the counterparty 1 (pre-haircut)"
+    provision "The [Variation margin posted by the counterparty 1 (pre-haircut)] is required if the [Collateralisation category] is populated with PRC1 or PRCL or OWC1 or OWP1 or OWP2 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> PRC1, CollateralisationType3Code__1 -> PRCL, CollateralisationType3Code__1 -> OWC1, CollateralisationType3Code__1 -> OWP1, CollateralisationType3Code__1 -> OWP2, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then variationMarginPostedByTheReportingCounterparty1PreHaircut exists
+
+    condition DOC0133: <"Variation margin posted by the counterparty 1 (post-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "46" validationRule "Variation margin posted by the counterparty 1 (post-haircut)"
+    provision "The [Variation margin posted by the counterparty 1 (post-haircut)] is required if the [Collateralisation category] is populated with PRC1 or PRCL or OWC1 or OWP1 or OWP2 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> PRC1, CollateralisationType3Code__1 -> PRCL, CollateralisationType3Code__1 -> OWC1, CollateralisationType3Code__1 -> OWP1, CollateralisationType3Code__1 -> OWP2, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then variationMarginPostedByTheReportingCounterparty1PostHaircut exists
+
+    condition DOC0134: <"Variation margin collected by the counterparty 1 (pre-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "48" validationRule "Variation margin collected by the counterparty 1 (pre-haircut)"
+    provision "The [Variation margin collected by the counterparty 1 (pre-haircut)] is required if the [Collateralisation category] is populated with PRC1 or PRCL or OWC1 or OWP1 or OWP2 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> PRC1, CollateralisationType3Code__1 -> PRCL, CollateralisationType3Code__1 -> OWC1, CollateralisationType3Code__1 -> OWP1, CollateralisationType3Code__1 -> OWP2, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then variationMarginCollectedByTheReportingCounterparty1PreHaircut exists
+
+    condition DOC0135: <"Variation margin collected by the counterparty 1 (post-haircut)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "49" validationRule "Variation margin collected by the counterparty 1 (post-haircut)"
+    provision "The [Variation margin collected by the counterparty 1 (post-haircut)] is required if the [Collateralisation category] is populated with PRC1 or PRCL or OWC1 or OWP1 or OWP2 or FLCL."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and [CollateralisationType3Code__1 -> PRC1, CollateralisationType3Code__1 -> PRCL, CollateralisationType3Code__1 -> OWC1, CollateralisationType3Code__1 -> OWP1, CollateralisationType3Code__1 -> OWP2, CollateralisationType3Code__1 -> FLCL] any = collateralisationCategory
+        then variationMarginCollectedByTheReportingCounterparty1PostHaircut exists
+
+    condition DOC0104: <"Unique Transaction Identifier (UTI)">
+        [docReference HKMA HKMA_Specs table "1" dataElement "138" validationRule "Unique Transaction Identifier (UTI)"
+    provision "The [Unique Transaction Identifier] is required if the [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] are populated with 'NOAP' in XML tag '<NoPrtfl>' and/or blank. "]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    condition DOC0112_1: <"Initial margin collateral portfolio code">
+        [docReference HKMA HKMA_Specs table "1" dataElement "150" validationRule "Initial margin collateral portfolio code"
+    provision "If the [Unique Transaction Identifier] is populated, [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] must be populated with 'NOAP' in XML tag '<NoPrtfl>' or blank if applicable."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and uniqueTransactionIdentifier exists
+        then initialMarginCollateralPortfolioCode = "NOAP"
+        else initialMarginCollateralPortfolioCode is absent
+
+    condition DOC0112_2: <"Variation margin collateral portfolio code">
+        [docReference HKMA HKMA_Specs table "1" dataElement "152" validationRule "Variation margin collateral portfolio code"
+    provision "If the [Unique Transaction Identifier] is populated, [Initial margin collateral portfolio code] and [Variation margin collateral portfolio code] must be populated with 'NOAP' in XML tag '<NoPrtfl>' or blank if applicable."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+                and uniqueTransactionIdentifier exists
+        then variationMarginCollateralPortfolioCode = "NOAP"
+        else variationMarginCollateralPortfolioCode is absent
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0114: <"[Submitter Identifier]*">
+        [docReference HKMA HKMA_Specs table "1" dataElement "153" validationRule "[Submitter Identifier]*"
+    provision "The [Submitter identifier] in the message does not match with the [Submitting party (From) ] in the Business Application Header"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0115: <"Entity responsible for reporting">
+        [docReference HKMA HKMA_Specs table "1" dataElement "154" validationRule "Entity responsible for reporting"
+    provision "The [Entity responsible for reporting] of a action must be the same as other trade actions in the same request file."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0136: <"Entity responsible for reporting">
+        [docReference HKMA HKMA_Specs table "1" dataElement "154" validationRule "Entity responsible for reporting"
+    provision "The [Entity responsible for reporting] must be an active TR participant with reporting service."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True
+
+    condition DOC0123: <"Collateral timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "184" validationRule "Collateral timestamp"
+    provision "The [Collateral timestamp] must not be a future timestamp."]
+        if [MarginActionEnum -> MARU, MarginActionEnum -> CORR] any = actionType
+        then collateralTimestamp <= Now
+
+    condition DOC0124: <"Collateral timestamp">
+        [docReference HKMA HKMA_Specs table "1" dataElement "184" validationRule "Collateral timestamp"
+    provision "The [Collateral timestamp] must be equal to or later than the [Execution timestamp] of original trade."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled. The condition cannot be executed in a stateless environment."]
+        True
+
+    // TH: Sprint 2025-09. This validation rule appears in the regulator specification but not in the DTCC specification.
+    condition DOC0127: <"Technical record identification">
+        [docReference HKMA HKMA_Specs table "1" dataElement "200" validationRule "Technical record identification"
+    provision "The [Technical record identification] must be unique for the [Entity responsible for reporting]."]
+        [regulatoryReference ISDA ISDAWorkingGroup date "unknown"
+    provision "Not modelled."]
+        True

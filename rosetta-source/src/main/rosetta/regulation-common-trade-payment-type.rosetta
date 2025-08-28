@@ -1,0 +1,14 @@
+namespace drr.regulation.common.trade.payment
+version "${project.version}"
+
+import drr.standards.iosco.cde.base.* as cde
+import drr.standards.iso.*
+
+type CommonPeriodicPayment extends cde.payment.PeriodicPayment:
+    floatingRateResetFrequencyPeriod FrequencyPeriodEnum (0..1)
+    floatingRateResetFrequencyMultiplier Max3Number (0..1)
+    floatingRateIndicator IndexEnum (0..1)
+    floatingRateIdentifier ISINOct2015Identifier (0..1)
+    floatingRateReferencePeriod FrequencyPeriodEnum (0..1)
+    floatingRateReferencePeriodMultiplier Max3Number (0..1)
+    nameOfTheFloatingRate string (0..1)

@@ -1,0 +1,64 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "bookingLocation" : "US",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2021-06-21",
+  "eventTimestamp" : "2021-06-21T21:28:54.2885611Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-06-21T21:26:47Z",
+  "expirationDate" : "2023-06-21",
+  "finalContractualSettlementDate" : "2023-06-21",
+  "firstExerciseDate" : "2023-06-21",
+  "leg1" : {
+    "notionalAmount" : 1400001.2858,
+    "notionalCurrency" : "USD",
+    "notionalQuantity" : 5347.19,
+    "quantityFrequency" : "EXPI",
+    "quantityUnitOfMeasure" : "IPNT",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 5347.19
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "UnderlierID" : "ELECTRICITY PJM-EASTERN HUB-REAL TIME",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 57960,
+  "optionPremiumCurrency" : "USD",
+  "optionStyle" : "EURO",
+  "optionType" : "CALL",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingSpecifiedPerson" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 261.82
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONIND01"
+}

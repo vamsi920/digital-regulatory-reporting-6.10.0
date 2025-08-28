@@ -1,0 +1,67 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "I",
+  "counterparty1" : "TESTCLIENTLEI0000009",
+  "counterparty2" : "TESTHOUSELEI00000001",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "envuatuatExt17b4fb656888b40f3949d136da448bbf52024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "primaryAssetClass" : "InterestRate",
+    "submittedForParty" : "TESTCLIENTLEI0000009",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "IRFRAEXXMLXXXXXXXX01",
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2020-12-09",
+  "eventTimestamp" : "2020-12-09T19:32:00.206Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-12-09T19:19:04Z",
+  "expirationDate" : "2021-03-09",
+  "leg1" : {
+    "fixedRate" : 0.0125,
+    "notionalAmount" : 100,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    }
+  },
+  "leg2" : {
+    "notionalAmount" : 100,
+    "notionalCurrency" : "EUR",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A004"
+    }
+  },
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "EUR",
+          "ReferenceRateTermUnit" : "MNTH",
+          "ReferenceRateTermValue" : 3,
+          "UnderlierID" : "EUR-EURIBOR-Reuters",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "TESTCLIENTLEI0000009",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "IRFRAEXXMLXXXXXXXX00L9M8X7X6E5A4R3F2R1I0"
+}

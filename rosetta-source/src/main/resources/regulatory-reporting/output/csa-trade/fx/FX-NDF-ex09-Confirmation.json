@@ -1,0 +1,79 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "DUMMY0000000000LEI012024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "DUMMY0000000000LEI01",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "DUMMY0000000000LEI01",
+    "tradeParty2ReportingDestination" : [ "FCA", "ESMA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-01-01",
+  "eventIdentifier" : "DUMMY0000000000LEI01",
+  "eventTimestamp" : "2020-01-01T10:06:10Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 1,
+  "exchangeRateBasis" : "USD/JPY",
+  "executionTimestamp" : "2020-01-01T08:59:51Z",
+  "expirationDate" : "2021-08-16",
+  "finalContractualSettlementDate" : "2021-08-16",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 1,
+    "notionalCurrency" : "JPY",
+    "payerIdentifier" : "DUMMY0000000000LEI01",
+    "receiverIdentifier" : "DUMMY0000000000LEI01",
+    "settlementCurrency" : "JPY",
+    "underlierIDOther" : "JPY",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "leg2" : {
+    "notionalAmount" : 1,
+    "notionalCurrency" : "USD",
+    "payerIdentifier" : "DUMMY0000000000LEI01",
+    "receiverIdentifier" : "DUMMY0000000000LEI01",
+    "underlierIDOther" : "USD",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "DUMMY0000000000LEI01"
+}

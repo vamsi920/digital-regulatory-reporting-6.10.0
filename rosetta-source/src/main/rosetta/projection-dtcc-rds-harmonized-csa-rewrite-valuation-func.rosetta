@@ -1,0 +1,654 @@
+namespace drr.projection.dtcc.rds.harmonized.csa.rewrite.valuation
+version "${project.version}"
+
+import drr.regulation.csa.rewrite.valuation.*
+
+import iso20022.dtcc.rds.harmonized.*
+
+func Project_CSAValuationReportToDtccRdsHarmonized:
+    [projection XML]
+    inputs:
+        drrReport CSAValuationReport (1..1)
+    output:
+        harmonizedReport Document (1..1)
+
+    set harmonizedReport -> submission -> header: Create_SubmissionHeader(drrReport)
+
+    set harmonizedReport -> submission -> core: Create_SubmissionCore(drrReport)
+
+    set harmonizedReport -> submission -> harmonizedData:
+        Create_SubmissionHarmonizedData(drrReport)
+
+func Create_SubmissionHeader:
+    inputs:
+        drrReport CSAValuationReport (1..1)
+    output:
+        header Header (1..1)
+
+    set header:
+        Header {
+            sender: drrReport -> counterparty1,
+            documentTrackingId: drrReport -> messageID,
+            documentCreationTimestamp: drrReport -> reportingTimestamp default cdm.base.datetime.Now(
+                ),
+            rdsSchemaVersion: empty, // NO FIELD
+            receiver: empty
+        }
+
+func Create_SubmissionCore:
+    inputs:
+        drrReport CSAValuationReport (1..1)
+    output:
+        core Core (1..1)
+
+    set core:
+        Core {
+            tradeLegTypes: empty, // NO FIELD
+            latestExecutionDatetime: empty, // NO FIELD
+            productId: empty, // NO FIELD
+            messageId: drrReport -> messageID,
+            messageType: drrReport -> messageType,
+            primaryAssetClass: drrReport -> primaryAssetClass to-string,
+            submittedForParty: drrReport -> submittedForParty,
+            submittingPartyId: drrReport -> submitterIdentifier,
+            submittingPartyIdType: drrReport -> submittingPartyIDType to-string,
+            tradeParty1Id: drrReport -> counterparty1,
+            tradeParty1IdType: drrReport -> tradeParty1IDType to-string,
+            tradeParty1ReportingDestination: drrReport -> tradeParty1ReportingDestination
+                extract to-string,
+            tradeParty1TransactionId: drrReport -> tradeParty1TransactionID,
+            tradeParty2Id: drrReport -> counterparty2,
+            tradeParty2IdType: drrReport -> counterparty2IdentifierSource,
+            tradeParty2ReportingDestination: drrReport -> tradeParty2ReportingDestination
+                extract to-string,
+            usiId: drrReport -> usiID,
+            usiIdPrefix: drrReport -> usiIDPrefix,
+            utiId: drrReport -> uniqueTransactionIdentifier,
+            tradeParty1ExecutionAgentId: drrReport -> tradeParty1ExecutionAgentID,
+            tradeParty1ExecutionAgentIdType: drrReport -> tradeParty1ExecutionAgentIDType to-string,
+            tradeParty2ExecutionAgentId: drrReport -> tradeParty2ExecutionAgentID,
+            tradeParty2ExecutionAgentIdType: drrReport -> tradeParty2ExecutionAgentIDType to-string,
+            reportingTimestamp: drrReport -> reportingTimestamp default cdm.base.datetime.Now(
+                ),
+            upi: drrReport -> uniqueProductIdentifier,
+            initialMarginCollateralPortfolioCode: drrReport -> initialMarginCollateralPortfolioCode,
+            variationMarginCollateralPortfolioCode: drrReport -> variationMarginCollateralPortfolioCode,
+            utiIdPrefix: empty, // See rationale at DTCC_CSA_VR_0017_01 condition. Decision agreed by EU/UK/NA PeerReview WG on 2025/03/27 about Prior UTI field
+            corporateActionNewTradeParty1Lei: empty, // NO FIELD
+            productIdType: empty, // NO FIELD
+            tradeParty2TransactionId: empty, // NO FIELD
+            transactionType: empty, // NO FIELD
+            lifecycleEventType: empty, // NO FIELD
+            tradeParty1ThirdPartyViewerId: empty, // NO FIELD
+            tradeParty2ThirdPartyViewerId: empty, // NO FIELD
+            tradeParty1ThirdPartyViewerIdType: empty, // NO FIELD
+            tradeParty2ThirdPartyViewerIdType: empty, // NO FIELD
+            aiParty1Id: empty, // NO FIELD
+            aiParty1IdType: empty, // NO FIELD
+            aiParty2Id: empty, // NO FIELD
+            aiParty2IdType: empty, // NO FIELD
+            tradeParty1RegulatoryActionType1: empty, // NO FIELD
+            tradeParty2RegulatoryActionType1: empty, // NO FIELD
+            noaActionType: drrReport -> actionType to-string,
+            noaEventType: empty // NO FIELD
+        }
+
+func Create_SubmissionHarmonizedData:
+    inputs:
+        drrReport CSAValuationReport (1..1)
+    output:
+        harmonized HarmonizedData (1..1)
+
+    set harmonized:
+        HarmonizedData {
+            amendmentIndicator: empty, // NO FIELD
+            cdePackageTransactionSpreadCurrency: empty, // NO FIELD
+            clearingVenueIdType: empty, // NO FIELD
+            clearingVenueId: empty, // NO FIELD
+            tradeParty1ClearingBrokerId: empty, // NO FIELD
+            tradeParty1ClearingBrokerIdType: empty, // NO FIELD
+            buyerPayer1: empty, // NO FIELD
+            cdeCallAmountLeg1: empty, // NO FIELD
+            cdeCallCurrencyLeg1: empty, // NO FIELD
+            cdeEffectiveDate: empty, // NO FIELD
+            customBasketIndicator: empty, // NO FIELD
+            cdeExpirationDate: empty, // NO FIELD
+            cdeFinalContractualSettlementDate: empty, // NO FIELD
+            cdeFirstExerciseDate: empty, // NO FIELD
+            cdeFixedRateDayCountConventionLeg1: empty, // NO FIELD
+            cdeFixedRateDayCountConventionLeg2: empty, // NO FIELD
+            cdeFixedRatePaymentFrequencyPeriodMultiplierLeg1: empty, // NO FIELD
+            cdeFixedRatePaymentFrequencyPeriodMultiplierLeg2: empty, // NO FIELD
+            cdeFixedRatePaymentFrequencyPeriodLeg1: empty, // NO FIELD
+            cdeFixedRatePaymentFrequencyPeriodLeg2: empty, // NO FIELD
+            cdeFloatingRateDayCountConventionLeg1: empty, // NO FIELD
+            cdeFloatingRateDayCountConventionLeg2: empty, // NO FIELD
+            cdeFloatingRatePaymentFrequencyPeriodMultiplierLeg1: empty, // NO FIELD
+            cdeFloatingRatePaymentFrequencyPeriodMultiplierLeg2: empty, // NO FIELD
+            cdeFloatingRatePaymentFrequencyPeriodLeg1: empty, // NO FIELD
+            cdeFloatingRatePaymentFrequencyPeriodLeg2: empty, // NO FIELD
+            cdePlatformIdentifier: empty, // NO FIELD
+            cdePriceCurrency: empty, // NO FIELD
+            cdePriceNotation: empty, // NO FIELD
+            cdePutAmountLeg1: empty, // NO FIELD
+            cdePutCurrencyLeg1: empty, // NO FIELD
+            cdeQuantityUnitOfMeasureLeg1: empty, // NO FIELD
+            cdeQuantityUnitOfMeasureLeg2: empty, // NO FIELD
+            cdeReceiverIdentifierLeg2: empty, // NO FIELD
+            cdeSettlementLocationLeg1: empty, // NO FIELD
+            cdeSpreadNotationLeg1: empty, // NO FIELD
+            cdeSpreadNotationLeg2: empty, // NO FIELD
+            clearingStatus: empty, // NO FIELD
+            eventType: empty, // NO FIELD
+            fixingDateLeg1: empty, // NO FIELD
+            fixingDateLeg2: empty, // NO FIELD
+            indexFactor: empty, // NO FIELD
+            exchangeRate: empty, // NO FIELD
+            leg1FixedRateInitial: empty, // NO FIELD
+            leg1NotionalQuantity: empty, // NO FIELD
+            leg1SpreadCurrency: empty, // NO FIELD
+            leg1TotalNotionalQuantity: empty, // NO FIELD
+            leg2FixedRateInitial: empty, // NO FIELD
+            leg2NotionalQuantity: empty, // NO FIELD
+            leg2QuantityFrequency: empty, // NO FIELD
+            leg2ResetFrequencyPeriod: empty, // NO FIELD
+            leg2ResetFrequencyPeriodMultiplier: empty, // NO FIELD
+            leg2SettlementCurrency: empty, // NO FIELD
+            leg2SpreadCurrency: empty, // NO FIELD
+            leg2TotalNotionalQuantity: empty, // NO FIELD
+            newSdrIdentifier: empty, // NO FIELD
+            noaActionType: drrReport -> actionType to-string,
+            nonStandardTradeIndicator: empty, // NO FIELD
+            notionalAmount1: empty, // NO FIELD
+            notionalAmount2: empty, // NO FIELD
+            notionalCurrency1: empty, // NO FIELD
+            notionalCurrency2: empty, // NO FIELD
+            optionStyle: empty, // NO FIELD
+            optionType: empty, // NO FIELD
+            originalExecutionTimestamp: empty, // NO FIELD
+            payment1Payer: empty, // NO FIELD
+            payment1Receiver: empty, // NO FIELD
+            payment2Payer: empty, // NO FIELD
+            premiumAmount: empty, // NO FIELD
+            premiumCurrency: empty, // NO FIELD
+            premiumPaymentDateUnadjusted: empty, // NO FIELD
+            price1Price: empty, // NO FIELD
+            price1Units: empty, // NO FIELD
+            priorUtiId: empty, // NO FIELD
+            quantityFrequencyMultiplierLeg1: empty, // NO FIELD
+            quantityFrequencyMultiplierLeg2: empty, // NO FIELD
+            resetFrequencyPeriod1: empty, // NO FIELD
+            resetFrequencyPeriodMultiplier1: empty, // NO FIELD
+            sellerPayer2: empty, // NO FIELD
+            settlementCurrency1: empty, // NO FIELD
+            strikePrice: empty, // NO FIELD
+            strikePriceCurrency: empty, // NO FIELD
+            cdeStrikePriceNotation: empty, // NO FIELD
+            settlementType: empty, // NO FIELD
+            cdeStrikePriceCurrency2: empty, // NO FIELD
+            leg1CommodityInstrumentId: empty, // NO FIELD
+            leg2CommodityInstrumentId: empty, // NO FIELD
+            leg1FloatingRateIndex: empty, // NO FIELD
+            leg2FloatingRateIndex: empty, // NO FIELD
+            leg1CommodityUnderlyerId: empty, // NO FIELD
+            leg2CommodityUnderlyerId: empty, // NO FIELD
+            responsibleDataSubmitterId: empty, // NO FIELD
+            responsibleDataSubmitterIdType: empty, // NO FIELD
+            secondaryAssetClass: empty, // NO FIELD
+            tradeParty1BrokerIdType: empty, // NO FIELD
+            tradeParty1BrokerId: empty, // NO FIELD
+            expirationDateUnadjusted: empty, // NO FIELD
+            leg2SpreadAmount: empty, // NO FIELD
+            leg1PartyPayer: empty, // NO FIELD
+            leg2PartyPayer: empty, // NO FIELD
+            sdMspIndicatorCounterparty1: empty, // NO FIELD
+            sdMspIndicatorCounterparty2: empty, // NO FIELD
+            physicalCommodityContractIndicator: empty, // NO FIELD
+            cdeCryptoAssetUnderlyingIndicatorLeg1: empty, // NO FIELD
+            cdeCryptoAssetUnderlyingIndicatorLeg2: empty, // NO FIELD
+            cdeCustomBasketCode: empty, // NO FIELD
+            underlierIdOtherLeg1: empty, // NO FIELD
+            underlierIdOtherLeg2: empty, // NO FIELD
+            underlierIdOtherSourceLeg1: empty, // NO FIELD
+            underlierIdOtherSourceLeg2: empty, // NO FIELD
+            cdeUnderlyingAssetTradingPlatformIdLeg1: empty, // NO FIELD
+            cdeUnderlyingAssetTradingPlatformIdLeg2: empty, // NO FIELD
+            cdeUnderlyingAssetPriceSourceLeg1: empty, // NO FIELD
+            cdeUnderlyingAssetPriceSourceLeg2: empty, // NO FIELD
+            totalQuantity: empty, // NO FIELD
+            leg1SpreadAmount: empty, // NO FIELD
+            leg2PartyReceiver: empty, // NO FIELD
+            leg1PartyReceiver: empty, // NO FIELD
+            leg2Quantity: empty, // NO FIELD
+            loadType: empty, // NO FIELD
+            deliveryLocation: empty, // NO FIELD
+            underlyingAssetExchangeId: empty, // NO FIELD
+            exchangeRateBasisCurrency1: empty, // NO FIELD
+            exchangeRateBasisCurrency2: empty, // NO FIELD
+            underlyingProductId: empty, // NO FIELD
+            expirationDate: empty, // NO FIELD
+            version: drrReport -> version,
+            comment1: drrReport -> comment1,
+            dayCountFraction1: empty, // NO FIELD
+            leg2DayCountFraction: empty, // NO FIELD
+            executionVenueId: empty, // NO FIELD
+            executionVenueIdType: empty, // NO FIELD
+            masterAgreementType: empty, // NO FIELD
+            masterAgreementVersion: empty, // NO FIELD
+            clearingDatetime: empty, // NO FIELD
+            maturityDateOfTheUnderlying: empty, // NO FIELD
+            productIdentification: empty, // NO FIELD
+            level: empty, // NO FIELD
+            executionVenueMicCode: empty, // NO FIELD
+            allocationType: empty, // NO FIELD
+            floatingRatePaymentFrequencyLeg1Multiplier: empty, // NO FIELD
+            floatingRatePaymentFrequencyLeg1TimePeriod: empty, // NO FIELD
+            floatingRatePaymentFrequencyLeg2Multiplier: empty, // NO FIELD
+            floatingRatePaymentFrequencyLeg2TimePeriod: empty, // NO FIELD
+            interaffiliate: empty, // NO FIELD
+            leg2PaymentTermsFrequencyPeriod: empty, // NO FIELD
+            leg2PaymentTermsPaymentFrequencyPeriodMultiplier: empty, // NO FIELD
+            maturityDate: empty, // NO FIELD
+            originalSwapSdrId: empty, // NO FIELD
+            originalSwapSdrIdType: empty, // NO FIELD
+            paymentFrequencyPeriodLeg1: empty, // NO FIELD
+            paymentFrequencyPeriodLeg2: empty, // NO FIELD
+            paymentFrequencyPeriodMultiplierLeg1: empty, // NO FIELD
+            paymentFrequencyPeriodMultiplierLeg2: empty, // NO FIELD
+            originalSwapUsi: empty, // NO FIELD
+            originalSwapUti: empty, // NO FIELD
+            counterparty1FederalEntityIndicator: empty, // NO FIELD
+            counterparty2FederalEntityIndicator: empty, // NO FIELD
+            eventIdentifier: empty, // NO FIELD
+            packageIndicator: empty, // NO FIELD
+            cdePackageIdentifier: empty, // NO FIELD
+            cdePackageTransactionPrice: empty, // NO FIELD
+            cdePackageTransactionPriceCurrency: empty, // NO FIELD
+            cdePackageTransactionPriceNotation: empty, // NO FIELD
+            cdePackageTransactionSpread: empty, // NO FIELD
+            cdePackageTransactionSpreadNotation: empty, // NO FIELD
+            postPricedSwapIndicator: empty, // NO FIELD
+            primeBrokerageTransactionIndicator: empty, // NO FIELD
+            swapReportingJurisdiction: empty, // NO FIELD
+            initialMarginCollateralPortfolioCode: drrReport -> initialMarginCollateralPortfolioCode,
+            variationMarginCollateralPortfolioCode: drrReport -> variationMarginCollateralPortfolioCode,
+            largeNotionalOffFacilitySwapElectionIndicator: empty, // NO FIELD
+            sefOrDcmAnonymousExecutionIndicator: empty, // NO FIELD
+            blockTradeElectionIndicator: empty, // NO FIELD
+            sefOrDcmIndicator: empty, // NO FIELD
+            mandatoryClearingIndicator: empty, // NO FIELD
+            priorUsiId: empty, // NO FIELD
+            contractType: empty, // NO FIELD
+            payment1FrequencyPeriod: empty, // NO FIELD
+            payment1FrequencyPeriodMultiplier: empty, // NO FIELD
+            payment2FrequencyPeriod: empty, // NO FIELD
+            payment2FrequencyPeriodMultiplier: empty, // NO FIELD
+            payment1Amount: empty, // NO FIELD
+            payment1Currency: empty, // NO FIELD
+            payment2Amount: empty, // NO FIELD
+            currencyOfPrice: empty, // NO FIELD
+            payment2Currency: empty, // NO FIELD
+            price1Currency: empty, // NO FIELD
+            leg2CommodityUnitOfMeasure: empty, // NO FIELD
+            leg2NotionalQuantityFrequency: empty, // NO FIELD
+            leg1CommodityUnitOfMeasure: empty, // NO FIELD
+            leg1NotionalQuantityUnit: empty, // NO FIELD
+            leg1NotionalQuantityFrequency: empty, // NO FIELD
+            leg2NotionalQuantityUnit: empty, // NO FIELD
+            leg2QuantityUnit: empty, // NO FIELD
+            settlementDateUnadjusted: empty, // NO FIELD
+            attachmentPoint: empty, // NO FIELD
+            exhaustionPoint: empty, // NO FIELD
+            crversion: empty, // NO FIELD
+            settlementFixingDate: empty, // NO FIELD
+            forwardExchangeRate: empty, // NO FIELD
+            settlementDate: empty, // NO FIELD
+            ccpValuationAmount: drrReport -> valuationAmount,
+            ccpValuationCurrency: drrReport -> valuationCurrency to-string,
+            ccpValuationDatetime: drrReport -> valuationTimestamp,
+            ccpValuationType: drrReport -> valuationMethod to-string,
+            euUnderlyingAssetIdType: empty, // NO FIELD
+            productClassification: empty, // NO FIELD
+            quantity: empty, // NO FIELD
+            confirmationDatetime: empty, // NO FIELD
+            euUnderlyingAssetId: empty, // NO FIELD
+            reportTrackingNumber: empty, // NO FIELD
+            intragroupIndicator: empty, // NO FIELD
+            clearingExceptionPartyId: empty, // NO FIELD
+            clearingExceptionPartyIdType: empty, // NO FIELD
+            clearingExceptionType: empty, // NO FIELD
+            tradeParty1CftcFinancialEntityStatus: empty, // NO FIELD
+            tradeParty2CftcFinancialEntityStatus: empty, // NO FIELD
+            cdeCallAmountLeg2: empty, // NO FIELD 
+            cdeCallCurrencyLeg2: empty, // NO FIELD
+            cdePutAmountLeg2: empty, // NO FIELD 
+            cdePutCurrencyLeg2: empty, // NO FIELD
+            cdeSettlementLocationLeg2: empty, // NO FIELD
+            changeInNotionalAmount1: empty, // NO FIELD
+            changeInNotionalAmount2: empty, // NO FIELD
+            leg2CommodityUnderlyerDetails: empty, // NO FIELD
+            leg2CommodityCurrency: empty, // NO FIELD
+            leg2CommodityExchangeId: empty, // NO FIELD
+            leg1CommodityRateSource: empty, // NO FIELD
+            leg1CommodityRateSourcePage: empty, // NO FIELD
+            leg2SpecifiedPrice: empty, // NO FIELD
+            commencementDateUnadjusted: empty, // NO FIELD
+            exerciseExpirationDateUnadjusted: empty, // NO FIELD
+            scheduledTerminationDateAdjusted: empty, // NO FIELD 
+            leg1CommodityExchangeId: empty, // NO FIELD
+            leg2CommodityRateSource: empty, // NO FIELD
+            leg1EffectiveDateUnadjusted: empty, // NO FIELD
+            leg2EffectiveDateUnadjusted: empty, // NO FIELD
+            coProductType: empty, // NO FIELD
+            totalQuantityUnit: empty, // NO FIELD
+            fixedPrice: empty, // NO FIELD
+            fixedPriceCurrency: empty, // NO FIELD
+            leg1CommodityCurrency: empty, // NO FIELD
+            leg1SpecifiedPrice: empty, // NO FIELD
+            coalSource: empty, // NO FIELD
+            commodityBase: empty, // NO FIELD
+            commodityDetails: empty, // NO FIELD
+            interconnectionPoint: empty, // NO FIELD
+            fixedPriceUnit: empty, // NO FIELD
+            exercisePaymentDateUnadjusted: empty, // NO FIELD
+            leg1PaymentDatesUnadjusted: empty, // NO FIELD
+            leg2PaymentDateUnadjusted: empty, // NO FIELD
+            leg1CommodityUnderlyerDetails: empty, // NO FIELD
+            leg2CommodityRateSourcePage: empty, // NO FIELD
+            valueDate: empty, // NO FIELD
+            gtrQuantityUnit: empty, // NO FIELD
+            mthToDefault: empty, // NO FIELD
+            nthToDefault: empty, // NO FIELD
+            seniority: empty, // NO FIELD 
+            series: empty, // NO FIELD
+            tranche: empty, // NO FIELD
+            referenceObligation: empty, // NO FIELD
+            referenceObligationIdType: empty, // NO FIELD
+            underlyingFixedRatePayerBuyer: empty, // NO FIELD
+            underlyingFloatRatePayerSeller: empty, // NO FIELD 
+            underlyingAssetNumberOfUnits: empty, // NO FIELD
+            optionalEarlyTerminationType: empty, // NO FIELD
+            optionalEarlyTerminationElectingPartyValue: empty, // NO FIELD
+            optionalEarlyTerminationIndicator: empty, // NO FIELD
+            underlyingAssetFloatingAmountPayer: empty, // NO FIELD
+            underlyingAssetFloatingAmountReceiver: empty, // NO FIELD
+            floatingRateOption: empty, // NO FIELD
+            underlyingAssetFloatingLegSpread: empty, // NO FIELD
+            leg2DesignatedMaturityPeriod: empty, // NO FIELD
+            leg2DesignatedMaturityPeriodMultiplier: empty, // NO FIELD 
+            underlyingAssetEquityAmountPayer: empty, // NO FIELD
+            underlyingAssetEquityAmountReceiver: empty, // NO FIELD
+            underlyingAssetInitialPriceCurrency: empty, // NO FIELD
+            leg1ValuationDates: empty, // NO FIELD
+            leg1TypeOfReturn: empty, // NO FIELD
+            observationStartDate: empty, // NO FIELD
+            varianceAmount: empty, // NO FIELD
+            volatilityStrikePrice: empty, // NO FIELD
+            varianceStrikePrice: empty, // NO FIELD
+            varianceCapFactor: empty, // NO FIELD
+            referenceCurrency: empty, // NO FIELD
+            specialDividendsIndicator: empty, // NO FIELD
+            materialNoncashDividendIndicator: empty, // NO FIELD
+            numberOfSharesUnits: empty, // NO FIELD
+            dividendAmountPayer: empty, // NO FIELD
+            dividendAmountReceiver: empty, // NO FIELD
+            fixedAmountPayer: empty, // NO FIELD
+            fixedAmountReceiver: empty, // NO FIELD
+            knockInEvent: empty, // NO FIELD
+            knockOutEvent: empty, // NO FIELD
+            knockInPrice: empty, // NO FIELD
+            knockOutPrice: empty, // NO FIELD
+            barrierType: empty, // NO FIELD
+            earliestExecutionTime: empty, // NO FIELD 
+            executionPeriodStartDate: empty, // NO FIELD
+            payoutStyle: empty, // NO FIELD
+            rateQuoteBasis1: empty, // NO FIELD
+            swapLinkId: empty, // NO FIELD
+            triggerCondition: empty, // NO FIELD
+            triggerCondition2: empty, // NO FIELD
+            triggerRate: empty, // NO FIELD
+            triggerRate2: empty, // NO FIELD
+            rateQuoteBasis2: empty, // NO FIELD
+            barrierType2: empty, // NO FIELD
+            cancelationOptionBuyer: empty, // NO FIELD
+            cancelationOptionCommencementDate: empty, // NO FIELD  
+            cancelationOptionExerciseStyleType: empty, // NO FIELD
+            cancelationOptionExpirationDate: empty, // NO FIELD
+            cancelationOptionInitialFeeCurrency: empty, // NO FIELD
+            cancelationOptionInitialFeePayer: empty, // NO FIELD
+            cancelationOptionPremiumAmount: empty, // NO FIELD
+            cancelationOptionSeller: empty, // NO FIELD
+            capRateInitial: empty, // NO FIELD
+            couponType: empty, // NO FIELD
+            finalPrincipalExchangeIndicatorAtTermination: empty, // NO FIELD
+            floorRateInitial: empty, // NO FIELD
+            fraDiscountingType: empty, // NO FIELD 
+            inflationIndexInitialLevel: empty, // NO FIELD
+            inflationIndexMainPublication: empty, // NO FIELD
+            inflationInterpolationMethod: empty, // NO FIELD
+            inflationLagDayType: empty, // NO FIELD
+            inflationLagPeriod: empty, // NO FIELD
+            inflationRateSourceName: empty, // NO FIELD
+            initialPrincipalExchangeIndicator: empty, // NO FIELD
+            intermediatePrincipalExchangeIndicator: empty, // NO FIELD
+            leg1FloatingRateInitialSpread: empty, // NO FIELD
+            leg1FloatingRateMultiplierInitialValue: empty, // NO FIELD
+            leg1FloatingRateTenorPeriod: empty, // NO FIELD
+            leg1FloatingRateTenorPeriodMultiplier: empty, // NO FIELD 
+            leg1KnownAmount: empty, // NO FIELD
+            leg1KnownAmountCurrency: empty, // NO FIELD
+            leg1ReferenceCurrency: empty, // NO FIELD
+            leg2FloatingRateInitialSpread: empty, // NO FIELD
+            leg2FloatingRateMultiplierInitialValue: empty, // NO FIELD
+            leg2FloatingRateTenorPeriod: empty, // NO FIELD
+            leg2FloatingRateTenorPeriodMultiplier: empty, // NO FIELD 
+            leg2KnownAmount: empty, // NO FIELD
+            leg2KnownAmountCurrency: empty, // NO FIELD
+            leg2ReferenceCurrency: empty, // NO FIELD
+            mandatoryEarlyTerminationDate: empty, // NO FIELD
+            mandatoryEarlyTerminationDateTenorPeriod: empty, // NO FIELD  
+            mandatoryEarlyTerminationDateTenorPeriodMultiplier: empty, // NO FIELD 
+            notionalUnits: empty, // NO FIELD
+            optionalEarlyTerminationCommencementDate: empty, // NO FIELD
+            optionalEarlyTerminationExerciseStyle: empty, // NO FIELD
+            optionalEarlyTerminationExpirationDate: empty, // NO FIELD
+            premiumReceiver: empty, // NO FIELD
+            underlyingCouponRate: empty, // NO FIELD
+            underlyingMaturityDate: empty, // NO FIELD
+            inflationLagPeriodMultiplier: empty, // NO FIELD
+            leg1FixedRateNotation: empty, // NO FIELD
+            leg2FixedRateNotation: empty, // NO FIELD
+            swaptionStraddleIndicator: empty, // NO FIELD
+            singlePartyEarlyTerminationBuyer: empty, // NO FIELD
+            leg1EffectiveDate: empty, // NO FIELD
+            action: empty, // NO FIELD
+            effectiveDate1: empty, // NO FIELD
+            executionVenueType: empty, // NO FIELD
+            price1Type: empty, // NO FIELD
+            scheduledTerminationDate1: empty, // NO FIELD
+            tradeDate: empty, // NO FIELD
+            tradeParty1CollateralizationType: empty, // This field is only applicable for Collateral report which uses CSV submissions
+            tradeParty1EventId: empty, // NO FIELD
+            tradeParty2CollateralizationType: empty, // NO FIELD  
+            tradeParty2EventId: empty, // NO FIELD
+            embeddedOptionOnSwap: empty, // NO FIELD
+            commencementDate: empty, // NO FIELD
+            leg2EffectiveDate: empty, // NO FIELD
+            leg2ScheduledTerminationDate: empty, // NO FIELD  
+            numberOfOptions: empty, // NO FIELD
+            optionEntitlement: empty, // NO FIELD
+            payment1Date: empty, // NO FIELD
+            payment2Date: empty, // NO FIELD
+            strikePriceUnits: empty, // NO FIELD
+            asOfDateTime: empty, // NO FIELD  
+            compressedTradeIndicator: empty, // NO FIELD
+            confirmationMethod: empty, // NO FIELD
+            confirmationPlatformId: empty, // NO FIELD
+            confirmationPlatformTradeId: empty, // NO FIELD
+            postTradeEffectiveDate: empty, // NO FIELD
+            priorUsiIdPrefix: empty, // See rationale at DTCC_CSA_VR_0019_01 condition. Decision agreed by EU/UK/NA PeerReview WG on 2025/03/27 about Prior USI field
+            priorUtiIdPrefix: empty, // See rationale at DTCC_CSA_VR_0017_01 condition. Decision agreed by EU/UK/NA PeerReview WG on 2025/03/27 about Prior UTI field
+            tradeParty1BranchLocation: empty, // NO FIELD
+            tradeParty1DeskLocation: empty, // NO FIELD
+            tradeParty1Domicile: empty, // NO FIELD
+            tradeParty1IndustrialSectorType: empty, // NO FIELD  
+            tradeParty2BranchLocation: empty, // NO FIELD
+            tradeParty2DeskLocation: empty, // NO FIELD
+            tradeParty2Domicile: empty, // NO FIELD
+            tradeParty2IndustrialSectorType: empty, // NO FIELD  
+            tradeParty1HkCounterpartyOrigin: empty, // NO FIELD
+            leg2SettlementDate: empty, // NO FIELD
+            postTradeTransactionDate: empty, // NO FIELD
+            tradeParty1Name: empty, // NO FIELD
+            tradeParty2Name: empty, // NO FIELD
+            tradeParty1ValuationAmount: drrReport -> valuationAmount,
+            tradeParty1ValuationCurrency: drrReport -> valuationCurrency to-string,
+            tradeParty1ValuationDatetime: drrReport -> valuationTimestamp,
+            tradeParty1ValuationType: drrReport -> valuationMethod to-string,
+            tradeParty2ValuationAmount: empty, // NO FIELD 
+            tradeParty2ValuationCurrency: empty, // NO FIELD 
+            tradeParty2ValuationDatetime: empty, // NO FIELD 
+            tradeParty2ValuationType: empty, // NO FIELD 
+            executionType: empty, // NO FIELD 
+            tradeParty2HkCounterpartyOrigin: empty, // NO FIELD  
+            tradeParty1CountryOfTheOtherCounterparty: empty, // NO FIELD 
+            tradeParty2CountryOfTheOtherCounterparty: empty, // NO FIELD 
+            tradeParty2BrokerId: empty, // NO FIELD 
+            tradeParty1BeneficiaryIdType: empty, // NO FIELD 
+            tradeParty1BeneficiaryId: empty, // NO FIELD 
+            tradeParty2BeneficiaryIdType: empty, // NO FIELD 
+            tradeParty2BeneficiaryId: empty, // NO FIELD 
+            tradeParty1CounterpartySide: empty, // NO FIELD 
+            tradeParty2CounterpartySide: empty, // NO FIELD 
+            tradeParty1CollateralPortfolioCode: empty, // NO FIELD 
+            tradeParty2CollateralPortfolioCode: empty, // NO FIELD 
+            complexTradeComponentId: empty, // NO FIELD 
+            priceMultiplier: empty, // NO FIELD 
+            productClassificationType: empty, // NO FIELD
+            productIdentificationType: empty, // NO FIELD 
+            tradeParty2BrokerIdType: empty, // NO FIELD
+            tradeParty2ClearingBrokerIdType: empty, // NO FIELD
+            tradeParty2ClearingBrokerId: empty, // NO FIELD
+            tradeParty1ClearingThreshold: empty, // NO FIELD
+            tradeParty2ClearingThreshold: empty, // NO FIELD
+            tradeParty1CorporateSectorType: empty, // NO FIELD
+            tradeParty2CorporateSectorType: empty, // NO FIELD
+            tradeParty1DirectlyLinkedToCommercialActivityOrTreasuryFinancingIndicator: empty, // NO FIELD
+            tradeParty2DirectlyLinkedToCommercialActivityOrTreasuryFinancingIndicator: empty, // NO FIELD
+            tradeParty1TradingCapacity1: empty, // NO FIELD
+            tradeParty2TradingCapacity1: empty, // NO FIELD
+            tradeParty1CollateralPortfolio: empty, // NO FIELD
+            tradeParty2CollateralPortfolio: empty, // NO FIELD 
+            expirationDateTimeBusinessCenter: empty, // NO FIELD 
+            expirationTime: empty, // NO FIELD
+            expirationTimeType: empty, // NO FIELD
+            tradeParty1TraderLocation: empty, // NO FIELD
+            tradeParty2TraderLocation: empty, // NO FIELD
+            payment3ResetFrequencyPeriodMultiplier: empty, // NO FIELD
+            payment3ResetFrequencyPeriod: empty, // NO FIELD
+            payment4ResetFrequencyPeriodMultiplier: empty, // NO FIELD 
+            payment4ResetFrequencyPeriod: empty, // NO FIELD
+            payment5ResetFrequencyPeriodMultiplier: empty, // NO FIELD 
+            payment5ResetFrequencyPeriod: empty, // NO FIELD
+            payment1Type: empty, // NO FIELD
+            payment1Reference: empty, // NO FIELD
+            payment2Type: empty, // NO FIELD
+            payment2Reference: empty, // NO FIELD
+            payment3Payer: empty, // NO FIELD
+            payment3Reference: empty, // NO FIELD
+            payment3FrequencyPeriod: empty, // NO FIELD
+            payment3FrequencyPeriodMultiplier: empty, // NO FIELD 
+            payment3Date: empty, // NO FIELD
+            payment4Reference: empty, // NO FIELD
+            payment4Payer: empty, // NO FIELD
+            payment4FrequencyPeriod: empty, // NO FIELD 
+            payment4FrequencyPeriodMultiplier: empty, // NO FIELD 
+            payment4Date: empty, // NO FIELD
+            payment5Reference: empty, // NO FIELD
+            payment5Payer: empty, // NO FIELD
+            payment5FrequencyPeriod: empty, // NO FIELD 
+            payment5FrequencyPeriodMultiplier: empty, // NO FIELD 
+            payment5Date: empty, // NO FIELD
+            payment3Type: empty, // NO FIELD
+            premiumPayer: empty, // NO FIELD
+            tradeParty1NatureOfTheReportingCounterparty: empty, // NO FIELD 
+            tradeParty2NatureOfTheReportingCounterparty: empty, // NO FIELD
+            reservedParticipantUse1: empty, // NO FIELD
+            reservedParticipantUse2: empty, // NO FIELD
+            reservedParticipantUse3: empty, // NO FIELD
+            reservedParticipantUse4: empty, // NO FIELD
+            reservedParticipantUse5: empty, // NO FIELD
+            leg1TerminationDate: empty, // NO FIELD
+            calculationBasis: empty, // NO FIELD
+            clearingMemberClientAccountId: empty, // NO FIELD
+            clearingReceiptDatetime: empty, // NO FIELD
+            clearingSwapSdrLeiId: empty, // NO FIELD
+            clearingSwapUtiId: empty, // NO FIELD
+            collateralReportingDate: empty, // NO FIELD
+            collateralValuationDatetime: empty, // NO FIELD
+            comment2: empty, // NO FIELD 
+            commodityStrikePriceUnit: empty, // NO FIELD
+            executionAgentMaskingIndicator: empty, // NO FIELD
+            feeInCurrency: empty, // NO FIELD
+            feeOutCurrency: empty, // NO FIELD
+            frequencyOfPayment: empty, // NO FIELD
+            largeTradeIndicator: empty, // NO FIELD  
+            leg1EffectiveDateAdjusted: empty, // NO FIELD
+            leg1FinalValuationDate: empty, // NO FIELD
+            leg1SettlementPeriod: empty, // NO FIELD
+            leg2EffectiveDateAdjusted: empty, // NO FIELD
+            leg2SettlementType: empty, // NO FIELD
+            leg2UnderlyingAssetId: empty, // NO FIELD
+            leg2UnderlyingAssetIdType: empty, // NO FIELD
+            leg2UnderlyingAssetName: empty, // NO FIELD 
+            optionalEarlyTerminationDate: empty, // NO FIELD
+            optionCommodityCurrency: empty, // NO FIELD
+            optionCommodityExchangeId: empty, // NO FIELD
+            optionCommodityInstrumentId: empty, // NO FIELD
+            optionCommodityRateSource: empty, // NO FIELD
+            optionCommodityRateSourcePage: empty, // NO FIELD
+            optionCommodityUnderlyerDetails: empty, // NO FIELD
+            optionCommodityUnderlyerId: empty, // NO FIELD
+            optionCommodityUnitOfMeasure: empty, // NO FIELD
+            optionSpecifiedPrice: empty, // NO FIELD
+            optionSpreadAmount: empty, // NO FIELD
+            optionSpreadCurrency: empty, // NO FIELD
+            optionSpreadSchedule: empty, // NO FIELD
+            origin: empty, // NO FIELD
+            premiumPayerPrefix: empty, // NO FIELD  
+            price2Price: empty, // NO FIELD
+            price2Type: empty, // NO FIELD
+            price2Units: empty, // NO FIELD
+            price3Price: empty, // NO FIELD
+            price3Type: empty, // NO FIELD
+            price3Units: empty, // NO FIELD
+            price4Price: empty, // NO FIELD
+            price4Type: empty, // NO FIELD
+            price4Units: empty, // NO FIELD
+            pricingContext: empty, // NO FIELD 
+            priorUsiType: empty, // NO FIELD
+            priorUtiType: empty, // NO FIELD
+            recoveryPrice: empty, // NO FIELD
+            sendToDataCenterCode: empty, // NO FIELD
+            strikePriceType: empty, // NO FIELD
+            subAssetClassForOtherCommodity: empty, // NO FIELD
+            tradeParty1CollateralAmount: empty, // NO FIELD
+            tradeParty1CollateralCurrency: empty, // NO FIELD
+            tradeParty1MandatoryDelegatedReporting: empty, // NO FIELD
+            tradeParty1Role: empty, // NO FIELD
+            tradeParty2CollateralAmount: empty, // NO FIELD
+            tradeParty2CollateralCurrency: empty, // NO FIELD
+            tradeParty2MandatoryDelegatedReporting: empty, // NO FIELD
+            tradeParty2Role: empty, // NO FIELD
+            upfrontPayment: empty, // NO FIELD
+            verificationMethod: empty, // NO FIELD
+            nextFloatingReferenceResetDateLeg1: drrReport -> nextFloatingReferenceResetDateLeg1,
+            lastFloatingReferenceValueLeg1: drrReport -> lastFloatingReferenceValueLeg1,
+            lastFloatingReferenceResetDateLeg1: drrReport -> lastFloatingReferenceResetDateLeg1,
+            nextFloatingReferenceResetDateLeg2: drrReport -> nextFloatingReferenceResetDateLeg2,
+            lastFloatingReferenceValueLeg2: drrReport -> lastFloatingReferenceValueLeg2,
+            lastFloatingReferenceResetDateLeg2: drrReport -> lastFloatingReferenceResetDateLeg2,
+            cdeDelta: drrReport -> delta,
+            changeInLeg1NotionalQuantity: empty, // NO FIELD
+            changeInLeg2NotionalQuantity: empty // NO FIELD
+        }

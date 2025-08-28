@@ -1,0 +1,48 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2018-02-09",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI02",
+  "eventIdentifier" : "d1b8d35a8ffc44d3b25539c9cce8f825",
+  "eventTimestamp" : "2019-02-05T06:10:39.4158625Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2018-02-09T22:23:00Z",
+  "expirationDate" : "2019-02-11",
+  "finalContractualSettlementDate" : "2019-02-11",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 2002.10821,
+    "notionalCurrency" : "USD",
+    "totalNotionalQuantity" : 1820098.37
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 23.232,
+    "notionalCurrency" : "USD",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 21120
+  },
+  "price" : {
+    "monetary" : 0.0011
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "d1b8d35a8ffc44d3b25539c9cce8f825",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPINDEX01"
+}

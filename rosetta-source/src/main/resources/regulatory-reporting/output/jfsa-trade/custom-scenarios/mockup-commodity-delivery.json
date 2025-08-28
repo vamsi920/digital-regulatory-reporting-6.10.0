@@ -1,0 +1,47 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "COMM",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "counterparty1" : "549300KFSLY4U7N3LL12",
+  "counterparty2" : "549300AJRHKBLY9GM262",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2006-07-01",
+  "entityResponsibleForReporting" : "549300KFSLY4U7N3LL12",
+  "eventIdentifier" : "00122941455512345BR777123456789",
+  "eventTimestamp" : "2023-07-19T14:44:58Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2023-07-19T14:44:58Z",
+  "expirationDate" : "2006-07-31",
+  "finalContractualSettlementDate" : "2006-07-31",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 487862.5,
+    "notionalCurrency" : "USD",
+    "quantityUnitOfMeasure" : "MBTU",
+    "totalNotionalQuantity" : 77500
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 487862.5,
+    "notionalCurrency" : "USD",
+    "quantityUnitOfMeasure" : "MBTU",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 77500
+  },
+  "platformIdentifier" : "XOFF",
+  "price" : {
+    "monetary" : 6.295
+  },
+  "priceCurrency" : "USD",
+  "priceNotation" : "Monetary",
+  "priceUnitOfMeasure" : "MBTU",
+  "reportSubmittingEntityID" : "549300KFSLY4U7N3LL12",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "technicalRecordId" : "00122941455512345BR777123456789",
+  "uniqueTransactionIdentifier" : "MOCKUPCOMMODITYDEL01"
+}

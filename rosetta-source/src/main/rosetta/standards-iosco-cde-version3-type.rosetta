@@ -1,0 +1,238 @@
+namespace drr.standards.iosco.cde.version3
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.base.*
+import drr.standards.iosco.cde.version2.* as cdeV2
+import drr.standards.iso.*
+
+type CriticalDataElement extends cdeV2.CriticalDataElementV2:
+//Dates and Timestamps
+    override effectiveDate ISODate (0..1)
+        [ruleReference datetime.EffectiveDate]
+    override earlyTerminationDate date (0..1)
+        [ruleReference datetime.EarlyTerminationDate]
+    override reportingTimestamp zonedDateTime (1..1)
+        [ruleReference datetime.ReportingTimestamp]
+    override executionTimestamp zonedDateTime (0..1)
+        [ruleReference datetime.ExecutionTimestamp]
+    override expirationDate ISODate (0..1)
+//Party
+    override counterparty1 LEIIdentifier (1..1)
+        [ruleReference party.Counterparty1]
+    override counterparty2 Min20Max72AlphaNumericText (0..1)
+        [ruleReference party.Counterparty2]
+    override counterparty2IdentifierType boolean (0..1)
+        [ruleReference party.Counterparty2IdentifierTypeIndicator]
+    override beneficiary1 Min20Max72AlphaNumericText (0..1)
+        [ruleReference party.Beneficiary1]
+    override beneficiary1IdentifierTypeIndicator boolean (0..1)
+        [ruleReference party.Beneficiary1IdentifierTypeIndicator]
+//Execution
+    override cleared ClearedEnum (0..1)
+        [ruleReference execution.Cleared]
+    override centralCounterparty LEIIdentifier (0..1)
+        [ruleReference execution.CentralCounterparty]
+    override clearingMember LEIIdentifier (0..1)
+        [ruleReference execution.ClearingMember]
+    override confirmed ConfirmationEnum (0..1)
+        [ruleReference execution.Confirmed]
+//Quantity
+    override callAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference quantity.CallAmount]
+    override putAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference quantity.PutAmount]
+    override callCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference quantity.CallCurrency]
+    override putCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference quantity.PutCurrency]
+    override delta ShortFraction5DecimalNumber (0..1)
+        [ruleReference quantity.Delta]
+//Price
+    override priceSchedule price.PricePeriod (0..*)
+        [ruleReference price.PriceSchedule]
+    override strikePriceSchedule price.PricePeriod (0..*)
+        [ruleReference price.StrikePriceSchedule]
+    override price price.PriceFormat (0..1)
+        [ruleReference price.Price]
+    override priceNotation price.PriceNotationEnum (0..1)
+        [ruleReference price.PriceNotation]
+    override priceCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference price.PriceCurrency]
+    override packageTransactionPrice price.PriceFormat (0..1)
+        [ruleReference price.PackageTransactionPrice]
+    override packageTransactionPriceNotation price.PriceNotationEnum (0..1)
+        [ruleReference price.PackageTransactionPriceNotationEnum]
+    override packageTransactionPriceCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference price.PackageTransactionPriceCurrency]
+    override packageTransactionSpread price.PriceFormat (0..1)
+        [ruleReference price.PackageTransactionSpread]
+    override packageTransactionSpreadNotation price.PriceNotationEnum (0..1)
+        [ruleReference price.PackageTransactionSpreadNotationEnum]
+    override packageTransactionSpreadCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference price.PackageTransactionSpreadCurrency]
+    override packageIdentifier Max100AlphaNumericText (0..1)
+        [ruleReference link.PackageIdentifier]
+    override strikePrice price.PriceFormat (0..1)
+        [ruleReference price.StrikePrice]
+    override strikePriceNotation price.PriceNotationEnum (0..1)
+        [ruleReference price.StrikePriceNotationEnum]
+    override strikePriceCurrency string (0..1)
+        [ruleReference price.StrikePriceCurrency]
+    override priceUnitOfMeasure Max4Text (0..1)
+        [ruleReference price.PriceUnitOfMeasure]
+    override optionPremiumAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference price.OptionPremiumAmount]
+    override optionPremiumCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference price.OptionPremiumCurrency]
+    override optionPremiumPaymentDate date (0..1)
+        [ruleReference price.OptionPremiumPaymentDate]
+    override exchangeRate Max18D13Number (0..1)
+        [ruleReference price.ExchangeRate]
+    override exchangeRateBasis ExchangeRateBasisStringFormat (0..1)
+        [ruleReference price.ExchangeRateBasis]
+//Transaction
+    override cdSIndexAttachmentPoint ShortFraction10DecimalNumber (0..1)
+        [ruleReference index.CDSIndexAttachmentPoint]
+    override cdSIndexDetachmentPoint ShortFraction10DecimalNumber (0..1)
+        [ruleReference index.CDSIndexDetachmentPoint]
+    override collateralPortfolioIndicator boolean (0..1)
+        [ruleReference collateral.CollateralPortfolioIndicator]
+    override firstExerciseDate date (0..1)
+        [ruleReference price.FirstExerciseDate]
+    override finalContractualSettlementDate date (0..1)
+        [ruleReference execution.FinalContractualSettlementDate]
+    override settlementLocation ISOCountryCodeEnum (0..1)
+        [ruleReference execution.SettlementLocation]
+    override buyerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference party.Direction1BuyerIdentifier]
+    override sellerIdentifier Min20Max72AlphaNumericText (0..1)
+        [ruleReference party.Direction1SellerIdentifier]
+    override priorUTI Max52AlphaNumericText (0..1)
+        [ruleReference link.PriorUTI]
+//Valuation
+    override valuationAmount ShortFraction5DecimalNumber (0..1)
+        [ruleReference valuation.ValuationAmount]
+    override valuationCurrency ISOCurrencyCodeEnum (0..1)
+        [ruleReference valuation.ValuationCurrency]
+    override valuationTimestamp zonedDateTime (0..1)
+        [ruleReference datetime.ValuationTimestamp]
+//Basket
+    override customBasketCode Max52AlphaNumericText (0..1)
+        [ruleReference basket.CustomBasketCode]
+    override basketConstituents basket.BasketConstituentsReport (0..*)
+        [ruleReference basket.BasketConstituents]
+//Other Payments
+    override otherPayment payment.OtherPayment (0..*)
+        [ruleReference payment.OtherPayment]
+//Leg
+    override leg1 Leg (0..1)
+    override leg2 Leg (0..1)
+//Underlying
+    underlyingIdOther Max350AlphaNumericTextAllSplChars (0..1)
+        [ruleReference underlier.UnderlierIDOther]
+    underlyingIdOtherSource ProductIdTypeEnum (0..1)
+        [ruleReference underlier.UnderlierIDOtherSource]
+    underlyingAssetTradingPlatformIdentifier Max4Text (0..1)
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "104"
+            provision "For a platform (e.g. exchange) traded underlying asset, the platform on which the asset is traded. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+        [regulatoryReference CPMI_IOSCO CDE date "20250318" field "Large notional off-facility swap election indicator"
+            provision "Both exchange and relatedExchange attributes are of type LegalEntity. Thus, MIC itself cannot be extracted, entityId needs to be populated with MIC. Nonetheless, LegalEntity type is going to be modified in CDM 7 extending Party type. Hence, the MIC extraction will be possible."]
+    underlyingAssetPriceSource Max50AlphaNumericText (0..1)
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "105"
+            provision "For an underlying asset or benchmark not traded on a platform, the source of the price used to determine the value or level of the asset or benchmark. This data element is not applicable to OTC derivative transactions with custom basket constituents."]
+    cryptoAssetUnderlyingIndicator boolean (0..1)
+        [ruleReference underlier.CryptoAssetUnderlyingIndicator]
+//Event
+    level ReportLevelEnum (0..1)
+        [ruleReference event.Level]
+    actionType ActionTypeEnum (1..1)
+        [ruleReference event.ActionType]
+    eventType EventTypeEnum (0..1)
+        [ruleReference event.EventType]
+    eventIdentifier Max52AlphaNumericText (0..1)
+        [ruleReference event.EventIdentifier]
+//Datetime
+    eventTimestamp zonedDateTime (0..1)
+        [ruleReference datetime.EventTimestamp]
+
+type Leg extends cdeV2.LegV2:
+    override periodicPayment payment.PeriodicPayment (0..1)
+    override notionalAmount ShortFraction5DecimalNumber (0..1)
+        // Definition
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "70"
+            provision "For each leg of the transaction, where applicable:
+            - for OTC derivative transactions negotiated in monetary amounts, amount specified in the contract.
+            - for OTC derivative transactions negotiated in non-monetary amounts:"]
+        // Commodity
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "70"
+            provision "- Commodity fixed/float swaps and similar products: Product of the fixed price and the total notional quantity.
+            - Commodity basis swaps and similar products: Product of the last available spot price at the time of the transaction of the underlying asset of the leg with no spread and the total notional quantity of the leg with no spread.
+            - Commodity options and similar products: Product of the strike price, and the total notional quantity.
+            - Commodity forwards and similar products: Product of the forward price and the total notional quantity
+            - Commodity swaptions and similar products: Notional amount of the underlying contract
+            - Commodity CFDs and similar products: Product of the initial price and the total notional quantity"]
+        // Equity
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "70"
+            provision "- Equity options and similar products: Product of the strike price and the number of shares or index units.
+            - Equity forwards and similar products: Product of the forward price and the number of shares or index units.
+            - Equity variance swaps and similar products: Variance amount.
+            - Equity dividend swaps and similar products: Product of the period fixed strike and the number of shares or index units
+            - Equity swaps, portfolio swaps, and similar products: Product of the initial price and the number of shares or index units
+            - Equity variance swaps and similar products: Variance amount
+            - Equity volatility swaps and similar products: Vega notional amount
+            - Equity CFDs and similar products: Product of the initial price and the number of shares or index units"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // Nigel
+            provision "CDEFXNotional is required due to jurisdictional specific leg level ordering.  When ordering rules are harmonised they could be combined with CDE rules"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // Nigel
+            provision "CDEForwardNotional is required due to jurisdictional specific leg level ordering.  When ordering rules are harmonised they could be combined with CDE rules"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // Nigel
+            provision "InterestRateNotional is required due to jurisdictional specific leg level ordering.  When ordering rules are harmonised they could be combined with CDE rules"]
+        [regulatoryReference ISDA ISDAWorkingGroup date "20210728" // Nigel
+            provision "See separate InterestRateNotional and FXNotional which is required due to jurisdictional specific leg level ordering. When ordering rules are harmonised they could be combined with CDE rules"]
+    override notionalAmountSchedule quantity.NotionalPeriod (0..*)
+        [regulatoryReference for effectiveDate CPMI_IOSCO CDE section "2" field "78.1"
+            provision "Unadjusted date on which the associated notional amount of becomes effective."]
+        [regulatoryReference for effectiveDate ISDA PeerReviewGroup date "20220811"
+            provision "Model should contain a fall back for unadjustedDate when adjustedDate is only available. If an adjusted date is only provided then fields requiring an unadjusted date are left blank which will result in a NACK from the TR.  Functional rules should be updated to fall back on adjusted date if available."]
+        [regulatoryReference for endDate CPMI_IOSCO CDE section "2" field "78.2"
+            provision "Unadjusted end date of the notional amount (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)."]
+        [regulatoryReference for value CPMI_IOSCO CDE section "2" field "78.3"
+            provision "Notional amount which becomes effective on the associated unadjusted effective date."]
+    override notionalQuantitySchedule quantity.NotionalPeriod (0..*)
+        [regulatoryReference for effectiveDate CPMI_IOSCO CDE section "2" field "80.1"
+            provision "Unadjusted date on which the associated notional quantity of becomes effective."]
+        [regulatoryReference for endDate CPMI_IOSCO CDE section "2" field "80.2"
+            provision "Unadjusted end date of the notional quantity (not applicable if the unadjusted end date of a given schedules period is back-to-back with the unadjusted effective date of the subsequent period)."]
+        [regulatoryReference for value CPMI_IOSCO CDE section "2" field "80.3"
+            provision "Notional quantity which becomes effective on the associated unadjusted effective date."]
+    override notionalCurrency ISOCurrencyCodeEnum (0..1)
+    override totalNotionalQuantity ShortFraction5DecimalNumber (0..1)
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "79"
+            provision "For each leg of the transaction, where applicable: aggregate Notional quantity of the underlying asset for the term of the transaction. Where the Total notional quantity is not known when a new transaction is reported, the Total notional quantity is updated as it becomes available."]
+        [regulatoryReference ISDA PeerReviewGroup date "20240529"
+            provision "This function only works with single tradeLot trades"]
+    override fixedRate Max11Number (0..1)
+    override settlementCurrency ISOCurrencyCodeEnum (0..1)
+    override spread price.PriceFormat (0..1)
+    override spreadNotation price.PriceNotationEnum (0..1)
+    override spreadCurrency ISOCurrencyCodeEnum (0..1)
+    override quantityUnitOfMeasure Max4Text (0..1)
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "77"
+            provision "For each leg of the transaction, where applicable: unit of measure in which the Total notional quantity and the Notional quantity schedules are expressed.
+         - Format updated to Char(4).
+         - Allowable values: ISO 20022 approved external UnitOfMeasureCode codeset"]
+    override direction2 Direction2Enum (0..1)
+        [regulatoryReference CPMI_IOSCO CDE section "2" field "13.2"
+            provision "Indicator of whether the reporting counterparty is the payer or the receiver of the leg as determined at the time of the    transaction.
+                Or
+                Identifier of the counterparty of the payer leg and the counterparty of the receiver leg as determined at the time of the transaction.
+                A non-exhaustive list of examples of instruments for which this data element could apply are:
+                - most swaps and swap-like contracts including interest rate swaps, credit total return swaps, and equity swaps (except for credit default swaps, variance, volatility, and correlation swaps)
+                - foreign exchange swaps, forwards, non-deliverable forwards
+                This data element is not applicable to instrument types covered by data elements Direction 1 or Buyer
+                identifier and Seller identifier."]

@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-hkma-tr-margin-report-to-iso20022",
+  "name" : "Hkma Tr Margin Report To Iso20022",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.iso20022.hkma.rewrite.margin.tr.functions.Project_HKMATrMarginReportToIso20022",
+    "inputType" : "drr.regulation.hkma.rewrite.margin.HKMAMarginReport",
+    "outputType" : "iso20022.auth108.hkma.tr.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-hkma-margin",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/auth108-hkma-tr-rosetta-xml-config.json"
+  }
+}

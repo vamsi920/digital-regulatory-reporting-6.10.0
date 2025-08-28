@@ -1,0 +1,39 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "EQUI",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "OPTN",
+  "cryptoAssetUnderlyingIndicator" : false,
+  "effectiveDate" : "2020-09-17",
+  "eventDate" : "2020-09-17",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2020-09-17T16:25:19Z",
+  "expirationDate" : "2020-10-16",
+  "finalContractualSettlementDate" : "2020-10-16",
+  "intragroup" : false,
+  "leg1" : {
+    "totalNotionalQuantity" : 9999999999999999999999999
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "optionPremiumAmount" : 48011.94,
+  "optionPremiumCurrency" : "EUR",
+  "optionPremiumPaymentDate" : "2020-09-21",
+  "optionStyle" : "AMER",
+  "optionType" : "CALL",
+  "productClassification" : "HEBPXX",
+  "ptrr" : false,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 128
+  },
+  "strikePriceCurrency" : "EUR",
+  "strikePriceNotation" : "Monetary",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "EQUITYOPTIONPRICER01",
+  "venueOfExecution" : "XXXX"
+}

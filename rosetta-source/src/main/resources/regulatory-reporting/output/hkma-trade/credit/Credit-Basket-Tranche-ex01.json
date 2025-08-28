@@ -1,0 +1,57 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CRDT",
+  "basketConstituents" : [ {
+    "identifier" : "US0089ABC985",
+    "source" : "ISIN"
+  }, {
+    "identifier" : "US0089ABC985",
+    "source" : "ISIN"
+  } ],
+  "bookingLocation" : "GB",
+  "cdSIndexAttachmentPoint" : 0.03,
+  "cdSIndexDetachmentPoint" : 0.07,
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "ECNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "ORPI" ],
+  "corporateSectorOfTheCounterparty2" : [ "UCIT" ],
+  "counterparty1" : "213800H14XVWOV87OI72",
+  "counterparty2" : "I7331LVCZKQKX5T7XV54",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "customBasketCode" : "CDSBASKETSAMPLE08912",
+  "deliveryType" : "CASH",
+  "direction1" : "BYER",
+  "effectiveDate" : "2004-03-23",
+  "entityResponsibleForReporting" : "213800H14XVWOV87OI72",
+  "eventIdentifier" : "GW0EB40A0q",
+  "eventTimestamp" : "2004-01-24T04:36:35-08:00",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2015-01-24T16:20:47Z",
+  "expirationDate" : "2014-03-20",
+  "finalContractualSettlementDate" : "2014-03-20",
+  "leg1" : {
+    "fixedRate" : 0.006,
+    "notionalAmount" : 25000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A008",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 1
+    },
+    "settlementCurrency" : "USD"
+  },
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "platformIdentifier" : "XNAS",
+  "reportSubmittingEntityID" : "213800H14XVWOV87OI72",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "seniority" : "SNDB",
+  "technicalRecordId" : "HKMA-213800H14XVWOV87OI72-I7331LVCZKQKX5T7XV54-CREDITBASKETTRANCH01-2004-01-24T04:36:35-08:00",
+  "underlyingIdentificationType" : "B",
+  "uniqueTransactionIdentifier" : "CREDITBASKETTRANCH01"
+}

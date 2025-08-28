@@ -1,0 +1,156 @@
+namespace drr.regulation.common.trade.link
+version "${project.version}"
+
+import cdm.base.staticdata.identifier.*
+import cdm.event.qualification.*
+import cdm.product.template.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.version3.* as cde
+
+func GetPriorTransactionIdentifier:
+    inputs:
+        transactionReportInstruction TransactionReportInstruction (1..1)
+        regime RegimeNameEnum (1..1)
+    output:
+        uti string (1..1)
+
+    alias AfterTradeIdentifier:
+        TradeForEvent(transactionReportInstruction) -> tradeIdentifier first -> assignedIdentifier -> identifier
+    alias BeforeTradeIdentifier:
+        BeforeTradeForEvent(transactionReportInstruction) -> tradeIdentifier first -> assignedIdentifier -> identifier
+
+    set uti:
+        if AfterTradeIdentifier exists
+                and BeforeTradeIdentifier exists
+                and AfterTradeIdentifier <> BeforeTradeIdentifier
+                and Qualify_Compression(
+                        transactionReportInstruction -> originatingWorkflowStep -> businessEvent
+                    ) = False
+        then cde.link.PriorUTI(transactionReportInstruction)
+        else (transactionReportInstruction -> reportableInformation -> transactionInformation
+            then filter
+                regimeName = regime
+                    and priorTransactionIdentifier -> identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+            then extract priorTransactionIdentifier -> assignedIdentifier -> identifier
+            then flatten
+            then distinct
+            then only-element)
+
+func SortIdentifiers: <"Returns the lexicographically minimum or maximum identifier string among all available product identifiers (index, loan, contractual product, security, basket, and floating rate index), based on the isMin flag. Prioritizes identifiers with source 'Name'; falls back to 'Other' if absent. Returns empty if no identifiers are found.">
+    inputs:
+        product Product (1..1)
+        isMin boolean (0..1)
+    output:
+        sortedIdentifier string (0..1)
+
+    alias indexIdentifierFilteredByName:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> index -> productIdentifier
+            filter identifier [ identifier -> source = Name ]
+
+    alias indexIdentifierFilteredByOther:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> index -> productIdentifier
+            filter identifier [ identifier -> source = Other ]
+
+    alias indexIdentifierFiltered:
+        if indexIdentifierFilteredByName is absent
+        then indexIdentifierFilteredByOther
+        else indexIdentifierFilteredByName
+
+    alias loanIdentifierFilteredByName:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> loan -> productIdentifier
+            filter identifier [ identifier -> source = Name ]
+
+    alias loanIdentifierFilteredByOther:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> loan -> productIdentifier
+            filter identifier [ identifier -> source = Other ]
+
+    alias loanIdentifierFiltered:
+        if loanIdentifierFilteredByName is absent
+        then loanIdentifierFilteredByOther
+        else loanIdentifierFilteredByName
+
+    alias contractualProductIdentifierFilteredByName:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> contractualProduct -> productIdentifier
+            filter identifier [ identifier -> source = Name ]
+
+    alias contractualProductIdentifierFilteredByOther:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> contractualProduct -> productIdentifier
+            filter identifier [ identifier -> source = Other ]
+
+    alias contractualProductIdentifierFiltered:
+        if contractualProductIdentifierFilteredByName is absent
+        then contractualProductIdentifierFilteredByOther
+        else contractualProductIdentifierFilteredByName
+
+    alias securityIdentifierFilteredByName:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> security -> productIdentifier
+            filter identifier [ identifier -> source = Name ]
+
+    alias securityIdentifierFilteredByOther:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> security -> productIdentifier
+            filter identifier [ identifier -> source = Other ]
+
+    alias securityIdentifierFiltered:
+        if securityIdentifierFilteredByName is absent
+        then securityIdentifierFilteredByOther
+        else securityIdentifierFilteredByName
+
+    alias basketIdentifierFilteredByName:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> basket -> productIdentifier
+            filter identifier [ identifier -> source = Name ]
+
+    alias basketIdentifierFilteredByOther:
+        EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> basket -> productIdentifier
+            filter identifier [ identifier -> source = Other ]
+
+    alias basketIdentifierFiltered:
+        if basketIdentifierFilteredByName is absent
+        then basketIdentifierFilteredByOther
+        else basketIdentifierFilteredByName
+
+    alias interestRatePayouts:
+        EconomicTermsForProduct(product) -> payout -> interestRatePayout
+
+    alias floatingRateIndexes:
+        interestRatePayouts -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+
+    alias IsIdentifierEmpty:
+        [
+            indexIdentifierFiltered -> identifier only-element,
+            loanIdentifierFiltered -> identifier only-element,
+            contractualProductIdentifierFiltered -> identifier only-element,
+            securityIdentifierFiltered -> identifier only-element,
+            basketIdentifierFiltered -> identifier only-element to-string
+        ]
+            is absent
+
+    alias comparison:
+        [
+            indexIdentifierFiltered -> identifier only-element,
+            loanIdentifierFiltered -> identifier only-element,
+            contractualProductIdentifierFiltered -> identifier only-element,
+            securityIdentifierFiltered -> identifier only-element,
+            basketIdentifierFiltered -> identifier only-element to-string,
+            floatingRateIndexes only-element to-string
+        ]
+
+    set sortedIdentifier:
+        if IsIdentifierEmpty
+        then empty
+        else if isMin
+        then comparison min
+        else comparison max
+
+func TechnicalRecordId:
+    inputs:
+        reportableInformation ReportableInformation (1..1)
+        regime RegimeNameEnum (1..1)
+    output:
+        technicalRecordIdentifier string (1..1)
+
+    set technicalRecordIdentifier:
+        reportableInformation -> partyInformation -> regimeInformation
+            then filter regimeName = regime
+            then extract technicalRecordId
+            then distinct only-element

@@ -1,0 +1,78 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "ForeignExchange",
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "N",
+  "counterparty1" : "E26EDV109X6EEPBKVH76",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2019-01-31",
+  "eventIdentifier" : "SI17765022606sz33wdg2p6u3664jwdby",
+  "eventTimestamp" : "2019-01-31T10:10:31Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.815394,
+  "exchangeRateBasis" : "EUR/GBP",
+  "executionTimestamp" : "2019-01-31T10:10:31Z",
+  "expirationDate" : "2019-02-20",
+  "finalContractualSettlementDate" : "2019-02-20",
+  "leg1" : {
+    "notionalAmount" : 793234.88,
+    "notionalCurrency" : "EUR",
+    "payerIdentifier" : "E26EDV109X6EEPBKVH76",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "GGDZP1UYGU9STUHRDP48",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 6000000,
+    "notionalCurrency" : "GBP",
+    "payerIdentifier" : "GGDZP1UYGU9STUHRDP48",
+    "payerIdentifierFormat" : "Lei",
+    "receiverIdentifier" : "E26EDV109X6EEPBKVH76",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Forward",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "GBP",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "packageIndicator" : false,
+  "platformIdentifier" : "XOFF",
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "E26EDV109X6EEPBKVH76",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "FXFORWARDEXXMLXXXX02"
+}

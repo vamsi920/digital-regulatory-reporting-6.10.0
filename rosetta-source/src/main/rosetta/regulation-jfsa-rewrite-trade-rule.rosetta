@@ -1,0 +1,1408 @@
+namespace drr.regulation.jfsa.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.asset.common.*
+import cdm.base.staticdata.identifier.*
+import cdm.base.staticdata.party.*
+import cdm.product.qualification.*
+
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.regulation.jfsa.*
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.upi.* as upi
+import drr.standards.iosco.uti.* as uti
+
+corpus Dissemination Trade
+
+report JFSA Trade in T+1
+  	from TransactionReportInstruction
+  	when ReportableProduct
+  	with type JFSATransactionReport
+    with source JFSARules
+
+eligibility rule ReportableProduct from TransactionReportInstruction:
+    [regulatoryReference JFSA Trade
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+rule source JFSARules
+{
+    JFSATransactionReport:
+        + uniqueTransactionIdentifier
+            [ruleReference Uti]
+        + uniqueTransactionIdentifierProprietary
+            [ruleReference UtiProprietary]
+        + priorUTI
+            [ruleReference PriorUti]
+        + priorUTIProprietary
+            [ruleReference PriorUtiProprietary]
+        - actionType
+        + actionType
+            [ruleReference ActionType]
+        - eventType
+        + eventType
+            [ruleReference EventType]
+        - eventIdentifier
+        + eventIdentifier
+            [ruleReference EventIdentifier]
+        - eventTimestamp
+        + eventTimestamp
+            [ruleReference EventTimestamp]
+        - cleared
+        + cleared
+            [ruleReference Cleared]
+        - centralCounterparty
+        + centralCounterparty
+            [ruleReference CentralCounterparty]
+        - clearingMember
+        + clearingMember
+            [ruleReference ClearingMember]
+        - effectiveDate
+        + effectiveDate
+            [ruleReference EffectiveDate]
+        - expirationDate
+        + expirationDate
+            [ruleReference ExpirationDate]
+        - earlyTerminationDate
+        + earlyTerminationDate
+            [ruleReference EarlyTerminationDate]
+        - reportingTimestamp
+        + reportingTimestamp
+            [ruleReference ReportingTimestamp]
+        - confirmed
+        + confirmed
+            [ruleReference Confirmed]
+        - executionTimestamp
+        + executionTimestamp 
+            [ruleReference ExecutionTimestamp]
+        - counterparty1
+        + counterparty1
+            [ruleReference Counterparty1]
+        - counterparty2
+        + counterparty2
+            [ruleReference Counterparty2]
+        - reportSubmittingEntityID
+        + reportSubmittingEntityID
+            [ruleReference SubmitterIdentifier]
+        - counterparty2Name
+        - executionAgentCounterparty1
+        - executionAgentCounterparty2
+        - clearingTimestamp
+        - platformIdentifier
+        + platformIdentifier
+            [ruleReference PlatformIdentifier]
+        - counterparty2IdentifierType
+        + counterparty2IdentifierType
+            [ruleReference Counterparty2IdentifierType]
+        - direction1
+        + direction1
+            [ruleReference Direction1]
+        - callAmount
+        + callAmount
+            [ruleReference CallAmount]
+        - callCurrency
+        + callCurrency
+            [ruleReference CallCurrency]
+        - putAmount
+        + putAmount
+            [ruleReference PutAmount]
+        - putCurrency
+        + putCurrency
+            [ruleReference PutCurrency]
+        - priceUnitOfMeasure
+        + priceUnitOfMeasure
+            [ruleReference PriceUnitOfMeasure]
+        - optionPremiumAmount
+        + optionPremiumAmount
+            [ruleReference OptionPremiumAmount]
+        - optionPremiumCurrency
+        + optionPremiumCurrency
+            [ruleReference OptionPremiumCurrency]
+        - optionPremiumPaymentDate
+        + optionPremiumPaymentDate
+            [ruleReference OptionPremiumPaymentDate]
+        - exchangeRate
+        + exchangeRate
+            [ruleReference ExchangeRate]
+        - exchangeRateBasis
+        + exchangeRateBasis
+            [ruleReference ExchangeRateBasis]
+        - uniqueProductIdentifier
+        + uniqueProductIdentifier
+            [ruleReference UPI]
+        - contractType
+        + contractType
+            [ruleReference ContractType]
+        - assetClass
+        + assetClass
+            [ruleReference AssetClass]
+        - packageIdentifier
+        + packageIdentifier
+            [ruleReference PackageIdentifier]
+        - cdSIndexAttachmentPoint
+        + cdSIndexAttachmentPoint
+            [ruleReference CDSIndexAttachmentPoint]
+        - cdSIndexDetachmentPoint
+        + cdSIndexDetachmentPoint
+            [ruleReference CDSIndexDetachmentPoint]
+        - collateralPortfolioIndicator
+        + collateralPortfolioIndicator
+            [ruleReference CollateralPortfolioIndicator]
+        - nameOfTheUnderlyingIndex
+        + nameOfTheUnderlyingIndex
+            [ruleReference NameOfTheUnderlyingIndex]
+        - firstExerciseDate
+        + firstExerciseDate
+            [ruleReference FirstExerciseDate]
+        - finalContractualSettlementDate
+        + finalContractualSettlementDate 
+            [ruleReference FinalContractualSettlementDate]
+        - maturityDateOfTheUnderlying
+        + maturityDateOfTheUnderlying
+            [ruleReference MaturityDateOfTheUnderlying]
+        - optionType
+        + optionType
+            [ruleReference OptionType]
+        - optionStyle
+        + optionStyle
+            [ruleReference OptionStyle]
+        - deliveryType
+        + deliveryType
+            [ruleReference DeliveryType]
+        - basketConstituents
+        + basketConstituents
+            [ruleReference BasketConstituents]
+        - otherPayment
+        + otherPayment
+            [ruleReference OtherPayment]
+        - priceSchedule
+        + priceSchedule
+            [ruleReference PriceSchedule]
+        - strikePriceSchedule
+        + strikePriceSchedule
+            [ruleReference StrikePriceSchedule]
+        + leg1 
+            [ruleReference Leg1Report]
+        + leg2 
+            [ruleReference Leg2Report]
+        - beneficiary1
+        - beneficiary1IdentifierTypeIndicator
+        - strikePrice
+        + strikePrice
+            [ruleReference StrikePrice]
+        - strikePriceNotation
+        + strikePriceNotation
+            [ruleReference StrikePriceNotation]
+        - strikePriceCurrency
+        + strikePriceCurrency
+            [ruleReference StrikePriceCurrencyCurrencyPair]
+        - price
+        + price
+            [ruleReference Price]
+        - priceNotation
+        + priceNotation
+            [ruleReference PriceNotation]
+        - priceCurrency
+        + priceCurrency
+            [ruleReference PriceCurrency]
+        - packageTransactionPrice
+        + packageTransactionPrice
+            [ruleReference PackageTransactionPrice]
+        - packageTransactionPriceNotation
+        + packageTransactionPriceNotation
+            [ruleReference PackageTransactionPriceNotation]
+        - packageTransactionPriceCurrency
+        + packageTransactionPriceCurrency
+            [ruleReference PackageTransactionPriceCurrency]
+        - packageTransactionSpread
+        + packageTransactionSpread
+            [ruleReference PackageTransactionSpread]
+        - packageTransactionSpreadNotation
+        + packageTransactionSpreadNotation
+            [ruleReference PackageTransactionSpreadNotation]
+        - packageTransactionSpreadCurrency
+        + packageTransactionSpreadCurrency
+            [ruleReference PackageTransactionSpreadCurrency]
+        - barrier
+        + barrier
+            [ruleReference SingleOrUpperAndLowerBarrier]
+        - embeddedOptionType
+        + embeddedOptionType
+            [ruleReference EmbeddedOptionType]
+        - countryOfTheCounterparty2
+        - traderLocation
+        - bookingLocation
+        - seniority
+        + seniority
+            [ruleReference Seniority]
+        - series
+        + series 
+            [ruleReference Series]
+        - indexFactor
+        + indexFactor 
+            [ruleReference IndexFactor]
+        + technicalRecordId
+            [ruleReference TechnicalRecordId]
+        + underlyingIdentification
+            [ruleReference UnderlyingIdentification]
+        + underlyingIdentificationType
+            [ruleReference UnderlyingIdentificationType]
+}
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective Date">
+    [regulatoryReference JFSA Trade dataElement "1" field "Effective Date"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction come into effect, as included in the confirmation."]
+    [regulatoryReference JFSA Trade dataElement "1" field "Effective Date - Remark"
+        provision "If the effective date is not stated in the confirmation, report the Execution date. If the Execution date is not stated, report the Trade Date. Otherwise, the definition used by the internal management of each financial institution is permitted."]
+    filter IsAllowableActionForJFSA
+    then cde.datetime.EffectiveDate
+        as "1 Effective Date"
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"Expiration date">
+    [regulatoryReference JFSA Trade dataElement "2" field "Expiration date"
+        provision "Unadjusted date at which obligations under the OTC derivative transaction stop being effective, as included in the confirmation. Early termination does not affect this data element."]
+    [regulatoryReference JFSA Trade dataElement "2" field "Expiration date - Remark"
+        provision "If a contract is early terminated, the date of when the early termination occurred is to be entered in the Early termination date column, and the expiration date determined at the time of the original execution shall continue to be entered in the Expiration date column."]
+    filter IsAllowableActionForJFSA
+    then extract ProductForEvent
+    then extract cde.datetime.ExpirationDate
+        as "2 Expiration date"
+
+reporting rule EarlyTerminationDate from TransactionReportInstruction: <"Early termination date">
+    [regulatoryReference JFSA Trade dataElement "3" field "Early termination date"
+        provision "Effective date of the early termination (expiry) of the reported transaction. This data element is applicable if the termination of the transaction occurs prior to its maturity due to an ex-interim decision of a counterparty (or counterparties).
+        Examples of early terminations (expiry) are: negotiated early termination; early termination under an optional early termination provision (mutual put); novation; offsetting (netting) transaction; option exercise; compression; early termination clause specified in the original contract which is a callable swap (bought embedded option); mutual credit break."]
+    [regulatoryReference JFSA Trade dataElement "3" field "Early termination date - Remark"
+        provision "Early termination includes the exercise of options (including Swaption). This applies to cases where options are exercisable at any time during the term, such as American-type options. In such cases, enter the effective date when the rights are exercised. Offsetting (netting) transactions have the same effect as early termination, however reporting is not required unless the position held by the financial institution is offsetted and cleared out."]
+    filter IsActionTypeCORR or IsActionTypeREVI or IsActionTypeTERM
+    then extract cde.datetime.EarlyTerminationDate
+        as "3 Early termination date"
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting timestamp">
+    [regulatoryReference JFSA Trade dataElement "4" field "Reporting timestamp"
+        provision "Date and time of the submission of the report to the trade repository"]
+    [regulatoryReference JFSA Trade dataElement "4" field "Reporting timestamp - Remark"
+        provision "System input time, data generation time, and system connection time are to be considered as acceptable values. In addition, if determining the time up to the seconds is impossible due to system restrictions, setting the seconds to 00 shall be acceptable. If it can be determined that the reporting date and time are the same as the trade date, then Trade Date, may be used as a substitute value. (If different, substitution will not be permitted.)"]
+    cde.datetime.ReportingTimestamp
+        as "4 Reporting timestamp"
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution timestamp">
+    [regulatoryReference JFSA Trade dataElement "5" field "Execution timestamp"
+        provision "Date and time a transaction was originally executed, resulting in the generation of a new UTI. This data element remains unchanged throughout the life of the UTI."]
+    [regulatoryReference JFSA Trade dataElement "5" field "Execution timestamp - Remark"
+        provision "System input time, data generation time, and system connection time are to be considered as acceptable values. In addition, if determining the time up to the seconds is impossible due to system restrictions, setting the seconds to '00' shall be acceptable. If it can be determined that the reporting date and time are the same as the trade date, then Trade Date, may be used as a substitute value. (If different, substitution will not be permitted.)"]
+    filter IsAllowableActionForJFSA
+    then cde.datetime.ExecutionTimestamp
+        as "5 Execution timestamp"
+
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1 (reporting counterparty)">
+    [regulatoryReference JFSA Trade dataElement "7" field "Counterparty 1 (reporting counterparty)"
+        provision "Identifier of the counterparty to an OTC derivative transaction who is fulfilling its reporting obligation via the report in question. In jurisdictions where both parties must report the transaction, the identifier of Counterparty 1 always identifies the reporting counterparty. In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund and not the fund manager is reported as the counterparty."]
+    [regulatoryReference JFSA Trade dataElement "7" field "Counterparty 1 (reporting counterparty) - Remark"
+        provision "Reporting using branch/international branch LEI is not allowed."]
+    extract cde.party.Counterparty1
+        as "7 Counterparty 1"
+
+reporting rule Counterparty2 from TransactionReportInstruction: <"Counterparty 2">
+    [regulatoryReference JFSA Trade dataElement "8" field "Counterparty 2"
+        provision "Identifier of the second counterparty to an OTC derivative transaction. In the case of an allocated derivative transaction executed by a fund manager on behalf of a fund, the fund, and not the fund manager is reported as the counterparty."]
+    [regulatoryReference JFSA Trade dataElement "8" field "Counterparty 2 - Remark"
+        provision "If LEI cannot be obtained, a tentative LEI is permitted. Tentative LEI must have a unique alphanumeric string to ensure the party can be uniquely identified.
+        Examples for assigning tentative LEI: [In the case of financial institutions] Tentative LEI = Party LEI + Counterparty BIC Code
+        [In the case of corporations and individuals] Tentative LEI = Trading Party LEI + Unique Alphanumeric Code (Control number assigned by the financial institution, etc.)
+        If a fund LEI is yet to be obtained, the Trust Bank must share a tentative LEI for the fund (Trust Bank LEI + Unique Alphanumeric Code) with its counterparty financial institution.
+        Enter the LEI of the clearing organization if the company transacts with a clearing organization prescribed in JFSA Notification No.105.
+        Reporting using branch/international branch LEI is not allowed."]
+    extract cde.party.Counterparty2
+        as "8 Counterparty 2"
+
+reporting rule Counterparty2IdentifierType from TransactionReportInstruction: <"Counterparty 2 identifier type">
+    [regulatoryReference JFSA Trade dataElement "9" field "Counterparty 2 identifier type"
+        provision "Indicator of whether LEI was used to identify the Counterparty 2."]
+    [regulatoryReference JFSA Trade dataElement "9" field "Counterparty 2 identifier type - Remark"
+        provision "Under the CDE Guidance, legal entity is to be reported as True and individual as False. However, for cases where a tentative LEI is used to report for a legal entity, it should be reported as False."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220307"
+        provision "Peer review recommnended to detect private individual party representations (instead of LEI scheme)."]
+    extract cde.party.Counterparty2IdentifierTypeIndicator
+        as "9 Counterparty 2 identifier type"
+
+reporting rule Direction1 from TransactionReportInstruction: <"Direction 1 (Buyer/Seller)">
+    [regulatoryReference JFSA Trade dataElement "10" field "Direction 1 (Buyer/Seller)"
+        provision "Indicator of whether the counterparty 1 is the buyer or the seller as determined at the time of the transaction. A non-exhaustive list of examples of instruments for which this data element could apply are: most forwards and forward-like contracts (except for foreign exchange forwards and foreign exchange non-deliverable forwards); most options and option-like contracts including swaptions, caps and floors; credit default swaps (buyer/seller of protection); variance, volatility and correlation swaps; contracts for difference and spreadbets. This data element is not applicable to instrument types covered by data elements Direction 2."]
+    filter IsAllowableActionForJFSA
+    then extract cde.party.Direction1
+        as "10 Direction 1"
+
+reporting rule SubmitterIdentifier from TransactionReportInstruction: <"Submitter identifier">
+    [regulatoryReference JFSA Trade dataElement "12" field "Submitter identifier"
+        provision "Identifier of the entity submitting the data to the swap data repository (SDR). The Submitter identifier will be the same as the reporting counterparty, unless they use a third-party service provider to submit the data to SDR in which case, report the identifier of the third-party service provider."]
+    [regulatoryReference JFSA Trade dataElement "12" field "Submitter identifier - Remark"
+        provision "See 'Entity responsible for reporting'. Applicable for central counterparty and financial institutions. If reporting is conducted using a platform, then the platform is deemed to be the submitter."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220309"
+        provision "Check whether trade is executed in a SEF first. If it is, SEF is obliged to be the Submitter. Then check for Reporting Party and Data Submitter."]
+    extract common.party.ReportSubmittingEntity
+        as "12 Submitter identifier"
+
+reporting rule NewSDRIdentifier from TransactionReportInstruction: <"New SDR Identifier">
+    filter IsAllowableActionForJFSA or IsActionTypeVALU
+    then extract common.link.NewSDRIdentifier
+
+reporting rule OriginalSwapSDRIdentifier from TransactionReportInstruction: <"Original Swap SDR Identifier">
+    filter IsAllowableActionForJFSA
+    then extract
+        if IsCleared(originatingWorkflowStep) = True and cde.event.EventType = CLRG
+        then ExtractPartyFromRelatedPartyByRole(
+                    reportableInformation -> partyInformation -> relatedParty,
+                    PartyRoleEnum -> PriorTradeRepository
+                )
+        else if IntendedToClear(originatingWorkflowStep) = True and IsActionTypeTERM = True
+        then ExtractPartyFromRelatedPartyByRole(
+                    reportableInformation -> partyInformation -> relatedParty,
+                    PartyRoleEnum -> TradeRepository
+                )
+    then extract PartyLei(partyId)
+
+reporting rule Cleared from TransactionReportInstruction: <"Cleared">
+    [regulatoryReference JFSA Trade dataElement "15" field "Cleared"
+        provision "Indicator of whether the transaction has been cleared, or is intended to be cleared, by a central counterparty."]
+    [regulatoryReference JFSA Trade dataElement "15" field "Cleared - Remark"
+        provision "'N' will be acceptable if 'I' cannot be distinguished due to system limitation. If N or I, it is to be reported by the financial institution. If Yes, it is to be reported by the central counterparty. However, if the financial institution conducts a transaction with a clearing organization prescribed in Financial Services Agency Notification No. 105, the financial institution must report the transaction information as a bilateral transaction, even if it is a clearing transaction. Examples of reporting transactions with the central counterparty prescribed in JFSA Notification No. 105 are as follows : (Example : The following items are mandatory) 15 Cleared Y 16 LEI of central counterparty 17 LEI of the clearing member 22 Clearing account origin 23 Orginal swap UTI for alpha transaction"]
+    filter IsAllowableActionForJFSA
+    then cde.execution.Cleared
+        as "15 Cleared"
+
+reporting rule CentralCounterparty from TransactionReportInstruction: <"Central counterparty">
+    [regulatoryReference JFSA Trade dataElement "16" field "Central counterparty"
+        provision "Identifier of the central counterparty that cleared the transaction. This data element is not applicable if the value of the data element Cleared is N (No, not centrally cleared) or I (Intent to clear)."]
+    [regulatoryReference JFSA Trade dataElement "16" field "Central counterparty - Remark"
+        provision "Reported by central counterparty. However, when a financial institution conducts a transaction with a central counterparty prescribed in JFSA Notification No. 105, the financial institution must report the transaction information as a bilateral transaction, even if it is a clearing transaction."]
+    filter IsAllowableActionForJFSA
+    then cde.execution.CentralCounterparty
+        as "16 Central counterparty"
+
+reporting rule ClearingMember from TransactionReportInstruction: <"Clearing member">
+    [regulatoryReference JFSA Trade dataElement "17" field "Clearing member"
+        provision "Identifier of the clearing member through which a derivative transaction was cleared at a CCP. This data element is applicable to cleared transactions."]
+    [regulatoryReference JFSA Trade dataElement "17" field "Clearing member - Remark"
+        provision "Reported by central counterparty. However, when a financial institution conducts a transaction with a central counterparty prescribed in JFSA Notification No. 105, the financial institution must report the transaction information as a bilateral transaction, even if it is a clearing transaction. (If clearing is concentrated through a clearing broker, report the identifiers of the clearing brokers.)"]
+    filter IsAllowableActionForJFSA
+    then cde.execution.ClearingMember
+        as "17 Clearing member"
+
+reporting rule PlatformIdentifier from TransactionReportInstruction: <"Platform Identifier">
+    [regulatoryReference JFSA Trade dataElement "18" field "Platform Identifier"
+        provision "Identifier of the trading facility (e.g., multilateral trading facility, swap execution facility) on which the transaction was executed."]
+    [regulatoryReference JFSA Trade dataElement "18" field "Platform Identifier - Remark"
+        provision "In Japan, an electronic trading platform operator is applicable as a swap execution facility. This may also be applicable for reporting when facilities in the United States and Europe are used. The CDE and CFTC Technical Specifications definitions include, but are not limited to, MTFs and SEFs. Referencing to the examples used in the definition, Japanese electronic trading platform operators will need to be included for reporting."]
+    filter IsAllowableActionForJFSA
+    then cde.execution.PlatformIdentifier
+        as "18 Platform Identifier"
+
+reporting rule Confirmed from TransactionReportInstruction: <"Confirmed">
+    [regulatoryReference JFSA Trade dataElement "19" field "Confirmed"
+        provision "For new reportable transactions (as defined by the CPMI-IOSCO Technical Guidance: Harmonisation of the Unique Transaction Identifier), whether the legally binding terms of an OTC derivatives contract were documented and agreed upon (confirmed) or not (unconfirmed). If documented and agreed, whether such confirmation was done:
+            Via a shared confirmation facility or platform, or a private/bilateral electronic system (electronic);
+            Via a human-readable written document, such as fax, paper or manually processed e-mails (non-electronic)."]
+    [regulatoryReference JFSA Trade dataElement "19" field "Confirmed - Remark"
+        provision "In cases where it is difficult to ascertain the status of the agreement through paper confirmation, it is acceptable to report as non-electronic (YCNF) with agreement (DONE), However, this will be limited to cases where the status can be promptly confirmed post agreement. In cases where it is already known in advance that it will take some time before an agreement can be reached, it is expected to be reported as unconfirmed (NCNF) and then changed to non-electronic (YCNF) post agreement. Reporting of Confirmation Timestamp is optional."]
+    filter IsAllowableActionForJFSA
+    then common.execution.Confirmed
+        as "19 Confirmed"
+
+reporting rule ConfirmationTimestampDTCC from TransactionReportInstruction: <"Confirmation Timestamp (DTCC)">
+    filter IsAllowableActionForJFSA
+    then extract common.datetime.ConfirmationTimestamp
+
+reporting rule FinalContractualSettlementDate from TransactionReportInstruction: <"Final contractual settlement date">
+    [regulatoryReference JFSA Trade dataElement "20" field "Final contractual settlement date"
+        provision "Unadjusted date as per the contract, by which all transfer of cash or assets should take place and the counterparties should no longer have any outstanding obligations to each other under that contract. For products that may not have a final contractual settlement date (eg American options), this data element reflects the date by which the transfer of cash or asset would take place if termination were to occur on the expiration date."]
+    filter IsAllowableActionForJFSA
+    then extract cde.execution.FinalContractualSettlementDate
+        as "20 Final contractual settlement date"
+
+reporting rule Leg1Report from TransactionReportInstruction: <"Leg 1 Report">
+    filter IsAllowableActionForJFSA
+    then common.LegEnrichment(
+                cde.Leg1(item, SpreadNotationOfLeg1, 9999999999999999999999999),
+                cde.quantity.NotionalAmountScheduleLeg1,
+                cde.quantity.NotionalQuantityScheduleLeg1,
+                empty,
+                common.payment.FloatingRateResetFrequencyPeriodLeg1,
+                common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg1,
+                common.datetime.FixingDateLeg1,
+                empty,
+                empty,
+                common.underlier.FloatingRateIndicatorLeg1,
+                empty,
+                common.underlier.FloatingRateReferencePeriodLeg1,
+                common.underlier.FloatingRateReferencePeriodMultiplierLeg1,
+                common.underlier.NameOfTheFloatingRateOfLeg1
+            )
+
+reporting rule Leg2Report from TransactionReportInstruction: <"Leg 2 Report">
+    filter IsAllowableActionForJFSA
+    then common.LegEnrichment(
+                cde.Leg2(item, SpreadNotationOfLeg2, 9999999999999999999999999),
+                cde.quantity.NotionalAmountScheduleLeg2,
+                cde.quantity.NotionalQuantityScheduleLeg2,
+                empty,
+                common.payment.FloatingRateResetFrequencyPeriodLeg2,
+                common.payment.FloatingRateResetFrequencyPeriodMultiplierLeg2,
+                common.datetime.FixingDateLeg2,
+                empty,
+                empty,
+                common.underlier.FloatingRateIndicatorLeg2,
+                empty,
+                common.underlier.FloatingRateReferencePeriodLeg2,
+                common.underlier.FloatingRateReferencePeriodMultiplierLeg2,
+                common.underlier.NameOfTheFloatingRateOfLeg2
+            )
+
+reporting rule SettlementCurrencyLeg1 from TransactionReportInstruction: <"Settlement Currency-Leg 1">
+    [regulatoryReference JFSA Trade dataElement "21" field "Settlement currency"
+        provision "Currency for the cash settlement of the transaction when applicable. For multicurrency products that do not net, the settlement currency of the leg 1. This data element is not applicable for physically settled products (eg physically settled swaptions)."]
+    [regulatoryReference JFSA Trade dataElement "21" field "Settlement currency - Remark"
+        provision "Offshore currencies are to be reported as onshore currency. For products denominated in multiple currencies which do not net (i.e. currency swaps that exchange JPY and foreign currency), reporting data must consist of two separate records (receipt and payment)."]
+    [regulatoryReference ISDA PeerReviewGroup date "unknown"
+        provision "In the case where settlement currency is not provided, model does not infer cash vs. physical settlement based on the product and then extract the notional currency as settlement currency. The conclusion at Peer Review was that firms should fill out the settlement currency field if it is reportable and DRR should not infer it from the notional."]
+    empty
+
+reporting rule SettlementCurrencyLeg2 from TransactionReportInstruction: <"Settlement Currency-Leg 2">
+    [regulatoryReference JFSA Trade dataElement "21" field "Settlement currency"
+        provision "Currency for the cash settlement of the transaction when applicable. For multi-currency products that do not net, the settlement currency of each leg. This data element is not applicable for physically settled products (e.g., physically settled swaptions)."]
+    [regulatoryReference JFSA Trade dataElement "21" field "Settlement currency - Remark"
+        provision "Offshore currencies are to be reported as onshore currency. For products denominated in multiple currencies which do not net (i.e. currency swaps that exchange JPY and foreign currency), reporting data must consist of two separate records (receipt and payment)."]
+    empty
+
+reporting rule ClearingAccountOrigin from TransactionReportInstruction: <"Clearing Account Origin">
+    filter IsAllowableActionForJFSA
+    then extract common.execution.ClearingAccountOrigin
+
+reporting rule OriginalSwapUTI from TransactionReportInstruction: <"Original Swap UTI">
+    filter IsAllowableActionForJFSA
+    then extract common.link.OriginalSwapUTI
+    then filter IsMax32UpperCaseAlphanumericText = True
+    then last
+
+reporting rule OriginalSwapUTIProprietary from TransactionReportInstruction: <"Original Swap UTI">
+    [regulatoryReference JFSA Trade dataElement "23" field "Original Swap UTI"
+        provision "The unique transaction identifier (UTI) of the original swap submitted for clearing to the derivatives clearing organization (DCO) that is replaced by clearing swaps."]
+    [regulatoryReference JFSA Trade dataElement "23" field "Original Swap UTI - Remark"
+        provision "Reported by central counterparty. However, when a financial institution conducts a transaction with a central counterparty prescribed in JFSA Notification No. 105, the financial institution must report the transaction information as a bilateral transaction, even if it is a clearing transaction."]
+    filter IsAllowableActionForJFSA
+    then extract
+        if IsCleared(originatingWorkflowStep) = True
+                and IsActionTypeNEWT = True
+                and cde.event.EventType = CLRG
+        then BeforeTradeForEvent
+    then extract tradeIdentifier
+    then filter identifierType = TradeIdentifierTypeEnum -> UniqueTransactionIdentifier
+    then only-element
+    then extract assignedIdentifier -> identifier
+    then filter IsMax32UpperCaseAlphanumericText = False
+    then last
+        as "23 Original Swap UTI (Proprietary)"
+
+reporting rule ClearingReceiptTimestamp from TransactionReportInstruction: <"Clearing receipt timestamp">
+    filter IsAllowableActionForJFSA or IsActionTypeTERM
+    then extract common.datetime.ClearingReceiptTimestamp
+
+reporting rule Uti from TransactionReportInstruction: <"Unique Transaction Identifier as managed by LEIROC">
+    [regulatoryReference JFSA Trade dataElement "25" field "UTI"
+        provision "A unique identifier assigned to all swap transactions which identifies the swap uniquely throughout its lifecycle."]
+    uti.GetUniqueTransactionIdentifier(item, JFSA)
+        then filter IsMax32UpperCaseAlphanumericText = True
+        as "25 Unique transaction identifier (UTI)"
+
+reporting rule UtiProprietary from TransactionReportInstruction: <"Unique Transaction Identifier as managed by LEIROC">
+    [regulatoryReference JFSA Trade dataElement "25" field "UTI"
+        provision "A unique identifier assigned to all swap transactions which identifies the swap uniquely throughout its lifecycle.  (Trade identifier expressed in a proprietary notation)"]
+    uti.GetUniqueTransactionIdentifier(item, JFSA)
+        then filter IsMax32UpperCaseAlphanumericText = False
+        as "25 Unique transaction identifier (UTI Proprietary)"
+
+reporting rule PriorUti from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference JFSA Trade dataElement "26" field "Prior UTI"
+        provision "UTI assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (eg in the case of a novation, when a transaction is terminated, and a new transaction is generated) or in a one-to-many relation between transactions (eg in clearing or if a transaction is split into several different transactions).
+			This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (eg in the case of a compression)."]
+    [regulatoryReference JFSA Trade dataElement "26" field "Prior UTI - Remark"
+        provision "This is applicable to one to-many or one to-one novation transactions. In addition to novation, it is to be applied to new transactions arising from the exercise of swap rights for swaptions and clearing transactions ( and  transactions) reported by central counterparty. Additionally, in the case of novation, it is to be reported in cases where a new financial institution joins the contract (step-in party). However, in cases where no UTI has been assigned in the past, or it is physically difficult to obtain the Prior UTI, a tentative Prior UTI (unique number established by each financial institution) may be used."]
+    filter IsAllowableActionForJFSA
+    then common.link.GetPriorTransactionIdentifier(item, JFSA)
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "26 Prior UTI"
+
+reporting rule PriorUtiProprietary from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference JFSA Trade dataElement "26" field "Prior UTI"
+        provision "UTI assigned to the predecessor transaction that has given rise to the reported transaction due to a lifecycle event, in a one-to-one relation between transactions (eg in the case of a novation, when a transaction is terminated, and a new transaction is generated) or in a one-to-many relation between transactions (eg in clearing or if a transaction is split into several different transactions).
+			This data element is not applicable when reporting many-to-one and many-to-many relations between transactions (eg in the case of a compression)."]
+    [regulatoryReference JFSA Trade dataElement "26" field "Prior UTI - Remark"
+        provision "This is applicable to one to-many or one to-one novation transactions. In addition to novation, it is to be applied to new transactions arising from the exercise of swap rights for swaptions and clearing transactions ( and  transactions) reported by central counterparty. Additionally, in the case of novation, it is to be reported in cases where a new financial institution joins the contract (step-in party). However, in cases where no UTI has been assigned in the past, or it is physically difficult to obtain the Prior UTI, a tentative Prior UTI (unique number established by each financial institution) may be used."]
+    filter IsAllowableActionForJFSA
+    then common.link.GetPriorTransactionIdentifier(item, JFSA)
+    then filter IsMax32UpperCaseAlphanumericText = False
+        as "26 Prior UTI (Proprietary)"
+
+// Remap to the CDE, currently endpoint "as" is probiting this
+//TODO: Update the samples to include Day Count Conventions on Floating legs
+reporting rule OtherPayment from TransactionReportInstruction: <"Other payment">
+    [regulatoryReference JFSA Trade dataElement "33-38" field "Other payment"
+        provision "Fields 33-38 are repeatable"]
+    [regulatoryReference ISDA ISDAWorkingGroup date "20220331" // RBC
+        provision "Need to evaluate whether step-in / step-out novations should be included as part of any OtherPayment type"]
+    filter IsAllowableActionForJFSA
+    then extract cde.payment.OtherPayment
+
+reporting rule ValuationAmount from TransactionReportInstruction: <"Valuation amount">
+    filter IsActionTypeVALU
+    then cde.valuation.ValuationAmount
+
+reporting rule ValuationCurrency from TransactionReportInstruction: <"Valuation currency">
+    filter IsActionTypeVALU
+    then cde.valuation.ValuationCurrency
+
+reporting rule ValuationTimestamp from TransactionReportInstruction: <"Valuation Timestamp">
+    filter IsActionTypeVALU
+    then cde.datetime.ValuationTimestamp
+
+reporting rule ValuationMethod from TransactionReportInstruction: <"Valuation method">
+    filter IsActionTypeVALU
+    then extract cde.valuation.ValuationMethod(GetValuation)
+
+reporting rule Delta from TransactionReportInstruction: <"Delta">
+    filter IsActionTypeVALU
+    then extract cde.quantity.Delta
+
+reporting rule CollateralPortfolioIndicator from TransactionReportInstruction: <"Collateral Portfolio Indicator">
+    [regulatoryReference JFSA Trade dataElement "44" field "Collateral Portfolio Indicator"
+        provision "Indicator of whether the collateralisation was performed on a portfolio basis. By on a portfolio basis, it is meant a set of transactions that are margined together (either on a net or a gross basis) contrary to the scenario where the margin is calculated and posted for each individual transaction separately."]
+    [regulatoryReference JFSA Trade dataElement "44" field "Collateral Portfolio Indicator - Remark"
+        provision "True, if collateralisation has been set for each parties involved in the transaction. Whether or not the collateralisation is set will be assumed based on CSA agreement, however it should also include any independently created collateral agreements other than CSA agreement. True, if there is a collateral agreement that covers more than one transaction even if there is only one currently outstanding balance."]
+    filter IsAllowableActionForJFSA
+    then extract cde.collateral.CollateralPortfolioIndicator
+        as "44 Collateral Portfolio Indicator"
+
+reporting rule InitialMarginCollateralPortfolioCode from TransactionReportInstruction: <"Initial margin collateral portfolio code">
+    filter IsAllowableActionForJFSA
+    then extract common.collateral.InitialMarginCollateralPortfolioCode
+
+reporting rule VariationMarginCollateralPortfolioCode from TransactionReportInstruction: <"Variation margin collateral portfolio code">
+    filter IsAllowableActionForJFSA
+    then extract common.collateral.VariationMarginCollateralPortfolioCode
+
+/* ---------------------------------------------------------------------------------------------------------------- */
+reporting rule Price from TransactionReportInstruction: <"Price.">
+    [regulatoryReference JFSA Trade dataElement "64" field "Price"
+        provision "Price specified in the OTC derivative transaction. It does not include fees, taxes or commissions.
+        For commodity fixed/float swaps and similar products with periodic payments, this data element refers to the fixed price of the fixed Leg(s).
+        For commodity and equity forwards and similar products, this data element refers to the forward price of the underlying or reference asset.
+        For equity swaps, portfolios swaps, and similar products, this data element refers to the initial price of the underlying or reference asset.
+        For contracts for difference and similar products, this data element refers to the initial price of the underlier.
+        This data element is not applicable to:
+            - Interest rate swaps and forward rate agreements, as it is understood that the information included in the data elements Fixed rate and Spread may be interpreted as the price of the transaction.
+            - Interest rate options and interest rate swaptions, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+            - Commodity basis swaps and the floating leg of commodity fixed/float swaps, as it is understood that the information included in the data element Spread may be interpreted as the price of the transaction.
+            - Foreign exchange swaps, forwards and options, as it is understood that the information included in the data elements Exchange rate, Strike price, and Option premium may be interpreted as the price of the transaction.
+            - Equity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+            - Credit default swaps and credit total return swaps, as it is understood that the information included in the data elements Fixed rate, Spread and Upfront payment (Other payment type: Upfront payment) may be interpreted as the price of the transaction.
+            - Commodity options, as it is understood that the information included in the data elements Strike price and Option premium may be interpreted as the price of the transaction.
+        Where the price is not known when a new transaction is reported, the price is updated as it becomes available. For transactions that are part of a package, this data element contains the price of the component transaction where applicable."]
+    [regulatoryReference JFSA Trade dataElement "64" field "Price" footnote "1"
+        provision "Note: '999999999999999999' (for Monetary values) or '99999999999' (for Decimal) is accepted when the value is not available at the time of reporting."]
+    [regulatoryReference ISDA PeerReviewGroup date "20221005"
+        provision "Members agreed DRR rules should not default the field value."]
+    filter IsAllowableActionForJFSA
+    then extract
+        cdebase.price.PriceFormatFromNotation(cde.price.PriceNoFormat, PriceNotation)
+
+/*------------------------------------------------------------------------------------ */
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price Currency">
+    [regulatoryReference JFSA Trade dataElement "65" field "Price currency"
+        provision "Currency in which the price is denominated. Price currency is only applicable if Price notation = 1."]
+    filter IsAllowableActionForJFSA
+    then extract cde.price.PriceCurrency
+        as "65 Price currency"
+
+reporting rule PriceNotation from TransactionReportInstruction: <"Price notation">
+    [regulatoryReference JFSA Trade dataElement "66" field "Price notation"
+        provision "Manner in which the price is expressed."]
+    filter IsAllowableActionForJFSA
+    then common.price.DefaultPercentageToDecimal(cde.price.PriceNotation, False)
+        as "66 Price notation"
+
+reporting rule PriceUnitOfMeasure from TransactionReportInstruction: <"Price unit of measure">
+    [regulatoryReference JFSA Trade dataElement "67" field "Price unit of measure"
+        provision "Unit of measure in which the price is expressed."]
+    filter IsAllowableActionForJFSA
+    then cde.price.PriceUnitOfMeasure
+        as "67 Price unit of measure"
+
+reporting rule PriceSchedule from TransactionReportInstruction: <"Price Schedule">
+    [regulatoryReference JFSA Trade dataElement "68-70" field "Price Schedule"
+        provision "Fields 68-70 are repeatable and shall be populated in the case of derivatives involving price schedules."]
+    [regulatoryReference JFSA Trade dataElement "68-70" field "Price Schedule - Remark"
+        provision "Applicable for products where the prices will vary throughout the life of transaction. For those products that are not applicable, reporting is not required."]
+    filter IsAllowableActionForJFSA
+    then extract cde.price.GetReportablePricePeriod(item, PriceNotation)
+
+reporting rule SpreadNotationOfLeg1 from TransactionReportInstruction: <"Spread notation-Leg 1">
+    [regulatoryReference JFSA Trade dataElement "74" field "Spread notation"
+        provision "For each Leg of the transaction, where applicable: manner in which the spread is expressed."]
+    common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg1NotationEnum, False)
+
+/*------------------------------------------------  Spread Leg 1 Ends ------------------------------------------------*/
+/*------------------------------------------------ Spread Leg 2 Starts------------------------------------------------*/
+reporting rule SpreadNotationOfLeg2 from TransactionReportInstruction: <"Spread notation-Leg 2">
+    [regulatoryReference JFSA Trade dataElement "74" field "Spread notation"
+        provision "For each Leg of the transaction, where applicable: manner in which the spread is expressed."]
+    common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg2NotationEnum, False)
+
+/*------------------------------------------------ Spread Leg 2 Ends------------------------------------------------*/
+/* ---------------------------------------------------------------------------------------------------------------- */
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike Price">
+    [regulatoryReference JFSA Trade dataElement "75" field "Strike price"
+        provision "For options other than FX options, swaptions and similar products, price at which the owner of an option can buy or sell the underlying asset of the option. For foreign exchange options, exchange rate at which the option can be exercised, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426.Where the strike price is not known when a new transaction is reported, the strike price is updated as it becomes available. For volatility and variance swaps and similar products the volatility strike price is reported in this data element."]
+    [regulatoryReference JFSA Trade dataElement "75" field "Strike price - Remark"
+        provision "In the case of over-the-counter derivatives transactions with a Strike Price schedule, report the Strike Price as of the commencement of the transaction."]
+    filter IsAllowableActionForJFSA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.StrikePriceNoFormat,
+                StrikePriceNotation
+            )
+        as "75 Strike Price"
+
+reporting rule StrikePriceCurrencyCurrencyPair from TransactionReportInstruction: <"Strike price currency">
+    [regulatoryReference JFSA Trade dataElement "76" field "Strike price currency"
+        provision "For equity options, commodity options, and similar products, currency in which the strike price is denominated. For foreign exchange options: Currency pair and order in which the strike price is expressed. It is expressed as unit currency/quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency, USD 1 = EUR 0.9426. Strike price currency/currency pair is only applicable if Strike price notation = 1."]
+    [regulatoryReference JFSA Trade dataElement "76" field "Strike price currency" footnote "1"
+        provision "Note: For FX [Strike price notation] can only be reported with the value 3 Derived from CDE-Exchange rate basis currency"]
+    filter IsAllowableActionForJFSA
+    then cde.price.StrikePriceCurrency
+        as "76 Strike price currency"
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike price notation">
+    [regulatoryReference JFSA Trade dataElement "77" field "Strike price notation"
+        provision "Manner in which the Strike price is expressed."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230621"
+        provision "This is a JFSA function which converts Percentage notation into Decimal."]
+    filter IsAllowableActionForJFSA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.StrikePriceNotationEnum,
+                cde.price.StrikePriceNotationEnum = Monetary and IsFXOption(ProductForEvent)
+            )
+        as "77 Strike price notation"
+
+/* ---------------------------------------------------------------------------------------------------------------- */
+reporting rule StrikePriceSchedule from TransactionReportInstruction: <"Strike Price Schedule">
+    [regulatoryReference JFSA Trade dataElement "78-80" field "Strike Price Schedule"
+        provision "Fields 135-137 are repeatable and reportable for options, swaptions and similar products with strike prices varying throughout the life of the transaction. Strike price schedule is only applicable if the strike price varies per schedule. The currency for the varying strike prices in the schedule is reported in Strike price currency data element."]
+    [regulatoryReference JFSA Trade dataElement "78-80" field "Strike Price Schedule - Remark"
+        provision "Applicable for products where the Strike price will vary throughout the life of transaction. For those products that are not applicable, reporting is not required."]
+    filter IsAllowableActionForJFSA
+    then extract cde.price.GetReportableStrikePricePeriod(item, StrikePriceNotation)
+
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option premium amount">
+    [regulatoryReference JFSA Trade dataElement "81" field "Option premium amount"
+        provision "For options and swaptions of all asset classes, monetary amount paid by the option buyer. This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    filter IsAllowableActionForJFSA
+    then common.price.OptionPremiumAmount
+        as "81 Option premium amount"
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction: <"Option premium currency">
+    [regulatoryReference JFSA Trade dataElement "82" field "Option premium currency"
+        provision "For options and swaptions of all asset classes, currency in which the option premium amount is denominated. This data element is not applicable if the instrument is not an option or does not embed any optionality."]
+    filter IsAllowableActionForJFSA
+    then cde.price.OptionPremiumCurrency
+        as "82 Option premium currency"
+
+reporting rule OptionPremiumPaymentDate from TransactionReportInstruction: <"Option premium payment date">
+    [regulatoryReference JFSA Trade dataElement "83" field "Option premium payment date"
+        provision "Unadjusted date on which the option premium is paid."]
+    [regulatoryReference JFSA Trade dataElement "83" field "Option premium payment date - Remark"
+        provision "If option premiums are paid in installments, report the first payment date."]
+    filter IsAllowableActionForJFSA
+    then cde.price.OptionPremiumPaymentDate
+        as "83 Option premium payment date"
+
+reporting rule FirstExerciseDate from TransactionReportInstruction: <"First exercise date">
+    [regulatoryReference JFSA Trade dataElement "84" field "First exercise date"
+        provision "First unadjusted date during the exercise period in which an option can be exercised. For European-style options, this date is same as the Expiration date. For American-style options, the first possible exercise date is the unadjusted date included in the execution timestamp. For knock-in options, where the first exercise date is not known when a new transaction is reported, the first exercise date is updated as it becomes available. This data element is not applicable if the instrument is not an option or does not embed any optionality"]
+    filter IsAllowableActionForJFSA
+    then cde.price.FirstExerciseDate
+        as "84 First exercise date"
+
+reporting rule ExchangeRate from TransactionReportInstruction: <"Exchange rate">
+    [regulatoryReference JFSA Trade dataElement "85" field "Exchange rate"
+        provision "Exchange rate between the two different currencies specified in the OTC derivative transaction agreed by the counterparties at the inception of the transaction, expressed as the rate of exchange from converting the unit currency into the quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency; USD 1 = EUR 0.9426."]
+    filter IsAllowableActionForJFSA
+    then cde.price.ExchangeRate
+        as "85 Exchange rate"
+
+reporting rule ExchangeRateBasis from TransactionReportInstruction: <"Exchange rate basis">
+    [regulatoryReference JFSA Trade dataElement "86" field "Exchange rate basis"
+        provision "Currency pair and order in which the exchange rate is denominated, expressed as unit currency/quoted currency. In the example 0.9426 USD/EUR, USD is the unit currency and EUR is the quoted currency, USD 1 = EUR 0.9426."]
+    filter IsAllowableActionForJFSA
+    then cde.price.ExchangeRateBasis
+        as "86 Exchange rate basis"
+
+reporting rule NotionalLeg1 from TransactionReportInstruction: <"Notional of Leg 1"> //Naming convention made consistent with EMIR
+    [regulatoryReference JFSA Trade dataElement "87" field "Notional amount"
+        provision "For each leg of the transaction, where applicable:
+        - for OTC derivative transactions negotiated in monetary amounts, amount specified in the contract.
+        - for OTC derivative transactions negotiated in non-monetary amounts
+        For OTC derivative transactions with a notional amount schedule, the initial notional amount, agreed by the counterparties at the inception of the transaction, is reported in this data element.
+        For OTC foreign exchange options, in addition to this data element, the amounts are reported using the data elements Call amount and Put amount.
+        For amendments or lifecycle events, the resulting outstanding notional amount is reported; (steps in notional amount schedules are not considered to be amendments or lifecycle events);
+        Where the notional amount is not known when a new transaction is reported, the notional amount is updated as it becomes available."]
+    [regulatoryReference JFSA Trade dataElement "87" field "Notional amount - Remark"
+        provision "For products denominated in multiple currencies which are not netted (i.e. currency swaps that exchange JPY and foreign currency), reporting data must consist of two separate records (receipt and payment)."]
+    [regulatoryReference JFSA Trade dataElement "87" field "Notional amount" footnote "1"
+        provision "Note: '9999999999999999999999999' is accepted when the value is not available at the time of reporting."]
+    [regulatoryReference ISDA PeerReviewGroup date "20221005"
+        provision "Members agreed DRR rules should not default the field value."]
+    empty
+
+reporting rule NotionalLeg2 from TransactionReportInstruction: <"Notional of Leg 2"> //Naming convention made consistent with EMIR
+    [regulatoryReference JFSA Trade dataElement "87" field "For each leg of the transaction, where applicable:
+        - for OTC derivative transactions negotiated in monetary amounts, amount specified in the contract.
+        - for OTC derivative transactions negotiated in non-monetary amounts
+
+        For OTC derivative transactions with a notional amount schedule, the initial notional amount, agreed by the counterparties at the inception of the transaction, is reported in this data element.
+        For OTC foreign exchange options, in addition to this data element, the amounts are reported using the data elements Call amount and Put amount.
+        For amendments or lifecycle events, the resulting outstanding notional amount is reported; (steps in notional amount schedules are not considered to be amendments or lifecycle events);
+        Where the notional amount is not known when a new transaction is reported, the notional amount is updated as it becomes available."]
+    [regulatoryReference JFSA Trade dataElement "87" field "Notional amount - Remark"
+        provision "For products denominated in multiple currencies which are not netted (i.e. currency swaps that exchange JPY and foreign currency), reporting data must consist of two separate records (receipt and payment)."]
+    [regulatoryReference JFSA Trade dataElement "87" field "Notional amount" footnote "1"
+        provision "Note: '9999999999999999999999999' is accepted when the value is not available at the time of reporting."]
+    [regulatoryReference ISDA PeerReviewGroup date "20221005"
+        provision "Members agreed DRR rules should not default the field value."]
+    empty
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call amount">
+    [regulatoryReference JFSA Trade dataElement "88" field "Call amount"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to buy."]
+    [regulatoryReference JFSA Trade dataElement "88" field "Call amount - Remark"
+        provision "This item is limited to currency options for which there are call amounts and put amounts. Call Amount/Put Amount will report the same amount as Notional Amount - Leg1/Leg2."]
+    [regulatoryReference ISDA PeerReviewGroup date "20211117"
+        provision "Discussed at Peer Review. Group largely in agreement with proposed logic - only open question was around Credit Options which members agreed to take away and revert on at the next peer review."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220119"
+        provision "Discussed at the DRR Peer Review call. No further input on logic for credit options:
+		    - Call, in case of payer option type
+		    - Put, in case of receiver option type"]
+    [regulatoryReference ISDA PeerReviewGroup date "20210120"
+        provision "On full termination of a trade the Put Amount and Call Amount should be reported as the prior amount, in line with the Notional field."]
+    filter IsAllowableActionForJFSA
+    then if IsFXOption(ProductForEvent)
+        then cde.quantity.ExtractCallAmount(item, 9999999999999999999999999)
+        as "88 Call amount"
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put amount">
+    [regulatoryReference JFSA Trade dataElement "89" field "Put amount"
+        provision "For foreign exchange options, the monetary amount that the option gives the right to sell."]
+    [regulatoryReference JFSA Trade dataElement "89" field "Put amount - Remark"
+        provision "This item is limited to currency options for which there are call amounts and put amounts. Call Amount/Put Amount will report the same amount as Notional Amount - Leg1/Leg2."]
+    [regulatoryReference ISDA PeerReviewGroup date "20211117"
+        provision "Discussed at Peer Review. Group largely in agreement with proposed logic - only open question was around Credit Options which members agreed to take away and revert on at the next peer review."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220119"
+        provision "Discussed at the DRR Peer Review call. No further input on logic for credit options:
+		    - Call, in case of payer option type
+		    - Put, in case of receiver option type"]
+    [regulatoryReference ISDA PeerReviewGroup date "20210120"
+        provision "On full termination of a trade the Put Amount and Call Amount should be reported as the prior amount, in line with the Notional field."]
+    filter IsAllowableActionForJFSA
+    then if IsFXOption(ProductForEvent)
+        then cde.quantity.ExtractPutAmount(item, 9999999999999999999999999)
+        as "89 Put Amount"
+
+reporting rule NotionalCurrencyOfLeg1 from TransactionReportInstruction: <"Notional currency-Leg 1">
+    [regulatoryReference JFSA Trade dataElement "90" field "Notional currency"
+        provision "For each Leg of the transaction, where applicable: currency in which the notional amount is denominated."]
+    [regulatoryReference JFSA Trade dataElement "90" field "Notional currency - Remark"
+        provision "For products denominated in multiple currencies which are not netted (i.e. currency swaps that exchange JPY and foreign currency), reporting data must consist of two separate records (receipt and payment)."]
+    empty
+
+reporting rule NotionalCurrencyOfLeg2 from TransactionReportInstruction: <"Notional currency-Leg 2">
+    [regulatoryReference JFSA Trade dataElement "90" field "Notional currency"
+        provision "For each Leg of the transaction, where applicable: currency in which the notional amount is denominated."]
+    [regulatoryReference JFSA Trade dataElement "90" field "Notional currency - Remark"
+        provision "For products denominated in multiple currencies which are not netted (i.e. currency swaps that exchange JPY and foreign currency), reporting data must consist of two separate records (receipt and payment)."]
+    empty
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call currency">
+    [regulatoryReference JFSA Trade dataElement "91" field "Call currency"
+        provision "For foreign exchange options, the currency in which the Call amount is denominated."]
+    [regulatoryReference JFSA Trade dataElement "91" field "Call currency - Remark"
+        provision "If Call Amount and Put Amount are reported, call currency and put currency is expected to be reported for all option transactions."]
+    [regulatoryReference ISDA PeerReviewGroup date "20211117"
+        provision "Discussed at Peer Review. Group largely in agreement with proposed logic - only open question was around Credit Options which members agreed to take away and revert on at the next peer review."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220119"
+        provision "Discussed at the DRR Peer Review call. No further input on logic for credit options:
+		    - Call, in case of payer option type
+		    - Put, in case of receiver option type"]
+    filter IsAllowableActionForJFSA
+    then if IsFXOption(ProductForEvent) then cde.quantity.CallCurrency
+        as "91 Call currency"
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put currency">
+    [regulatoryReference JFSA Trade dataElement "92" field "Put currency"
+        provision "For foreign exchange options, the currency in which the Put amount is denominated."]
+    [regulatoryReference JFSA Trade dataElement "92" field "Put currency - Remark"
+        provision "If Call Amount and Put Amount are reported, call currency and put currency is expected to be reported for all option transactions."]
+    [regulatoryReference ISDA PeerReviewGroup date "20211117"
+        provision "Discussed at Peer Review. Group largely in agreement with proposed logic - only open question was around Credit Options which members agreed to take away and revert on at the next peer review."]
+    [regulatoryReference ISDA PeerReviewGroup date "20220119"
+        provision "Discussed at the DRR Peer Review call. No further input on logic for credit options:
+		    - Call, in case of payer option type
+		    - Put, in case of receiver option type"]
+    filter IsAllowableActionForJFSA
+    then if IsFXOption(ProductForEvent) then cde.quantity.PutCurrency
+        as "92 Put currency"
+
+reporting rule ActionType from TransactionReportInstruction: <"Action Type">
+    [regulatoryReference JFSA Trade dataElement "101" field "Action Type"
+        provision "Type of action taken on the swap transaction or type of end-of-day reporting.
+        Actions may include, but are not limited to, new, modify, correct, error, terminate, revive, transfer out, valuation, and collateral.
+        New: An action that reports a new swap transaction. It applies to the first message relating to a new UTI.
+        Modify: An action that modifies the state of a previously submitted transaction (e.g., credit event) or changes a term of a previously submitted transaction due to a newly negotiated modification (amendment) or updates previously missing information (e.g., post price swap). It does not include correction of a previous transaction.
+        Correct: An action that corrects erroneous data of a previously submitted transaction.
+        Error: An action of cancellation of a wrongly submitted entire transaction in case it never came into existence or was not subject to the reporting requirements but was reported erroneously, or a cancellation of duplicate report.
+        Terminate: An action that closes an existing transaction because of a new event (e.g., Compression, Novation). This does not apply to transactions that terminate at contractual maturity date.
+        Revive: An action that reinstates a swap transaction that was reported as error or terminated by mistake.
+        Transfer out: An action that transfers swap transaction from one SDR to another SDR (change of swap data repository).
+        Valuation: An update to valuation data. There will be no corresponding Event type.
+        Collateral: An update to collateral margin data. There will be no corresponding Event type."]
+    [regulatoryReference JFSA Trade dataElement "101" field "Action Type - Remark"
+        provision "Status for reporting items such as 'LEI' and 'Confirm' could change during contract period. For those updates which does not involve contractual changes or error corrections, use Action Type: Modify.
+        If New, Correct, or Modify occurs on the same day as the valuation for a same transaction, report the correction and valuation separately.
+        [Specific example] (Specific example 1) Where an equity option transaction is knocked-out (currently reported as modify with a notional amount of 0)
+        Report 'ACTION TYPE' as 'Terminate (TERM)' and 'EVENT TYPE' as 'Early Termination (EART)'.
+        (Specific Example 2) Where a customer cancels an equity option transaction (currently reported as cancel) Report 'ACTION TYPE' as 'Terminate (TERM)' and 'EVENT TYPE' as 'Early Termination (EART)'.
+        (Specific example 3) Exercise of equity option transactions (previously excluded from reporting) Report 'ACTION TYPE' as 'Terminate (TERM)' 'EVENT TYPE' as 'Exercise (EXER)'.
+        In cases where the rights are exercised, it is expectd to be reported as 'Terminate' and 'Exercise'."]
+    extract cde.event.ActionType
+        as "101 Action type"
+
+reporting rule EventType from TransactionReportInstruction: <"Event Type">
+    [regulatoryReference JFSA Trade dataElement "102" field "Event Type"
+        provision "Explanation or reason for the action being taken on the swap transaction. Events may include, but are not limited to, trade, novation, compression or risk reduction exercise, early termination, clearing, exercise, allocation, clearing and allocation, credit event, and transfer.
+            - Trade: A creation, modification, or termination of a transaction.
+            - Novation: A novation legally moves partial or all of the financial risks of a swap from a transferor to a transferee and has the effect of terminating/modifying the original transaction and creating a new transaction to identify the exposure between the transferor/transferee and remaining party.
+            - Compression or Risk Reduction Exercise: Compressions and risk reduction exercises generally have the effect of terminating or modifying (i.e., reducing the notional value) a set of existing transactions and of creating a set of new transaction(s). These processes result in largely the same exposure of market risk that existed prior to the event for the counterparty.
+            - Early termination: Termination of an existing swap transaction prior to scheduled termination or maturity date.
+            - Clearing: Central clearing is a process where a derivatives clearing organization interposes itself between counterparties to contracts, becoming the buyer to every seller and the seller to every buyer. It has the effect of terminating an existing transaction between the buyer and the seller and thereby ensuring the performance of open contracts.
+            - Exercise: The process by which a counterparty fully or partially exercises their rights specified in the contract of an option or a swaption.
+            - Allocation: The process by which an agent, having facilitated a single swap transaction on behalf of several clients, allocates a portion of the executed swap to the clients.
+            - Clearing and Allocation: A simultaneous clearing and allocation event in a derivatives clearing organization.
+            - Credit event: An event or trigger that results in the modification of the state of a previously submitted credit derivative transaction. Applies only to credit derivatives.
+            - Transfer: The process by which a swap is transferred to another SDR that  has the effect of the closing of the swap transaction at one SDR or opening of the same swap transaction using the same UTI/USI in a different SDR (new)."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230124"
+        provision "Peer Review firms agreed to represent partial terminations using MODI and ETRM, thus aligning with EMIR, not CFTC."]
+    extract cde.event.EventType
+        as "102 Event type"
+
+reporting rule EventIdentifier from TransactionReportInstruction: <"Event identifier">
+    [regulatoryReference JFSA Trade dataElement "103" field "Event identifier"
+        provision "Unique identifier to link swap transactions resulting from an event may be, but is not limited to, compression, and credit event. The unique identifier may be assigned by the reporting counterparty or a service provider."]
+    [regulatoryReference JFSA Trade dataElement "103" field "Event identifier - Remark"
+        provision "This element is necessary as Prior UTIs cannot be used for compression and credit events. Any ID assigned by a service provider is expected to be reported. However if the assignment is done by the reporting counterparty, then it is not expected for the assigned ID to be shared between the parties to the transaction."]
+    filter IsAllowableActionForJFSA
+    then extract cde.event.EventIdentifier
+        as "103 Event identifier"
+
+reporting rule EventTimestamp from TransactionReportInstruction: <"Event Timestamp">
+    [regulatoryReference JFSA Trade dataElement "104" field "Event Timestamp"
+        provision "Date and time of occurrence of the event as determined by the reporting counterparty or a service provider.
+        In the case of a clearing event, date and time when the original swap is accepted by the derivative clearing organization (DCO) for clearing and recorded by the DCOs system should be reported in this data element.
+        The time element is as specific as technologically practicable."]
+    [regulatoryReference JFSA Trade dataElement "104" field "Event Timestamp - Remark"
+        provision "System input time, data generation time, and system connection time are to be considered as acceptable values. In addition, if determining the time up to the seconds is impossible due to system restrictions, setting the seconds to '00' shall be acceptable.
+        Cancellation report of alpha - transactions by financial institutions do not necessarily have to match the date and time recorded by the central counterparty's system.
+        The date and time recorded by the central counterparty's system will be submitted by the central counterparty when they report their  and  transactions."]
+    filter IsAllowableActionForJFSA
+    then extract cde.datetime.EventTimestamp
+        as "104 Event timestamp"
+
+reporting rule IndexFactor from TransactionReportInstruction: <"Index factor">
+    [regulatoryReference JFSA Trade dataElement "105" field "Index factor"
+        provision "The index version factor or percent, expressed as a decimal value, that multiplied by the Notional amount yields the notional amount covered by the seller of protection for credit default swap."]
+    [regulatoryReference JFSA Trade dataElement "105" field "Index factor - Remark"
+        provision "(Example) Gross Notional amount : JPY 1 billion
+        Reference : Index comprised of 50 Japanese companies (iTraxx Japan) Notional amount for each company : JPY 20 million each Credit event settlement : <Credit event occur for company #1>
+        Company #1 to settle for JPY 20 million
+        Gross Notional amount reduced to 980 million yen, contract to be continued
+        ->The INDEX Factor will become 98%. (Calculate notional amount after the credit event)
+        INDEX Factor will be 100% at the start of the transaction, and will become Version2 notional/Version1 notional when the credit event occurs."]
+    filter IsAllowableActionForJFSA
+    then extract common.index.IndexFactor
+        as "105 Index factor"
+
+reporting rule EmbeddedOptionType from TransactionReportInstruction: <"Embedded option type">
+    [regulatoryReference JFSA Trade dataElement "106" field "Embedded option type"
+        provision "Type of option or optional provision embedded in a contract."]
+    [regulatoryReference JFSA Trade dataElement "106" field "Embedded option type - Remark"
+        provision "Embedded options are products that combines with other options, such as callable swaps."]
+    [regulatoryReference ISDA USComplianceGroup date "20220519"
+        provision "The US Compliance WG discussed #106 on May 19 WG call. The alternatives of the hierarchy (and OTHR were discussed (BNP and CS were on and assisted). 2 types of hierarchies were discussed
+                - the one raised in Peer WG, and
+                - one raised on the US WG call of a chronological (e.g. which came 1st).
+            The consensus was that for cases where one option may have multiple provisions applicable, including the example of having both mandatory (MDET) and early termination (OPET) provisions applicable, the WG agreed to use the allowable value OTHR, rather than any hierarchy."]
+    filter IsAllowableActionForJFSA
+    then extract common.contract.EmbeddedOptionType
+        as "106 Embedded option type"
+
+reporting rule UPI from TransactionReportInstruction: <"UPI">
+    [regulatoryReference JFSA Trade dataElement "107" field "UPI"
+        provision "A unique set of characters that represents a particular OTC derivative."]
+    [regulatoryReference JFSA Trade dataElement "107" field "UPI"
+        provision "Reporting (including any amendments made on an existing trade), is required from April 7, 2025."]
+    filter IsAllowableActionForJFSA
+    then extract upi.UniqueProductIdentifier
+        as "107 UPI"
+
+reporting rule DeliveryType from TransactionReportInstruction:
+    [regulatoryReference JFSA Trade dataElement "108" field "Delivery Type"
+        provision "Indicates whether the contract is settled physically or in cash."]
+    filter IsAllowableActionForJFSA
+    then extract common.contract.DeliveryType
+        as "108 Delivery Type"
+
+reporting rule AssetClass from TransactionReportInstruction: <"Asset Class">
+    [regulatoryReference JFSA Trade dataElement "109" field "Asset Class"
+        provision "Each reported contract shall be classified according to the asset class it is based on."]
+    [regulatoryReference JFSA Trade dataElement "109" field "Asset Class - Remark"
+        provision "When the underlying assets of the derivatives are cryptoassets: Select 'OTHR = Other'"]
+    filter IsAllowableActionForJFSA
+    then extract common.contract.AssetClass
+        as "109 Asset Class"
+
+reporting rule UnderlyingIdentificationType from TransactionReportInstruction: <"Underlying identification type">
+    [regulatoryReference JFSA Trade dataElement "110" field "Underlying identification type"
+        provision "The type of relevant underlying identifier."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230426"
+        provision "Regarding test samples of Equity baskets with a single index or a single security with an ISIN, the view of Credit Suisse's representative is that those samples are valid because they illustrate an acceptable boundary condition."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230426"
+        provision "Regarding whether the underlying ISIN will always be used in EMIR reporting, the view of Credit Suisse's representative is that MIFID only accepts ISIN."]
+    filter IsAllowableActionForJFSA
+    then if GetUnderlyingIdentificationType exists
+        then GetUnderlyingIdentificationType
+        as "110 Underlying identification type"
+
+reporting rule UnderlyingIdentification from TransactionReportInstruction: <"Underlying identification">
+    [regulatoryReference JFSA Trade dataElement "111" field "Underlying identification"
+        provision "The direct underlying shall be identified by using a unique identification for this underlying based on its type. For Credit Default Swaps, the ISIN of the reference obligation should be provided."]
+    [regulatoryReference JFSA Trade dataElement "111" field "Underlying identification - Remark"
+        provision "If the reference asset is an index without ISIN, report the asset under 'Indicator of the underlying index'."]
+    filter IsAllowableActionForJFSA
+    then extract
+        (if IsCreditSwaption(ProductForEvent) or IsIRSwaption(ProductForEvent)
+        then UnderlierForProduct(ProductForEvent)
+        else ProductForEvent)
+    then extract
+        // Underlying Identification Type = I for ISIN
+        if UnderlierForProduct -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (UnderlierForProduct -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then identifier)
+        else if UnderlierForProduct -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (UnderlierForProduct -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if (IsProductETD and UnderlierForProduct -> commodity -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN)
+        then (UnderlierForProduct -> commodity -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if (IsProductETD and EconomicTermsForProduct -> payout -> performancePayout -> underlier -> commodity -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN)
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> commodity -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if (IsProductETD and EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> commodity -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN)
+        then (EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> commodity -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> security -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier -> source any = ProductIdTypeEnum -> ISIN
+        then (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation -> referenceObligation -> loan -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        else if UnderlierForProduct -> contractualProduct -> productIdentifier exists
+                and UnderlierForProduct -> contractualProduct -> productIdentifier -> source all <> ProductIdTypeEnum -> ISIN
+        then (UnderlierForProduct -> contractualProduct -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        // IR on bond
+        else if (EconomicTermsForProduct -> payout -> interestRatePayout -> bondReference -> bond exists and EconomicTermsForProduct -> payout -> interestRatePayout -> bondReference -> bond -> source all <> ProductIdTypeEnum -> ISIN)
+        then (EconomicTermsForProduct -> payout -> interestRatePayout -> bondReference -> bond
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then extract identifier)
+        // Underlying Identification Type = X for Index
+        else if UnderlierForProduct -> index exists
+        then (UnderlierForProduct -> index -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> index exists
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> index -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then identifier)
+        else if EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> index exists
+        then (EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> index -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then identifier)
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId
+        else if IsFRA
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId
+        // Underlying Identification Type = B
+        else if UnderlierForProduct -> basket exists
+        then (UnderlierForProduct -> basket -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then identifier)
+        else if EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket exists
+        then (EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket -> productIdentifier
+            filter source = ProductIdTypeEnum -> ISIN
+            then first
+            then identifier)
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> basketId
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation -> basketId
+        else if Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then ([EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first, EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> inflationRate -> rateOption -> indexReferenceInformation -> indexId first] only-element)
+    then last
+        as "111 Underlying identification"
+
+reporting rule UnderlyingIndexIndicator from TransactionReportInstruction: <"Indicator of the underlying index">
+    [regulatoryReference JFSA Trade dataElement "112" field "Indicator of the underlying index"
+        provision "An indication of the underlying index, where available."]
+    [regulatoryReference JFSA Trade dataElement "112" field "Indicator of the underlying index - Remark"
+        provision "If the indicator of the underlying index does not exist in the list, report the index using the 'Name of the underlying index'."]
+    filter IsAllowableActionForJFSA
+    then extract
+        (if IsCreditSwaption(ProductForEvent) or IsIRSwaption(ProductForEvent)
+        then UnderlierForProduct(ProductForEvent)
+        else ProductForEvent)
+    then extract
+        if contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if UnderlierForProduct -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+        then UnderlierForProduct -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if UnderlierForProduct -> index exists
+                and UnderlierForProduct -> index -> productIdentifier -> source any = ProductIdTypeEnum -> Name
+        then (UnderlierForProduct -> index -> productIdentifier
+            then filter source = ProductIdTypeEnum -> Name
+            then extract identifier)
+        else if contractualProduct -> economicTerms -> payout -> performancePayout -> underlier -> index exists
+        then (contractualProduct -> economicTerms -> payout -> performancePayout -> underlier -> index -> productIdentifier
+            then filter source = ProductIdTypeEnum -> Name
+            then extract identifier)
+        else if contractualProduct -> economicTerms -> payout -> commodityPayout -> underlier -> index exists
+        then (contractualProduct -> economicTerms -> payout -> commodityPayout -> underlier -> index -> productIdentifier
+            then filter source = ProductIdTypeEnum -> Name
+            then extract identifier)
+        else if IsFRA
+        then contractualProduct -> economicTerms -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+            first
+            to-string
+        else if Qualify_BaseProduct_IRSwap(EconomicTermsForProduct)
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> floatingRateIndex
+            first
+            to-string
+    then extract GetIndexIndicatorFromFloatingRate
+    then distinct only-element
+        as "112 Indicator of the underlying index"
+
+reporting rule NameOfTheUnderlyingIndex from TransactionReportInstruction: <"Name of the underlying index">
+    [regulatoryReference JFSA Trade dataElement "113" field "Name of the underlying index"
+        provision "The full name of the underlying index as assigned by the index provider."]
+    [regulatoryReference JFSA Trade dataElement "113" field "Name of the underlying index - Remark"
+        provision "If the indicator of the underlying index does not exist in the list, report the full name of the index here."]
+    filter IsAllowableActionForJFSA
+    then extract common.underlier.NameOfTheUnderlyingIndex
+        as "113 Name of the underlying index"
+
+reporting rule ReferenceEntity from TransactionReportInstruction: <"Reference entity">
+    [regulatoryReference JFSA Trade dataElement "114" field "Reference entity"
+        provision "Identification of the underlying reference entity."]
+    filter IsAllowableActionForJFSA
+    then extract
+        if UnderlyingIdentificationType is absent // DTCC_JFSA_BR_0114_01
+        then ExtractReferenceEntity
+        as "114 Reference entity"
+
+reporting rule IndicatorOfTheFloatingRateOfLeg1 from TransactionReportInstruction: <"Indicator of the floating rate-Leg 1">
+    [regulatoryReference JFSA Trade dataElement "115" field "Indicator of the floating rate"
+        provision "An indication of the interest rate, where available."]
+    [regulatoryReference JFSA Trade dataElement "115" field "Indicator of the floating rate - Remark"
+        provision "If the floating rate index does not exist in the list, report the index using the 'Name of the floating rate'."]
+    [regulatoryReference ISDA TechnicalExecutionGroup date "20240418"
+        provision "Equity products are implicitly filtered out by calling the function InterestRateLeg1, so no explicit filtering is needed."]
+    filter IsAllowableActionForJFSA
+    then extract ProductForEvent
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg1
+    then extract RateOption
+    then extract item -> floatingRateIndex to-string
+    then extract GetIndexIndicatorFromFloatingRate
+        as "115 Indicator of the floating rate-Leg 1"
+
+reporting rule IndicatorOfTheFloatingRateOfLeg2 from TransactionReportInstruction: <"Indicator of the floating rate-Leg 2">
+    [regulatoryReference JFSA Trade dataElement "115" field "Indicator of the floating rate"
+        provision "An indication of the interest rate, where available."]
+    [regulatoryReference JFSA Trade dataElement "115" field "Indicator of the floating rate - Remark"
+        provision "If the floating rate index does not exist in the list, report the index using the 'Name of the floating rate'."]
+    [regulatoryReference ISDA TechnicalExecutionGroup date "20240418"
+        provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+    filter IsAllowableActionForJFSA
+    then extract ProductForEvent
+    then filter IsFRA = False
+    then extract ProductOrUnderlierProduct
+    then extract InterestRateLeg2
+    then extract RateOption
+    then extract item -> floatingRateIndex to-string
+    then extract GetIndexIndicatorFromFloatingRate
+        as "115 Indicator of the floating rate-Leg 2"
+
+reporting rule DerivativeBasedOnCryptoAssets from TransactionReportInstruction: <"Derivative based on crypto-assets">
+    filter IsAllowableActionForJFSA
+    then extract cde.underlier.CryptoAssetUnderlyingIndicator
+
+reporting rule MaturityDateOfTheUnderlying from TransactionReportInstruction: <"Maturity date of the underlying">
+    [regulatoryReference JFSA Trade dataElement "120" field "Maturity date of the underlying"
+        provision "In case of swaptions, maturity date of the underlying swap."]
+    [regulatoryReference JFSA Trade dataElement "120" field "Maturity date of the underlying - Remark"
+        provision "Reported for swaptions only."]
+    filter IsAllowableActionForJFSA
+    then common.datetime.MaturityDateOfTheUnderlier
+        as "120 Maturity date of the underlying"
+
+reporting rule Seniority from TransactionReportInstruction: <"Seniority">
+    [regulatoryReference JFSA Trade dataElement "121" field "Seniority"
+        provision "Indicates the seniority of the debt security, or debt basket or index underlying a derivative."]
+    filter IsAllowableActionForJFSA
+    then extract common.index.Seniority
+        as "121 Seniority"
+
+reporting rule Series from TransactionReportInstruction: <"Series">
+    [regulatoryReference JFSA Trade dataElement "122" field "Series"
+        provision "The series number of the composition of the index if applicable."]
+    filter IsAllowableActionForJFSA
+    then extract common.index.Series
+        as "122 Series"
+
+reporting rule Version from TransactionReportInstruction: <"Version">
+    filter IsAllowableActionForJFSA
+    then extract common.index.Version
+
+reporting rule CDSIndexAttachmentPoint from TransactionReportInstruction: <"CDS index attachment point">
+    [regulatoryReference JFSA Trade dataElement "124" field "CDS index attachment point"
+        provision "Defined lower point at which the level of losses in the underlying portfolio reduces the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% will be reduced after 3% of losses in the portfolio have occurred. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    filter IsAllowableActionForJFSA
+    then cde.index.CDSIndexAttachmentPoint
+        as "124 CDS index attachment point"
+
+reporting rule CDSIndexDetachmentPoint from TransactionReportInstruction: <"CDS index detachment point">
+    [regulatoryReference JFSA Trade dataElement "125" field "CDS index detachment point"
+        provision "Defined point beyond which losses in the underlying portfolio no longer reduce the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% and a detachment point of 6% will be reduced after there have been 3% of losses in the portfolio. 6% losses in the portfolio deplete the notional of the tranche. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    filter IsAllowableActionForJFSA
+    then cde.index.CDSIndexDetachmentPoint
+        as "125 CDS index detachment point"
+
+reporting rule CustomBasketCode from TransactionReportInstruction: <"Custom basket code">
+    filter IsAllowableActionForJFSA
+    then extract cde.basket.CustomBasketCode
+
+reporting rule BasketConstituents from TransactionReportInstruction:
+    filter IsAllowableActionForJFSA
+    then extract cde.basket.BasketConstituents
+
+reporting rule ContractType from TransactionReportInstruction: <"Contract Type">
+    [regulatoryReference JFSA Trade dataElement "129" field "Contract Type"
+        provision "Each reported contract shall be classified according to its type."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230920"
+        provision "SPDB and CFDS output values will not be supported in DRR until CDM is able to functionally qualify them as distinct products. The qualification of these products needs to be backed by transaction or reporting samples provided by DRR firms."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230920"
+        provision "OTHR is populated if none of the possible outputs are a precise fit"]
+    filter IsAllowableActionForJFSA
+    then extract common.contract.ContractType
+        as "129 Contract Type"
+
+reporting rule OptionStyle from TransactionReportInstruction: <"Option style">
+    [regulatoryReference JFSA Trade dataElement "130" field "Option style"
+        provision "Indicates whether the option may be exercised only at a fixed date (European), a series of pre-specified dates (Bermudan) or at any time during the life of the contract (American)."]
+    [regulatoryReference JFSA Trade dataElement "130" field "Option style - Remark"
+        provision "For Caps and Floors, report 'EURO'."]
+    filter IsAllowableActionForJFSA
+    then extract common.contract.OptionStyle
+        as "130 Option style"
+
+reporting rule OptionType from TransactionReportInstruction: <"Option type">
+    [regulatoryReference JFSA Trade dataElement "131" field "Option type"
+        provision "Indication as to whether the derivative contract is a call (right to purchase a specific underlying asset) or a put (right to sell a specific underlying asset) or whether it cannot be determined whether it is a call or a put at the time of execution of the derivative contract.
+			In case of swaptions it shall be:
+				- Put, in case of receiver swaption, in which the buyer has the right to enter into a swap as a fixed-rate receiver.
+				- Call, in case of payer swaption, in which the buyer has the right to enter into a swap as a fixed-rate payer.
+			In case of Caps and Floors it shall be:
+				- Put, in case of a Floor.
+				- Call, in case of a Cap"]
+    filter IsAllowableActionForJFSA
+    then extract common.contract.OptionType
+        as "131 Option type"
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package identifier">
+    [regulatoryReference JFSA Trade dataElement "132" field "Package identifier"
+        provision "Identifier (determined by the reporting counterparty) in order to connect two or more transactions that are reported separately by the reporting counterparty, but that are negotiated together as the product of a single economic agreement. Two or more reports pertaining to the same transaction whenever jurisdictional reporting requirement does not allow the transaction to be reported with a single report to TRs. A package may include reportable and non-reportable transactions. This data element is not applicable  if no package is involved, or  to allocations. Where the Package identifier is not known when a new transaction is reported, the Package identifier is updated as it becomes available."]
+    [regulatoryReference JFSA Trade dataElement "132" field "Package identifier - Remark"
+        provision "It shall be a unique identifier. It is not expected to be shared with the parties involved in the transaction."]
+    filter IsAllowableActionForJFSA
+    then extract cde.link.PackageIdentifier
+        as "132 Package identifier"
+
+reporting rule PackageTransactionPrice from TransactionReportInstruction: <"Package Transaction Price">
+    [regulatoryReference JFSA Trade dataElement "133" field "Package transaction price"
+        provision "Traded price of the entire package in which the reported derivative transaction is a component. This data element is not applicable if no package is involved, or package transaction spread is used. Prices and related data elements of the transactions (Price currency, Price notation, Price unit of measure) that represent individual components of the package are reported when available. The package transaction price may not be known when a new transaction is reported but may be updated later."]
+    [regulatoryReference JFSA Trade dataElement "133" field "Package transaction price" footnote "1"
+        provision "Note: '999999999999999999' (for Monetary values) or '99999999999' (for Decimal) is accepted when the value is not available at the time of reporting."]
+    [regulatoryReference ISDA PeerReviewGroup date "20221005"
+        provision "Members agreed DRR rules should not default the field value."]
+    filter IsAllowableActionForJFSA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionPriceNoFormat,
+                PackageTransactionPriceNotation
+            )
+
+reporting rule PackageTransactionPriceCurrency from TransactionReportInstruction: <"Package transaction price currency">
+    [regulatoryReference JFSA Trade dataElement "134" field "Package transaction price currency"
+        provision "Currency in which the Package transaction price is denominated. This data element is not applicable if no package is involved, or package transaction spread is used, or package transaction price notation = 3"]
+    filter IsAllowableActionForJFSA
+    then extract cde.price.PackageTransactionPriceCurrency
+        as "134 Package transaction price currency"
+
+reporting rule PackageTransactionPriceNotation from TransactionReportInstruction: <"Package transaction price notation">
+    [regulatoryReference JFSA Trade dataElement "135" field "Package transaction price notation"
+        provision "Manner in which the Package transaction price is expressed. This data element is not applicable if no package is involved, or package transaction spread is used"]
+    filter IsAllowableActionForJFSA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionPriceNotationEnum,
+                False
+            )
+        as "135 Package Transaction Price Notation"
+
+reporting rule PackageTransactionSpread from TransactionReportInstruction: <"Package transaction spread">
+    [regulatoryReference JFSA Trade dataElement "136" field "Package transaction spread"
+        provision "Traded price of the entire package in which the reported derivative transaction is a component of a package transaction. Package transaction price when the price of the package is expressed as a spread, difference between two reference prices. This data element is not applicable if no package is involved, or Package transaction price is used. Spread and related data elements of the transactions (spread currency, Spread notation) that represent individual components of the package are reported when available. Package transaction spread may not be known when a new transaction is reported but may be updated later."]
+    filter IsAllowableActionForJFSA
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionSpreadNoFormat,
+                PackageTransactionSpreadNotation
+            )
+
+reporting rule PackageTransactionSpreadCurrency from TransactionReportInstruction: <"Package transaction spread currency">
+    [regulatoryReference JFSA Trade dataElement "137" field "Package transaction spread currency"
+        provision "Currency in which the Package transaction spread is denominated. This data element is not applicable if no package is involved, or Package transaction price is used, or Package transaction spread notation = 3, or = 4"]
+    filter IsAllowableActionForJFSA
+    then extract cde.price.PackageTransactionSpreadCurrency
+        as "137 Package transaction spread currency"
+
+reporting rule PackageTransactionSpreadNotation from TransactionReportInstruction: <"Package transaction spread notation">
+    [regulatoryReference JFSA Trade dataElement "138" field "Package transaction spread notation"
+        provision "Manner in which the Package transaction spread is expressed. This data element is not applicable if no package is involved, or Package transaction price is used."]
+    filter IsAllowableActionForJFSA
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionSpreadNotationEnum,
+                False
+            )
+        as "138 Package transaction spread notation"
+
+reporting rule TechnicalRecordId from TransactionReportInstruction: <"Technical Record Id (ISO)">
+    extract common.link.TechnicalRecordId(item -> reportableInformation, JFSA)
+
+reporting rule SingleOrUpperAndLowerBarrier from TransactionReportInstruction: <"Single or Upper barrier and Lower barrier">
+    [regulatoryReference JFSA Trade dataElement "187" field "Single barrier price notation"
+        provision "Manner in which the Single barrier price is expressed."]
+    [regulatoryReference JFSA Trade dataElement "187" field "Single barrier price notation" footnote "1"
+        provision "Note: For FX [Single barrier price notation] can only be reported with the value 3"]
+    [regulatoryReference JFSA Trade dataElement "188" field "Lower barrier price notation"
+        provision "Manner in which the Lower barrier price is expressed."]
+    [regulatoryReference JFSA Trade dataElement "188" field "Lower barrier price notation" footnote "1"
+        provision "Note: For FX [Lower barrier price notation] can only be reported with the value 3"]
+    [regulatoryReference JFSA Trade dataElement "189" field "Upper barrier price notation"
+        provision "Manner in which the Upper barrier price is expressed."]
+    [regulatoryReference JFSA Trade dataElement "189" field "Upper barrier price notation" footnote "1"
+        provision "Note: For FX [Upper barrier price notation] can only be reported with the value 3"]
+    [regulatoryReference JFSA Trade dataElement "190" field "Single barrier price"
+        provision "For a barrier option involving only one barrier level, specifies the predetermined price of an underlier at which the occurrence of a barrier event (e.g. knock-out) is determined."]
+    [regulatoryReference JFSA Trade dataElement "192" field "Lower barrier price"
+        provision "For a barrier option involving two barrier levels, specifies the lower and upper levels as a predetermined price of an underlier at which the occurrence of a barrier event (such as a knock-out) is determined. Specifies the lower of the two barrier levels as a predetermined price."]
+    [regulatoryReference JFSA Trade dataElement "194" field "Upper barrier price"
+        provision "For a barrier option involving two barrier levels, specifies the lower and upper levels as a predetermined price of an underlier at which the occurrence of a barrier event (such as a knock-out) is determined. Specifies the higher of the two barrier levels as a predetermined price."]
+    [regulatoryReference JFSA Trade dataElement "[Not in regulation]" field "Single barrier price currency"
+        provision "For equity options, commodity options, and similar products, currency in which the Single Barrier is denominated."]
+    [regulatoryReference JFSA Trade dataElement "[Not in regulation]" field "Lower barrier price currency"
+        provision "For equity options, commodity options, and similar products, currency in which the Lower Barrier is denominated."]
+    [regulatoryReference JFSA Trade dataElement "[Not in regulation]" field "Upper barrier price currency"
+        provision "For equity options, commodity options, and similar products, currency in which the Upper Barrier is denominated."]
+    [regulatoryReference ISDA PeerReviewGroup date "20240410"
+        provision "The modelling of this field is blocked until the CDM Trigger refactoring is available in DRR."]
+    [regulatoryReference ISDA APACJFSAPeerReviewGroup date "20240828"
+        provision "Modelling and extraction of barrier price currency fields to be revisited when DRR version is updated to use the newer CDM version 6 supporting currency at the trigger level."]
+    filter IsAllowableActionForJFSA
+    then extract common.price.SingleOrUpperAndLowerBarrier
+
+func IsAllowableActionForJFSA:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        isAllowableAction boolean (1..1)
+
+    set isAllowableAction:
+        IsActionTypeNEWT(reportableEvent)
+            or IsActionTypeMODI(reportableEvent)
+            or IsActionTypeCORR(reportableEvent)
+            or IsActionTypeREVI(reportableEvent)
+            or IsActionTypeTERM(reportableEvent)
+            or IsActionTypePRTO(reportableEvent)
+            or IsActionTypeEROR(reportableEvent)

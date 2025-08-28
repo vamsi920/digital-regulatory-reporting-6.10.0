@@ -1,0 +1,16 @@
+namespace drr.standards.iosco.cde.base.payment
+version "${project.version}"
+
+import cdm.event.common.*
+
+import drr.regulation.common.*
+
+reporting rule OtherPaymentPayerFormat from TransferState: <"Other Payment Payer Format - LEI, or LEI and Person.">
+    extract transfer -> payerReceiver -> payerPartyReference
+    then extract PartyIdentifierFormat
+        as "Other Payment Payer Format (non-reportable)"
+
+reporting rule OtherPaymentReceiverFormat from TransferState: <"Other Payment Receiver Format - LEI, or LEI and Person.">
+    extract transfer -> payerReceiver -> receiverPartyReference
+    then extract PartyIdentifierFormat
+        as "Other Payment Receiver Format (non-reportable)"

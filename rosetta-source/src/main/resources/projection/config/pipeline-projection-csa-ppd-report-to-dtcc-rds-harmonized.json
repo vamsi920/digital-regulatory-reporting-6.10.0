@@ -1,0 +1,15 @@
+{
+  "id" : "pipeline-projection-csa-ppd-report-to-dtcc-rds-harmonized",
+  "name" : "Csa Ppd Report To Dtcc Rds Harmonized",
+  "transform" : {
+    "type" : "PROJECTION",
+    "function" : "drr.projection.dtcc.rds.harmonized.csa.rewrite.trade.functions.Project_CsaPpdReportToDtccRdsHarmonized",
+    "inputType" : "drr.regulation.csa.rewrite.trade.CSATransactionReport",
+    "outputType" : "iso20022.dtcc.rds.harmonized.Document"
+  },
+  "upstreamPipelineId" : "pipeline-report-csa-ppd",
+  "outputSerialisation" : {
+    "format" : "XML",
+    "configPath" : "xml-config/dtcc-rds-rosetta-xml-config.json"
+  }
+}

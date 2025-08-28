@@ -1,0 +1,70 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CSDS" ],
+  "corporateSectorOfTheCounterparty2" : [ "CDTI" ],
+  "counterparty1" : "DUMMY0000000000LEI01",
+  "counterparty2" : "969500A1DO2476C1ZL52",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2014-01-17",
+  "entityResponsibleForReporting" : "DUMMY0000000000LEI01",
+  "eventDate" : "2011-02-04",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2011-02-04T16:20:47Z",
+  "expirationDate" : "2024-01-17",
+  "finalContractualSettlementDate" : "2024-01-17",
+  "leg1" : {
+    "direction2" : "TAKE",
+    "fixedRate" : 2.232,
+    "notionalAmount" : 25000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A011",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 6
+    }
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 25000000,
+    "notionalCurrency" : "USD",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "LIBO",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateReferencePeriod" : "MNTH",
+      "floatingRateReferencePeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    }
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "packageIdentifier" : "123",
+  "packageTransactionPrice" : {
+    "monetary" : 123567
+  },
+  "packageTransactionPriceCurrency" : "USD",
+  "packageTransactionPriceNotation" : "Monetary",
+  "productClassification" : "SRCXSC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI01",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "uniqueTransactionIdentifier" : "IRPACKAGEPRICEXMLX02L16M15X14E13C12I11R10P9E8G7A6K5C",
+  "venueOfExecution" : "XXXX"
+}

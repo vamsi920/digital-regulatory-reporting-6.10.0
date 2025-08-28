@@ -1,0 +1,72 @@
+{
+  "actionType" : "NEWT",
+  "cleared" : "N",
+  "counterparty1" : "DUMMY0000000000LEI02",
+  "counterparty2" : "DUMMY0000000000LEI01",
+  "counterparty2IdentifierSource" : "LEID",
+  "counterparty2IdentifierType" : true,
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "messageID" : "e1baf10d1e1d123abcf1ddd1c1a13f412024-04-29T00:00Z",
+    "messageTypePPD" : "RT",
+    "optionStyle" : "EURO",
+    "optionType" : "Call",
+    "primaryAssetClass" : "Commodity",
+    "settlementType" : "Cash",
+    "submittedForParty" : "DUMMY0000000000LEI02",
+    "submittingPartyIDType" : "LEI",
+    "tradeLegTypes" : "O-:OPT:OPT",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "versionPPD" : "PPD1.0"
+  },
+  "effectiveDate" : "2022-01-01",
+  "eventTimestamp" : "2021-12-03T18:37:29.8685426Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-12-03T18:12:12Z",
+  "expirationDate" : "2022-12-31",
+  "firstExerciseDate" : "2022-12-31",
+  "leg1" : {
+    "commodityInstrumentID" : "HEATING OIL - NEW YORK - NYMEX",
+    "notionalAmount" : 656560,
+    "notionalCurrency" : "USD",
+    "quantityUnitOfMeasure" : "USGA",
+    "settlementCurrency" : "USD",
+    "totalNotionalQuantity" : 283000
+  },
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OptionType" : "CALL",
+          "UnderlierID" : "HEATING OIL - NEW YORK - NYMEX",
+          "UnderlierIDSource" : "COMM",
+          "ValuationMethodorTrigger" : "Vanilla"
+        },
+        "Header" : {
+          "AssetClass" : "Commodities",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "underlyingAssetType" : "Index"
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 36224,
+  "optionPremiumCurrency" : "USD",
+  "packageIndicator" : false,
+  "reportSubmittingEntityID" : "DUMMY0000000000LEI02",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "strikePrice" : {
+    "monetary" : 2.32
+  },
+  "strikePriceCurrency" : "USD",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "COMMODITYOPTIONENE01"
+}

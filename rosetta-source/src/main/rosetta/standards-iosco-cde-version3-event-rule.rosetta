@@ -1,0 +1,130 @@
+namespace drr.standards.iosco.cde.version3.event
+version "${project.version}"
+
+import cdm.event.common.*
+import cdm.event.qualification.*
+import cdm.event.workflow.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version3.* as cdeV3
+import drr.standards.iso.*
+
+reporting rule ActionType from TransactionReportInstruction: <"Action Type">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "107"
+        provision "Type of action taken on the transaction or type of end-of-day reporting."]
+    // ToDo: MARU action type
+    extract
+        if IsActionTypeCORR
+        then ActionTypeEnum -> CORR
+        else if IsActionTypeEROR
+        then ActionTypeEnum -> EROR
+        else if IsActionTypeREVI
+        then ActionTypeEnum -> REVI
+        else if IsActionTypePRTO
+        then ActionTypeEnum -> PRTO
+        else if IsActionTypeVALU
+        then ActionTypeEnum -> VALU
+        else if IsActionTypeTERM
+        then ActionTypeEnum -> TERM
+        else if IsActionTypeMODI or IsActionTypePositionMODI
+        then ActionTypeEnum -> MODI
+        else if IsActionTypePOSC
+        then ActionTypeEnum -> POSC
+        else if IsActionTypeNEWT
+        then ActionTypeEnum -> NEWT
+
+reporting rule EventType from TransactionReportInstruction: <"Event Type">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "108"
+        provision "Explanation or reason for the action being taken on the transaction."]
+    filter
+        (IsActionTypeNEWT or IsActionTypeMODI or IsActionTypePositionMODI or IsActionTypeTERM)
+    then extract reportableEvent [
+        if (IsActionTypeCORR = False
+                and IsActionTypeEROR = False
+                and IsActionTypeREVI = False
+                and IsActionTypePOSC = False
+                and IsActionTypeVALU = False)
+        then originatingWorkflowStep
+            extract workflowStep [
+                if workflowStep -> businessEvent exists
+                then workflowStep -> businessEvent
+                    extract
+                        (if IsEventTypePTNG(reportableEvent)
+                                or IsActionTypePRTO(reportableEvent)
+                        then EventTypeEnum -> PTNG
+                        else if IsEventTypeUPDT(reportableEvent)
+                        then EventTypeEnum -> UPDT
+                        else if Qualify_Novation
+                                or Qualify_PartialNovation
+                                or intent = EventIntentEnum -> Novation
+                        then EventTypeEnum -> NOVA
+                        else if Qualify_Allocation
+                                or Qualify_Reallocation
+                                or intent = EventIntentEnum -> Allocation
+                        then EventTypeEnum -> ALOC
+                        else if Qualify_Exercise or intent = EventIntentEnum -> OptionExercise
+                        then EventTypeEnum -> EXER
+                        else if Qualify_ClearedTrade
+                                or reportableEvent -> originatingWorkflowStep -> workflowState -> workflowStatus = WorkflowStatusEnum -> Cleared
+                                or intent = EventIntentEnum -> Clearing
+                        then EventTypeEnum -> CLRG
+                        else if Qualify_Compression or intent = EventIntentEnum -> Compression or Qualify_PortfolioRebalancing
+                        then EventTypeEnum -> COMP
+                        else if Qualify_Termination
+                                or intent = EventIntentEnum -> EarlyTerminationProvision
+                                or Qualify_PartialTermination
+                                or intent = EventIntentEnum -> Decrease
+                        then EventTypeEnum -> ETRM
+                        else if Qualify_CreditEventDetermined or intent = EventIntentEnum -> CreditEvent
+                        then EventTypeEnum -> CREV
+                        else if Qualify_CorporateActionDetermined or intent = EventIntentEnum -> CorporateActionAdjustment
+                        then EventTypeEnum -> CORP
+                        else if Qualify_ContractFormation
+                                or intent = EventIntentEnum -> Decrease
+                                or Qualify_Increase
+                                or Qualify_Renegotiation
+                                or Qualify_IndexTransition
+                                or Qualify_FullReturn
+                                or instruction -> primitiveInstruction -> quantityChange exists
+                                or instruction -> primitiveInstruction -> transfer exists
+                                or intent = EventIntentEnum -> ContractTermsAmendment
+                        then EventTypeEnum -> TRAD
+                        else if IsActionTypeMODI(reportableEvent)
+                        then empty
+                        else empty)
+                else if workflowStep -> counterpartyPositionBusinessEvent exists
+                then if workflowStep -> counterpartyPositionBusinessEvent -> intent = PositionEventIntentEnum -> OptionExercise
+                    then EventTypeEnum -> EXER
+                    else if workflowStep -> counterpartyPositionBusinessEvent -> intent = PositionEventIntentEnum -> Transfer
+                    then EventTypeEnum -> NOVA
+                    else if workflowStep -> counterpartyPositionBusinessEvent -> intent = PositionEventIntentEnum -> CorporateActionAdjustment
+                    then EventTypeEnum -> CORP
+                    else EventTypeEnum -> INCP
+            ]
+    ]
+
+reporting rule EventIdentifier from TransactionReportInstruction: <"Event identifier">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "110"
+        provision "Unique identifier to link transactions entering into and resulting from an event, which may be, but is not limited to, compression or other post trade risk reduction exercises, credit event, etc. The unique identifier may be assigned by the reporting counterparty or a service provider or CCP providing the service."]
+    extract
+        originatingWorkflowStep -> eventIdentifier -> assignedIdentifier -> identifier only-element
+
+reporting rule EventIdentifierType from TransactionReportInstruction: <"Event identifier type">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "111"
+        provision "Indication of the type of the event to which the event identifier pertains."]
+    if originatingWorkflowStep -> eventIdentifier -> assignedIdentifier -> identifier exists
+    then extract originatingWorkflowStep -> businessEvent
+        then extract
+            (if Qualify_Compression or intent = EventIntentEnum -> Compression or Qualify_PortfolioRebalancing
+            then EventTypeEnum -> COMP
+            else if Qualify_CreditEventDetermined or intent = EventIntentEnum -> CreditEvent
+            then EventTypeEnum -> CREV)
+
+reporting rule Level from ReportableEvent: <"Level">
+    [regulatoryReference CPMI_IOSCO cdeV3.CDE section "2" field "112"
+        provision "Indication whether the report is done at trade or position level. Position level report can be used as a supplement to trade level reporting to report post trade events and if individual trades have been replaced by the position."]
+    if TradeForEvent exists
+    then extract ReportLevelEnum -> TCTN
+    else if PositionForEvent exists
+    then extract ReportLevelEnum -> PSTN

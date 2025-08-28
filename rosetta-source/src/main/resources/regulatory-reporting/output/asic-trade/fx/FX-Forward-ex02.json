@@ -1,0 +1,54 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "brokerID" : "529900P0204W9HA8JP36",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "FORW",
+  "counterparty1" : "E26EDV109X6EEPBKVH76",
+  "counterparty2" : "GGDZP1UYGU9STUHRDP48",
+  "counterparty2IdentifierType" : true,
+  "effectiveDate" : "2019-01-31",
+  "entityResponsibleForReporting" : "E26EDV109X6EEPBKVH76",
+  "eventIdentifier" : "SI17765022606sz33wdg2p6u3664jwdby",
+  "eventTimestamp" : "2019-01-31T10:10:31Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 0.815394,
+  "exchangeRateBasis" : "EUR/GBP",
+  "executionTimestamp" : "2019-01-31T10:10:31Z",
+  "expirationDate" : "2019-02-20",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 793234.88,
+    "notionalCurrency" : "EUR"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 6000000,
+    "notionalCurrency" : "GBP"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OtherUnderlierID" : "GBP",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "EUR",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "InstrumentType" : "Forward",
+          "Level" : "UPI",
+          "UseCase" : "Forward"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "platformIdentifier" : "XOFF",
+  "reportSubmittingEntityID" : "E26EDV109X6EEPBKVH76",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "FXFORWARDEXXMLXXXX01",
+  "uniqueTransactionIdentifier" : "FXFORWARDEXXMLXXXX02"
+}

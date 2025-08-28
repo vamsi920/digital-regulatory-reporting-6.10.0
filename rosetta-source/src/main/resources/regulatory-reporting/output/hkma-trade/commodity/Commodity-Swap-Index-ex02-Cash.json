@@ -1,0 +1,59 @@
+{
+  "actionType" : "CORR",
+  "assetClass" : "COMM",
+  "bookingLocation" : "GB",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "confirmed" : "NCNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "CSDS" ],
+  "corporateSectorOfTheCounterparty2" : [ "INUN" ],
+  "counterparty1" : "213800IV9PCAC364HN60",
+  "counterparty2" : "213800WWTABZ1GOJHH37",
+  "counterparty2IdentifierFormat" : "Lei",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "CASH",
+  "effectiveDate" : "2021-01-04",
+  "entityResponsibleForReporting" : "213800IV9PCAC364HN60",
+  "eventIdentifier" : "001229414555123459991234569BR777123456789",
+  "eventTimestamp" : "2020-11-16T00:00:00Z",
+  "executionTimestamp" : "2022-03-17T14:44:58Z",
+  "expirationDate" : "2021-01-29",
+  "finalContractualSettlementDate" : "2021-01-29",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalQuantity" : 3000,
+    "quantityFrequency" : "HOUL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OZTR",
+    "settlementCurrency" : "USD",
+    "spread" : {
+      "monetary" : 0.003
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 2000
+  },
+  "leg2" : {
+    "direction2" : "MAKE",
+    "notionalQuantity" : 3000,
+    "quantityFrequency" : "HOUL",
+    "quantityFrequencyMultiplier" : 1,
+    "quantityUnitOfMeasure" : "OZTR",
+    "spread" : {
+      "monetary" : 0
+    },
+    "spreadCurrency" : "USD",
+    "spreadNotation" : "Monetary",
+    "totalNotionalQuantity" : 4000
+  },
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "nonStandardizedTermIndicator" : false,
+  "reportSubmittingEntityID" : "213800IV9PCAC364HN60",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "COMMODITYSWAPINDEX01",
+  "technicalRecordId" : "HKMA-213800IV9PCAC364HN60-213800WWTABZ1GOJHH37-COMMODITYSWAPINDEX02-2020-11-16T00:00Z",
+  "uniqueTransactionIdentifier" : "COMMODITYSWAPINDEX02"
+}

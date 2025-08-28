@@ -1,0 +1,10 @@
+{
+  "id" : "pipeline-report-asic-valuation",
+  "name" : "ASIC / Valuation",
+  "transform" : {
+    "type" : "REPORT",
+    "function" : "drr.regulation.asic.rewrite.valuation.reports.ASICValuationReportFunction",
+    "inputType" : "drr.regulation.common.ValuationReportInstruction",
+    "outputType" : "drr.regulation.asic.rewrite.valuation.ASICValuationReport"
+  }
+}

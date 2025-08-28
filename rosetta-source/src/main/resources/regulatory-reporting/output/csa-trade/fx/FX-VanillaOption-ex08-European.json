@@ -1,0 +1,91 @@
+{
+  "actionType" : "NEWT",
+  "buyerIdentifier" : "R0MUWSFPU8MPRO8K5P83",
+  "callAmount" : 1000000,
+  "callCurrency" : "USD",
+  "cleared" : "N",
+  "counterparty1" : "549300ZK53CNGEEI6A29",
+  "counterparty2" : "R0MUWSFPU8MPRO8K5P83",
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "dtccAdditionalFields" : {
+    "allocationType" : "UNAL",
+    "messageID" : "D97J9JTCprimaryDTCCEU02024-04-29T00:00Z",
+    "messageTypeTransaction" : "Trade State",
+    "primaryAssetClass" : "ForeignExchange",
+    "submittedForParty" : "549300ZK53CNGEEI6A29",
+    "submittingPartyIDType" : "LEI",
+    "tradeParty1IDType" : "LEI",
+    "tradeParty1ReportingDestination" : [ "CA.AB.ASC" ],
+    "tradeParty1TransactionID" : "FXVANILLAOPTIONEXE01",
+    "tradeParty2ReportingDestination" : [ "ESMA", "FCA", "JFSA", "HKMA" ],
+    "versionTransaction" : "CORE1.0"
+  },
+  "effectiveDate" : "2020-12-03",
+  "eventIdentifier" : "D97J9JTCprimaryDTCCEU0",
+  "eventTimestamp" : "2020-12-03T15:24:36Z",
+  "eventType" : "TRAD",
+  "exchangeRate" : 104.3,
+  "exchangeRateBasis" : "USD/JPY",
+  "executionTimestamp" : "2020-12-03T15:22:41Z",
+  "expirationDate" : "2021-06-03",
+  "finalContractualSettlementDate" : "2021-06-07",
+  "firstExerciseDate" : "2021-06-03",
+  "jurisdictionOfCounterparty1" : [ "NON-CA" ],
+  "jurisdictionOfCounterparty2" : [ "NON-CA" ],
+  "leg1" : {
+    "notionalAmount" : 104300000,
+    "notionalCurrency" : "JPY",
+    "settlementCurrency" : "JPY",
+    "underlierIDOther" : "JPY",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "leg2" : {
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "USD",
+    "underlierIDOther" : "USD",
+    "underlierIDOtherSource" : "CCY"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 1992,
+  "nonReportable" : {
+    "instrumentType" : "Option",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "CASH",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "JPY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "nonStandardizedTermIndicator" : false,
+  "optionPremiumAmount" : 0,
+  "optionPremiumCurrency" : "USD",
+  "optionPremiumPaymentDate" : "2020-12-07",
+  "packageIndicator" : false,
+  "platformIdentifier" : "XXXX",
+  "putAmount" : 104300000,
+  "putCurrency" : "JPY",
+  "reportSubmittingEntityID" : "549300ZK53CNGEEI6A29",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "sellerIdentifier" : "549300ZK53CNGEEI6A29",
+  "strikePrice" : {
+    "monetary" : 104.3
+  },
+  "strikePriceCurrency" : "USD/JPY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

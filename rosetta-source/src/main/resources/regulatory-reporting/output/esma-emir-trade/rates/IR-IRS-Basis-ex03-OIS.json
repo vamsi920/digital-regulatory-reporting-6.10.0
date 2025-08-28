@@ -1,0 +1,76 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "INTR",
+  "cleared" : "N",
+  "clearingObligation" : "FLSE",
+  "clearingThresholdOfCounterparty1" : true,
+  "clearingThresholdOfCounterparty2" : true,
+  "collateralPortfolioCode" : "123",
+  "collateralPortfolioIndicator" : true,
+  "confirmationTimestamp" : "2022-02-28T09:35:13Z",
+  "confirmed" : "ECNF",
+  "contractType" : "SWAP",
+  "corporateSectorOfTheCounterparty1" : [ "INVF" ],
+  "corporateSectorOfTheCounterparty2" : [ "ORPI" ],
+  "counterparty1" : "549300V2LQD6SX1WIG70",
+  "counterparty2" : "549300CWK6F65W566G32",
+  "counterparty2IdentifierType" : true,
+  "cryptoAssetUnderlyingIndicator" : false,
+  "deliveryType" : "PHYS",
+  "effectiveDate" : "2022-02-28",
+  "entityResponsibleForReporting" : "549300V2LQD6SX1WIG70",
+  "eventDate" : "2022-02-28",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2022-02-28T09:33:22Z",
+  "expirationDate" : "2023-02-28",
+  "finalContractualSettlementDate" : "2023-02-28",
+  "leg1" : {
+    "direction2" : "MAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRateIndicator" : "SONA",
+      "floatingRatePaymentFrequencyPeriod" : "YEAR",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateReferencePeriod" : "YEAR",
+      "floatingRateReferencePeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "YEAR"
+    },
+    "spread" : {
+      "basis" : 23
+    },
+    "spreadNotation" : "Basis"
+  },
+  "leg2" : {
+    "direction2" : "TAKE",
+    "notionalAmount" : 1000000,
+    "notionalCurrency" : "GBP",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRatePaymentFrequencyPeriod" : "YEAR",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 1,
+      "floatingRateReferencePeriod" : "YEAR",
+      "floatingRateReferencePeriodMultiplier" : 1,
+      "floatingRateResetFrequencyMultiplier" : 1,
+      "floatingRateResetFrequencyPeriod" : "YEAR"
+    },
+    "spread" : {
+      "basis" : 3
+    },
+    "spreadNotation" : "Basis"
+  },
+  "level" : "TCTN",
+  "masterAgreementType" : "ISDA",
+  "masterAgreementVersion" : 2002,
+  "natureOfCounterparty1" : "F",
+  "natureOfCounterparty2" : "F",
+  "productClassification" : "SRAXSC",
+  "ptrr" : false,
+  "reportSubmittingEntityID" : "549300V2LQD6SX1WIG70",
+  "reportingObligationOfTheCounterparty2" : true,
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "underlyingIdentificationType" : "X",
+  "venueOfExecution" : "XXXX"
+}

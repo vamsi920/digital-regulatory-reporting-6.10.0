@@ -1,0 +1,64 @@
+namespace drr.regulation.common.trade.index
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+import cdm.product.asset.*
+
+import drr.regulation.common.*
+import drr.standards.iso.*
+
+func GetSeniority:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        result SeniorityEnum (0..1)
+    alias product: ProductForEvent(reportableEvent)
+
+    alias indexReferenceInformation:
+        if IsCreditSwaption(product)
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation
+        else if IsCreditDefaultSwap(product)
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation
+
+    alias referenceInformation:
+        if IsCreditSwaption(product)
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation
+        else if IsCreditDefaultSwap(product)
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> referenceInformation
+
+    alias basketReferenceInformation:
+        if IsCreditSwaption(product)
+        then EconomicTermsForProduct(UnderlierForProduct(product)) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation
+        else if IsCreditDefaultSwapBasket(product)
+        then EconomicTermsForProduct(product) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation
+
+    alias creditSeniority: indexReferenceInformation -> seniority
+
+    alias debtSeniority:
+        if referenceInformation exists
+        then referenceInformation -> referenceObligation -> security -> debtType -> debtEconomics -> debtSeniority
+        else if IsTotalReturnSwapDebtUnderlier(product)
+        then EconomicTermsForProduct(product) -> payout -> performancePayout only-element -> underlier -> security -> debtType -> debtEconomics -> debtSeniority
+
+    alias basketSeniority:
+        if basketReferenceInformation exists
+        then basketReferenceInformation -> referencePool -> referencePoolItem -> referencePair -> referenceObligation -> security -> debtType -> debtEconomics -> debtSeniority
+
+    set result:
+        if creditSeniority = CreditSeniorityEnum -> SeniorUnSec
+                or creditSeniority = CreditSeniorityEnum -> SeniorSec
+                or creditSeniority = CreditSeniorityEnum -> SeniorLossAbsorbingCapacity
+                or debtSeniority any = DebtSeniorityEnum -> Senior
+                or basketSeniority all = DebtSeniorityEnum -> Senior
+        then SNDB
+        else if creditSeniority = CreditSeniorityEnum -> SubTier3
+                or creditSeniority = CreditSeniorityEnum -> SubUpperTier2
+                or creditSeniority = CreditSeniorityEnum -> SubLowerTier2
+                or creditSeniority = CreditSeniorityEnum -> SubTier1
+                or debtSeniority any = DebtSeniorityEnum -> Subordinated
+                or basketSeniority all = DebtSeniorityEnum -> Subordinated
+        then SBOD
+        else if creditSeniority = CreditSeniorityEnum -> Other
+                or debtSeniority any = DebtSeniorityEnum -> Secured
+                or basketSeniority exists
+        then OTHR

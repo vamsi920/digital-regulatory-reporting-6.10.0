@@ -1,0 +1,25 @@
+namespace drr.standards.iosco.cde.version2.price
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.cde.base.* as base
+import drr.standards.iosco.cde.version1.* as cdeV1
+
+func GetReportablePricePeriod: <"Extracts the period for a price schedule">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        notation base.price.PriceNotationEnum (0..1)
+    output:
+        reportablePeriod base.price.PricePeriod (1..*)
+
+    add reportablePeriod: cdeV1.price.GetReportablePricePeriod(reportableEvent, notation)
+
+func GetReportableStrikePricePeriod: <"Extracts the period for a strike price schedule">
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+        notation base.price.PriceNotationEnum (0..1)
+    output:
+        reportablePeriod base.price.PricePeriod (1..*)
+
+    add reportablePeriod:
+        cdeV1.price.GetReportableStrikePricePeriod(reportableEvent, notation)

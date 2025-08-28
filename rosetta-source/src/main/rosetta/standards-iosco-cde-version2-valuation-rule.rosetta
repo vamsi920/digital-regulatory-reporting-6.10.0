@@ -1,0 +1,28 @@
+namespace drr.standards.iosco.cde.version2.valuation
+version "${project.version}"
+
+import cdm.event.common.*
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+import drr.standards.iosco.cde.version2.* as cdeV2
+
+reporting rule ValuationAmount from TransactionReportInstruction: <"Valuation amount">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "25"
+        provision "Current value of the outstanding contract.
+        Valuation amount is expressed as the exit cost of the contract or components of the contract, ie the price that would be received to sell the contract (in the market in an orderly transaction at the valuation date)."]
+    cdeV1.valuation.ValuationAmount
+
+reporting rule ValuationMethod from Valuation: <"Valuation Method">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE table "2" field "28"
+        provision "Source and method used for the valuation of the transaction by the reporting counterparty.
+            If at least one valuation input is used that is classified as mark-to-model in the below table, then the whole valuation is classified as mark-to-model.
+            If only inputs are used that are classified as mark-to-market in the table below, then the whole valuation is classified as mark-to-market.
+            - Format: Char(4)"]
+    cdeV1.valuation.ValuationMethod
+
+reporting rule ValuationCurrency from TransactionReportInstruction: <"Valuation currency">
+    [regulatoryReference CPMI_IOSCO cdeV2.CDE section "2" field "26"
+        provision "Currency in which the valuation amount is denominated."]
+    cdeV1.valuation.ValuationCurrency

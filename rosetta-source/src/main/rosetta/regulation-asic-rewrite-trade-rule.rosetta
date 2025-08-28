@@ -1,0 +1,1127 @@
+namespace drr.regulation.asic.rewrite.trade
+version "${project.version}"
+
+import cdm.base.*
+import cdm.base.staticdata.* as staticdata
+import cdm.observable.asset.*
+import cdm.product.* as product
+
+import drr.regulation.asic.*
+import drr.regulation.common.*
+import drr.regulation.common.trade.* as common
+import drr.standards.iosco.cde.base.* as cdebase
+import drr.standards.iosco.cde.version3.* as cde
+import drr.standards.iosco.upi.* as upi
+import drr.standards.iosco.uti.* as uti
+import drr.standards.iso.*
+
+corpus Dissemination Trade
+
+report ASIC Trade in T+1
+  	from TransactionReportInstruction
+  	when ReportableProduct
+  	with type ASICTransactionReport
+    with source ASICRules
+
+eligibility rule ReportableProduct from TransactionReportInstruction: <"When eligible for ASIC">
+    [regulatoryReference ASIC Trade
+        provision "Demonstrative eligibility rule for display"]
+    True
+
+rule source ASICRules
+{
+    ASICTransactionReport:
+        - reportingTimestamp
+        + reportingTimestamp
+            [ruleReference ReportingTimestamp]
+        - counterparty1
+        + counterparty1
+             [ruleReference Counterparty1]
+        - counterparty2
+        + counterparty2
+            [ruleReference Counterparty2]
+        - counterparty2IdentifierType
+        + counterparty2IdentifierType
+            [ruleReference Counterparty2IdentifierTypeIndicator]
+        - counterparty2Name
+        + counterparty2Name
+            [ruleReference Counterparty2Name]
+        - centralCounterparty
+        + centralCounterparty
+            [ruleReference CentralCounterparty]
+        - beneficiary1
+        + beneficiary1
+            [ruleReference Beneficiary1]
+        - beneficiary1IdentifierTypeIndicator
+        + beneficiary1IdentifierTypeIndicator
+            [ruleReference Beneficiary1IdentifierTypeIndicator]
+        - executionAgentCounterparty1
+        + executionAgentCounterparty1
+            [ruleReference ExecutionAgentCounterparty1]
+        - executionAgentCounterparty2
+        + executionAgentCounterparty2
+            [ruleReference ExecutionAgentCounterparty2DTCC]
+        - reportSubmittingEntityID
+        + reportSubmittingEntityID
+            [ruleReference ReportSubmittingEntity]
+        - clearingMember
+        + clearingMember
+            [ruleReference ClearingMember]
+        + uniqueTransactionIdentifier
+            [ruleReference UniqueTransactionIdentifier]
+        + uniqueTransactionIdentifierProprietary
+            [ruleReference UtiProprietary]
+        + priorUTI
+            [ruleReference PriorUTI]
+        + priorUTIProprietary
+            [ruleReference PriorUTIProprietary]
+        - cleared
+        + cleared 
+            [ruleReference Cleared]
+        - assetClass
+        + assetClass
+            [ruleReference AssetClass]
+        - contractType
+        + contractType
+            [ruleReference ContractType]
+        - uniqueProductIdentifier
+        + uniqueProductIdentifier
+            [ruleReference UniqueProductIdentifier]
+        - platformIdentifier
+        + platformIdentifier
+            [ruleReference PlatformIdentifier]
+        - direction1
+        + direction1
+            [ruleReference Direction1]
+        - exchangeRate
+        + exchangeRate
+            [ruleReference ExchangeRate]
+        - exchangeRateBasis
+        + exchangeRateBasis
+            [ruleReference ExchangeRateBasis]
+        - effectiveDate
+        + effectiveDate
+            [ruleReference EffectiveDate]
+        - expirationDate
+        + expirationDate
+            [ruleReference ExpirationDate]
+        - executionTimestamp
+        + executionTimestamp
+            [ruleReference ExecutionTimestamp]
+        - clearingTimestamp
+        + clearingTimestamp
+            [ruleReference ClearingTimestamp]
+        - eventTimestamp
+        + eventTimestamp
+            [ruleReference EventTimestamp]
+        - eventType
+        + eventType
+            [ruleReference EventType]
+        - actionType
+        + actionType 
+            [ruleReference ActionType]
+        - packageIdentifier
+        + packageIdentifier
+            [ruleReference PackageIdentifier]
+        - callAmount
+        + callAmount
+            [ruleReference CallAmount]
+        - callCurrency
+        + callCurrency
+            [ruleReference CallCurrency]
+        - putAmount
+        + putAmount
+            [ruleReference PutAmount]
+        - putCurrency
+        + putCurrency
+            [ruleReference PutCurrency]
+        - optionPremiumAmount
+        + optionPremiumAmount
+            [ruleReference OptionPremiumAmount]
+        - optionPremiumCurrency
+        + optionPremiumCurrency
+            [ruleReference OptionPremiumCurrency]
+        - optionPremiumPaymentDate
+        + optionPremiumPaymentDate
+            [ruleReference OptionPremiumPaymentDate]
+        - priceUnitOfMeasure
+        + priceUnitOfMeasure
+            [ruleReference PriceUnitOfMeasure]
+        - cdSIndexAttachmentPoint
+        + cdSIndexAttachmentPoint
+            [ruleReference CDSIndexAttachmentPoint]
+        - cdSIndexDetachmentPoint
+        + cdSIndexDetachmentPoint
+            [ruleReference CDSIndexDetachmentPoint]
+        - collateralPortfolioIndicator
+        + collateralPortfolioIndicator
+            [ruleReference CollateralPortfolioIndicator]
+        - maturityDateOfTheUnderlying
+        + maturityDateOfTheUnderlying
+            [ruleReference MaturityDateOfTheUnderlier]
+        - basketConstituents
+        + basketConstituents
+            [ruleReference BasketConstituents]
+        - otherPayment
+        + otherPayment
+            [ruleReference OtherPayment]
+        + leg1 
+            [ruleReference Leg1Report]
+        + leg2 
+            [ruleReference Leg2Report]
+        - confirmed
+        - firstExerciseDate
+        - finalContractualSettlementDate
+        - optionType
+        - optionStyle
+        - deliveryType
+        - nameOfTheUnderlyingIndex
+        - earlyTerminationDate
+        - embeddedOptionType
+        - traderLocation
+        - bookingLocation
+        - seniority
+        - series
+        - countryOfTheCounterparty2
+        + countryOfTheCounterparty2
+            [ruleReference CountryOfCounterparty2]
+        - indexFactor
+        + indexFactor
+            [ruleReference IndexFactor]
+        - strikePrice
+        + strikePrice
+            [ruleReference StrikePrice]
+        - strikePriceNotation
+        + strikePriceNotation
+            [ruleReference StrikePriceNotation]
+        - strikePriceCurrency
+        + strikePriceCurrency
+            [ruleReference StrikePriceCurrencyCurrencyPair]
+        - price
+        + price
+            [ruleReference Price]
+        - priceNotation
+        + priceNotation
+            [ruleReference PriceNotation]
+        - priceCurrency
+        + priceCurrency
+            [ruleReference PriceCurrency]
+        - packageTransactionPrice
+        + packageTransactionPrice
+            [ruleReference PackageTransactionPrice]
+        - packageTransactionPriceNotation
+        + packageTransactionPriceNotation
+            [ruleReference PackageTransactionPriceNotation]
+        - packageTransactionPriceCurrency
+        + packageTransactionPriceCurrency
+            [ruleReference PackageTransactionPriceCurrency]
+        - packageTransactionSpread
+        + packageTransactionSpread
+            [ruleReference PackageTransactionSpread]
+        - packageTransactionSpreadNotation
+        + packageTransactionSpreadNotation
+            [ruleReference PackageTransactionSpreadNotation]
+        - packageTransactionSpreadCurrency
+        + packageTransactionSpreadCurrency
+            [ruleReference PackageTransactionSpreadCurrency]
+        - barrier
+        + barrier
+            [ruleReference SingleOrUpperAndLowerBarrier]
+        + technicalRecordId
+            [ruleReference TechnicalRecordId]
+        - strikePriceSchedule
+        - priceSchedule
+        + underlyingIdentification
+        [ruleReference UnderlyingIdentification]
+        + underlyingIdentificationType
+            [ruleReference UnderlyingIdentificationType]
+}
+
+//ASIC Definitions
+reporting rule UniqueTransactionIdentifier from TransactionReportInstruction: <"Unique transaction identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "1" field "Unique transaction identifier"
+        provision "For a Reportable Transaction of the kind referred to in 1.2.5(1)(b)(i), (iii) or (iv), a UTI as referred to in Rule 2.2.9.
+            For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c) a UTI as referred to in Rule 2.2.9.
+            For a Reportable Transaction of the kind referred to in subparagraph 1.2.5(1)(b)(ii) in relation to an OTC Derivative or for a report made under paragraph 2.2.2(2)(a) or (b) or Rule 2.4.1 in relation to an OTC Derivative:
+                if a UTI was reported for the initial Reportable Transaction in relation to the OTC Derivativethat UTI; and
+                if a UTI was not reported for the initial Reportable Transaction  a transaction identifier that was reported for the initial Reportable Transaction."]
+    uti.GetUniqueTransactionIdentifier(item, ASIC)
+        then filter IsMax32UpperCaseAlphanumericText = True
+        as "1.1 Unique transaction identifier"
+
+reporting rule UtiProprietary from TransactionReportInstruction: <"Unique transaction identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "1" field "Unique transaction identifier"
+        provision "For a Reportable Transaction of the kind referred to in 1.2.5(1)(b)(i), (iii) or (iv), a UTI as referred to in Rule 2.2.9.
+            For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c) a UTI as referred to in Rule 2.2.9.
+            For a Reportable Transaction of the kind referred to in subparagraph 1.2.5(1)(b)(ii) in relation to an OTC Derivative or for a report made under paragraph 2.2.2(2)(a) or (b) or Rule 2.4.1 in relation to an OTC Derivative:
+                if a UTI was reported for the initial Reportable Transaction in relation to the OTC Derivativethat UTI; and
+                if a UTI was not reported for the initial Reportable Transaction  a transaction identifier that was reported for the initial Reportable Transaction.  (Trade identifier expressed in a proprietary notation)"]
+    uti.GetUniqueTransactionIdentifier(item, ASIC)
+        then filter IsMax32UpperCaseAlphanumericText = False
+        as "1.1 Unique transaction identifier (ProprietaryID)"
+
+reporting rule UniqueProductIdentifier from TransactionReportInstruction: <"Unique product identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "2" field "Unique product identifier"
+        provision "The product identifier for the kind of OTC Derivative the subject of the Reportable Transaction.
+            This data element is not required in a report about
+            the termination of an OTC Derivative."]
+    filter
+        IsAllowableActionForASIC or IsActionTypeTERM or IsActionTypePRTO or IsActionTypeEROR
+    then extract upi.UniqueProductIdentifier
+        as "1.2 Unique product identifier"
+
+reporting rule AssetClass from TransactionReportInstruction: <"Asset class">
+    [regulatoryReference ASIC Trade table "1" dataElement "3" field "Asset class"
+        provision "An indicator of the asset class of the UPI reported under item 2."]
+    common.contract.AssetClass
+        as "1.3 Asset class"
+
+reporting rule ContractType from TransactionReportInstruction: <"Contract type">
+    [regulatoryReference ASIC Trade table "1" dataElement "4" field "Contract type"
+        provision "An indicator of the instrument type or product name of the UPI reported under item 2."]
+    common.contract.ContractType
+        as "1.4 Contract type"
+
+reporting rule Counterparty1 from TransactionReportInstruction: <"Counterparty 1">
+    [regulatoryReference ASIC Trade table "1" dataElement "6" field "Counterparty 1"
+        provision "The current LEI of:
+            If the Reporting Entity is an RE, Trustee or corporate director of the managed investment scheme, trust or CCIV that holds the OTC Derivative the subject of the Reportable Transaction, the managed investment scheme, trust or CCIV.
+            Otherwise, the Reporting Entity."]
+    extract cde.party.Counterparty1
+        as "1.6 Counterparty 1"
+
+reporting rule Counterparty2 from TransactionReportInstruction: <"Counterparty 2">
+    [regulatoryReference ASIC Trade table "1" dataElement "7" field "Counterparty 2"
+        provision "The LEI or another identifier, determined in accordance with subrule S1.3.1(2), of the entity that is:
+        if the counterparty of the OTC Derivative the subject of the Reportable Transaction whose identifier is not reported at item 6 is an RE or Trustee of the managed investment scheme or trust that holds the OTC Derivative the subject of the Reportable Transaction, the managed investment scheme or trust; 
+        otherwise, the counterparty of the OTC Derivative the subject of the Reportable Transaction whose identifier is not reported for Counterparty 1 (item 6 above).
+    If the OTC Derivative the subject of the Reportable Transaction was entered into on or through a facility and cleared by a CCP, and the identities of the counterparties were not disclosed to each other, an anonymity identifier."]
+    extract common.party.Counterparty2
+        as "1.7 Counterparty 2"
+
+reporting rule Counterparty2Name from TransactionReportInstruction: <"Counterparty 2 name">
+    [regulatoryReference ASIC Trade table "1" dataElement "7" field "Counterparty 2 name"
+        provision "If the identifier reported for Counterparty 2 (item 7 above) is not an LEI, a Designated Business Identifier or the value ANON, the legal name of Counterparty 2."]
+    extract common.party.Counterparty2Name
+        as "1.7a Counterparty 2 name"
+
+reporting rule Counterparty2IdentifierTypeIndicator from TransactionReportInstruction: <"Counterparty identifier type indicator">
+    [regulatoryReference ASIC Trade table "1" dataElement "8" field "Counterparty identifier type indicator"
+        provision "For the identifier reported for Counterparty 2 (item 7 above), the applicable True or False value specified in column 5 of this item."]
+    extract cde.party.Counterparty2IdentifierTypeIndicator
+        as "1.8 Counterparty 2 identifier type indicator"
+
+reporting rule CountryOfCounterparty2 from TransactionReportInstruction: <"Country of Counterparty 2">
+    [regulatoryReference ASIC Trade table "1" dataElement "9" field "Country of Counterparty 2"
+        provision "For an identifier type reported as False under item 8 above, the code of the country of residence or registered business address of Counterparty 2 (item 7 above)."]
+    filter IsAllowableActionForASIC
+    then extract reportInstruction [
+        extract reportableInformation -> partyInformation
+        then filter
+            partyReference = reportInstruction -> reportingSide -> reportingCounterparty
+        then only-element
+        then extract
+            if partyReference -> partyId -> identifierType all <> staticdata.party.PartyIdentifierTypeEnum -> LEI
+            then (partyReference -> contactInformation -> address -> country only-element
+                    default partyReference -> person -> contactInformation -> address -> country only-element)
+        then extract to-enum staticdata.asset.common.ISOCountryCodeEnum
+    ]
+        as "1.9 Country of Counterparty 2"
+
+reporting rule Beneficiary1 from TransactionReportInstruction: <"Beneficiary 1">
+    [regulatoryReference ASIC Trade table "1" dataElement "10" field "Beneficiary 1"
+        provision "Where a person other than the Reporting Entity or the beneficiaries of a managed investment scheme, trust or CCIV is a beneficiary of the rights and obligations of the Reportable Transaction, the LEI or other identifier of the beneficiary determined in accordance with subrule S1.3.1(2)."]
+    filter IsAllowableActionForASIC
+    then extract cde.party.Beneficiary1
+        as "1.10 Beneficiary 1"
+
+reporting rule Beneficiary1IdentifierTypeIndicator from TransactionReportInstruction: <"Beneficiary 1 identifier type indicator">
+    [regulatoryReference ASIC Trade table "1" dataElement "11" field "Beneficiary 1 identifier type indicator"
+        provision "For the identifier reported for Beneficiary 1 (item 10 above), the applicable True or False indicator specified in column 5 of this item."]
+    filter IsAllowableActionForASIC
+    then extract cde.party.Beneficiary1IdentifierTypeIndicator
+        as "1.11 Beneficiary 1 identifier type indicator"
+
+reporting rule Broker from TransactionReportInstruction: <"Broker">
+    filter IsAllowableActionForASIC
+    then extract common.party.BrokerID
+
+reporting rule ExecutionAgentCounterparty1 from TransactionReportInstruction: <"Execution agent of the Counterparty 1">
+    [regulatoryReference ASIC Trade table "1" dataElement "13" field "Execution agent of Counterparty 1"
+        provision "If applicable, the LEI of the entity that entered into the Reportable Transaction as agent for the Reporting Entity without becoming a counterparty themselves."]
+    filter
+        IsAllowableActionForASIC or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO or IsActionTypeVALU
+    then extract common.party.ExecutionAgentCounterparty1
+        as "1.13 Execution agent of Counterparty 1"
+
+reporting rule Direction1 from TransactionReportInstruction: <"Direction 1">
+    [regulatoryReference ASIC Trade table "1" dataElement "14" field "Direction 1"
+        provision "An indicator of whether the Reporting Entity is the buyer or the seller at the time the Reportable Transaction is entered into.
+        This data element is required for OTC Derivatives:
+            where, other than for foreign exchange derivatives, the UPI that is reported is for an instrument type that is a forward;
+            that are options, contracts for difference (other than foreign exchange contracts for difference) or credit default swaps;
+            where the underlier to the OTC Derivative is a measure of variance, volatility, correlation, dividend or other attribute of an underlier (other than its price) which may vary in value; or
+            a value is not reported for Direction 2Leg 1 (item 15 below) or Direction 2Leg 2 (item 16 below).
+        This data element is not applicable to Reportable Transactions for which a value for Direction 2Leg 1 (item 15 below) is required to be reported."]
+    filter IsAllowableActionForASIC
+    then extract common.party.Direction1
+        as "1.14 Direction 1"
+
+reporting rule EffectiveDate from TransactionReportInstruction: <"Effective date">
+    [regulatoryReference ASIC Trade table "1" dataElement "17" field "Effective date"
+        provision "The unadjusted date at which obligations under the OTC Derivative the subject of the Reportable Transaction come into effect, taken from the trade confirmation."]
+    filter IsAllowableActionForASIC
+    then extract common.datetime.EffectiveDate
+        as "1.17 Effective date"
+
+reporting rule ExpirationDate from TransactionReportInstruction: <"Expiration date">
+    [regulatoryReference ASIC Trade table "1" dataElement "18" field "Expiration date"
+        provision "The unadjusted date at which obligations under the OTC Derivative the subject of the Reportable Transaction cease, taken from the trade confirmation."]
+    filter IsAllowableActionForASIC
+    then extract common.datetime.ExpirationDate
+        as "1.18 Expiration date"
+
+reporting rule ExecutionTimestamp from TransactionReportInstruction: <"Execution timestamp">
+    [regulatoryReference ASIC Trade table "1" dataElement "19" field "Execution timestamp"
+        provision "The date and time the OTC Derivative the subject of the Reportable Transaction was entered into. 
+    This data element remains constant during the life of the OTC Derivative and must be included in all reports including a report about the termination of the OTC Derivative."]
+    filter IsAllowableActionForASIC or IsActionTypeTERM
+    then cde.datetime.ExecutionTimestamp
+        as "1.19 Execution timestamp"
+
+reporting rule EventTimestamp from TransactionReportInstruction: <"Event timestamp">
+    [regulatoryReference ASIC Trade table "1" dataElement "20" field "Event timestamp"
+        provision "The date and time of the occurrence of the event of the Event type (item 102 below) where the Action type (item 101 below) is reported as MODI or TERM."]
+    filter
+        IsAllowableActionForASIC or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO
+    then extract cde.datetime.EventTimestamp
+        as "1.20 Event timestamp"
+
+reporting rule ClearingTimestamp from TransactionReportInstruction: <"Clearing timestamp">
+    [regulatoryReference ASIC Trade table "1" dataElement "21" field "Clearing timestamp"
+        provision "If the Reportable Transaction was cleared at a CCP,
+        the date and time, notified to the Reporting Entity by a CCP, that the OTC Derivative the subject of the Reportable Transaction was cleared by the CCP."]
+    filter IsAllowableActionForASIC
+    then extract common.datetime.ClearingTimestamp
+        as "1.21 Clearing timestamp"
+
+reporting rule Cleared from TransactionReportInstruction: <"Cleared ">
+    [regulatoryReference ASIC Trade table "1" dataElement "22" field "Cleared"
+        provision "An indicator of whether the OTC Derivative the subject of the Reportable Transaction has been cleared, or the Reporting Entity intends it to be cleared, by a CCP."]
+    filter IsAllowableActionForASIC
+    then extract
+        if IsCleared(originatingWorkflowStep)
+        then ClearedEnum -> Y
+        else ClearedEnum -> N
+        as "1.22 Cleared"
+
+reporting rule CentralCounterparty from TransactionReportInstruction: <"Central counterparty">
+    [regulatoryReference ASIC Trade table "1" dataElement "23" field "Central counterparty"
+        provision "Where Cleared (item 22 above) is reported as Y, the current LEI of the CCP that cleared the OTC Derivative the subject of the Reportable Transaction."]
+    filter IsAllowableActionForASIC
+    then cde.execution.CentralCounterparty
+        as "1.23 Central counterparty"
+
+reporting rule ClearingMember from TransactionReportInstruction: <"Clearing member">
+    [regulatoryReference ASIC Trade table "1" dataElement "24" field "Clearing member"
+        provision "If the Reportable Transaction was cleared at a CCP, the LEI of the clearing member through which the Reportable Transaction was cleared at the CCP reported as Central counterparty (item 23 above)."]
+    filter IsAllowableActionForASIC
+    then extract cde.execution.ClearingMember
+        as "1.24 Clearing member"
+
+reporting rule PlatformIdentifier from TransactionReportInstruction: <"Platform identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "25" field "Platform identifier"
+        provision "If the OTC Derivative the subject of the Reportable Transaction was entered into on or through financial market, the MIC of the facility.
+    If the OTC Derivative the subject of the Reportable Transaction was not entered into on or through financial market, an indicator of whether:
+    	the OTC Derivative the subject of the Reportable Transaction is able to be traded on or through financial market
+    	the OTC Derivative the subject of the Reportable Transaction is not able to be traded on or through financial market
+    	if the Reporting Entity is not able to determine whether the OTC Derivative the subject of the Reportable Transaction is, or is not, able to be traded on or through a facility financial market"]
+    filter IsAllowableActionForASIC
+    then extract common.execution.PlatformIdentifier
+        as "1.25 Platform identifier"
+
+reporting rule Leg1Report from TransactionReportInstruction: <"Leg 1 Report">
+    filter IsAllowableActionForASIC
+    then if item exists
+        then ASICLegEnrichment(
+                    common.LegEnrichment(
+                            cde.Leg1(item, SpreadLeg1Notation, 9999999999999999999999999),
+                            cde.quantity.NotionalAmountScheduleLeg1,
+                            empty,
+                            common.quantity.NotionalQuantityLeg1,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty
+                        ),
+                    NextFloatingReferenceResetDateLeg1
+                )
+
+reporting rule Leg2Report from TransactionReportInstruction: <"Leg 2 Report">
+    filter IsAllowableActionForASIC
+    then if item exists
+        then ASICLegEnrichment(
+                    common.LegEnrichment(
+                            cde.Leg2(item, SpreadLeg2Notation, 9999999999999999999999999),
+                            cde.quantity.NotionalAmountScheduleLeg2,
+                            empty,
+                            common.quantity.NotionalQuantityLeg2,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            empty,
+                            IndicatorOfTheFloatingRateLeg2,
+                            empty,
+                            FloatingRateReferencePeriodLeg2,
+                            FloatingRateReferencePeriodMultiplierLeg2,
+                            empty
+                        ),
+                    NextFloatingReferenceResetDateLeg2
+                )
+
+reporting rule CallAmount from TransactionReportInstruction: <"Call amount">
+    [regulatoryReference ASIC Trade table "1" dataElement "32" field "Call amount"
+        provision "If the Reportable Transaction is a foreign exchange option and the UPI that is reported for Unique product identifier (item 2 above) is not a UPI for a digital option, the monetary amount that the option gives the right to buy."]
+    filter IsAllowableActionForASIC
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.ExtractCallAmount(item, 9999999999999999999999999)
+        as "1.32 Call amount"
+
+reporting rule PutAmount from TransactionReportInstruction: <"Put amount">
+    [regulatoryReference ASIC Trade table "1" dataElement "33" field "Put amount"
+        provision "If the Reportable Transaction is a foreign exchange option, the monetary amount that the option gives the right to sell."]
+    filter IsAllowableActionForASIC
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.ExtractPutAmount(item, 9999999999999999999999999)
+        as "1.33 Put amount"
+
+reporting rule CallCurrency from TransactionReportInstruction: <"Call currency">
+    [regulatoryReference ASIC Trade table "1" dataElement "38" field "Call currency"
+        provision "The currency code for the currency  in which the Call amount (item 32 above) is denominated."]
+    filter IsAllowableActionForASIC
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.CallCurrency
+        as "1.38 Call currency"
+
+reporting rule PutCurrency from TransactionReportInstruction: <"Put currency">
+    [regulatoryReference ASIC Trade table "1" dataElement "39" field "Put currency"
+        provision "The currency code for the currency in which the Put amount (item 33 above) is denominated."]
+    filter IsAllowableActionForASIC
+    then filter IsFXOption(ProductForEvent)
+    then cde.quantity.PutCurrency
+        as "1.39 Put currency"
+
+reporting rule PriceNotation from TransactionReportInstruction: <"Price notation">
+    [regulatoryReference ASIC Trade table "1" dataElement "46" field "Price notation"
+        provision "An indicator of the type of units in which Price (item 47 below) is reported."]
+    filter IsAllowableActionForASIC
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PriceNotation,
+                common.price.IsDefaultPrice
+            )
+        as "1.46 Price notation"
+
+reporting rule Price from TransactionReportInstruction: <"Price">
+    [regulatoryReference ASIC Trade table "1" dataElement "47" field "Price"
+        provision "The price taken from the trade confirmation of the Reportable Transaction, not including fees, taxes or commissions.
+    This data element is required for OTC Derivatives:
+        (a) that are contracts for difference (other than foreign exchange derivatives);
+        (b) that are commodity derivatives or equity derivatives where:
+            i) the UPI that is reported is for an instrument type that is a forward; or
+            ii) the UPI that is reported is for an instrument type that is a swap and the OTC Derivative includes a term that is, or is equivalent to, a fixed price or initial price; or
+        where a value is not reported for all of the following: Fixed rateLeg 1 (item 50 below), Fixed rateLeg 2 (item 51 below), SpreadLeg 1 (item 53 below), SpreadLeg 2 (item 55 below), Strike price (item 59 below), Option premium amount (item 61 below) and Exchange rate (item 64 below), and, for OTC Derivatives that are credit derivatives, a value of UFRO is not reported for Other payment type (item 75 below)."]
+    filter IsAllowableActionForASIC
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                if common.price.IsDefaultPrice
+                then 99999999999
+                else cde.price.PriceNoFormat,
+                PriceNotation
+            )
+
+reporting rule PriceCurrency from TransactionReportInstruction: <"Price currency">
+    [regulatoryReference ASIC Trade table "1" dataElement "48" field "Price currency"
+        provision "The currency code for the currency in which Price (item 47 above) is denominated."]
+    filter IsAllowableActionForASIC
+    then extract
+        if common.price.IsDefaultPrice or cde.price.PriceNotation = Percentage
+        then empty
+        else cde.price.PriceCurrency
+        as "1.48 Price currency"
+
+reporting rule PriceUnitOfMeasure from TransactionReportInstruction: <"Price unit of measure">
+    [regulatoryReference ASIC Trade table "1" dataElement "49" field "Price unit of measure"
+        provision "The unit of measure in which Price (item 47 above) is reported."]
+    filter IsAllowableActionForASIC
+    then extract
+        if (cdebase.price.Contract_Price_Monetary -> priceType any = PriceTypeEnum -> CashPrice
+                and (cdebase.price.Contract_Price_Monetary -> priceExpression any = PriceExpressionEnum -> PercentageOfNotional
+                    or cdebase.price.Contract_Price_Monetary -> priceExpression any = PriceExpressionEnum -> AbsoluteTerms))
+        then "ACCY"
+        else cde.price.PriceUnitOfMeasure
+        as "1.49 Price unit of measure"
+
+reporting rule SpreadLeg1Notation from TransactionReportInstruction: <"Spread Notation - Leg 1">
+    [regulatoryReference ASIC Trade table "1" dataElement "53" field "Spread - Leg 1"
+        provision "If applicable, the value of the spread that is added to the reference rate or reference price of the underlier of Leg 1."]
+    filter IsAllowableActionForASIC
+    then common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg1NotationEnum, False)
+
+reporting rule SpreadLeg2Notation from TransactionReportInstruction: <"Spread Notation - Leg 2">
+    [regulatoryReference ASIC Trade table "1" dataElement "55" field "Spread - Leg 2"
+        provision "If applicable, the value of the spread that is added to the reference rate or reference price of the underlier of Leg 2."]
+    filter IsAllowableActionForASIC
+    then common.price.DefaultPercentageToDecimal(cde.price.SpreadLeg2NotationEnum, False)
+
+reporting rule StrikePriceNotation from TransactionReportInstruction: <"Strike price notation">
+    [regulatoryReference ASIC Trade table "1" dataElement "58" field "Strike price notation"
+        provision "An indicator of the type of units in which Strike price (item 59 below) is reported."]
+    filter IsAllowableActionForASIC
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.StrikePriceNotationEnum,
+                cde.price.StrikePriceNotationEnum = Monetary
+                    and (IsVarianceSwap(ProductForEvent) or IsVolatilitySwap(ProductForEvent))
+            )
+        as "1.58 Strike price notation"
+
+reporting rule StrikePrice from TransactionReportInstruction: <"Strike price">
+    [regulatoryReference ASIC Trade table "1" dataElement "59" field "Strike price"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is an option, the value of the strike price of the option."]
+    filter IsAllowableActionForASIC
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.StrikePriceNoFormat,
+                StrikePriceNotation
+            )
+
+reporting rule StrikePriceCurrencyCurrencyPair from TransactionReportInstruction: <"Strike price currency/currency pair">
+    [regulatoryReference ASIC Trade table "1" dataElement "60" field "Strike price currency/currency pair"
+        provision "If Strike price (item 59 above) is denominated in terms of one currency, the currency code for the currency in which Strike price (item 59 above) is denominated.
+        If Strike price (item 59 above) is denominated in terms of two currencies, the currency codes for the currencies in which Strike price (item 59 above) is expressed, in the order of the unit currency followed by 
+        the quoted currency, where the quoted currency is the currency of the units in which Strike price (item 59 above) is expressed."]
+    filter IsAllowableActionForASIC
+    then cde.price.StrikePriceCurrency
+        as "1.60 Strike price currency/currency pair"
+
+reporting rule SingleOrUpperAndLowerBarrier from TransactionReportInstruction: <"Single or Upper barrier and Lower barrier">
+    [regulatoryReference ASIC Trade table "1" dataElement "58a" field "Lower or only barrier price notation"
+        provision "An indicator of the type of units in which Lower or only barrier price (item 59a below) is reported."]
+    [regulatoryReference ASIC Trade table "1" dataElement "58b" field "Upper barrier price notation"
+        provision "An indicator of the type of units in which Upper barrier price (item 59b below) is reported."]
+    [regulatoryReference ASIC Trade table "1" dataElement "59a" field "Lower or only barrier price"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is an option and the UPI that is reported for Unique product identifier (item 2 above) is a UPI for a barrier option, the value of the lower or only barrier price of the option."]
+    [regulatoryReference ASIC Trade table "1" dataElement "59b" field "Upper barrier price"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is an option and the UPI that is reported for Unique product identifier (item 2 above) is a UPI for a barrier option, the value of the upper barrier price, if applicable, of the option."]
+    [regulatoryReference ASIC Trade dataElement "[Not in regulation]" field "Lower barrier or only price currency"
+        provision "For equity options, commodity options, and similar products, currency in which the lower or only barrier is denominated."]
+    [regulatoryReference ASIC Trade dataElement "[Not in regulation]" field "Upper barrier price currency"
+        provision "For equity options, commodity options, and similar products, currency in which the  Upper Barrier is denominated."]
+    [regulatoryReference ISDA PeerReviewGroup date "20240410"
+        provision "The modelling of this field is blocked until the CDM Trigger refactoring is available in DRR."]
+    [regulatoryReference ISDA APACJFSAPeerReviewGroup date "20240828"
+        provision "Modelling and extraction of barrier price currency fields to be revisited when DRR version is updated to use the newer CDM version 6 supporting currency at the trigger level."]
+    filter IsAllowableActionForASIC
+    then common.price.SingleOrUpperAndLowerBarrier
+
+reporting rule OptionPremiumAmount from TransactionReportInstruction: <"Option premium amount">
+    [regulatoryReference ASIC Trade table "1" dataElement "61" field "Option premium amount"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is an option, the monetary amount of the option premium paid, or due to be paid, by the option buyer."]
+    filter IsAllowableActionForASIC
+    then filter GetContractType = OPTN or GetContractType = SWPT
+    then common.price.OptionPremiumAmount
+        as "1.61 Option premium amount"
+
+reporting rule OptionPremiumCurrency from TransactionReportInstruction: <"Option premium currency">
+    [regulatoryReference ASIC Trade table "1" dataElement "62" field "Option premium currency"
+        provision "The currency code for the currency in which the Option premium amount (item 61 above) is denominated."]
+    filter IsAllowableActionForASIC
+    then filter GetContractType = OPTN or GetContractType = SWPT
+    then common.price.OptionPremiumCurrency
+        as "1.62 Option premium currency"
+
+reporting rule OptionPremiumPaymentDate from TransactionReportInstruction: <"Option premium payment date">
+    [regulatoryReference ASIC Trade table "1" dataElement "63" field "Option premium payment date"
+        provision "The unadjusted date on which the Option premium amount (item 61 above) is due to be paid, or due to be first paid where the Option premium amount (item 61 above) is paid in instalments."]
+    filter GetContractType = OPTN or GetContractType = SWPT
+    then cde.price.OptionPremiumPaymentDate
+        as "1.63 Option premium payment date"
+
+reporting rule ExchangeRate from TransactionReportInstruction: <"Exchange rate">
+    [regulatoryReference ASIC Trade table "1" dataElement "64" field "Exchange rate"
+        provision "For foreign exchange derivatives that are not options:
+        the exchange rate between Notional currencyLeg 1 (item 34 above) and Notional currencyLeg 2 (item 35 above) taken from the trade confirmation of the Reportable Transaction; or
+        if no such exchange rate is specified in the trade confirmation of the Reportable Transaction, the exchange rate calculated by dividing the amount reported as Notional amountLeg 1 by Notional amountLeg 2."]
+    filter IsAllowableActionForASIC
+    then filter IsFXOption(ProductForEvent) = False
+    then cde.price.ExchangeRate
+        as "1.64 Exchange rate"
+
+reporting rule ExchangeRateBasis from TransactionReportInstruction: <"Exchange rate basis">
+    [regulatoryReference ASIC Trade table "1" dataElement "65" field "Exchange rate basis"
+        provision "The currency codes for the currencies in which exchange rate (item 64 above) is expressed, in the order of the unit currency followed by the quoted currency, where the quoted currency is the currency of the units in which exchange rate (item 64 above) is expressed."]
+    filter IsAllowableActionForASIC
+    then cde.price.ExchangeRateBasis
+        as "1.65 Exchange rate basis"
+
+//end of fixed-float fields
+/* Other Payment Report */
+reporting rule OtherPayment from TransactionReportInstruction:
+    filter IsAllowableActionForASIC or IsActionTypeTERM
+    then extract cde.payment.OtherPayment
+
+/* Other Payment Report */
+reporting rule CustomBasketCodeIdentifier from ReportableEvent: <"Custom Basket Code Identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "80b" field "Custom basket code"
+        provision "Where the UPI that is reported for Unique product identifier (item 2 above) is a UPI which identifies that the underlier a custom basket:
+                   (a)   the unique code assigned by the structurer of the custom basket (the structurer) to link its constituents; or
+                   (b)   if the structurer is not the Reporting Entity and the Reporting Entity does not receive the unique code from the structurer in sufficient time to enable the Reporting Entity to report that code in accordance with Rule 2.2.3:
+                   (i)    a unique code assigned by the Reporting Entity; or
+                   (ii)   if the Reporting Entity has not entered into, in the twelve months ending on the preceding quarter day, more than twenty OTC Derivatives that require the reporting of a Custom basket code, the value B."]
+    filter IsAllowableActionForASIC
+    then reportableInformation -> customBasket -> customBasketCode default cde.basket.CustomBasketCode
+        as "1.80a Custom basket code"
+
+reporting rule BasketStructurer from ReportableEvent: <"Basket Structurer">
+    [regulatoryReference ASIC Trade table "1" dataElement "80b" field "Custom basket code"
+        provision "Where the UPI that is reported for Unique product identifier (item 2 above) is a UPI which identifies that the underlier a custom basket:
+                   (a)   the unique code assigned by the structurer of the custom basket (the structurer) to link its constituents; or
+                   (b)   if the structurer is not the Reporting Entity and the Reporting Entity does not receive the unique code from the structurer in sufficient time to enable the Reporting Entity to report that code in accordance with Rule 2.2.3:
+                   (i)    a unique code assigned by the Reporting Entity; or
+                   (ii)   if the Reporting Entity has not entered into, in the twelve months ending on the preceding quarter day, more than twenty OTC Derivatives that require the reporting of a Custom basket code, the value B."]
+    filter IsAllowableActionForASIC
+    then extract reportableInformation -> customBasket -> basketStructurerLei
+    then filter item -> identifierType = staticdata.party.PartyIdentifierTypeEnum -> LEI
+    then extract item -> identifier
+        as "1.80b Basket Structurer"
+
+reporting rule BasketConstituents from TransactionReportInstruction:
+    filter IsAllowableActionForASIC
+    then extract cde.basket.BasketConstituents
+
+reporting rule UnderlyingIdentification from TransactionReportInstruction: <"Underlying Identification">
+    [regulatoryReference ASIC Trade table "1" dataElement "83" field "Underlying Identification"
+        provision "Where the UPI that is reported for Unique product identifier (item 2 above) is a UPI which does not identify the specific underlier for the OTC Derivative and Custom basket code (item 80) does not apply, an identifier which identifies the specific underlier.
+        Otherwise, the identifier of the specific underlier may be, but is not required to be, reported for this item."]
+    filter IsAllowableActionForASIC
+    then extract ProductForEvent
+    then extract
+        if (GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source any = staticdata.asset.common.ProductIdTypeEnum -> ISIN)
+        then GetUnderlierProductIdentifier first -> identifier
+        else if EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId exists
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId first
+        else if EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId exists
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId first
+        else if IsFRA
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId first
+        as "1.83 Underlying identification (DTCC)"
+
+reporting rule UnderlyingIdentificationType from TransactionReportInstruction: <"Underlying Identification Type (DTCC)">
+    [regulatoryReference ASIC Trade table "1" dataElement "84" field "Underlying Identification Type"
+        provision "The identifier of the publisher of the rate, price or measure of the underlier reported as Underlier ID (Other) (item 83 above)."]
+    [regulatoryReference ISDA PeerReviewGroup date "20230426"
+        provision "Regarding test samples of Equity baskets with a single index or a single security with an ISIN, the view of Credit Suisse's representative is that those samples are valid because they illustrate an acceptable boundary condition."]
+    filter IsAllowableActionForASIC
+    then ProductForEvent
+    then extract
+        if (GetUnderlierProductIdentifier exists
+                    and GetUnderlierProductIdentifier -> source any = staticdata.asset.common.ProductIdTypeEnum -> ISIN)
+                or EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId exists
+                or EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId exists
+                or (IsFRA and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId exists)
+        then common.underlier.UnderlyingIdentificationTypeEnum -> I
+        else if UnderlierForProduct -> basket exists
+                or EconomicTermsForProduct -> payout -> performancePayout -> underlier -> basket exists
+                or EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+                or EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> basketReferenceInformation exists
+                    // Commodities: only for ETDs
+                or (IsProductETD
+                    and EconomicTermsForProduct -> payout -> commodityPayout -> underlier -> basket exists
+                    and IsSingleCommodityPayoutProduct = False)
+        then B
+        else if (GetUnderlierProductIdentifier exists
+                    and GetUnderlierProductIdentifier -> source all <> staticdata.asset.common.ProductIdTypeEnum -> ISIN)
+                or (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (IsFRA
+                    and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName exists)
+        then O
+        as "1.84 Underlying Identification Type (DTCC)"
+
+reporting rule UnderlyingIdOther from TransactionReportInstruction: <"Underlying ID (Other) (DTCC)">
+    filter IsAllowableActionForASIC
+    then extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source all <> staticdata.asset.common.ProductIdTypeEnum -> ISIN
+        then (GetUnderlierProductIdentifier
+            then extract ExtractProductIdentifierBySource
+            then identifier)
+        else if (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent)
+        then EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent)
+        then EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName
+        else if (IsFRA and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent)
+        then EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName only-element
+
+reporting rule UnderlyingIdOtherSource from TransactionReportInstruction: <"Underlying ID (Other) Source (DTCC)">
+    filter IsAllowableActionForASIC
+    then extract ProductForEvent
+    then extract
+        if GetUnderlierProductIdentifier exists
+                and GetUnderlierProductIdentifier -> source all <> staticdata.asset.common.ProductIdTypeEnum -> ISIN
+        then (GetUnderlierProductIdentifier
+            then extract ExtractProductIdentifierBySource
+            then extract source)
+        else if (EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation exists
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct(UnderlierForProduct) -> payout -> creditDefaultPayout -> generalTerms -> indexReferenceInformation -> indexName exists)
+                or (IsFRA
+                    and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexId is absent
+                    and EconomicTermsForProduct -> payout -> interestRatePayout -> rateSpecification -> floatingRate -> rateOption -> indexReferenceInformation -> indexName exists)
+        then staticdata.asset.common.ProductIdTypeEnum -> Name
+
+reporting rule MaturityDateOfTheUnderlier from TransactionReportInstruction: <"Maturity date of the underlier">
+    [regulatoryReference ASIC Trade table "1" dataElement "85" field "Maturity date of the underlier"
+        provision "Where Contract type (item 4 above) is reported as SWPT, the unadjusted date of the expiration date of the swap that is the underlier to the option."]
+    filter IsAllowableActionForASIC
+    then common.datetime.MaturityDateOfTheUnderlier
+        as "1.85 Maturity date of the underlier"
+
+reporting rule IndicatorOfTheFloatingRateLeg2 from TransactionReportInstruction: <"Indicator of the floating rate  Leg 2">
+    [regulatoryReference ASIC Trade table "1" dataElement "86" field "Indicator of the floating rate  Leg 2"
+        provision "Other than for OTC Derivatives that are interest rate derivatives and if applicable, the indicator of the interest rate reference rate used to determine the interest payment amounts at predetermined intervals."]
+    [regulatoryReference ISDA TechnicalExecutionGroup date "20240418"
+        provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+    filter IsAllowableActionForASIC
+    then filter
+        (AssetClass = CommonAssetClass -> COMM or AssetClass = EQUI or AssetClass = CRDT)
+    then extract common.underlier.FloatingRateIndicatorLeg2
+        as "1.86 Indicator of the floating rate  Leg 2"
+
+reporting rule FloatingRateReferencePeriodLeg2 from TransactionReportInstruction: <"Floating rate reference period - Leg 2">
+    [regulatoryReference ASIC Trade table "1" dataElement "87" field "Floating rate reference period - Leg 2"
+        provision "Where an allowable value is reported for Identifier of the floating rateLeg 2 (item 86 above), the time unit associated with the term of item 86 that is the interest rate reference rate of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+    [regulatoryReference ISDA TechnicalExecutionGroup date "20240418"
+        provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+    filter IsAllowableActionForASIC
+    then filter
+        (AssetClass = CommonAssetClass -> COMM or AssetClass = EQUI or AssetClass = CRDT)
+    then common.underlier.FloatingRateReferencePeriodLeg2
+        as "1.87 Floating rate reference period - Leg 2"
+
+reporting rule FloatingRateReferencePeriodMultiplierLeg2 from TransactionReportInstruction: <"Floating rate reference period muliplier- Leg 2">
+    [regulatoryReference ASIC Trade table "1" dataElement "88" field "Floating rate reference period muliplier- Leg 2"
+        provision "Where an allowable value is reported for Indicator of the floating rateLeg 2 (item 86 above), the number of time units (in the units reported for item 87 above) that determines the term of item 86 that is the interest rate reference rate of Leg 2 of the OTC Derivative the subject of the Reportable Transaction."]
+    [regulatoryReference ISDA TechnicalExecutionGroup date "20240418"
+        provision "Credit products are implicitly filtered out by calling the function InterestRateLeg2, so no explicit filtering is needed."]
+    filter IsAllowableActionForASIC
+    then filter
+        (AssetClass = CommonAssetClass -> COMM or AssetClass = EQUI or AssetClass = CRDT)
+    then common.underlier.FloatingRateReferencePeriodMultiplierLeg2
+        as "1.88 Floating rate reference period muliplier- Leg 2"
+
+reporting rule CDSIndexAttachmentPoint from TransactionReportInstruction: <"CDS index attachment point">
+    [regulatoryReference ASIC Trade table "1" dataElement "89" field "CDS index attachment point"
+        provision "If applicable, the defined lower point at which the level of losses:
+            in the underlying portfolio of the CDS index;
+            that is the underlier of the OTC Derivative the subject of the Reportable Transaction;
+            reduces the notional of a tranche of the CDS index"]
+    filter IsAllowableActionForASIC
+    then cde.index.CDSIndexAttachmentPoint
+        as "1.89 CDS index attachment point"
+
+reporting rule CDSIndexDetachmentPoint from TransactionReportInstruction: <"CDS index detachment point">
+    [regulatoryReference ASIC Trade table "1" dataElement "90" field "CDS index detachment point"
+        provision "If applicable, the defined upper point at which the level of losses:
+            in the underlying portfolio of the CDS index;
+            that is the underlier of the OTC Derivative the subject of the Reportable Transaction;
+            no longer reduces the notional of the tranche of the CDS index to which CDS index attachment point (item 89 above) applies."]
+    filter IsAllowableActionForASIC
+    then cde.index.CDSIndexDetachmentPoint
+        as "1.90 CDS index detachment point"
+
+reporting rule IndexFactor from TransactionReportInstruction: <"Index factor">
+    [regulatoryReference ASIC Trade table "1" dataElement "91" field "Index factor"
+        provision "If applicable, the index version factor or percentage of the CDS index that is the underlier of the OTC Derivative the subject of the Reportable Transaction that:
+            multiplied by the Notional amountLeg 1 (item 26 above);
+            equals the current notional amount covered by the seller of the OTC 
+        Derivative the subject of the Reportable Transaction."]
+    filter IsAllowableActionForASIC
+    then extract common.index.IndexFactor
+        as "1.91 Index factor"
+
+reporting rule PackageIdentifier from TransactionReportInstruction: <"Package identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "92" field "Package identifier"
+        provision "The identifier (determined by the Reporting Entity) in order to connect two or more Reportable Transactions that are reported separately.
+        This data element is required for a Reportable Transaction which is one of two or more transactions that:
+            are reported separately but entered into together as the product of a single economic arrangement;
+            are reported separately because they are not able to be reported as a single report; or
+            is the reporting of a foreign exchange swap derivative transaction entered into as a single economic arrangement but reported as two foreign exchange contracts with different expiration dates (item 18 above)"]
+    filter IsAllowableActionForASIC
+    then extract cde.link.PackageIdentifier
+        as "1.92 Package identifier"
+
+reporting rule PackageTransactionPriceNotation from TransactionReportInstruction: <"Package transaction price notation">
+    [regulatoryReference ASIC Trade table "1" dataElement "93" field "Package transaction price notation"
+        provision "An indicator of the type of units in which Package transaction price (item 94 below) is reported"]
+    filter IsAllowableActionForASIC
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionPriceNotationEnum,
+                GetPackageInformation -> listId -> assignedIdentifier -> identifier exists
+                    and cde.price.PackageTransactionPriceNotationEnum is absent
+            )
+        as "1.93 Package transaction price notation"
+
+reporting rule PackageTransactionPrice from TransactionReportInstruction: <"Package transaction price">
+    [regulatoryReference ASIC Trade table "1" dataElement "94" field "Package transaction price"
+        provision "Where an allowable value is reported for Package identifier (item 92 above) and a value is not reported for Package transaction spread (item 97 below), the traded price of the entire package in which the Reportable Transaction is a component."]
+    filter IsAllowableActionForASIC
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                if GetPackageInformation -> listId -> assignedIdentifier -> identifier exists
+                        and cde.price.PackageTransactionPriceNotationEnum is absent
+                then 99999999999
+                else cde.price.PackageTransactionPriceNoFormat,
+                PackageTransactionPriceNotation
+            )
+
+reporting rule PackageTransactionPriceCurrency from TransactionReportInstruction: <"Package transaction price currency">
+    [regulatoryReference ASIC Trade table "1" dataElement "95" field "Package transaction price currency"
+        provision "The currency code of the currency in which Package transaction price (item 94 above) is denominated."]
+    filter IsAllowableActionForASIC
+    then extract cde.price.PackageTransactionPriceCurrency
+        as "1.95 Package transaction price currency"
+
+reporting rule PackageTransactionSpreadNotation from TransactionReportInstruction: <"Package transaction spread notation">
+    [regulatoryReference ASIC Trade table "1" dataElement "96" field "Package transaction spread notation"
+        provision "An indicator of the type of units in which Package transaction spread (item 97 below) is reported."]
+    filter IsAllowableActionForASIC
+    then common.price.DefaultPercentageToDecimal(
+                cde.price.PackageTransactionSpreadNotationEnum,
+                False
+            )
+        as "1.96 Package transaction spread notation"
+
+reporting rule PackageTransactionSpread from TransactionReportInstruction: <"Package transaction spread">
+    [regulatoryReference ASIC Trade table "1" dataElement "97" field "Package transaction spread"
+        provision "If a value is reported for Package identifier (item 92 above) and a value is not reported for Package transaction price (item 94 above),the traded price of the entire package in which the Reportable Transaction is a component, where the price is expressed as a spread or difference between two reference prices."]
+    filter IsAllowableActionForASIC
+    then extract
+        cdebase.price.PriceFormatFromNotation(
+                cde.price.PackageTransactionSpreadNoFormat,
+                PackageTransactionSpreadNotation
+            )
+
+reporting rule PackageTransactionSpreadCurrency from TransactionReportInstruction: <"Package transaction spread currency">
+    [regulatoryReference ASIC Trade table "1" dataElement "98" field "Package transaction spread currency"
+        provision "The currency code of the currency in which Package transaction spread (item 97 above) is denominated"]
+    filter IsAllowableActionForASIC
+    then extract cde.price.PackageTransactionSpreadCurrency
+        as "1.98 Package transaction spread currency"
+
+reporting rule PriorUTI from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference ASIC Trade table "1" dataElement "99" field "Prior UTI"
+        provision "For a Reportable Transaction that arises due to a lifecycle event on a single predecessor OTC Derivative, and
+        (a)Reporting Entity (item 5 above) was reported as Reporting Entity for that predecessor OTC Derivative;
+        (b) Counterparty 1 (item 6 above) was reported as Counterparty 1 for that predecessor OTC Derivative; or
+        (c) Event type (item 102 below) is reported as ALOC, the transaction identifier of that single predecessor OTC Derivative.
+    For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c), the first UTI reported for the OTC Derivative."]
+    filter IsAllowableActionForASIC
+    then common.link.GetPriorTransactionIdentifier(item, ASIC)
+    then filter IsMax32UpperCaseAlphanumericText = True
+        as "1.99 Prior UTI"
+
+reporting rule PriorUTIProprietary from TransactionReportInstruction: <"Prior UTI">
+    [regulatoryReference ASIC Trade table "1" dataElement "99" field "Prior UTI"
+        provision "For a Reportable Transaction that arises due to a lifecycle event on a single predecessor OTC Derivative, and
+            (a)Reporting Entity (item 5 above) was reported as Reporting Entity for that predecessor OTC Derivative;
+            (b) Counterparty 1 (item 6 above) was reported as Counterparty 1 for that predecessor OTC Derivative; or
+            (c) Event type (item 102 below) is reported as ALOC, the transaction identifier of that single predecessor OTC Derivative.
+        For a report made under Rule 2.2.2 of the kind referred to in paragraph 2.2.2(2)(c), the first UTI reported for the OTC Derivative."]
+    filter IsAllowableActionForASIC
+    then common.link.GetPriorTransactionIdentifier(item, ASIC)
+    then filter IsMax32UpperCaseAlphanumericText = False
+        as "1.99 Prior UTI (Proprietary)"
+
+reporting rule EventIdentifier from TransactionReportInstruction: <"Event identifier">
+    [regulatoryReference ASIC Trade table "1" dataElement "100" field "Event identifier"
+        provision "The unique identifier to connect Reportable Transactions resulting from an event (for example, a compression or credit event)."]
+    filter IsAllowableActionForASIC or IsActionTypeTERM
+    then extract cde.event.EventIdentifier
+        as "1.100 Event identifier"
+
+reporting rule ActionType from TransactionReportInstruction: <"Action type">
+    [regulatoryReference ASIC Trade table "1" dataElement "101" field "Action type"
+        provision "An indicator of whether the report being made relates to:
+            a Reportable Transaction that is an entry into an OTC Derivative;
+            a Reportable Transaction that is a modification of an OTC Derivative; or
+            a Reportable Transaction that is a full termination of an OTC Derivative.
+        For a report of a change under subrule 2.2.2(1), a notation to indicate whether the change relates to:
+            a correction to information in a report previously made;
+            a cancellation of a report previously made in error;
+            the reinstatement of a Reportable Transaction that was cancelled, terminated, matured or expired in error; or
+            the transfer of a Reportable Transaction from one Derivative Trade Repository to another Derivative Trade Repository."]
+    extract cde.event.ActionType
+        as "1.101 Action type"
+
+reporting rule EventType from TransactionReportInstruction: <"Event type ">
+    [regulatoryReference ASIC Trade table "1" dataElement "102" field "Event type "
+        provision "An indicator of whether the kind of event associated with the value reported for Action type relates to:
+            the entry into an OTC Derivative or renegotiation of the terms of a previously reported OTC Derivative that does not result in change of a counterparty;
+            an assignment of an OTC Derivative;
+            a compression or post-trade risk reduction exercise ;
+            the full or partial termination of an OTC Derivative;
+            the clearing of an OTC Derivative;
+            the exercise  of an option;
+            the allocation of an OTC Derivative by apportioning its notional amount or total notional quantity to new OTC Derivatives with different counterparties;
+            an event that results in the modification or termination of a previously reported OTC Derivative that is a credit derivative;
+            the transfer of a Reportable Transaction from one Derivative Trade Repository to another Derivative Trade Repository;
+            a corporate action on an equity underlier that impacts the previously reported OTC Derivatives over that equity underlier; 
+            the inclusion of an OTC Derivative into a position, where an existing OTC Derivative is terminated and either a new position is created or the Notional amount or Total notional quantity of an existing OTC Derivative is modified; or
+            the re-reporting of a previously reported Reportable Transaction where the reported information about the OTC Derivative does not include all of the relevant Derivative Transaction Information set out in column 3 of this table or the reported information is not in accordance with the format and allowed values set out in columns 4-5 of this table."]
+    cde.event.EventType
+        as "1.102 Event type"
+
+reporting rule ReportSubmittingEntity from TransactionReportInstruction: <"Report submitting entity">
+    [regulatoryReference ASIC Trade table "1" dataElement "104" field "Report submitting entity"
+        provision "The LEI of the person submitting the report of a Reportable Transaction."]
+    extract common.party.ReportSubmittingEntity
+        as "1.104 Report submitting entity"
+
+reporting rule NewDerivativeTradeRepository from TransactionReportInstruction: <"New Derivative Trade Repository">
+    [regulatoryReference ASIC Trade table "1" dataElement "105" field "New Derivative Trade Repository"
+        provision "Where a value of PRTO is reported for Action type (item 101 above),
+    the current LEI of the Derivative Trade Repository to which the Reportable Transaction is being transferred."]
+    extract
+        ExtractPartyFromRelatedPartyByRole(
+                reportableInformation -> partyInformation -> relatedParty,
+                staticdata.party.PartyRoleEnum -> TradeRepository
+            )
+    then extract PartyLei(partyId)
+        as "1.105 New Derivative Trade Repository"
+
+reporting rule SmallScaleBuySideEntityIndicator from TransactionReportInstruction: <"Small-scale buy-side Entity indicator">
+    [regulatoryReference ASIC Trade table "2" dataElement "4" field "Small-scale buy-side Entity indicator"
+        provision "If applicable, an indicator that the Reporting Entity is making the report as a Small-scale Buy-side Entity."]
+    [regulatoryReference ISDA PeerReviewGroup date "20240207"
+        provision "in FpML a small bank indicator exists in clearing exceptions (http://www.fpml.org/coding-scheme/cftc-clearing-exception-and-exemptions-1-1.xml), also http://www.fpml.org/coding-scheme/party-role-3-9.xml when value is ExecutionAgent is defined as 'The (generally buy-side) organization'  we could use this data as a base to define the indicator in CDM"]
+    filter IsAllowableActionForASIC
+    then extract
+        common.party.ExtractRegimeInformation(item, item -> reportingSide -> reportingParty) -> asicPartyInformation
+    then only-element
+    then extract if smallScaleBuySideIndicator = True then "SSBS"
+        as "2.4 Small-scale buy-side Entity indicator"
+
+reporting rule ValuationTimestamp from TransactionReportInstruction: <"Valuation Timestamp">
+    filter
+        (IsActionTypeNEWT or IsActionTypeVALU or IsActionTypeCORR or IsActionTypeREVI or IsActionTypePOSC)
+    then cde.datetime.ValuationTimestamp
+
+reporting rule ValuationAmount from TransactionReportInstruction: <"Valuation amount">
+    filter
+        (IsActionTypeNEWT or IsActionTypeVALU or IsActionTypeCORR or IsActionTypeREVI or IsActionTypePOSC)
+    then cde.valuation.ValuationAmount
+
+reporting rule ValuationCurrency from TransactionReportInstruction: <"Valuation currency">
+    filter
+        (IsActionTypeNEWT or IsActionTypeVALU or IsActionTypeCORR or IsActionTypeREVI or IsActionTypePOSC)
+    then cde.valuation.ValuationCurrency
+
+reporting rule ValuationMethod from TransactionReportInstruction: <"Valuation method">
+    filter
+        (IsActionTypeNEWT or IsActionTypeVALU or IsActionTypeCORR or IsActionTypeREVI or IsActionTypePOSC)
+    then extract cde.valuation.ValuationMethod(GetValuation)
+
+reporting rule Delta from TransactionReportInstruction: <"Delta">
+    filter
+        (IsActionTypeNEWT or IsActionTypeVALU or IsActionTypeCORR or IsActionTypeREVI or IsActionTypePOSC)
+    then extract cde.quantity.Delta
+
+reporting rule NextFloatingReferenceResetDateLeg1 from TransactionReportInstruction: <"Next floating reference reset date - Leg 1">
+    extract GetNextFloatingReferenceResetDate(item, InterestRateLeg1(ProductForEvent))
+
+reporting rule NextFloatingReferenceResetDateLeg2 from TransactionReportInstruction: <"Next floating reference reset date - Leg 2">
+    extract GetNextFloatingReferenceResetDate(item, InterestRateLeg2(ProductForEvent))
+
+reporting rule TechnicalRecordId from TransactionReportInstruction: <"Technical Record Id (ISO)">
+    extract common.link.TechnicalRecordId(item -> reportableInformation, ASIC)
+
+reporting rule CollateralPortfolioIndicator from TransactionReportInstruction: <"Collateral Portfolio Indicator">
+    [regulatoryReference ASIC Trade table "3" dataElement "8" field "Collateral Portfolio Indicator"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is collateralised, the True or False indicator specified in the applicable paragraph of column 5 of this item."]
+    filter IsAllowableActionForASIC
+    then extract cde.collateral.CollateralPortfolioIndicator
+        as "3.8 Collateral Portfolio Indicator"
+
+reporting rule CollateralPortfolioCodeInitialMargin from TransactionReportInstruction: <"Collateral portfolio code (initial margin)">
+    [regulatoryReference ASIC Trade table "3" dataElement "10" field "Collateral portfolio code (initial margin)"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is collateralised and collateral is reported on a Portfolio Basis, a unique code, determined by the Reporting Entity to identify the collateral portfolio of amounts of initial margin, unless the collateralisation does not involve amounts of initial margin. This data element is not reported if there is only one collateral portfolio of amounts of margin that does not distinguish between margin that is initial margin and margin that is variation margin, and the collateral portfolio code of the collateral portfolio is reported as Collateral portfolio code (variation margin) (item 11 below)."]
+    filter IsAllowableActionForASIC
+    then extract TradeForEvent -> collateral -> collateralPortfolio
+    then filter
+        legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = product.collateral.CollateralMarginTypeEnum -> InitialMargin
+    then only-element
+    then portfolioIdentifier -> assignedIdentifier -> identifier last
+        as "3.10 Collateral portfolio code (initial margin)"
+
+reporting rule CollateralPortfolioCodeVariationMargin from TransactionReportInstruction: <"Collateral portfolio code (variation margin)">
+    [regulatoryReference ASIC Trade table "3" dataElement "11" field "Collateral portfolio code (variation margin)"
+        provision "If the OTC Derivative the subject of the Reportable Transaction is collateralised and collateral is reported on a Portfolio Basis, a unique code, determined by the Reporting Entity to identify the collateral portfolio of amounts of variation margin, unless the collateralisation does not involve amounts of variation margin. If there is only one collateral portfolio of amounts of margin that does not distinguish between margin that is initial margin and margin that is variation margin, the unique code is of that portfolio. 
+            This data element is reported as the same code as Collateral portfolio code (initial margin) (item 10 above) if there is only one collateral portfolio and the amounts of initial and variation margin are distinguished within that portfolio."]
+    filter IsAllowableActionForASIC
+    then extract
+        if TradeForEvent -> collateral -> collateralPortfolio -> portfolioIdentifier exists
+        then (TradeForEvent -> collateral -> collateralPortfolio
+            then filter
+                legalAgreement -> legalAgreementIdentification -> agreementName -> creditSupportAgreementMarginType = product.collateral.CollateralMarginTypeEnum -> VariationMargin
+            then only-element
+            then portfolioIdentifier -> assignedIdentifier -> identifier last)
+        else if TradeForEvent -> collateral -> portfolioIdentifier exists
+        then cde.collateral.CollateralPortfolioCode
+        as "3.11 Collateral portfolio code (variation margin)"
+
+reporting rule ReportingTimestamp from TransactionReportInstruction: <"Reporting timestamp">
+    [regulatoryReference ASIC Trade dataElement "103" field "Reporting timestamp"
+        provision "The date and time of the submission of a  report of a Reportable Transaction to the Derivative Trade Repository."]
+    cde.datetime.ReportingTimestamp
+        as "Reporting timestamp"
+
+reporting rule ExecutionAgentCounterparty2DTCC from TransactionReportInstruction: <"Execution Agent of Counterparty 2">
+    [regulatoryReference ASIC Trade dataElement "[Not in Regulation]" field "Execution Agent of Counterparty 2"
+        provision "The Execution agent of Counterparty 2"]
+    filter
+        IsAllowableActionForASIC or IsActionTypeTERM or IsActionTypeEROR or IsActionTypePRTO or IsActionTypeVALU
+    then common.party.ExecutionAgentCounterparty2
+        as "[Not in regulation] Execution Agent of Counterparty 2"
+
+func IsAllowableActionForASIC:
+    inputs:
+        reportableEvent ReportableEvent (1..1)
+    output:
+        isAllowableAction boolean (1..1)
+
+    set isAllowableAction:
+        IsActionTypeNEWT(reportableEvent)
+            or IsActionTypeMODI(reportableEvent)
+            or IsActionTypePositionMODI(reportableEvent)
+            or IsActionTypeCORR(reportableEvent)
+            or IsActionTypeREVI(reportableEvent)
+            or IsActionTypePOSC(reportableEvent)

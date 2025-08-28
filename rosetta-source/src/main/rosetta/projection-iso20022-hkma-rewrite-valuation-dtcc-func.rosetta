@@ -1,0 +1,373 @@
+namespace drr.projection.iso20022.hkma.rewrite.valuation.dtcc
+version "${project.version}"
+
+import cdm.base.math.*
+
+import drr.regulation.common.*
+import drr.regulation.hkma.rewrite.valuation.*
+
+import iso20022.auth030.hkma.dtcc.*
+
+func Project_HKMADtccValuationReportToIso20022:
+    [projection XML]
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        iso20022Report Document (1..1)
+
+    set iso20022Report -> derivsTradRpt -> rptHdr: Create_TradeReportHeader
+
+    add iso20022Report -> derivsTradRpt -> tradData -> rpt:
+        Create_TradeReport33Choice__1(drrReport)
+
+func Create_TradeReportHeader:
+    output:
+        rptHdr TradeReportHeader4__1 (1..1)
+
+    set rptHdr:
+        TradeReportHeader4__1 {
+            nbRcrds: 1
+        }
+
+func Create_TradeReport33Choice__1:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        rpt TradeReport33Choice__1 (1..1)
+
+    alias actionType: drrReport -> actionType
+
+    set rpt:
+        TradeReport33Choice__1 {
+            new: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            mod: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            crrctn: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            termntn: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            valtnUpd: if actionType = VALU
+                then TradeData43__5 {
+                    ctrPtySpcfcData: Create_CounterpartySpecificData36__3(drrReport),
+                    cmonTradData: Create_CommonTradeDataReport71__5(drrReport),
+                    techAttrbts: Create_TechnicalAttributes5__1(drrReport),
+                    ... // TH Comment Sprint 10-2025: Optional fields left unpopulated as the data is not available in the valuation report.
+                },
+            err: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            rvv: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            portOut: empty // TH Comment Sprint 10-2025: Is not available in the valuation report.
+        }
+
+// CounterpartySpecificData36
+func Create_CounterpartySpecificData36__1:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__1 (1..1)
+
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__1 {
+            ctrPty: Create_TradeCounterpartyReport20__1(drrReport),
+            rptgTmStmp: drrReport -> reportingTimestamp
+        }
+
+func Create_CounterpartySpecificData36__2:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__2 (1..1)
+
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__2 {
+            ctrPty: Create_TradeCounterpartyReport20__2(drrReport),
+            rptgTmStmp: drrReport -> reportingTimestamp
+        }
+
+func Create_CounterpartySpecificData36__3:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        ctrPtySpcfcData CounterpartySpecificData36__3 (1..1)
+    set ctrPtySpcfcData:
+        CounterpartySpecificData36__3 {
+            ctrPty: Create_TradeCounterpartyReport20__2(drrReport),
+            valtn: ContractValuationData8__1 {
+                ctrctVal: AmountAndDirection109__1 {
+                    amt: ActiveOrHistoricCurrencyAnd5DecimalAmount {
+                        value: Abs(drrReport -> valuationAmount),
+                        ccy: drrReport -> valuationCurrency to-string
+                    },
+                    sgn: if drrReport -> valuationAmount < 0
+                        then False
+                },
+                tmStmp: drrReport -> valuationTimestamp,
+                tp: drrReport -> valuationMethod to-enum ValuationType1Code,
+                dlta: drrReport -> delta
+            },
+            rptgTmStmp: drrReport -> reportingTimestamp,
+        }
+
+func GetSubmitgAgt:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        submitgAgt OrganisationIdentification15Choice__4 (1..1)
+
+    set submitgAgt:
+        Create_OrganisationIdentification15Choice__4(drrReport -> submitterIdentifier)
+
+func Create_OrganisationIdentification15Choice__4:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__4 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__4 {
+            lei: lei,
+            othr: OrganisationIdentification38__3 {
+                id: GenericIdentification175__3 {
+                    id: empty // TH Comment Sprint 10-2025: Not possible to populate Othr/Id/Id only LEI
+        }}}
+
+func Create_TradeCounterpartyReport20__1:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__1 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__1 {
+            rptgCtrPty: Counterparty45__1 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1),
+                ntr: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+                tradgCpcty: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+                drctnOrSd: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+                ...
+            },
+            othrCtrPty: Counterparty46__1 {
+                idTp: Create_PartyIdentification248Choice__2(drrReport),
+                ntr: empty, // TH Comment Sprint 10-2025: Is not available in the valuation report.
+            },
+            submitgAgt: OrganisationIdentification15Choice__4 {
+                lei: drrReport -> submitterIdentifier,
+                othr: empty // TH Comment Sprint 10-2025: Not possible to populate Othr/Id/Id only LEI
+            },
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            ... // TH Comment Sprint 10-2025: Optional fields left unpopulated as the data is not available in the valuation report.
+        }
+
+func Create_TradeCounterpartyReport20__2:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        ctrPty TradeCounterpartyReport20__2 (1..1)
+
+    set ctrPty:
+        TradeCounterpartyReport20__2 {
+            rptgCtrPty: Counterparty45__2 {
+                id: Create_PartyIdentification248Choice__1(drrReport -> counterparty1)
+            },
+            othrCtrPty: Counterparty46__2 {
+                idTp: Create_PartyIdentification248Choice__5(drrReport)
+            },
+            submitgAgt: OrganisationIdentification15Choice__4 {
+                lei: drrReport -> submitterIdentifier,
+                othr: empty // TH Comment Sprint 10-2025: Not possible to populate Othr/Id/Id only LEI
+            },
+            nttyRspnsblForRpt: GetNttyRspnsblForRpt(drrReport),
+            ... // TH Comment Sprint 10-2025: Optional fields left unpopulated as the data is not available in the valuation report.
+        }
+
+func GetNttyRspnsblForRpt:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        nttyRspnsblForRpt OrganisationIdentification15Choice__1 (1..1)
+
+    set nttyRspnsblForRpt:
+        Create_OrganisationIdentification15Choice__1(
+                drrReport -> entityResponsibleForReporting
+            )
+
+// PartyIdentification248Choice
+func Create_PartyIdentification248Choice__1:
+    inputs:
+        lei string (1..1)
+    output:
+        id PartyIdentification248Choice__1 (1..1)
+
+    set id:
+        PartyIdentification248Choice__1 {
+            lgl: LegalPersonIdentification1__1 {
+                id: Create_OrganisationIdentification15Choice__1(lei)
+        }}
+
+func Create_PartyIdentification248Choice__2:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        id PartyIdentification248Choice__2 (1..1)
+
+    set id:
+        PartyIdentification248Choice__2 {
+            lgl: LegalPersonIdentification1__2 {
+                id: Create_OrganisationIdentification15Choice__2(
+                        drrReport,
+                        drrReport -> counterparty2IdentifierFormat,
+                        drrReport -> counterparty2,
+                        drrReport -> counterparty2SchemeName to-string
+                    ),
+                ... // TH Comment Sprint 10-2025: Optional fields left unpopulated as the data is not available in the valuation report.
+            },
+            ntrl: if drrReport -> counterparty2IdentifierTypeIndicator = False
+                then NaturalPersonIdentification3__1 {
+                    id: NaturalPersonIdentification2__1 {
+                        id: GenericIdentification175__1 {
+                            id: drrReport -> counterparty2
+                    }},
+                    ... // TH Comment Sprint 10-2025: Optional fields left unpopulated as the data is not available in the valuation report.
+        }}
+
+func Create_PartyIdentification248Choice__3:
+    inputs:
+        idFormat PartyIdentifierFormat2Enum (0..1)
+        idFromReport string (0..1)
+        schemeName string (0..1)
+    output:
+        id PartyIdentification248Choice__3 (1..1)
+
+    set id:
+        PartyIdentification248Choice__3 {
+            lgl: LegalPersonIdentification1__3 {
+                id: Create_OrganisationIdentification15Choice__3(
+                        idFormat,
+                        idFromReport,
+                        schemeName
+                    )
+        }}
+
+func Create_PartyIdentification248Choice__5:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        id PartyIdentification248Choice__5 (1..1)
+
+    set id:
+        PartyIdentification248Choice__5 {
+            lgl: LegalPersonIdentification1__5 {
+                id: Create_OrganisationIdentification15Choice__2(
+                        drrReport,
+                        drrReport -> counterparty2IdentifierFormat,
+                        drrReport -> counterparty2,
+                        drrReport -> counterparty2SchemeName to-string
+                    )
+            },
+            ntrl: if drrReport -> counterparty2IdentifierTypeIndicator = False
+                then NaturalPersonIdentification3__2 {
+                    id: NaturalPersonIdentification2__1 {
+                        id: GenericIdentification175__1 {
+                            id: drrReport -> counterparty2
+        }}}}
+
+// OrganisationIdentification15Choice
+func Create_OrganisationIdentification15Choice__1:
+    inputs:
+        lei string (1..1)
+    output:
+        id OrganisationIdentification15Choice__1 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__1 {
+            lei: lei
+        }
+
+func Create_OrganisationIdentification15Choice__2:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+        idFormat PartyIdentifierFormat2Enum (0..1)
+        idFromReport string (1..1)
+        schemeName string (1..1)
+    output:
+        id OrganisationIdentification15Choice__2 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__2 {
+            lei: if idFormat = PartyIdentifierFormat2Enum -> Lei
+                then idFromReport,
+            othr: if idFormat = PartyIdentifierFormat2Enum -> Other
+                then OrganisationIdentification38__1 {
+                    id: GenericIdentification175__2 {
+                        id: idFromReport,
+                        schmeNm: schemeName to-enum iso20022.auth030.hkma.dtcc.HKTRPartyScheme
+                    },
+                    nm: drrReport -> counterparty2Name,
+                },
+            anyBIC: if idFormat = PartyIdentifierFormat2Enum -> SWIFTBIC
+                then idFromReport
+        }
+
+func Create_OrganisationIdentification15Choice__3:
+    inputs:
+        idFormat PartyIdentifierFormat2Enum (0..1)
+        idFromReport string (1..1)
+        schemeName string (1..1)
+    output:
+        id OrganisationIdentification15Choice__3 (1..1)
+
+    set id:
+        OrganisationIdentification15Choice__3 {
+            lei: if idFormat = PartyIdentifierFormat2Enum -> Lei
+                then idFromReport,
+            othr: if idFormat = PartyIdentifierFormat2Enum -> Other
+                then OrganisationIdentification38__2 {
+                    id: GenericIdentification175__2 {
+                        id: idFromReport,
+                        schmeNm: schemeName to-enum iso20022.auth030.hkma.dtcc.HKTRPartyScheme
+            }},
+            anyBIC: if idFormat = PartyIdentifierFormat2Enum -> SWIFTBIC
+                then idFromReport
+        }
+
+func Create_CommonTradeDataReport71__5:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        cmonTradData CommonTradeDataReport71__5 (1..1)
+
+    set cmonTradData:
+        CommonTradeDataReport71__5 {
+            txData: Create_TradeTransaction50__5(drrReport)
+        }
+
+func Create_TradeTransaction50__5:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        txData TradeTransaction50__5 (1..1)
+
+    set txData:
+        TradeTransaction50__5 {
+            txId: UniqueTransactionIdentifier2Choice__1 {
+                unqTxIdr: GetTxId(drrReport),
+                prtry: GenericIdentification175__4 {
+                    id: if drrReport -> uniqueTransactionIdentifierProprietary exists
+                        then drrReport -> uniqueTransactionIdentifierProprietary,
+                    schmeNm: drrReport -> uniqueTransactionIdentifierProprietarySchemeName to-string
+        }}}
+
+func GetTxId:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        uti iso20022.auth030.hkma.dtcc.UTIIdentifier (1..1)
+
+    set uti: drrReport -> uniqueTransactionIdentifier
+
+func Create_TechnicalAttributes5__1:
+    inputs:
+        drrReport HKMAValuationReport (1..1)
+    output:
+        techAttrbts TechnicalAttributes5__1 (1..1)
+
+    set techAttrbts:
+        TechnicalAttributes5__1 {
+            techRcrdId: drrReport -> technicalRecordId + "_" + drrReport -> reportingTimestamp to-string,
+        }

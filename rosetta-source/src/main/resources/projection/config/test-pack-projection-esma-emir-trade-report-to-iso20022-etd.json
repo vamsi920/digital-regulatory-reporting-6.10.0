@@ -1,0 +1,126 @@
+{
+  "id" : "test-pack-projection-esma-emir-trade-report-to-iso20022-etd",
+  "pipelineId" : "pipeline-projection-esma-emir-trade-report-to-iso20022",
+  "name" : "Etd",
+  "samples" : [ {
+    "id" : "mockup-estr-features-cme",
+    "name" : "mockup estr features cme",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-estr-features-cme.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-estr-features-cme.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-estr-option-cme",
+    "name" : "mockup estr option cme",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-estr-option-cme.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-estr-option-cme.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-etd-10-year-t-note-future",
+    "name" : "mockup etd 10 year T note future",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-etd-10-year-T-note-future.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-etd-10-year-T-note-future.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-etd-10-year-t-note-option",
+    "name" : "mockup etd 10 year T note option",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-etd-10-year-T-note-option.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-etd-10-year-T-note-option.xml",
+    "assertions" : {
+      "modelValidationFailures" : 6,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-etd-cocoa-future",
+    "name" : "mockup etd cocoa future",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-etd-cocoa-future.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-etd-cocoa-future.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-etd-cocoa-option",
+    "name" : "mockup etd cocoa option",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-etd-cocoa-option.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-etd-cocoa-option.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-etd-future-security-product",
+    "name" : "mockup etd future security product",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-etd-future-security-product.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-etd-future-security-product.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-etd-option-security-product",
+    "name" : "mockup etd option security product",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-etd-option-security-product.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-etd-option-security-product.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-gold-feature-etd",
+    "name" : "mockup gold feature etd",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-gold-feature-etd.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-gold-feature-etd.xml",
+    "assertions" : {
+      "modelValidationFailures" : 4,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-gold-option-etd",
+    "name" : "mockup gold option etd",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-gold-option-etd.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-gold-option-etd.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-socgen-equity-listed-future",
+    "name" : "mockup socgen equity listed future",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-socgen-equity-listed-future.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-socgen-equity-listed-future.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-socgen-equity-listed-option",
+    "name" : "mockup socgen equity listed option",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/etd/mockup-socgen-equity-listed-option.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/etd/mockup-socgen-equity-listed-option.xml",
+    "assertions" : {
+      "modelValidationFailures" : 5,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  } ]
+}

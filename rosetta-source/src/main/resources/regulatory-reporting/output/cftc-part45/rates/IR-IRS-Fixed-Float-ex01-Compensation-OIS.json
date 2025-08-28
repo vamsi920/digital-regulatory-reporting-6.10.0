@@ -1,0 +1,102 @@
+{
+  "actionType" : "NEWT",
+  "allocationIndicator" : "UNAL",
+  "blockTradeElectionIndicator" : false,
+  "cftcGuidebook" : {
+    "assetClass" : "InterestRate",
+    "largeNotionalOffFacilitySwapElectionIndicator" : false,
+    "messageType" : "Trade State",
+    "physicalCommodityIndicator" : false,
+    "sefOrDcmAnonymousExecutionIndicator" : false,
+    "sefOrDcmIndicator" : false
+  },
+  "cleared" : "I",
+  "counterparty1" : "XGJWNIWHTPOW4QHTR381",
+  "counterparty1FederalEntityIndicator" : false,
+  "counterparty1FinancialEntityIndicator" : false,
+  "counterparty2" : "F226TOH6YD6XJB17KS62",
+  "counterparty2FederalEntityIndicator" : false,
+  "counterparty2FinancialEntityIndicator" : false,
+  "counterparty2IdentifierSource" : "LEID",
+  "customBasketIndicator" : false,
+  "effectiveDate" : "2021-08-11",
+  "eventIdentifier" : "JF6472404",
+  "eventTimestamp" : "2021-08-11T03:00:00Z",
+  "eventType" : "TRAD",
+  "executionTimestamp" : "2021-08-11T03:00:00Z",
+  "expirationDate" : "2021-08-13",
+  "finalContractualSettlementDate" : "2021-08-13",
+  "jurisdiction" : "CFTC",
+  "leg1" : {
+    "fixedRate" : 0.01,
+    "notionalAmount" : 1,
+    "notionalCurrency" : "JPY",
+    "payerIdentifier" : "XGJWNIWHTPOW4QHTR381",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "fixedRateDayCountConvention" : "A004",
+      "fixedRatePaymentFrequencyPeriod" : "MNTH",
+      "fixedRatePaymentFrequencyPeriodMultiplier" : 3
+    },
+    "receiverIdentifier" : "F226TOH6YD6XJB17KS62",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "leg2" : {
+    "notionalAmount" : 1,
+    "notionalCurrency" : "JPY",
+    "payerIdentifier" : "F226TOH6YD6XJB17KS62",
+    "payerIdentifierFormat" : "Lei",
+    "periodicPayment" : {
+      "floatingRateDayCountConvention" : "A005",
+      "floatingRatePaymentFrequencyPeriod" : "MNTH",
+      "floatingRatePaymentFrequencyPeriodMultiplier" : 3,
+      "floatingRateResetFrequencyMultiplier" : 3,
+      "floatingRateResetFrequencyPeriod" : "MNTH"
+    },
+    "receiverIdentifier" : "XGJWNIWHTPOW4QHTR381",
+    "receiverIdentifierFormat" : "Lei"
+  },
+  "nonReportable" : {
+    "buyerIdentifierFormat" : "Lei",
+    "counterparty1Format" : "Lei",
+    "counterparty2Format" : "Lei",
+    "instrumentType" : "Swap",
+    "notionalSchedule" : "Constant",
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "NotionalCurrency" : "JPY",
+          "NotionalSchedule" : "Constant",
+          "ReferenceRateTermValue" : 3,
+          "UnderlierID" : "JPY-TONA-OIS Compound",
+          "UnderlierIDSource" : "FPML"
+        },
+        "Header" : {
+          "AssetClass" : "Rates",
+          "InstrumentType" : "Swap",
+          "Level" : "UPI",
+          "UseCase" : "Fixed_Float_OIS"
+        }
+      },
+      "requestType" : "ProductRequest"
+    },
+    "sellerIdentifierFormat" : "Lei"
+  },
+  "otherPayment" : [ {
+    "amount" : 337.3,
+    "currency" : "JPY",
+    "date" : "2021-08-13",
+    "payer" : "F226TOH6YD6XJB17KS62",
+    "payerFormat" : "Lei",
+    "paymentType" : "UFRO",
+    "receiver" : "XGJWNIWHTPOW4QHTR381",
+    "receiverFormat" : "Lei"
+  } ],
+  "packageIndicator" : false,
+  "postPricedSwapIndicator" : false,
+  "primeBrokerageTransactionIndicator" : false,
+  "reportSubmittingEntityID" : "XGJWNIWHTPOW4QHTR381",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "uniqueTransactionIdentifier" : "IRIRSFIXEDFLOATEXC01"
+}

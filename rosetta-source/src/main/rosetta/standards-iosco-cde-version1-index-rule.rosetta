@@ -1,0 +1,35 @@
+namespace drr.standards.iosco.cde.version1.index
+version "${project.version}"
+
+import drr.regulation.common.*
+import drr.standards.iosco.*
+import drr.standards.iosco.cde.base.price.*
+import drr.standards.iosco.cde.version1.* as cdeV1
+
+reporting rule CDSIndexAttachmentPoint from TransactionReportInstruction: <"CDS Index Attachment Point">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "81"
+        provision "Defined lower point at which the level of losses in the underlying portfolio reduces the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% will be reduced after 3% of losses in the portfolio have occurred. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    extract TradeForEvent
+    then extract
+        tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms
+    then extract
+        if indexReferenceInformation -> tranche exists
+        then indexReferenceInformation -> tranche -> attachmentPoint
+        else if basketReferenceInformation -> tranche exists
+        then basketReferenceInformation -> tranche -> attachmentPoint
+    then FormatToBaseOneRate
+        as "2.81 CDS Index Attachment Point"
+
+reporting rule CDSIndexDetachmentPoint from TransactionReportInstruction: <"CDS Index Detachment Point">
+    [regulatoryReference CPMI_IOSCO cdeV1.CDE section "2" field "82"
+        provision "Defined point beyond which losses in the underlying portfolio no longer reduce the notional of a tranche. For example, the notional in a tranche with an attachment point of 3% and a detachment point of 6% will be reduced after there have been 3% of losses in the portfolio. 6% losses in the portfolio deplete the notional of the tranche. This data element is not applicable if the transaction is not a CDS tranche transaction (index or custom basket)."]
+    extract TradeForEvent
+    then extract
+        tradableProduct -> product -> contractualProduct -> economicTerms -> payout -> creditDefaultPayout -> generalTerms
+    then extract
+        if indexReferenceInformation -> tranche exists
+        then indexReferenceInformation -> tranche -> exhaustionPoint
+        else if basketReferenceInformation -> tranche exists
+        then basketReferenceInformation -> tranche -> exhaustionPoint
+    then FormatToBaseOneRate
+        as "2.82 CDS Index Detachment Point"

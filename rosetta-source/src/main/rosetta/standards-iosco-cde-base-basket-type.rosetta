@@ -1,0 +1,12 @@
+namespace drr.standards.iosco.cde.base.basket
+version "${project.version}"
+
+import cdm.base.staticdata.asset.common.*
+
+import drr.standards.iso.*
+
+type BasketConstituentsReport:
+    identifier Max210Text (0..1)
+    source ProductIdTypeEnum (0..1)
+    numberOfUnits Max18D13Number (0..1)
+    unitOfMeasure Max4Text (0..1)

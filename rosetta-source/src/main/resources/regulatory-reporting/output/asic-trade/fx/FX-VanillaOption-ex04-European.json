@@ -1,0 +1,66 @@
+{
+  "actionType" : "NEWT",
+  "assetClass" : "CURR",
+  "beneficiary1" : "W22LROWP2IHZNBB6K528",
+  "beneficiary1IdentifierTypeIndicator" : true,
+  "callAmount" : 20827500,
+  "callCurrency" : "CNY",
+  "cleared" : "N",
+  "collateralPortfolioIndicator" : false,
+  "contractType" : "OPTN",
+  "counterparty1" : "W22LROWP2IHZNBB6K528",
+  "counterparty2" : "MXKQVM4U1OHBQWFPG196",
+  "counterparty2IdentifierType" : true,
+  "direction1" : "BYER",
+  "effectiveDate" : "2020-07-06",
+  "entityResponsibleForReporting" : "W22LROWP2IHZNBB6K528",
+  "eventIdentifier" : "envuatuatExt1b45f8f29f8024fcf882f22f0287de1bc",
+  "eventTimestamp" : "2020-11-10T20:15:45Z",
+  "eventType" : "TRAD",
+  "exchangeRateBasis" : "USD/CNY",
+  "executionTimestamp" : "2020-07-06T03:58:14Z",
+  "expirationDate" : "2020-09-29",
+  "leg1" : {
+    "notionalAmount" : 20827500,
+    "notionalCurrency" : "CNY"
+  },
+  "leg2" : {
+    "notionalAmount" : 3000000,
+    "notionalCurrency" : "USD"
+  },
+  "nonReportable" : {
+    "preUpiData" : {
+      "request" : {
+        "Attributes" : {
+          "DeliveryType" : "PHYS",
+          "OptionExerciseStyle" : "EURO",
+          "OtherUnderlierID" : "USD",
+          "OtherUnderlierIDSource" : "CCY",
+          "UnderlierID" : "CNY",
+          "UnderlierIDSource" : "CCY"
+        },
+        "Header" : {
+          "AssetClass" : "Foreign_Exchange",
+          "InstrumentType" : "Option",
+          "Level" : "UPI",
+          "UseCase" : "Vanilla_Option"
+        }
+      },
+      "requestType" : "ProductRequest"
+    }
+  },
+  "optionPremiumAmount" : 40723.8,
+  "optionPremiumCurrency" : "CNY",
+  "optionPremiumPaymentDate" : "2020-07-08",
+  "putAmount" : 3000000,
+  "putCurrency" : "USD",
+  "reportSubmittingEntityID" : "W22LROWP2IHZNBB6K528",
+  "reportingTimestamp" : "2024-04-29T00:00:00Z",
+  "secondaryTransactionIdentifier" : "FXVANILLAOPTIONEXE01",
+  "strikePrice" : {
+    "monetary" : 6.9425
+  },
+  "strikePriceCurrency" : "USD/CNY",
+  "strikePriceNotation" : "Monetary",
+  "uniqueTransactionIdentifier" : "FXVANILLAOPTIONEXE02"
+}

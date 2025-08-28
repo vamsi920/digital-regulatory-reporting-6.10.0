@@ -1,0 +1,326 @@
+{
+  "id" : "test-pack-projection-esma-emir-trade-report-to-iso20022-custom-scenarios",
+  "pipelineId" : "pipeline-projection-esma-emir-trade-report-to-iso20022",
+  "name" : "Custom scenarios",
+  "samples" : [ {
+    "id" : "mockup-agent-trading-capacity",
+    "name" : "mockup agent trading capacity",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-agent-trading-capacity.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-agent-trading-capacity.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-clearing-threshold-party-1",
+    "name" : "mockup clearing threshold party 1",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-clearing-threshold-party-1.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-clearing-threshold-party-1.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-clearing-threshold-party-2",
+    "name" : "mockup clearing threshold party 2",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-clearing-threshold-party-2.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-clearing-threshold-party-2.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-com-ex5-gas-v-electricity-spark-spread-singleleg-01",
+    "name" : "mockup com ex5 gas v electricity spark spread singleleg 01",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-com-ex5-gas-v-electricity-spark-spread-singleleg-01.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-com-ex5-gas-v-electricity-spark-spread-singleleg-01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-com-ex5-gas-v-electricity-spark-spread-singleleg-02",
+    "name" : "mockup com ex5 gas v electricity spark spread singleleg 02",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-com-ex5-gas-v-electricity-spark-spread-singleleg-02.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-com-ex5-gas-v-electricity-spark-spread-singleleg-02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-commodity-delivery",
+    "name" : "mockup commodity delivery",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-commodity-delivery.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-commodity-delivery.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-commodity-swap-last-available-spot-price",
+    "name" : "mockup commodity swap last available spot price",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-commodity-swap-last-available-spot-price.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-commodity-swap-last-available-spot-price.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-corporate-sector-ex01-single-party-esma",
+    "name" : "mockup corporate sector ex01 single party esma",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-corporate-sector-ex01-single-party-esma.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-corporate-sector-ex01-single-party-esma.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-corporate-sector-ex02-multiple-parties-multiple-regimes",
+    "name" : "mockup corporate sector ex02 multiple parties multiple regimes",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-corporate-sector-ex02-multiple-parties-multiple-regimes.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-corporate-sector-ex02-multiple-parties-multiple-regimes.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-data-masking-clearing-threshold",
+    "name" : "mockup data masking clearing threshold",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-data-masking-clearing-threshold.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-data-masking-clearing-threshold.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-external-api-enrich",
+    "name" : "mockup external api enrich",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-external-api-enrich.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-external-api-enrich.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-federal-entity-credit-default-swap",
+    "name" : "mockup federal entity credit default swap",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-federal-entity-credit-default-swap.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-federal-entity-credit-default-swap.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-financial-entity-ir-swap",
+    "name" : "mockup financial entity ir swap",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-financial-entity-ir-swap.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-financial-entity-ir-swap.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-fx-strategy-forward",
+    "name" : "mockup fx strategy forward",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-fx-strategy-forward.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-fx-strategy-forward.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-fx-strategy-spot",
+    "name" : "mockup fx strategy spot",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-fx-strategy-spot.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-fx-strategy-spot.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-fx-swap-spot-forward",
+    "name" : "mockup fx swap spot forward",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-fx-swap-spot-forward.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-fx-swap-spot-forward.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-ir-irs-basis-ex01-admitted-notadmitted",
+    "name" : "mockup ir irs basis ex01 admitted notadmitted",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-ir-irs-basis-ex01-admitted-notadmitted.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-ir-irs-basis-ex01-admitted-notadmitted.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-ir-irs-basis-ex01-notadmitted-admitted",
+    "name" : "mockup ir irs basis ex01 notadmitted admitted",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-ir-irs-basis-ex01-notadmitted-admitted.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-ir-irs-basis-ex01-notadmitted-admitted.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-ir-irs-basis-ex03-xoff",
+    "name" : "mockup ir irs basis ex03 xoff",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-ir-irs-basis-ex03-xoff.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-ir-irs-basis-ex03-xoff.xml",
+    "assertions" : {
+      "modelValidationFailures" : 1,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-irs-new-trade-notional-amount-schedule",
+    "name" : "mockup irs new trade notional amount schedule",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-irs-new-trade-notional-amount-schedule.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-irs-new-trade-notional-amount-schedule.xml",
+    "assertions" : {
+      "modelValidationFailures" : 2,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-natural-person-ir-swaption",
+    "name" : "mockup natural person ir swaption",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-natural-person-ir-swaption.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-natural-person-ir-swaption.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-package-price-ir-swap",
+    "name" : "mockup package price ir swap",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-package-price-ir-swap.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-package-price-ir-swap.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-post-priced",
+    "name" : "mockup post priced",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-post-priced.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-post-priced.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-post-priced-apac",
+    "name" : "mockup post priced apac",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-post-priced-apac.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-post-priced-apac.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-pre-enrich",
+    "name" : "mockup pre enrich",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-pre-enrich.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-pre-enrich.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-pre-enrich-ssbs",
+    "name" : "mockup pre enrich ssbs",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-pre-enrich-ssbs.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-pre-enrich-ssbs.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-principal-trading-capacity",
+    "name" : "mockup principal trading capacity",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-principal-trading-capacity.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-principal-trading-capacity.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-strikeprice-ex01-strikepriceschedule",
+    "name" : "mockup strikePrice ex01 strikePriceSchedule",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-strikePrice-ex01-strikePriceSchedule.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-strikePrice-ex01-strikePriceSchedule.xml",
+    "assertions" : {
+      "modelValidationFailures" : 8,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-strikeprice-ex02-strikepriceperunitschedule-01",
+    "name" : "mockup strikePrice ex02 strikePricePerUnitSchedule 01",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-strikePrice-ex02-strikePricePerUnitSchedule-01.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-strikePrice-ex02-strikePricePerUnitSchedule-01.xml",
+    "assertions" : {
+      "modelValidationFailures" : 3,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-strikeprice-ex02-strikepriceperunitschedule-02",
+    "name" : "mockup strikePrice ex02 strikePricePerUnitSchedule 02",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-strikePrice-ex02-strikePricePerUnitSchedule-02.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-strikePrice-ex02-strikePricePerUnitSchedule-02.xml",
+    "assertions" : {
+      "modelValidationFailures" : 3,
+      "schemaValidationFailure" : false,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-volatility-strike-price-variance-swap",
+    "name" : "mockup volatility strike price variance swap",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-volatility-strike-price-variance-swap.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-volatility-strike-price-variance-swap.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  }, {
+    "id" : "mockup-volatility-swap",
+    "name" : "mockup volatility swap",
+    "inputPath" : "regulatory-reporting/output/esma-emir-trade/custom-scenarios/mockup-volatility-swap.json",
+    "outputPath" : "projection/output/esma-emir-trade-report-to-iso20022/custom-scenarios/mockup-volatility-swap.xml",
+    "assertions" : {
+      "modelValidationFailures" : 0,
+      "schemaValidationFailure" : true,
+      "runtimeError" : false
+    }
+  } ]
+}
